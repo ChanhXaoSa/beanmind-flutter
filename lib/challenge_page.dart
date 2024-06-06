@@ -13,20 +13,20 @@ class _ChallengePageState extends State<ChallengePage> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    buildCard('Daily Challenge', 'Sunday Mini', 'Start', 'Every Mon - Sat', Colors.orange, Colors.white),
-                    buildCard('Peer Challenge', '', '', '', Colors.deepOrange, Colors.white),
-                    buildCard('Super Hero Challenge', '', '', '', Colors.blue, Colors.white),
-                  ],
-                ),
-                SizedBox(height: 20),
-                // Additional content can be added here
-              ],
-            ),
+            child:
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        buildCard('Daily Challenge', 'Sunday Mini', 'Start', 'Every Mon - Sat', Colors.orange, Colors.white),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            buildCard('Peer Challenge', '', '', '', Colors.deepOrange, Colors.white),
+                            buildCard('Super Hero Challenge', '', '', '', Colors.blue, Colors.white),
+                          ],
+                        )
+                      ],
+                    ),
           ),
         ),
       ),

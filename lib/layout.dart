@@ -18,7 +18,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('KooBits', style: TextStyle(color: Colors.white),),
+            Text('BeanMind', style: TextStyle(color: Colors.white),),
             Spacer(),
             IconButton(icon: Icon(Icons.notifications ,color: Colors.white), onPressed: () {}),
             IconButton(icon: Icon(Icons.settings ,color: Colors.white), onPressed: () {}),
@@ -44,7 +44,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
             ),
             ListTile(
               leading: Icon(Icons.flag),
-              title: Text('KooChallenge'),
+              title: Text('Challenge'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -52,7 +52,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
             ),
             ListTile(
               leading: Icon(Icons.school),
-              title: Text('KooTraining'),
+              title: Text('Training'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -60,7 +60,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
             ),
             ListTile(
               leading: Icon(Icons.class_),
-              title: Text('KooClass'),
+              title: Text('Class'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -68,7 +68,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
             ),
             ListTile(
               leading: Icon(Icons.gamepad),
-              title: Text('KooFun'),
+              title: Text('Fun'),
               onTap: () {
                 // Update the state of the app
                 // ...
