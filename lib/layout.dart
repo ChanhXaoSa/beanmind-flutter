@@ -1,5 +1,4 @@
 import 'package:beanmind_flutter/challenge_page.dart';
-import 'package:beanmind_flutter/hexcolor.dart';
 import 'package:flutter/material.dart';
 
 class BeanMindLayout extends StatefulWidget {
@@ -140,5 +139,4 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
       ),
     );
   }
-
 }

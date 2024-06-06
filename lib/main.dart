@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/layout.dart';
+import 'package:beanmind_flutter/quiz_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: BeanMindLayout(),
+      home: QuizPage(),
     );
   }
 }
