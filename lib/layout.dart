@@ -1,14 +1,15 @@
+import 'package:beanmind_flutter/challenge_page.dart';
 import 'package:beanmind_flutter/hexcolor.dart';
 import 'package:flutter/material.dart';
 
-class BuildLayoutDemo extends StatefulWidget {
-  const BuildLayoutDemo({super.key});
+class BeanMindLayout extends StatefulWidget {
+  const BeanMindLayout({super.key});
 
   @override
-  _BuildLayoutDemoState createState() => _BuildLayoutDemoState();
+  _BeanMindLayoutState createState() => _BeanMindLayoutState();
 }
 
-class _BuildLayoutDemoState extends State<BuildLayoutDemo> {
+class _BeanMindLayoutState extends State<BeanMindLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,61 +135,10 @@ class _BuildLayoutDemoState extends State<BuildLayoutDemo> {
               ],
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildCard('Daily Challenge', 'Sunday Mini', 'Start', 'Every Mon - Sat', Colors.orange, Colors.white),
-                        buildCard('Peer Challenge', '', '', '', Colors.deepOrange, Colors.white),
-                        buildCard('Super Hero Challenge', '', '', '', Colors.blue, Colors.white),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    // Additional content can be added here
-                  ],
-                ),
-              ),
-            ),
-          ),
+          Expanded(child: ChallengePage()),
         ],
       ),
     );
   }
-  Widget buildCard(String title, String subtitle, String buttonText, String description, Color color, Color textColor) {
-    return Container(
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(fontSize: 16, color: textColor),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text(buttonText),
-          ),
-          Text(
-            description,
-            style: TextStyle(fontSize: 12, color: textColor),
-          ),
-        ],
-      ),
-    );
-  }
+
 }
