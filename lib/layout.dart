@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/challenge_page.dart';
+import 'package:beanmind_flutter/game/main.dart';
 import 'package:flutter/material.dart';
 
 class BeanMindLayout extends StatefulWidget {
@@ -17,10 +18,17 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('BeanMind', style: TextStyle(color: Colors.white),),
+            Text(
+              'BeanMind',
+              style: TextStyle(color: Colors.white),
+            ),
             Spacer(),
-            IconButton(icon: Icon(Icons.notifications ,color: Colors.white), onPressed: () {}),
-            IconButton(icon: Icon(Icons.settings ,color: Colors.white), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.notifications, color: Colors.white),
+                onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.settings, color: Colors.white),
+                onPressed: () {}),
           ],
         ),
         actions: [
@@ -35,7 +43,8 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
               accountName: Text('User'),
               accountEmail: Text('Level 1 / 1k'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Profile picture
+                backgroundImage: NetworkImage(
+                    'https://via.placeholder.com/150'), // Profile picture
               ),
               decoration: BoxDecoration(
                 color: Color(0xFF605BD9),
@@ -71,6 +80,11 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
               onTap: () {
                 // Update the state of the app
                 // ...
+                // go to GameList()
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GameList()),
+                );
               },
             ),
           ],
@@ -83,49 +97,92 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
             color: Color(0xFF605BD9),
             child: Column(
               children: [
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Profile picture
+                  backgroundImage: NetworkImage(
+                      'https://via.placeholder.com/150'), // Profile picture
                 ),
-                SizedBox(height: 20,),
-                Text('User', style: TextStyle(fontSize: 20, color: Colors.white),),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'User',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 ListTile(
-                  leading: Icon(Icons.flag, color: Colors.white,),
-                  title: Text('Challenge', style: TextStyle(color: Colors.white),),
+                  leading: Icon(
+                    Icons.flag,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'Challenge',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
                     // Update the state of the app
                     // ...
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.school, color: Colors.white,),
-                  title: Text('Training', style: TextStyle(color: Colors.white),),
+                  leading: Icon(
+                    Icons.school,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'Training',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
                     // Update the state of the app
                     // ...
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.class_, color: Colors.white,),
-                  title: Text('Class', style: TextStyle(color: Colors.white),),
+                  leading: Icon(
+                    Icons.class_,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'Class',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
                     // Update the state of the app
                     // ...
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.gamepad, color: Colors.white,),
-                  title: Text('Fun', style: TextStyle(color: Colors.white),),
+                  leading: Icon(
+                    Icons.gamepad,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'Fun',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
                     // Update the state of the app
                     // ...
+                    // go to GameList()
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GameList()),
+                    );
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.supervised_user_circle, color: Colors.white),
-                  title: Text('Friends', style: TextStyle(color: Colors.white),),
+                  leading:
+                      Icon(Icons.supervised_user_circle, color: Colors.white),
+                  title: Text(
+                    'Friends',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
                     // Update the state of the app
                     // ...
