@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/layout.dart';
+import 'package:beanmind_flutter/quiz_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: BeanMindLayout(),
+      home: QuizPage(),
     );
   }
 }

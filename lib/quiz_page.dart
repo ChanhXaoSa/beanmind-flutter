@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/quiz_content.dart';
 import 'package:flutter/material.dart';
 
 class QuizPage extends StatefulWidget {
@@ -64,7 +65,7 @@ class _QuizPageState extends State<QuizPage> {
       body: Row(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.12,
+            width: MediaQuery.of(context).size.width * 0.2,
             color: const Color(0xFFF0FDF3),
             child: Column(
               children: [
@@ -93,7 +94,7 @@ class _QuizPageState extends State<QuizPage> {
                             leading: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                if (index < 9)
+                                if (index < 10 && index > 1)
                                   Container(
                                     width: 2,
                                     height: 10,
@@ -138,10 +139,9 @@ class _QuizPageState extends State<QuizPage> {
               ],
             ),
           ),
-          const Expanded(
-              child: Center(
-            child: Text('quiz here'),
-          )),
+          Expanded(
+              child: QuizContent(),
+          ),
         ],
       ),
     );
