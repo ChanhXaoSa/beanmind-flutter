@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/challenge_page.dart';
-import 'package:beanmind_flutter/game/main.dart';
+import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:flutter/material.dart';
 
 class BeanMindLayout extends StatefulWidget {
