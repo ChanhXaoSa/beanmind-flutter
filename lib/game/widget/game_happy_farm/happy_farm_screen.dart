@@ -1,5 +1,6 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/utils/count_animal.dart';
+import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +8,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 import 'happy_farm.dart';
-import '../../utils/my_button.dart';
 
 class HappyFarmScreen extends StatefulWidget {
   @override
@@ -121,7 +121,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           Icons.arrow_forward_ios,
                           color: Colors.white,
                         ),
-                      ),  
+                      ),
                     )
                   ],
                 ),
@@ -309,15 +309,32 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
               ),
             ),
             Container(
-              height: 60,
-              color: Colors.deepPurple,
-              child: Center(
-                child: Text(
-                  'Có bao nhiêu con gà?   Chickens: $globalChickenCount, Ducks: $globalDuckCount',
-                  style: whiteTextStyle,
-                ),
-              ),
-            ),
+                height: 60,
+                color: Colors.deepPurple,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Có bao nhiêu con Blue Fish ? ',
+                        style: whiteTextStyle,
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                        color: Colors.blue[100],
+                        child: Text(
+                          '$userAnswer',
+                          style: whiteTextStyle.copyWith(color: Colors.orange),
+                        ),
+                      ),
+                      Text(
+                        ' Blue Fish: $globalBlueFishCount',
+                        style: whiteTextStyle,
+                      ),
+                    ],
+                  ),
+                )),
             Expanded(
               child: isWideScreen
                   ? Row(

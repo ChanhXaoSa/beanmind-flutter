@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/chicken.dart';
+import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/class/animal/duck.dart';
-import 'package:beanmind_flutter/game/utils/count_animal.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';

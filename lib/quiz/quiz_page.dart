@@ -1,4 +1,4 @@
-import 'package:beanmind_flutter/quiz_content.dart';
+import 'package:beanmind_flutter/quiz/quiz_content.dart';
 import 'package:flutter/material.dart';
 
 class QuizPage extends StatefulWidget {
