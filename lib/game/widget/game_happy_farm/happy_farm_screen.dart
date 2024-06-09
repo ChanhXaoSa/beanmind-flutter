@@ -321,7 +321,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                       ),
                       Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                         color: Colors.blue[100],
                         child: Text(
                           '$userAnswer',
