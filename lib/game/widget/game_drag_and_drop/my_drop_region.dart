@@ -20,7 +20,7 @@ class MyDropRegion extends StatefulWidget {
   final int columns;
   final Panel panel;
   final VoidCallback onDrop;
-  final void Function(String) setExternalData;
+  final void Function(int) setExternalData;
   final void Function(PanelLocation) updateDropPreview;
   final Widget child;
 
@@ -51,10 +51,6 @@ class _MyDropRegionState extends State<MyDropRegion> {
             // show unsportted file type message
             return;
           }
-          dataReader.getFile(Formats.plainTextFile, 
-          (value) async {
-            widget.setExternalData(utf8.decode(await value.readAll()));
-          });
         }
       },
       child: widget.child,

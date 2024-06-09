@@ -130,6 +130,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
           });
       return;
     }
+    
     if (globalBlueFishCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
