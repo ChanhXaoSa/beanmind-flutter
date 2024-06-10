@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/item_panel.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/my_drop_region.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/types.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/item_panel.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/my_drop_region.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +17,12 @@ class SplitPanels extends StatefulWidget {
 }
 
 class _SplitPanelsState extends State<SplitPanels> {
-  //final List<int> upper = [];
-  final List<int> lower = List.generate(10, (_) => Random().nextInt(99) + 1); 
+  @override
+  void initState() {
+    super.initState();
+    randomNumber();
+  }
+
   PanelLocation? dragStart;
   PanelLocation? dropPreview;
   int? hoveringData;

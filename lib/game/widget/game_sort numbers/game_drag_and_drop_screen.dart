@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/split_panels.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -37,6 +38,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       if (button == 'CHECK RESULT') {
         checkResult();
       } else if (button == 'RESET') {
+        upper.clear();
+        lower = List.from(startLower);
         _splitPanels = SplitPanels();
       }
     });
@@ -57,7 +60,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
     // Check if the upper list is empty
     if (upper.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json');
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
       return;
     }
 
@@ -70,67 +73,89 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       }
     }
 
-    if (isSorted) {
+    if (isSorted && upper.length == 10) {
       userPoint += 1;
       _playSuccessSound();
-      _showDialog('Correct!', 'assets/lotties/success.json');
+      _showDialog(
+          'Congratulations!', 'assets/lotties/success.json', true, false);
+    } else if (isSorted) {
+      _showDialog('Correct!', 'assets/lotties/success.json', false, false);
     } else {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json');
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
     }
   }
 
-  void _showDialog(String message, String lottieAsset) {
+  void _showDialog(String message, String lottieAsset, bool showNextQuestion,
+      bool showVideo) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
-            content: Container(
-              height: 400,
-              color: Colors.deepPurple,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    message,
-                    style: whiteTextStyle,
-                  ),
-                  Lottie.asset(lottieAsset, height: 100),
-                  Center(
-                    child: _videoPlayerController.value.isInitialized
-                        ? AspectRatio(
-                            aspectRatio:
-                                _videoPlayerController.value.aspectRatio,
-                            child: VideoPlayer(_videoPlayerController),
-                          )
-                        : Container(),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      setState(() {
-                        _videoPlayerController.value.isPlaying
-                            ? _videoPlayerController.pause()
-                            : _videoPlayerController.play();
-                      });
-                    },
-                    child: Icon(_videoPlayerController.value.isPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow),
-                  ),
-                  GestureDetector(
-                    onTap: goToNextQuestion,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          color: Colors.deepPurple[300],
-                          borderRadius: BorderRadius.circular(8)),
-                      child: const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                      ),
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
                     ),
-                  )
-                ],
+                    SizedBox(height: 16),
+                    Lottie.asset(lottieAsset, height: 100),
+                    SizedBox(height: 16),
+                    if (showVideo)
+                      Center(
+                        child: _videoPlayerController.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
+                                child: VideoPlayer(_videoPlayerController),
+                              )
+                            : Container(),
+                      )
+                    else
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                    if (showVideo) SizedBox(height: 16),
+                    if (showVideo)
+                      FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _videoPlayerController.value.isPlaying
+                                ? _videoPlayerController.pause()
+                                : _videoPlayerController.play();
+                          });
+                        },
+                        child: Icon(_videoPlayerController.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow),
+                      ),
+                    if (showNextQuestion) SizedBox(height: 16),
+                    if (showNextQuestion)
+                      GestureDetector(
+                        onTap: goToNextQuestion,
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              color: Colors.deepPurple[300],
+                              borderRadius: BorderRadius.circular(8)),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           );
@@ -141,9 +166,14 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        showResultDialog = false;
-        userAnswer = '';
+        upper.clear();
+        resetGameSortNumber();
+        lower = List.from(startLower);
         _splitPanels = SplitPanels();
+        userAnswer = '';
+      });
+      setState(() {
+        showResultDialog = false;
       });
     }
   }

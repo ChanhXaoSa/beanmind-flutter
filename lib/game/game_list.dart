@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/split_panels.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_math/math_game.dart';

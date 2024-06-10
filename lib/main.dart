@@ -1,5 +1,5 @@
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/game_drag_and_drop_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/split_panels.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/game_drag_and_drop_screen.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';

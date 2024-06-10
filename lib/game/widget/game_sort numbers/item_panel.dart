@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/my_draggable_widget.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/types.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/my_draggable_widget.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -94,8 +94,8 @@ class ItemPanel extends StatelessWidget {
           } else {
             child = Container(
               height: 200,
-              decoration: const BoxDecoration(
-                  color: Colors.grey,
+              decoration: BoxDecoration(
+                  color: Colors.blue[300],
                   borderRadius: BorderRadius.all(Radius.circular(8))),
               child: child,
             );
