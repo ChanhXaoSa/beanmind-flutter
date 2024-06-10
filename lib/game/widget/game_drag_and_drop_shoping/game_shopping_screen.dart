@@ -30,14 +30,18 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   int userPoint = 0;
 
   void buttonTapped(String button) {
-    setState(() {
       if (button == 'RESET') {
-        loadProduct();
+        setState(() {
+        balance = 100;
+        lastbalance = 20;
+        upper.clear();
+        lower = List.from(startLower);
+          _shopingSplitPanels = ShopingSplitPanels();
+        });
       }
       if (button == 'CHECK RESULT') {
         checkResult();
       }
-    });
   }
 
   void checkResult() {
@@ -49,6 +53,13 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     if (upper.isEmpty) {
       _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
       return;
+    }
+
+    if (balance == lastbalance) {
+      _playSuccessSound();
+      _showDialog('Congratulations!', 'assets/lotties/success.json', true, false);   
+    } else {
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
     }
   }
 
@@ -133,7 +144,11 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
+        balance = 100;
+        lastbalance = 20;
+        upper.clear();
         lower = List.from(startLower);
+        _shopingSplitPanels = ShopingSplitPanels();
       });
       setState(() {
         showResultDialog = false;

@@ -20,19 +20,19 @@ class ShopingSplitPanels extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
+  @override
+  void initState() {
+    super.initState();
+    upper.clear();
+    lower.clear();
+    lower = List.from(startLower);
+  }
+
   PanelLocation? dragStart;
   PanelLocation? dropPreview;
   Product? hoveringData;
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
-
-  @override
-  void initState() {
-    super.initState();
-    upper = [];
-    lower = [];
-    lower = List.from(startLower);
-  }
 
   void onDragStart(PanelLocation start) {
     final data = switch (start.$2) {
