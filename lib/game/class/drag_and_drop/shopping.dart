@@ -1,3 +1,10 @@
+class Product {
+  final int price;
+  final String image;
+
+  Product({required this.price, required this.image});
+}
+
 List<Product> upper = [];
 List<Product> lower = [];
 List<Product> startLower = [
@@ -29,16 +36,6 @@ void loadProduct() {
   lower = startLower;
 }
 
-class Product {
-  final double price;
-  final String image;
+int balance = 100;
+int lastbalance = 20;
 
-  Product({required this.price, required this.image});
-}
-
-class Wallet {
-  double balance;
-  final double lastbalance;
-
-  Wallet({required this.balance, required this.lastbalance});
-}

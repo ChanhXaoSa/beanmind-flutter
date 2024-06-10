@@ -6,9 +6,11 @@ import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class ShopingSplitPanels extends StatefulWidget {
-  const ShopingSplitPanels({super.key, this.columns = 10, this.itemSpacing = 4.0});
+  const ShopingSplitPanels(
+      {super.key, this.columns = 10, this.itemSpacing = 4.0});
 
   final int columns;
   final double itemSpacing;
@@ -17,19 +19,12 @@ class ShopingSplitPanels extends StatefulWidget {
   State<ShopingSplitPanels> createState() => _ShopingSplitPanelsState();
 }
 
-class Wallet {
-  double balance;
-  final double lastbalance; 
-
-  Wallet({required this.balance, required this.lastbalance});
-}
-
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
-  
   PanelLocation? dragStart;
   PanelLocation? dropPreview;
   Product? hoveringData;
-  Wallet wallet = Wallet(balance: 100, lastbalance: 20);
+  var whiteTextStyle = const TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   @override
   void initState() {
@@ -51,31 +46,41 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
   }
 
   void drop() {
-    assert(dropPreview != null, 'Can only drop over a known location');
-    assert(hoveringData != null, 'Can only drop when data is being dragged');
-    setState(() {
-      if (dragStart!.$2 == Panel.lower && wallet.balance - hoveringData!.price < 0) {
-        // Kéo từ dưới lên trên và số dư không đủ
-        return;
-      }
-      if (dragStart != null) {
-        if (dragStart!.$2 == Panel.upper) {
-          upper.removeAt(dragStart!.$1);
-          wallet.balance += hoveringData!.price;
-        } else {
-          lower.removeAt(dragStart!.$1);
-          wallet.balance -= hoveringData!.price;
+    try {
+      assert(dropPreview != null, 'Can only drop over a known location');
+      assert(hoveringData != null, 'Can only drop when data is being dragged');
+      setState(() {
+        if (dragStart!.$2 == Panel.lower && balance - hoveringData!.price < 0) {
+          // Kéo từ dưới lên trên và số dư không đủ
+          _showDialog('Số tiền không đủ');
+          return;
         }
-      }
-      if (dropPreview!.$2 == Panel.upper) {
-        upper.insert(min(dropPreview!.$1, upper.length), hoveringData!);
-      } else {
-        lower.insert(min(dropPreview!.$1, lower.length), hoveringData!);
-      }
-      dragStart = null;
-      dropPreview = null;
-      hoveringData = null;
-    });
+        if (upper.length >= 10 && dragStart!.$2 == Panel.lower) {
+          // Kéo từ dưới lên trên và số lượng vượt quá 10
+          _showDialog('Số lượng vượt quá 10');
+          return;
+        }
+        if (dragStart != null) {
+          if (dragStart!.$2 == Panel.upper) {
+            upper.removeAt(dragStart!.$1);
+            balance += hoveringData!.price;
+          } else {
+            lower.removeAt(dragStart!.$1);
+            balance -= hoveringData!.price;
+          }
+        }
+        if (dropPreview!.$2 == Panel.upper) {
+          upper.insert(min(dropPreview!.$1, upper.length), hoveringData!);
+        } else {
+          lower.insert(min(dropPreview!.$1, lower.length), hoveringData!);
+        }
+        dragStart = null;
+        dropPreview = null;
+        hoveringData = null;
+      });
+    } catch (e) {
+      return;
+    }
   }
 
   void setExternalData(Product data) => hoveringData = data;
@@ -84,6 +89,35 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     setState(() {
       dropPreview = update;
     });
+  }
+
+  void _showDialog(
+    String message,
+  ) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -98,26 +132,26 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
       return Stack(
         children: <Widget>[
           Positioned(
-      top: 10, // Adjust this value to position the balance display as needed
-      left: 10, // Adjust this value to position the balance display as needed
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Your balance: ${wallet.balance} \$',
-            style: TextStyle(fontSize: 24, color: Colors.white),
+            top: 10,
+            left: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Số tiền bạn có: ${balance} \$',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                Text(
+                  'Số tiền yêu cầu: ${lastbalance} \$',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+              ],
+            ),
           ),
-          Text(
-            'Required balance: ${wallet.lastbalance} \$',
-            style: TextStyle(fontSize: 24, color: Colors.white),
-          ),
-        ],
-      ),
-    ),
           Positioned(
               height: constraints.maxHeight / 2,
               width: constraints.maxWidth,
-              top: 0,
+              top: 100,
               child: MyDropRegion(
                 onDrop: drop,
                 setExternalData: setExternalData,
@@ -305,10 +339,10 @@ class ItemPanel extends StatelessWidget {
                       ),
                     ),
                     Text(
-                  '${entry.value.price} \$',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 36, color: textColor),
-                ),
+                      '${entry.value.price} \$',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 36, color: textColor),
+                    ),
                   ],
                 ),
               ),

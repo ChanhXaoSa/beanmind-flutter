@@ -211,7 +211,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Xếp số theo thứ tự từ bé đến lớn',
+                      'Mua hàng đến khi đạt số tiền yêu cầu',
                       style: whiteTextStyle,
                     ),
                   ],
