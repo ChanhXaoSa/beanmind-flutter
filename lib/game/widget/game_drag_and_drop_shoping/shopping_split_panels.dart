@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
@@ -23,82 +24,20 @@ class Wallet {
   Wallet({required this.balance, required this.lastbalance});
 }
 
-class Product {
-  final double price;
-  final String image;
-
-  Product({required this.price, required this.image});
-}
-
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
-  final List<Product> upper = [];
-  final List<Product> lower = [
-    Product(
-        price: 5,
-        image: "/images/item_store/food/item_store_017.png"),
-    Product(
-        price: 7,
-        image: "/images/item_store/food/item_store_043.png"),
-    Product(
-        price: 8,
-        image: "/images/item_store/food/item_store_044.png"),
-    Product(
-        price: 6,
-        image: "/images/item_store/food/item_store_056.png"),
-    Product(
-        price: 10,
-        image: "/images/item_store/food/item_store_057.png"),
-    Product(
-        price: 12,
-        image: "/images/item_store/food/item_store_060.png"),
-    Product(
-        price: 15,
-        image: "/images/item_store/food/item_store_062.png"),
-    Product(
-        price: 20,
-        image: "/images/item_store/food/item_store_063.png"),
-    Product(
-        price: 9,
-        image: "/images/item_store/food/item_store_067.png"),
-    Product(
-        price: 18,
-        image: "/images/item_store/food/item_store_080.png"),
-    Product(
-        price: 22,
-        image: "/images/item_store/food/item_store_085.png"),
-    Product(
-        price: 17,
-        image: "/images/item_store/food/item_store_087.png"),
-    Product(
-        price: 11,
-        image: "/images/item_store/food/item_store_089.png"),
-    Product(
-        price: 14,
-        image: "/images/item_store/food/item_store_091.png"),
-    Product(
-        price: 19,
-        image: "/images/item_store/food/item_store_093.png"),
-    Product(
-        price: 23,
-        image: "/images/item_store/food/item_store_094.png"),
-    Product(
-        price: 13,
-        image: "/images/item_store/food/item_store_095.png"),
-    Product(
-        price: 16,
-        image: "/images/item_store/food/item_store_096.png"),
-    Product(
-        price: 21,
-        image: "/images/item_store/food/item_store_097.png"),
-    Product(
-        price: 25,
-        image: "/images/item_store/food/item_store_098.png"),
-  ];
-
+  
   PanelLocation? dragStart;
   PanelLocation? dropPreview;
   Product? hoveringData;
   Wallet wallet = Wallet(balance: 100, lastbalance: 20);
+
+  @override
+  void initState() {
+    super.initState();
+    upper = [];
+    lower = [];
+    lower = List.from(startLower);
+  }
 
   void onDragStart(PanelLocation start) {
     final data = switch (start.$2) {
