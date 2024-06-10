@@ -18,6 +18,10 @@ class MyButton extends StatelessWidget {
       buttonColor = Colors.red;
     } else if (child == '=') {
       buttonColor = Colors.deepPurple;
+    } else if (child == 'CHECK RESULT') {
+      buttonColor = Colors.green;
+    } else if (child == 'RESET') {
+      buttonColor = Colors.red;
     }
 
     return Padding(

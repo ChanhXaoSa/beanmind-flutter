@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/types.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:dotted_border/dotted_border.dart';

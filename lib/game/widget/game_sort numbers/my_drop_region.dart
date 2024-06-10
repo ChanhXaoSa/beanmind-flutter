@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop/types.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:flutter/material.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
@@ -20,7 +20,7 @@ class MyDropRegion extends StatefulWidget {
   final int columns;
   final Panel panel;
   final VoidCallback onDrop;
-  final void Function(String) setExternalData;
+  final void Function(int) setExternalData;
   final void Function(PanelLocation) updateDropPreview;
   final Widget child;
 
@@ -39,11 +39,9 @@ class _MyDropRegionState extends State<MyDropRegion> {
         _updatePreview(event.position.local);
         return DropOperation.copy;
       },
-
       onPerformDrop: (PerformDropEvent event) async {
         widget.onDrop();
       },
-
       onDropEnter: (DropEvent event) {
         if (event.session.items.first.dataReader != null) {
           final dataReader = event.session.items.first.dataReader!;
@@ -51,10 +49,6 @@ class _MyDropRegionState extends State<MyDropRegion> {
             // show unsportted file type message
             return;
           }
-          dataReader.getFile(Formats.plainTextFile, 
-          (value) async {
-            widget.setExternalData(utf8.decode(await value.readAll()));
-          });
         }
       },
       child: widget.child,

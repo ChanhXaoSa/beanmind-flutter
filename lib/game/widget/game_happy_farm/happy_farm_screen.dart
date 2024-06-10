@@ -121,7 +121,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           Icons.arrow_forward_ios,
                           color: Colors.white,
                         ),
-                      ),  
+                      ),
                     )
                   ],
                 ),
@@ -309,15 +309,32 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
               ),
             ),
             Container(
-              height: 60,
-              color: Colors.deepPurple,
-              child: Center(
-                child: Text(
-                  'Có bao nhiêu con gà?   Chickens: $globalChickenCount, Ducks: $globalDuckCount',
-                  style: whiteTextStyle,
-                ),
-              ),
-            ),
+                height: 60,
+                color: Colors.deepPurple,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Có bao nhiêu con Blue Fish ? ',
+                        style: whiteTextStyle,
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                        color: Colors.blue[100],
+                        child: Text(
+                          '$userAnswer',
+                          style: whiteTextStyle.copyWith(color: Colors.orange),
+                        ),
+                      ),
+                      Text(
+                        ' Blue Fish: $globalBlueFishCount',
+                        style: whiteTextStyle,
+                      ),
+                    ],
+                  ),
+                )),
             Expanded(
               child: isWideScreen
                   ? Row(

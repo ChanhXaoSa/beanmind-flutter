@@ -130,6 +130,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
           });
       return;
     }
+    
     if (globalBlueFishCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
@@ -309,15 +310,32 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
               ),
             ),
             Container(
-              height: 60,
-              color: Colors.deepPurple,
-              child: Center(
-                child: Text(
-                  'Có bao nhiêu con ? Blue Fish $globalBlueFishCount',
-                  style: whiteTextStyle,
-                ),
-              ),
-            ),
+                height: 60,
+                color: Colors.deepPurple,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Có bao nhiêu con Blue Fish ? ',
+                        style: whiteTextStyle,
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                        color: Colors.blue[100],
+                        child: Text(
+                          '$userAnswer',
+                          style: whiteTextStyle.copyWith(color: Colors.orange),
+                        ),
+                      ),
+                      Text(
+                        ' Blue Fish: $globalBlueFishCount',
+                        style: whiteTextStyle,
+                      ),
+                    ],
+                  ),
+                )),
             Expanded(
               child: isWideScreen
                   ? Row(

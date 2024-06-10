@@ -7,6 +7,7 @@ int globalVioletFishCount = 0;
 int globalOctopusCount = 0;
 int globalMoonFishCount = 0;
 
+List<int> uppercheck = [];
 
 void resetGame() {
   globalBlueFishCount = 0;
