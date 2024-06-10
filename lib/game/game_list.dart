@@ -1,10 +1,9 @@
-import 'package:beanmind_flutter/game/utils/count_animal.dart';
+import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_math/math_game.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_shopping/ProductDragAndDrop.dart';
 import 'package:flutter/material.dart';
 
 class GameList extends StatefulWidget {

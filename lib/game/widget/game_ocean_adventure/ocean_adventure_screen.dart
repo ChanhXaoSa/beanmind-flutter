@@ -1,13 +1,13 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/utils/count_animal.dart';
+import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
+import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
-import '../../utils/my_button.dart';
 
 class OceanAdventureScreen extends StatefulWidget {
   @override

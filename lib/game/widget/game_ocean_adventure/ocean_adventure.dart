@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/blue_fish.dart';
+import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/class/animal/moon_fish.dart';
 import 'package:beanmind_flutter/game/class/animal/octopus.dart';
 import 'package:beanmind_flutter/game/class/animal/red_fish.dart';
 import 'package:beanmind_flutter/game/class/animal/violet_fish.dart';
-import 'package:beanmind_flutter/game/utils/count_animal.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
