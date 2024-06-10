@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: MathDragAndDropScreen(),
+      home: BeanMindLayout(),
     );
   }
 }

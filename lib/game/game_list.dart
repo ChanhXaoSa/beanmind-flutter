@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/game_drag_and_drop_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
@@ -136,7 +137,7 @@ class _GameListState extends State<GameList> {
       case 'jungle':
         return const MathGame();
       case 'desert':
-        return const SplitPanels();
+        return MathDragAndDropScreen();
       case 'mountain':
         return const ShopingSplitPanels();
       default:
