@@ -20,6 +20,8 @@ class _SplitPanelsState extends State<SplitPanels> {
   @override
   void initState() {
     super.initState();
+    upper.clear();
+    lower.clear();
     randomNumber();
   }
 

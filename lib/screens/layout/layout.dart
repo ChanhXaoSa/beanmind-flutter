@@ -191,7 +191,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
               ],
             ),
           ),
-          Expanded(child: ChallengePage()),
+          // Expanded(child: ChallengePage()),
         ],
       ),
     );

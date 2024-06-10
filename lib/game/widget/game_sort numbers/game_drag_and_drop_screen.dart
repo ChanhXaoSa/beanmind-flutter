@@ -166,7 +166,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        upper.clear();
         resetGameSortNumber();
         lower = List.from(startLower);
         _splitPanels = SplitPanels();
