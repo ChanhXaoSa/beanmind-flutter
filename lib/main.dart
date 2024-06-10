@@ -1,7 +1,7 @@
 import 'package:beanmind_flutter/bindings/initial_binding.dart';
 import 'package:beanmind_flutter/controllers/common/theme_controller.dart';
 import 'package:beanmind_flutter/firebase_options.dart';
-import 'package:beanmind_flutter/layout.dart';
+import 'package:beanmind_flutter/screens/layout/layout.dart';
 import 'package:beanmind_flutter/routes/app_routes.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -52,8 +52,8 @@ class MyApp extends StatelessWidget {
       theme: Get.find<ThemeController>().getLightheme(),
       darkTheme: Get.find<ThemeController>().getDarkTheme(),
       debugShowCheckedModeBanner: false,
-      getPages: AppRoutes.pages(),
-      // home: BeanMindLayout(),
+      // getPages: AppRoutes.pages(),
+      home: BeanMindLayout(),
     );
   }
 }
