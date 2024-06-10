@@ -43,8 +43,8 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
               accountName: Text('User'),
               accountEmail: Text('Level 1 / 1k'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://via.placeholder.com/150'), // Profile picture
+                backgroundImage: AssetImage(
+                    'assets/images/physics.png'), // Profile picture
               ),
               decoration: BoxDecoration(
                 color: Color(0xFF605BD9),
@@ -102,8 +102,8 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
                 ),
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(
-                      'https://via.placeholder.com/150'), // Profile picture
+                  backgroundImage: AssetImage(
+                      'assets/images/physics.png'), // Profile picture
                 ),
                 SizedBox(
                   height: 20,

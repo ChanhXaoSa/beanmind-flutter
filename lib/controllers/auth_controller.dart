@@ -9,7 +9,7 @@ import 'package:beanmind_flutter/widgets/widgets.dart';
 class AuthController extends GetxController {
   @override
   void onReady() {
-    initAuth();
+    // initAuth();
     super.onReady();
   }
 
