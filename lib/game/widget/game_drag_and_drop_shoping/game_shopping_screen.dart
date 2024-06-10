@@ -56,6 +56,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     }
 
     if (balance == lastbalance) {
+      userPoint += 1;
       _playSuccessSound();
       _showDialog('Congratulations!', 'assets/lotties/success.json', true, false);   
     } else {
