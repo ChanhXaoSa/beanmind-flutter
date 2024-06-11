@@ -459,7 +459,7 @@ class _MathGameState extends State<MathGame> {
         builder: (BuildContext context) {
           return AlertDialog(
             scrollable: true,
-            title: Text('Total Round'),
+            title: Text('Tổng số lượt đấu'),
             content: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
@@ -469,7 +469,7 @@ class _MathGameState extends State<MathGame> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Total Round',
+                        hintText: 'Nhâp số lượt đấu ở đây',
                       ),
                       controller: totalRoundController,
                     ),

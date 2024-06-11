@@ -303,7 +303,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
               color: Colors.deepPurple,
               child: Center(
                 child: Text(
-                  'Total point : ' + userPoint.toString(),
+                  'Số điểm của bạn : ' + userPoint.toString(),
                   style: whiteTextStyle,
                 ),
               ),
@@ -316,22 +316,22 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Có bao nhiêu con Blue Fish ? ',
+                        'Có bao nhiêu con Con gà ? ',
                         style: whiteTextStyle,
                       ),
                       Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                        color: Colors.blue[100],
+                        color: const Color.fromARGB(255, 43, 45, 46),
                         child: Text(
                           '$userAnswer',
                           style: whiteTextStyle.copyWith(color: Colors.orange),
                         ),
                       ),
-                      Text(
-                        ' Blue Fish: $globalBlueFishCount',
-                        style: whiteTextStyle,
-                      ),
+                      // Text(
+                      //   ' Số lượng gà: $globalChickenCount',
+                      //   style: whiteTextStyle,
+                      // ),
                     ],
                   ),
                 )),

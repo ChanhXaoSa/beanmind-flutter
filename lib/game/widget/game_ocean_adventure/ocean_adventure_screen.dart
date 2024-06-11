@@ -304,7 +304,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
               color: Colors.deepPurple,
               child: Center(
                 child: Text(
-                  'Total point : ' + userPoint.toString(),
+                  'Số điểm của bạn : ' + userPoint.toString(),
                   style: whiteTextStyle,
                 ),
               ),
@@ -329,10 +329,10 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                           style: whiteTextStyle.copyWith(color: Colors.orange),
                         ),
                       ),
-                      Text(
-                        ' Blue Fish: $globalBlueFishCount',
-                        style: whiteTextStyle,
-                      ),
+                      // Text(
+                      //   ' Blue Fish: $globalBlueFishCount',
+                      //   style: whiteTextStyle,
+                      // ),
                     ],
                   ),
                 )),

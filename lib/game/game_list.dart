@@ -20,20 +20,28 @@ class _GameListState extends State<GameList> {
 
   final List<Map<String, String>> games = [
     {
-      'title': 'Ocean adventure',
+      'title': 'Khám phá đại dương',
       'image': 'ocean_adventure.png',
       'gameType': 'ocean'
     },
-    {'title': 'Happy farm', 'image': 'happy_farm.png', 'gameType': 'space'},
-    {'title': 'Game shopping', 'image': 'happy_farm.png', 'gameType': 'jungle'},
     {
-      'title': 'Drag and Drop',
-      'image': 'ocean_adventure.png',
+      'title': 'Nông trại vui vẻ',
+      'image': 'happy_farm.png',
+      'gameType': 'space'
+    },
+    {
+      'title': 'Trận đấu toán học',
+      'image': 'mathgame1v1.png',
+      'gameType': 'jungle'
+    },
+    {
+      'title': 'Sắp xếp số',
+      'image': 'number_sort.png',
       'gameType': 'desert'
     },
     {
-      'title': 'Mountain Climb',
-      'image': 'happy_farm.png',
+      'title': 'Trò chơi mua sắm',
+      'image': 'shopping.png',
       'gameType': 'mountain'
     },
     // Thêm các trò chơi khác ở đây
@@ -45,7 +53,7 @@ class _GameListState extends State<GameList> {
       appBar: AppBar(
         title: Text(selectedGame != null
             ? _getGameTitle(selectedGame!)
-            : 'Game Gallery'),
+            : 'Thư viện trò chơi'),
         leading: selectedGame != null
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -70,15 +78,15 @@ class _GameListState extends State<GameList> {
   String _getGameTitle(String gameType) {
     switch (gameType) {
       case 'ocean':
-        return 'Ocean Adventure';
+        return 'Khám phá đại dương';
       case 'space':
-        return 'Happy Farm';
+        return 'Nông trại vui vẻ';
       case 'jungle':
-        return 'Math game 1v1';
+        return 'Trận đấu toán học';
       case 'desert':
-        return 'Drag and Drop';
+        return 'Sắp xếp số';
       case 'mountain':
-        return 'Mountain Climb';
+        return 'Trò chơi mua sắm';
       default:
         return 'Game Gallery';
     }
