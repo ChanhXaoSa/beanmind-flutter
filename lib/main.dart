@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
 
 Future<void> initFireBase() async {
   await Firebase.initializeApp(
-    name: 'beanmind-2911',
     options: DefaultFirebaseOptions.currentPlatform,
   );
 }

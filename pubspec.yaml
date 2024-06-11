@@ -88,6 +88,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/DB/papers/
+
     - assets/images/animal/chicken/
     - assets/images/animal/duck/
     - assets/images/animal/blue_fish/
