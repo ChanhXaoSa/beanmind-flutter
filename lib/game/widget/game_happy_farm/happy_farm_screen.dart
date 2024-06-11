@@ -299,13 +299,44 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         body: Column(
           children: [
             Container(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
               height: 60,
               color: Colors.deepPurple,
-              child: Center(
-                child: Text(
-                  'Số điểm của bạn : ' + userPoint.toString(),
-                  style: whiteTextStyle,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: Text(
+                      'Số điểm của bạn : ' + userPoint.toString(),
+                      style: whiteTextStyle,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Hướng dẫn'),
+                            content: Text(
+                              'Nội dung hướng dẫn người chơi...',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: const Text('Hướng dẫn'),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -322,7 +353,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                       Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                        color: const Color.fromARGB(255, 43, 45, 46),
+                        color: Colors.blue[100],
                         child: Text(
                           '$userAnswer',
                           style: whiteTextStyle.copyWith(color: Colors.orange),

@@ -130,7 +130,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
           });
       return;
     }
-    
+
     if (globalBlueFishCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
@@ -300,13 +300,44 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         body: Column(
           children: [
             Container(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
               height: 60,
               color: Colors.deepPurple,
-              child: Center(
-                child: Text(
-                  'Số điểm của bạn : ' + userPoint.toString(),
-                  style: whiteTextStyle,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: Text(
+                      'Số điểm của bạn : ' + userPoint.toString(),
+                      style: whiteTextStyle,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Hướng dẫn'),
+                            content: Text(
+                              'Nội dung hướng dẫn người chơi...',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: const Text('Hướng dẫn'),
+                  ),
+                ],
               ),
             ),
             Container(
