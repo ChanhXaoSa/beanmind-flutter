@@ -1,6 +1,7 @@
 import 'package:beanmind_flutter/bindings/initial_binding.dart';
 import 'package:beanmind_flutter/controllers/common/theme_controller.dart';
 import 'package:beanmind_flutter/firebase_options.dart';
+import 'package:beanmind_flutter/screens/data_uploader_screen.dart';
 import 'package:beanmind_flutter/screens/layout/layout.dart';
 import 'package:beanmind_flutter/routes/app_routes.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_screen.dart';
@@ -14,25 +15,19 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initFireBase();
   InitialBinding().dependencies();
-  // if (kIsWeb) {
-  //   await Firebase.initializeApp(
-  //       options: const FirebaseOptions(
-  //     apiKey: "AIzaSyDnEiQYEx-eREW0igYLAbE2b9bXQbjzbQ0",
-  //     authDomain: "beanmind-2911.firebaseapp.com",
-  //     projectId: "beanmind-2911",
-  //     storageBucket: "beanmind-2911.appspot.com",
-  //     messagingSenderId: "635855189971",
-  //     appId: "1:635855189971:web:9f3902e9a63a68744be126",
-  //     measurementId: "G-HMP0LG4QV3",
-  //   ));
-  // } else {
-  //   await Firebase.initializeApp();
-  // }
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(const MyApp());
   });
 }
+
+// void main(List<String> args) async{
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await initFireBase();
+//   runApp(GetMaterialApp(
+//     home: DataUploaderScreen(),
+//   ));
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -60,7 +55,7 @@ class MyApp extends StatelessWidget {
 
 Future<void> initFireBase() async {
   await Firebase.initializeApp(
-    name: 'quizzle-demo',
+    name: 'beanmind-2911',
     options: DefaultFirebaseOptions.currentPlatform,
   );
 }
