@@ -61,6 +61,10 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
           return;
         }
         if (dragStart != null) {
+          if (dragStart!.$2 == dropPreview!.$2) {
+            return;
+          }
+
           if (dragStart!.$2 == Panel.upper) {
             upper.removeAt(dragStart!.$1);
             balance += hoveringData!.price;
