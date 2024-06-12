@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-class Animal {
+abstract class Animal {
   final double scaleFactor;
   final SpriteAnimation animation;
   final Vector2 position;

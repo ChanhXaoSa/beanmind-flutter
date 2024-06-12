@@ -95,6 +95,8 @@ flutter:
     - assets/images/animal/moon_fish/
     - assets/images/animal/violet_fish/
     - assets/images/animal/octopus/
+    - assets/images/animal/blue_bird/
+    - assets/images/animal/red_bird/
 
     - assets/images/background/
     - assets/images/game_thumbnail/

@@ -1,7 +1,7 @@
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/game_shopping_screen.dart';
+import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/game_drag_and_drop_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_math/math_game.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure_screen.dart';
@@ -44,6 +44,11 @@ class _GameListState extends State<GameList> {
       'image': 'shopping.png',
       'gameType': 'mountain'
     },
+    {
+      'title': 'Số lẻ và số chẳn',
+      'image': 'happy_farm.png',
+      'gameType': 'odd_even'
+    }
     // Thêm các trò chơi khác ở đây
   ];
 
@@ -87,6 +92,8 @@ class _GameListState extends State<GameList> {
         return 'Sắp xếp số';
       case 'mountain':
         return 'Trò chơi mua sắm';
+      case 'odd_even':
+        return 'Số lẻ và số chẳn';
       default:
         return 'Game Gallery';
     }
@@ -148,6 +155,8 @@ class _GameListState extends State<GameList> {
         return MathDragAndDropScreen();
       case 'mountain':
         return GameShoppingScreen();
+      case 'odd_even':
+        return GameOddAndEvenScreen();
       default:
         return Container();
     }

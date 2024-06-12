@@ -6,6 +6,8 @@ int globalRedFishCount = 0;
 int globalVioletFishCount = 0;
 int globalOctopusCount = 0;
 int globalMoonFishCount = 0;
+int globalBlueBirdCount = 0;
+int globalRedBirdCount = 0;
 
 List<int> uppercheck = [];
 
@@ -17,4 +19,6 @@ void resetGame() {
   globalOctopusCount = 0;
   globalMoonFishCount = 0;
   globalVioletFishCount = 0;
+  globalBlueBirdCount = 0;
+  globalRedBirdCount = 0;
 }
