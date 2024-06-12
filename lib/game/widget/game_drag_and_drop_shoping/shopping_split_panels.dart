@@ -23,6 +23,8 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
   @override
   void initState() {
     super.initState();
+    balance = 100;
+    lastbalance = 20; 
     upper.clear();
     lower.clear();
     lower = List.from(startLower);
