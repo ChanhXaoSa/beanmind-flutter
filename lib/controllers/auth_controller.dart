@@ -28,7 +28,9 @@ class AuthController extends GetxController {
   }
 
   Future<void> siginInWithGoogle() async {
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    final GoogleSignIn _googleSignIn = GoogleSignIn(
+      clientId: '505548876025-5ts10r3vh4ou7e3rv8589bei4uq6d8vo.apps.googleusercontent.com',
+    );
 
     try {
       GoogleSignInAccount? account = await _googleSignIn.signIn();

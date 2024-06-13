@@ -1,6 +1,7 @@
 import 'package:beanmind_flutter/bindings/initial_binding.dart';
 import 'package:beanmind_flutter/controllers/common/theme_controller.dart';
 import 'package:beanmind_flutter/firebase_options.dart';
+import 'package:beanmind_flutter/routes/app_routes.dart';
 import 'package:beanmind_flutter/screens/data_uploader_screen.dart';
 import 'package:beanmind_flutter/screens/layout/layout.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,11 +9,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initFireBase();
   InitialBinding().dependencies();
+  setPathUrlStrategy();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(const MyApp());
