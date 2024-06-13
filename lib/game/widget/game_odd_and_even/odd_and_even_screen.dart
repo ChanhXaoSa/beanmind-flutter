@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventur
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -47,16 +48,12 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
 
   void buttonTapped(String button) {
     setState(() {
-      if (button == '=') {
+      if (button == '1') {
+        userAnswer = 'số lẻ';
         checkResult();
-      } else if (button == 'C') {
-        userAnswer = '';
-      } else if (button == 'DEL') {
-        if (userAnswer.isNotEmpty) {
-          userAnswer = userAnswer.substring(0, userAnswer.length - 1);
-        }
-      } else if (userAnswer.length < 4) {
-        userAnswer += button;
+      } else if (button == '2') {
+        userAnswer = 'số chẵn';
+        checkResult();
       }
     });
   }
@@ -73,158 +70,97 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     setState(() {
       showResultDialog = true;
     });
-    if (userAnswer.isEmpty) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.deepPurple,
-              content: Container(
-                height: 400,
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Incorrect!',
-                      style: whiteTextStyle,
-                    ),
-                    Lottie.asset('assets/lotties/wrong.json', height: 100),
-                    Center(
-                      child: _videoPlayerController.value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(_videoPlayerController),
-                            )
-                          : Container(),
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        setState(() {
-                          _videoPlayerController.value.isPlaying
-                              ? _videoPlayerController.pause()
-                              : _videoPlayerController.play();
-                        });
-                      },
-                      child: Icon(_videoPlayerController.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow),
-                    ),
-                    GestureDetector(
-                      onTap: goToNextQuestion,
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.deepPurple[300],
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
-      return;
-    }
-
-    if (globalBlueFishCount == int.parse(userAnswer)) {
+    if (userAnswer == 'số lẻ' &&
+        (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
       userPoint += 1;
       _playSuccessSound();
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.deepPurple,
-              content: Container(
-                height: 200,
+      _showDialog('Correct!', 'assets/lotties/success.json', true, false);
+    }
+    else if (userAnswer == 'số chẵn' &&
+        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
+      userPoint += 1;
+      _playSuccessSound();
+      _showDialog('Correct!', 'assets/lotties/success.json', true, false);
+    } else {
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
+    }
+  }
+
+  void _showDialog(String message, String lottieAsset, bool showNextQuestion,
+      bool showVideo) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
                 color: Colors.deepPurple,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Correct!',
+                      message,
                       style: whiteTextStyle,
+                      textAlign: TextAlign.center,
                     ),
-                    Lottie.asset('assets/lotties/success.json', height: 100),
-                    GestureDetector(
+                    SizedBox(height: 16),
+                    Lottie.asset(lottieAsset, height: 100),
+                    SizedBox(height: 16),
+                    if (showVideo)
+                      Center(
+                        child: _videoPlayerController.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
+                                child: VideoPlayer(_videoPlayerController),
+                              )
+                            : Container(),
+                      )
+                    else
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                    if (showVideo) SizedBox(height: 16),
+                    if (showVideo)
+                      FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _videoPlayerController.value.isPlaying
+                                ? _videoPlayerController.pause()
+                                : _videoPlayerController.play();
+                          });
+                        },
+                        child: Icon(_videoPlayerController.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow),
+                      ),
+                    if (showNextQuestion) SizedBox(height: 16),
+                    if (showNextQuestion)
+                      GestureDetector(
                         onTap: goToNextQuestion,
                         child: Container(
-                          padding: EdgeInsets.all(4),
+                          padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               color: Colors.deepPurple[300],
                               borderRadius: BorderRadius.circular(8)),
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.white,
                           ),
-                        ))
-                  ],
-                ),
-              ),
-            );
-          });
-    } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.deepPurple,
-              content: Container(
-                height: 400,
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Incorrect!',
-                      style: whiteTextStyle,
-                    ),
-                    Lottie.asset('assets/lotties/wrong.json', height: 100),
-                    Center(
-                      child: _videoPlayerController.value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(_videoPlayerController),
-                            )
-                          : Container(),
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        setState(() {
-                          _videoPlayerController.value.isPlaying
-                              ? _videoPlayerController.pause()
-                              : _videoPlayerController.play();
-                        });
-                      },
-                      child: Icon(_videoPlayerController.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow),
-                    ),
-                    GestureDetector(
-                      onTap: goToNextQuestion,
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.deepPurple[300],
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
                         ),
                       ),
-                    )
                   ],
                 ),
               ),
-            );
-          });
-    }
+            ),
+          );
+        });
   }
 
   var randomNumber = Random();
@@ -341,33 +277,6 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                 ],
               ),
             ),
-            Container(
-                height: 60,
-                color: Colors.deepPurple,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Có bao nhiêu con Blue Fish ? ',
-                        style: whiteTextStyle,
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                        color: Colors.blue[100],
-                        child: Text(
-                          '$userAnswer',
-                          style: whiteTextStyle.copyWith(color: Colors.orange),
-                        ),
-                      ),
-                      // Text(
-                      //   ' Blue Fish: $globalBlueFishCount',
-                      //   style: whiteTextStyle,
-                      // ),
-                    ],
-                  ),
-                )),
             Expanded(
               child: isWideScreen
                   ? Row(
@@ -378,26 +287,6 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                           child: Container(
                             alignment: Alignment.topCenter,
                             child: GameWidget(game: _gameOddAndEven),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4, childAspectRatio: 0.9),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
                           ),
                         ),
                       ],
@@ -411,29 +300,51 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                             child: GameWidget(game: _gameOddAndEven),
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
                       ],
                     ),
             ),
+            Container(
+                height: 120,
+                color: Colors.deepPurple,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Số lượng chim là',
+                        style: whiteTextStyle,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          buttonTapped('1');
+                        },
+                        child: const Text(
+                          'số lẻ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32,
+                              color: Colors.green),
+                        ),
+                      ),
+                      Text(
+                        'hay',
+                        style: whiteTextStyle,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          buttonTapped('2');
+                        },
+                        child: const Text(
+                          'số chẵn',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32,
+                              color: Colors.red),
+                        ),
+                      )
+                    ],
+                  ),
+                )),
             Focus(
               focusNode: _resultFocusNode,
               child: Container(

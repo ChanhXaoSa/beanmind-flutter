@@ -45,8 +45,8 @@ class _GameListState extends State<GameList> {
       'gameType': 'mountain'
     },
     {
-      'title': 'Số lẻ và số chẳn',
-      'image': 'happy_farm.png',
+      'title': 'Số lẻ và số chẵn',
+      'image': 'odd_and_even.png',
       'gameType': 'odd_even'
     }
     // Thêm các trò chơi khác ở đây
@@ -93,7 +93,7 @@ class _GameListState extends State<GameList> {
       case 'mountain':
         return 'Trò chơi mua sắm';
       case 'odd_even':
-        return 'Số lẻ và số chẳn';
+        return 'Số lẻ và số chẵn';
       default:
         return 'Game Gallery';
     }
