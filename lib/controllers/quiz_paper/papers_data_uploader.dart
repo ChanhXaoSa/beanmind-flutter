@@ -20,63 +20,69 @@ class PapersDataUploader extends GetxController {
   final loadingStatus = LoadingStatus.loading.obs;
 
   uploadData() async {
-    loadingStatus.value = LoadingStatus.loading; 
+    loadingStatus.value = LoadingStatus.loading;
     final fi = FirebaseFirestore.instance;
 
     try {
       //read asset folder
-      final manifestContent = await DefaultAssetBundle.of(Get.context!)
-          .loadString('AssetManifest.json');
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-      //seperate quiz json files
-      final papersInAsset = manifestMap.keys
-          .where((path) =>
-              path.startsWith('assets/DB/papers/') && path.contains('.json'))
-          .toList();
+      final context = Get.context;
+      if (context != null) {
+        final manifestContent = await DefaultAssetBundle.of(Get.context!)
+            .loadString('AssetManifest.json');
+        final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+        //seperate quiz json files
+        final papersInAsset = manifestMap.keys
+            .where((path) =>
+                path.startsWith('assets/DB/papers/') && path.contains('.json'))
+            .toList();
 
-      final List<QuizPaperModel> quizPapers = [];
+        final List<QuizPaperModel> quizPapers = [];
 
-      for (var paper in papersInAsset) {
-        //read content of papers(json files)
-        String stringPaperContent = await rootBundle.loadString(paper);
-        //add data to model
-        quizPapers.add(QuizPaperModel.fromString(stringPaperContent));
-      }
+        for (var paper in papersInAsset) {
+          //read content of papers(json files)
+          String stringPaperContent = await rootBundle.loadString(paper);
+          //add data to model
+          quizPapers.add(QuizPaperModel.fromString(stringPaperContent));
+        }
 
-      //upload data to firebase
+        //upload data to firebase
 
-      var batch = fi.batch();
+        var batch = fi.batch();
 
-      for (var paper in quizPapers) {
-        batch.set(quizePaperFR.doc(paper.id), {
-          "title": paper.title,
-          "image_url": paper.imageUrl,
-          "Description": paper.description,
-          "time_seconds": paper.timeSeconds,
-          "questions_count" : paper.questions == null ? 0 : paper.questions!.length
-        }, 
-        
-        );
-
-        for (var questions in paper.questions!) {
-          
-          final questionPath = questionsFR(
-            paperId: paper.id,
-            questionsId: questions.id
+        for (var paper in quizPapers) {
+          batch.set(
+            quizePaperFR.doc(paper.id),
+            {
+              "title": paper.title,
+              "image_url": paper.imageUrl,
+              "Description": paper.description,
+              "time_seconds": paper.timeSeconds,
+              "questions_count":
+                  paper.questions == null ? 0 : paper.questions!.length
+            },
           );
 
-          batch.set(questionPath, {
-            "question": questions.question,
-            "correct_answer": questions.correctAnswer
-          });
+          for (var questions in paper.questions!) {
+            final questionPath =
+                questionsFR(paperId: paper.id, questionsId: questions.id);
 
-          for (var answer in questions.answers) {
-            batch.set(questionPath.collection('answers').doc(answer.identifier), {"identifier": answer.identifier, "answer": answer.answer});
+            batch.set(questionPath, {
+              "question": questions.question,
+              "correct_answer": questions.correctAnswer
+            });
+
+            for (var answer in questions.answers) {
+              batch.set(
+                  questionPath.collection('answers').doc(answer.identifier),
+                  {"identifier": answer.identifier, "answer": answer.answer});
+            }
           }
         }
+        await batch.commit();
+        loadingStatus.value = LoadingStatus.completed;
+      } else {
+        AppLogger.e("Context is null");
       }
-      await batch.commit();
-      loadingStatus.value = LoadingStatus.completed; 
     } on Exception catch (e) {
       AppLogger.e(e);
     }
