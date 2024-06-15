@@ -58,35 +58,25 @@ class QuizeScreen extends GetView<QuizController> {
                               GetBuilder<QuizController>(
                                   id: 'answers_list',
                                   builder: (context) {
-                                    return ListView.separated(
-                                      itemCount: controller.currentQuestion
-                                          .value!.answers.length,
+                                    return GridView.builder(
+                                      itemCount: controller.currentQuestion.value!.answers.length,
                                       shrinkWrap: true,
                                       padding: const EdgeInsets.only(top: 25),
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      separatorBuilder:
-                                          (BuildContext context, int index) {
-                                        return const SizedBox(
-                                          height: 10,
-                                        );
-                                      },
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final answer = controller
-                                            .currentQuestion
-                                            .value!
-                                            .answers[index];
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,  // Number of columns
+                                        crossAxisSpacing: 10,  // Space between columns
+                                        mainAxisSpacing: 10,  // Space between rows
+                                        childAspectRatio: 5,  // Adjust the aspect ratio as needed
+                                      ),
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final answer = controller.currentQuestion.value!.answers[index];
                                         return AnswerCard(
-                                          isSelected: answer.identifier ==
-                                              controller.currentQuestion.value!
-                                                  .selectedAnswer,
+                                          isSelected: answer.identifier == controller.currentQuestion.value!.selectedAnswer,
                                           onTap: () {
-                                            controller.selectAnswer(
-                                                answer.identifier);
+                                            controller.selectAnswer(answer.identifier);
                                           },
-                                          answer:
-                                              '${answer.identifier}. ${answer.answer}',
+                                          answer: '${answer.identifier}. ${answer.answer}',
                                         );
                                       },
                                     );

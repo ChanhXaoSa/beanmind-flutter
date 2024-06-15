@@ -16,7 +16,7 @@ class LoginScreen extends GetView<AuthController> {
       extendBodyBehindAppBar: true,
       appBar: const CustomAppBar(),
       body: Container(
-          constraints: const BoxConstraints(maxWidth: kTabletChangePoint),
+          constraints: const BoxConstraints(maxWidth: double.infinity),
           padding: const EdgeInsets.symmetric(horizontal: 30),
           alignment: Alignment.center,
           decoration: BoxDecoration(gradient: mainGradient(context)),
@@ -27,37 +27,40 @@ class LoginScreen extends GetView<AuthController> {
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 60),
                 child: Text(
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                  'Trang web học tập giành cho học sinh tiểu học',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: kOnSurfaceTextColor, fontWeight: FontWeight.bold),
                 ),
               ),
-              MainButton(
-                onTap: () {
-                  controller.siginInWithGoogle();
-                 },
-                color: Colors.white,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        child: SvgPicture.asset(
-                          'assets/icons/google.svg',
-                        )),
-                    Center(
-                      child: Text(
-                        'Sign in  with google',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold),
+              Container(
+                width: 280,
+                child: MainButton(
+                  onTap: () {
+                    controller.siginInWithGoogle();
+                  },
+                  color: Colors.white,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          child: SvgPicture.asset(
+                            'assets/icons/google.svg',
+                          )),
+                      Center(
+                        child: Text(
+                          'Sign in with google',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
           )),
     );
