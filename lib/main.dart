@@ -48,8 +48,8 @@ class MyApp extends StatelessWidget {
       theme: Get.find<ThemeController>().getLightheme(),
       darkTheme: Get.find<ThemeController>().getDarkTheme(),
       debugShowCheckedModeBanner: false,
-      // getPages: AppRoutes.pages(),
-      home: BeanMindLayout(),
+      getPages: AppRoutes.pages(),
+      // home: BeanMindLayout(),
     );
   }
 }
