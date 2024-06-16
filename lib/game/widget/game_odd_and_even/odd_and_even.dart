@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/blue_bird.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
-import 'package:beanmind_flutter/game/class/animal/red_bird.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
@@ -30,8 +28,10 @@ class GameOddAndEven extends FlameGame {
     add(background);
 
     // Load Images
-    Image blueBirdIdleImage = await images.load('animal/blue_bird/blue_bird_ilde.png');
-    Image redBirdIdleImage = await images.load('animal/red_bird/red_bird_idle.png');
+    Image blueBirdIdleImage =
+        await images.load('animal/blue_bird/blue_bird_ilde.png');
+    Image redBirdIdleImage =
+        await images.load('animal/red_bird/red_bird_idle.png');
 
     // Load Animations
 
@@ -53,36 +53,27 @@ class GameOddAndEven extends FlameGame {
       ),
     );
 
-
     // Create Animals
     // blue bird
     createAnimals(
-      count: Random().nextInt(5) + 1,
+      count: Random().nextInt(10) + 1,
       scaleFactor: blueBirdScaleFactor,
       animation: blueBirdAnimation,
+      xRange: Range(0.05, 0.95),
+      yRange: Range(0.05, 0.95),
       textureSize: Vector2(470 / 6, 103),
-      animalType: 'blueBird',
-      createAnimal: (position, flipped) => BlueBird(
-        scaleFactor: blueBirdScaleFactor,
-        animation: blueBirdAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'blueBird',
     );
 
     // red bird
     createAnimals(
-      count: Random().nextInt(5) + 1,
+      count: Random().nextInt(10) + 1,
       scaleFactor: redBirdScaleFactor,
       animation: redBirdAnimation,
+      xRange: Range(0.05, 0.95),
+      yRange: Range(0.05, 0.95),
       textureSize: Vector2(466 / 6, 100),
-      animalType: 'redBird',
-      createAnimal: (position, flipped) => RedBird(
-        scaleFactor: redBirdScaleFactor,
-        animation: redBirdAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'redBird',
     );
   }
 
@@ -90,38 +81,69 @@ class GameOddAndEven extends FlameGame {
     required int count,
     required double scaleFactor,
     required SpriteAnimation animation,
+    required Range xRange,
+    required Range yRange,
     required Vector2 textureSize,
-    required String animalType,
-    required Animal Function(Vector2 position, bool flipped) createAnimal,
+    required String type,
   }) {
-    Random random = Random();
-    double maxX = size.x - textureSize.x * scaleFactor;
-    double maxY = size.y - textureSize.y * scaleFactor - 200;
+    double screenWidth = size.x;
+    double screenHeight = size.y;
+    double minGap = 60.0; // Minimum gap between animals
 
-    double minX =
-        textureSize.x * scaleFactor; // Đảm bảo không vượt quá mép trái màn hình
-    double minY =
-        textureSize.y * scaleFactor; // Đảm bảo không vượt quá mép trên màn hình
+    List<Vector2> positions = [];
 
     for (int i = 0; i < count; i++) {
-      double x = random.nextDouble() * (maxX - minX) +
-          minX; // Giới hạn khu vực xung quanh
-      double y = random.nextDouble() * (maxY - minY) +
-          minY; // Giới hạn khu vực xung quanh
-      bool flipped = random.nextBool();
+      Vector2 position;
+      bool validPosition;
 
-      Animal animal = createAnimal(
-        Vector2(x, y),
-        flipped,
-      );
+      // Find a valid random position for the current animal
+      do {
+        validPosition = true;
 
-      if (animalType == 'blueBird') {
-        globalBlueBirdCount++;
-      } else if (animalType == 'redBird') {
-        globalRedBirdCount++;
+        // Generate random position within the specified ranges
+        double x =
+            Random().nextDouble() * (xRange.end - xRange.start) + xRange.start;
+        double y =
+            Random().nextDouble() * (yRange.end - yRange.start) + yRange.start;
+
+        // Adjust position to screen dimensions and scale
+        double xPosition = screenWidth * x;
+        double yPosition = screenHeight * y;
+
+        position = Vector2(xPosition, yPosition);
+
+        // Check if the new position is at least minGap away from existing positions
+        for (Vector2 existingPosition in positions) {
+          if ((position - existingPosition).length < minGap) {
+            validPosition = false;
+            break;
+          }
+        }
+      } while (!validPosition);
+
+      positions.add(position);
+
+      // Check if the animal exceeds the screen boundaries
+      if (position.x >= 0 &&
+          position.x + textureSize.x * scaleFactor <= screenWidth &&
+          position.y >= 0 &&
+          position.y + textureSize.y * scaleFactor <= screenHeight) {
+        bool flip = Random().nextBool();
+        Animal animal = Animal(
+          scaleFactor: scaleFactor,
+          animation: animation,
+          textureSize: textureSize,
+          position: position,
+          flipped: flip,
+          type: type,
+        );
+        if (type == 'blueBird') {
+          globalBlueBirdCount++;
+        } else if (type == 'redBird') {
+          globalRedBirdCount++;
+        }
+        add(animal.createComponent());
       }
-
-      add(animal.createComponent());
     }
   }
 
@@ -129,4 +151,11 @@ class GameOddAndEven extends FlameGame {
   void update(double dt) {
     super.update(dt);
   }
+}
+
+class Range {
+  final double start;
+  final double end;
+
+  Range(this.start, this.end);
 }

@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/chicken.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
-import 'package:beanmind_flutter/game/class/animal/duck.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
@@ -58,13 +56,7 @@ class HappyFarm extends FlameGame {
       xRange: Range(0.05, 0.45),
       yPosition: size.y * 0.7,
       textureSize: Vector2(32, 34),
-      animalType: 'chicken',
-      createAnimal: (position, flipped) => Chicken(
-        scaleFactor: chickenIdleScaleFactor,
-        animation: chickenIdleAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'chicken',
     );
 
     createAnimals(
@@ -74,13 +66,7 @@ class HappyFarm extends FlameGame {
       xRange: Range(0.55, 0.95),
       yPosition: size.y * 0.7,
       textureSize: Vector2(230 / 4, 70),
-      animalType: 'duck',
-      createAnimal: (position, flipped) => Duck(
-        scaleFactor: duckIdleScaleFactor,
-        animation: duckIdleAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'duck',
     );
   }
 
@@ -91,11 +77,9 @@ class HappyFarm extends FlameGame {
     required Range xRange,
     required double yPosition,
     required Vector2 textureSize,
-    required String animalType,
-    required Animal Function(Vector2 position, bool flipped) createAnimal,
+    required String type,
   }) {
     double screenWidth = size.x;
-    //double screenHeight = size.y;
     double xStart = screenWidth *
         (xRange.start + 0.05); // Starting x position with 5% border
     double xEnd =
@@ -113,10 +97,17 @@ class HappyFarm extends FlameGame {
       // Check if the animal exceeds the screen boundaries
       if (xStart >= 0 && xStart + textureSize.x * scaleFactor <= screenWidth) {
         bool flip = Random().nextBool();
-        Animal animal = createAnimal(Vector2(xStart, yPosition), flip);
-        if (animalType == 'chicken') {
+        Animal animal = Animal(
+          scaleFactor: scaleFactor,
+          animation: animation,
+          textureSize: textureSize,
+          position: Vector2(xStart, yPosition),
+          flipped: flip,
+          type: type,
+        );
+        if (type == 'chicken') {
           globalChickenCount++;
-        } else if (animalType == 'duck') {
+        } else if (type == 'duck') {
           globalDuckCount++;
         }
         add(animal.createComponent());
