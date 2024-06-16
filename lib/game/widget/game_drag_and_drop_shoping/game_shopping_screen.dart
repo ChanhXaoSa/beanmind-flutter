@@ -81,26 +81,43 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     });
 
     if (upper.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
-      return;
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
     }
 
     if (balance == lastbalance) {
       userPoint += 1;
       _playSuccessSound();
-      if(userProgress == totalQuestion){
+      if (userProgress == totalQuestion) {
+        _playSuccessSound();
+        String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            'assets/lotties/gold-medal.json', userPoint);
+            lottieAsset, userPoint);
         return;
       }
-      _showDialog('Congratulations!', 'assets/lotties/success.json', true, false);
+      _showDialog(
+          'Congratulations!', 'assets/lotties/success.json', true, false);
     } else {
-      if(userProgress == totalQuestion){
+      if (userProgress == totalQuestion) {
+        _playSuccessSound();
+        String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            'assets/lotties/gold-medal.json', userPoint);
+            lottieAsset, userPoint);
         return;
       }
       _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+    }
+  }
+
+  String _getLottieAsset(int userPoint) {
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze-medal.json';
+      case 2:
+        return 'assets/lotties/silver-medal.json';
+      case 3:
+        return 'assets/lotties/gold-medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
     }
   }
 
