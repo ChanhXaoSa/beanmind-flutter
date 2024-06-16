@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/blue_bird.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
-import 'package:beanmind_flutter/game/class/animal/red_bird.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
@@ -57,32 +55,24 @@ class GameOddAndEven extends FlameGame {
     // Create Animals
     // blue bird
     createAnimals(
-      count: Random().nextInt(5) + 1,
+      count: Random().nextInt(10) + 1,
       scaleFactor: blueBirdScaleFactor,
       animation: blueBirdAnimation,
+      xRange: Range(0.55, 0.95),
+      yPosition: size.y * 0.5,
       textureSize: Vector2(470 / 6, 103),
-      animalType: 'blueBird',
-      createAnimal: (position, flipped) => BlueBird(
-        scaleFactor: blueBirdScaleFactor,
-        animation: blueBirdAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'blueBird',
     );
 
     // red bird
     createAnimals(
-      count: Random().nextInt(5) + 1,
+      count: Random().nextInt(10) + 1,
       scaleFactor: redBirdScaleFactor,
       animation: redBirdAnimation,
+      xRange: Range(0.05, 0.45),
+      yPosition: size.y * 0.5,
       textureSize: Vector2(466 / 6, 100),
-      animalType: 'redBird',
-      createAnimal: (position, flipped) => RedBird(
-        scaleFactor: redBirdScaleFactor,
-        animation: redBirdAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'redBird',
     );
   }
 
@@ -90,38 +80,50 @@ class GameOddAndEven extends FlameGame {
     required int count,
     required double scaleFactor,
     required SpriteAnimation animation,
+    required Range xRange,
+    required double yPosition,
     required Vector2 textureSize,
-    required String animalType,
-    required Animal Function(Vector2 position, bool flipped) createAnimal,
+    required String type,
   }) {
-    Random random = Random();
-    double maxX = size.x - textureSize.x * scaleFactor;
-    double maxY = size.y - textureSize.y * scaleFactor - 200;
+    double screenWidth = size.x;
+    double xStart = screenWidth *
+        (xRange.start + 0.05); // Starting x position with 5% border
+    double xEnd =
+        screenWidth * (xRange.end - 0.05); // Ending x position with 5% border
 
-    double minX =
-        textureSize.x * scaleFactor; // Đảm bảo không vượt quá mép trái màn hình
-    double minY =
-        textureSize.y * scaleFactor; // Đảm bảo không vượt quá mép trên màn hình
+    // Ensure the gap accounts for the size of the animals and scaleFactor
+    double gap = (xEnd - xStart) / (count - 1);
+    double minGap = textureSize.x * scaleFactor;
+
+    if (gap < minGap) {
+      gap = minGap;
+    }
 
     for (int i = 0; i < count; i++) {
-      double x = random.nextDouble() * (maxX - minX) +
-          minX; // Giới hạn khu vực xung quanh
-      double y = random.nextDouble() * (maxY - minY) +
-          minY; // Giới hạn khu vực xung quanh
-      bool flipped = random.nextBool();
-
-      Animal animal = createAnimal(
-        Vector2(x, y),
-        flipped,
-      );
-
-      if (animalType == 'blueBird') {
-        globalBlueBirdCount++;
-      } else if (animalType == 'redBird') {
-        globalRedBirdCount++;
+      // Check if the animal exceeds the screen boundaries
+      if (xStart >= 0 && xStart + textureSize.x * scaleFactor <= screenWidth) {
+        bool flip = Random().nextBool();
+        Animal animal = Animal(
+          scaleFactor: scaleFactor,
+          animation: animation,
+          textureSize: textureSize,
+          position: Vector2(xStart, yPosition),
+          flipped: flip,
+          type: type,
+        );
+        if (type == 'blueBird') {
+          globalBlueBirdCount++;
+        } else if (type == 'redBird') {
+          globalRedBirdCount++;
+        }
+        add(animal.createComponent());
       }
+      xStart += gap;
 
-      add(animal.createComponent());
+      // Ensure xStart is within bounds
+      if (xStart > xEnd) {
+        break; // Exit the loop if the animals exceed the specified x-range
+      }
     }
   }
 
@@ -129,4 +131,11 @@ class GameOddAndEven extends FlameGame {
   void update(double dt) {
     super.update(dt);
   }
+}
+
+class Range {
+  final double start;
+  final double end;
+
+  Range(this.start, this.end);
 }

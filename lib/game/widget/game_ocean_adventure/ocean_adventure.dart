@@ -1,11 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/blue_fish.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
-import 'package:beanmind_flutter/game/class/animal/moon_fish.dart';
-import 'package:beanmind_flutter/game/class/animal/octopus.dart';
-import 'package:beanmind_flutter/game/class/animal/red_fish.dart';
-import 'package:beanmind_flutter/game/class/animal/violet_fish.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
@@ -100,14 +95,10 @@ class GameOceanAdventure extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: blueFishScaleFactor,
       animation: blueFishAnimation,
+      xRange: Range(0.05, 0.45),
+      yPosition: size.y * 0.7,
       textureSize: Vector2(420 / 6, 50),
-      animalType: 'blueFish',
-      createAnimal: (position, flipped) => BlueFish(
-        scaleFactor: blueFishScaleFactor,
-        animation: blueFishAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'blueFish',
     );
 
     // moonFish
@@ -115,14 +106,10 @@ class GameOceanAdventure extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: moonFishScaleFactor,
       animation: moonFishAnimation,
-      textureSize: Vector2(480 / 6, 60),
-      animalType: 'moonFish',
-      createAnimal: (position, flipped) => MoonFish(
-        scaleFactor: moonFishScaleFactor,
-        animation: moonFishAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      xRange: Range(0.55, 0.95),
+      yPosition: size.y * 0.7,
+      textureSize: Vector2(230 / 4, 70),
+      type: 'moonFish',
     );
 
     // octopus
@@ -130,14 +117,10 @@ class GameOceanAdventure extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: octopusScaleFactor,
       animation: octopusAnimation,
+      xRange: Range(0.05, 0.45),
+      yPosition: size.y * 0.5,
       textureSize: Vector2(725 / 6, 90),
-      animalType: 'octopus',
-      createAnimal: (position, flipped) => Octopus(
-        scaleFactor: octopusScaleFactor,
-        animation: octopusAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'octopus',
     );
 
     // redFish
@@ -145,14 +128,10 @@ class GameOceanAdventure extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: redFishScaleFactor,
       animation: redFishAnimation,
+      xRange: Range(0.55, 0.95),
+      yPosition: size.y * 0.5,
       textureSize: Vector2(450 / 6, 50),
-      animalType: 'redFish',
-      createAnimal: (position, flipped) => RedFish(
-        scaleFactor: redFishScaleFactor,
-        animation: redFishAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      type: 'redFish',
     );
 
     // violetFish
@@ -160,14 +139,10 @@ class GameOceanAdventure extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: violetFishScaleFactor,
       animation: violetFishAnimation,
-      textureSize: Vector2(460 / 6, 60),
-      animalType: 'violetFish',
-      createAnimal: (position, flipped) => VioletFish(
-        scaleFactor: violetFishScaleFactor,
-        animation: violetFishAnimation,
-        position: position,
-        flipped: flipped,
-      ),
+      xRange: Range(0.05, 0.45),
+      yPosition: size.y * 0.3,
+      textureSize: Vector2(460 / 6, 50),
+      type: 'violetFish',
     );
   }
 
@@ -175,44 +150,56 @@ class GameOceanAdventure extends FlameGame {
     required int count,
     required double scaleFactor,
     required SpriteAnimation animation,
+    required Range xRange,
+    required double yPosition,
     required Vector2 textureSize,
-    required String animalType,
-    required Animal Function(Vector2 position, bool flipped) createAnimal,
+    required String type,
   }) {
-    Random random = Random();
-    double maxX = size.x - textureSize.x * scaleFactor;
-    double maxY = size.y - textureSize.y * scaleFactor;
+    double screenWidth = size.x;
+    double xStart = screenWidth *
+        (xRange.start + 0.05); // Starting x position with 5% border
+    double xEnd =
+        screenWidth * (xRange.end - 0.05); // Ending x position with 5% border
 
-    double minX =
-        textureSize.x * scaleFactor; // Đảm bảo không vượt quá mép trái màn hình
-    double minY =
-        textureSize.y * scaleFactor; // Đảm bảo không vượt quá mép trên màn hình
+    // Ensure the gap accounts for the size of the animals and scaleFactor
+    double gap = (xEnd - xStart) / (count - 1);
+    double minGap = textureSize.x * scaleFactor;
+
+    if (gap < minGap) {
+      gap = minGap;
+    }
 
     for (int i = 0; i < count; i++) {
-      double x = random.nextDouble() * (maxX - minX) +
-          minX; // Giới hạn khu vực xung quanh
-      double y = random.nextDouble() * (maxY - minY) +
-          minY; // Giới hạn khu vực xung quanh
-      bool flipped = random.nextBool();
-
-      Animal animal = createAnimal(
-        Vector2(x, y),
-        flipped,
-      );
-
-      if (animalType == 'blueFish') {
-        globalBlueFishCount++;
-      } else if (animalType == 'moonFish') {
-        globalMoonFishCount++;
-      } else if (animalType == 'octopus') {
-        globalOctopusCount++;
-      } else if (animalType == 'redFish') {
-        globalRedFishCount++;
-      } else if (animalType == 'violetFish') {
-        globalVioletFishCount++;
+      // Check if the animal exceeds the screen boundaries
+      if (xStart >= 0 && xStart + textureSize.x * scaleFactor <= screenWidth) {
+        bool flip = Random().nextBool();
+        Animal animal = Animal(
+          scaleFactor: scaleFactor,
+          animation: animation,
+          textureSize: textureSize,
+          position: Vector2(xStart, yPosition),
+          flipped: flip,
+          type: type,
+        );
+        if (type == 'blueFish') {
+          globalBlueFishCount++;
+        } else if (type == 'moonFish') {
+          globalMoonFishCount++;
+        } else if (type == 'octopus') {
+          globalOctopusCount++;
+        } else if (type == 'redFish') {
+          globalRedFishCount++;
+        } else if (type == 'violetFish') {
+          globalVioletFishCount++;
+        }
+        add(animal.createComponent());
       }
+      xStart += gap;
 
-      add(animal.createComponent());
+      // Ensure xStart is within bounds
+      if (xStart > xEnd) {
+        break; // Exit the loop if the animals exceed the specified x-range
+      }
     }
   }
 
@@ -220,4 +207,11 @@ class GameOceanAdventure extends FlameGame {
   void update(double dt) {
     super.update(dt);
   }
+}
+
+class Range {
+  final double start;
+  final double end;
+
+  Range(this.start, this.end);
 }
