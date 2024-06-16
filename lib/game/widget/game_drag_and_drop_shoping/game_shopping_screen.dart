@@ -7,6 +7,7 @@ import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
@@ -55,6 +56,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   }
 
   void resetGame() {
+    Navigator.of(context).pop();
     setState(() {
       balance = 100;
       lastbalance = 20;
@@ -63,15 +65,17 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       upper.clear();
       lower = List.from(startLower);
       _shopingSplitPanels = ShopingSplitPanels();
-      showResultDialog = false;
     });
   }
 
   void backtoHome() {
-    GameList();
+    // go to GameList
+    Get.offAll(() => GameList());
   }
 
   void checkResult() {
+    userProgress += 1;
+
     setState(() {
       showResultDialog = true;
     });
@@ -84,28 +88,69 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     if (balance == lastbalance) {
       userPoint += 1;
       _playSuccessSound();
-      if (userProgress != 3)
-        _showDialog(
-            'Congratulations!', 'assets/lotties/success.json', true, false);
-    } else {
-      if (userProgress != 3) {
-        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
-      }
-    }
-    userProgress += 1;
-
-    if (userProgress == totalQuestion) {
-      setState(() {
-        resetGame();
+      if(userProgress == totalQuestion){
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             'assets/lotties/gold-medal.json', userPoint);
+        return;
+      }
+      _showDialog('Congratulations!', 'assets/lotties/success.json', true, false);
+    } else {
+      if(userProgress == totalQuestion){
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            'assets/lotties/gold-medal.json', userPoint);
+        return;
+      }
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+    }
+  }
+
+  void goToNextQuestion() {
+    if (showResultDialog) {
+      Navigator.of(context).pop();
+      setState(() {
+        balance = 100;
+        lastbalance = 20;
+        upper.clear();
+        lower = List.from(startLower);
+        _shopingSplitPanels = ShopingSplitPanels();
+      });
+      setState(() {
+        showResultDialog = false;
       });
     }
+  }
+
+  void _playSuccessSound() async {
+    try {
+      await _audioPlayer.setAsset('assets/sounds/success.mp3');
+      _audioPlayer.play();
+    } catch (e, stacktrace) {
+      print('Error playing success sound: $e');
+      print(stacktrace);
+    }
+  }
+
+  @override
+  void dispose() {
+    _resultFocusNode.dispose();
+    _audioPlayer.dispose();
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
+      ..initialize().then((value) => {setState(() {})});
+    _shopingSplitPanels = ShopingSplitPanels();
   }
 
   void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -126,7 +171,10 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                     Lottie.asset('assets/lotties/gold-medal.json', height: 100),
                     SizedBox(height: 16),
                     Text(
-                      'Số điểm của bạn: $userPoint / 3',
+                      'Số điểm của bạn: ' +
+                          userPoint.toString() +
+                          '/' +
+                          totalQuestion.toString(),
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 10),
@@ -194,6 +242,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       bool showVideo) {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -265,49 +314,6 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
             ),
           );
         });
-  }
-
-  void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        balance = 100;
-        lastbalance = 20;
-        upper.clear();
-        lower = List.from(startLower);
-        _shopingSplitPanels = ShopingSplitPanels();
-      });
-      setState(() {
-        showResultDialog = false;
-      });
-    }
-  }
-
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
-  @override
-  void dispose() {
-    _resultFocusNode.dispose();
-    _audioPlayer.dispose();
-    _videoPlayerController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((value) => {setState(() {})});
-    _shopingSplitPanels = ShopingSplitPanels();
   }
 
   @override
