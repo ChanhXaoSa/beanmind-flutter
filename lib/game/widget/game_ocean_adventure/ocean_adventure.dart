@@ -96,7 +96,7 @@ class GameOceanAdventure extends FlameGame {
       scaleFactor: blueFishScaleFactor,
       animation: blueFishAnimation,
       xRange: Range(0.05, 0.45),
-      yPosition: size.y * 0.7,
+      yRange: Range(0.05, 0.95),
       textureSize: Vector2(420 / 6, 50),
       type: 'blueFish',
     );
@@ -107,8 +107,8 @@ class GameOceanAdventure extends FlameGame {
       scaleFactor: moonFishScaleFactor,
       animation: moonFishAnimation,
       xRange: Range(0.55, 0.95),
-      yPosition: size.y * 0.7,
-      textureSize: Vector2(230 / 4, 70),
+      yRange: Range(0.05, 0.95),
+      textureSize: Vector2(480 / 6, 60),
       type: 'moonFish',
     );
 
@@ -118,7 +118,7 @@ class GameOceanAdventure extends FlameGame {
       scaleFactor: octopusScaleFactor,
       animation: octopusAnimation,
       xRange: Range(0.05, 0.45),
-      yPosition: size.y * 0.5,
+      yRange: Range(0.05, 0.95),
       textureSize: Vector2(725 / 6, 90),
       type: 'octopus',
     );
@@ -129,7 +129,7 @@ class GameOceanAdventure extends FlameGame {
       scaleFactor: redFishScaleFactor,
       animation: redFishAnimation,
       xRange: Range(0.55, 0.95),
-      yPosition: size.y * 0.5,
+      yRange: Range(0.05, 0.95),
       textureSize: Vector2(450 / 6, 50),
       type: 'redFish',
     );
@@ -140,7 +140,7 @@ class GameOceanAdventure extends FlameGame {
       scaleFactor: violetFishScaleFactor,
       animation: violetFishAnimation,
       xRange: Range(0.05, 0.45),
-      yPosition: size.y * 0.3,
+      yRange: Range(0.05, 0.95),
       textureSize: Vector2(460 / 6, 50),
       type: 'violetFish',
     );
@@ -151,33 +151,58 @@ class GameOceanAdventure extends FlameGame {
     required double scaleFactor,
     required SpriteAnimation animation,
     required Range xRange,
-    required double yPosition,
+    required Range yRange,
     required Vector2 textureSize,
     required String type,
   }) {
     double screenWidth = size.x;
-    double xStart = screenWidth *
-        (xRange.start + 0.05); // Starting x position with 5% border
-    double xEnd =
-        screenWidth * (xRange.end - 0.05); // Ending x position with 5% border
+    double screenHeight = size.y;
+    double minGap = 60.0; // Minimum gap between animals
 
-    // Ensure the gap accounts for the size of the animals and scaleFactor
-    double gap = (xEnd - xStart) / (count - 1);
-    double minGap = textureSize.x * scaleFactor;
-
-    if (gap < minGap) {
-      gap = minGap;
-    }
+    List<Vector2> positions = [];
 
     for (int i = 0; i < count; i++) {
+      Vector2 position;
+      bool validPosition;
+
+      // Find a valid random position for the current animal
+      do {
+        validPosition = true;
+
+        // Generate random position within the specified ranges
+        double x =
+            Random().nextDouble() * (xRange.end - xRange.start) + xRange.start;
+        double y =
+            Random().nextDouble() * (yRange.end - yRange.start) + yRange.start;
+
+        // Adjust position to screen dimensions and scale
+        double xPosition = screenWidth * x;
+        double yPosition = screenHeight * y;
+
+        position = Vector2(xPosition, yPosition);
+
+        // Check if the new position is at least minGap away from existing positions
+        for (Vector2 existingPosition in positions) {
+          if ((position - existingPosition).length < minGap) {
+            validPosition = false;
+            break;
+          }
+        }
+      } while (!validPosition);
+
+      positions.add(position);
+
       // Check if the animal exceeds the screen boundaries
-      if (xStart >= 0 && xStart + textureSize.x * scaleFactor <= screenWidth) {
+      if (position.x >= 0 &&
+          position.x + textureSize.x * scaleFactor <= screenWidth &&
+          position.y >= 0 &&
+          position.y + textureSize.y * scaleFactor <= screenHeight) {
         bool flip = Random().nextBool();
         Animal animal = Animal(
           scaleFactor: scaleFactor,
           animation: animation,
           textureSize: textureSize,
-          position: Vector2(xStart, yPosition),
+          position: position,
           flipped: flip,
           type: type,
         );
@@ -193,12 +218,6 @@ class GameOceanAdventure extends FlameGame {
           globalVioletFishCount++;
         }
         add(animal.createComponent());
-      }
-      xStart += gap;
-
-      // Ensure xStart is within bounds
-      if (xStart > xEnd) {
-        break; // Exit the loop if the animals exceed the specified x-range
       }
     }
   }
