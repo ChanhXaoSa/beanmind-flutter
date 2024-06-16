@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/controllers/course/course_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,10 @@ class MyDrawerController extends GetxController {
 
   void signIn() {
     Get.find<AuthController>().navigateToLogin();
+  }
+
+  void course() {
+    Get.find<CourseController>().navigateToCourse();
   }
 
   void github() {

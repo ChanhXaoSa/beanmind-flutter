@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/course/course_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
@@ -18,6 +19,7 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(QuizPaperController());
               Get.put(MyDrawerController());
+              Get.put(CourseController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
@@ -37,7 +39,7 @@ class AppRoutes {
             page: () => QuizeScreen(),
             name: QuizeScreen.routeName,
             binding: BindingsBuilder(() {
-              Get.put<QuizController>( QuizController());
+              Get.put<QuizController>(QuizController());
             })),
         GetPage(
             page: () => const AnswersCheckScreen(),
@@ -46,5 +48,8 @@ class AppRoutes {
             page: () => const QuizOverviewScreen(),
             name: QuizOverviewScreen.routeName),
         GetPage(page: () => const Resultcreen(), name: Resultcreen.routeName),
+        GetPage(
+            name: CourseScreen.routeName,
+            page: () => const CourseScreen()),
       ];
 }

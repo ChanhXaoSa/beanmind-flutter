@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(gradient: mainGradient(context)),
-        child: SvgPicture.asset('assets/images/app_splash_logo.svg'),
+        child: SvgPicture.asset('assets/images/logo_beanmind.svg'),
       ),
     );
   }

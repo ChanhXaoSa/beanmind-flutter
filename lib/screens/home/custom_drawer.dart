@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/course/course_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
@@ -79,6 +80,10 @@ class CustomDrawer extends GetView<MyDrawerController> {
                                 color: kOnSurfaceTextColor)),
                   ),
                   const Spacer(flex: 1),
+                  _DrawerButton(
+                      onPressed: () => controller.course(),
+                      icon: Icons.book,
+                      label: 'My Course'),
                   _DrawerButton(
                       onPressed: () => controller.github(),
                       icon: AppIcons.github,
