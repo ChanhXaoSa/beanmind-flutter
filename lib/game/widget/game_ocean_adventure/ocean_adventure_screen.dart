@@ -5,9 +5,12 @@ import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../game_list.dart';
 
 class OceanAdventureScreen extends StatefulWidget {
   @override
@@ -21,6 +24,12 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   late GameOceanAdventure _gameOceanAdventure;
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
+
+  int userPoint = 0;
+  int userProgress = 0;
+  int totalQuestion = 3;
+  String userAnswer = '';
+  var randomNumber = Random();
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -40,9 +49,6 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     '=',
     '0'
   ];
-
-  String userAnswer = '';
-  int userPoint = 0;
 
   void buttonTapped(String button) {
     setState(() {
@@ -68,174 +74,80 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     });
   }
 
+  void resetGame() {
+    Navigator.of(context).pop();
+    setState(() {
+      userAnswer = '';
+      userPoint = 0;
+      userProgress = 0;
+      resetAnimal();
+      _gameOceanAdventure = GameOceanAdventure();
+    });
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAll(() => GameList());
+  }
+
   void checkResult() {
+    userProgress += 1;
+
     setState(() {
       showResultDialog = true;
     });
+
     if (userAnswer.isEmpty) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.deepPurple,
-              content: Container(
-                height: 400,
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Incorrect!',
-                      style: whiteTextStyle,
-                    ),
-                    Lottie.asset('assets/lotties/wrong.json', height: 100),
-                    Center(
-                      child: _videoPlayerController.value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(_videoPlayerController),
-                            )
-                          : Container(),
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        setState(() {
-                          _videoPlayerController.value.isPlaying
-                              ? _videoPlayerController.pause()
-                              : _videoPlayerController.play();
-                        });
-                      },
-                      child: Icon(_videoPlayerController.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow),
-                    ),
-                    GestureDetector(
-                      onTap: goToNextQuestion,
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.deepPurple[300],
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
-      return;
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
     }
 
-    if (globalBlueFishCount == int.parse(userAnswer)) {
+    if (globalChickenCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.deepPurple,
-              content: Container(
-                height: 200,
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Correct!',
-                      style: whiteTextStyle,
-                    ),
-                    Lottie.asset('assets/lotties/success.json', height: 100),
-                    GestureDetector(
-                        onTap: goToNextQuestion,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              color: Colors.deepPurple[300],
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                          ),
-                        ))
-                  ],
-                ),
-              ),
-            );
-          });
+      if (userProgress == totalQuestion) {
+        _playSuccessSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, userPoint);
+        return;
+      }
+      _showDialog(
+          'Congratulations!', 'assets/lotties/success.json', true, false);
     } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.deepPurple,
-              content: Container(
-                height: 400,
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Incorrect!',
-                      style: whiteTextStyle,
-                    ),
-                    Lottie.asset('assets/lotties/wrong.json', height: 100),
-                    Center(
-                      child: _videoPlayerController.value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(_videoPlayerController),
-                            )
-                          : Container(),
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        setState(() {
-                          _videoPlayerController.value.isPlaying
-                              ? _videoPlayerController.pause()
-                              : _videoPlayerController.play();
-                        });
-                      },
-                      child: Icon(_videoPlayerController.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow),
-                    ),
-                    GestureDetector(
-                      onTap: goToNextQuestion,
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.deepPurple[300],
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
+      if (userProgress == totalQuestion) {
+        _playSuccessSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, userPoint);
+        return;
+      }
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
     }
   }
 
-  var randomNumber = Random();
+  String _getLottieAsset(int userPoint) {
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze-medal.json';
+      case 2:
+        return 'assets/lotties/silver-medal.json';
+      case 3:
+        return 'assets/lotties/gold-medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
+    }
+  }
 
   void goToNextQuestion() {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        showResultDialog = false;
+        resetAnimal();
         userAnswer = '';
-        resetGame();
         _gameOceanAdventure = GameOceanAdventure();
+      });
+      setState(() {
+        showResultDialog = false;
       });
     }
   }
@@ -266,6 +178,175 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       ..initialize().then((value) => {setState(() {})});
 
     _gameOceanAdventure = GameOceanAdventure();
+  }
+
+  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    SizedBox(height: 16),
+                    Text(
+                      'Số điểm của bạn: ' +
+                          userPoint.toString() +
+                          '/' +
+                          totalQuestion.toString(),
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Thời gian hoàn thành trò chơi: ',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: resetGame,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Chơi lại ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: backtoHome,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Trở về trang chủ ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showDialog(String message, String lottieAsset, bool showNextQuestion,
+      bool showVideo) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    Lottie.asset(lottieAsset, height: 100),
+                    SizedBox(height: 16),
+                    if (showVideo)
+                      Center(
+                        child: _videoPlayerController.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
+                                child: VideoPlayer(_videoPlayerController),
+                              )
+                            : Container(),
+                      )
+                    else
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                    if (showVideo) SizedBox(height: 16),
+                    if (showVideo)
+                      FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _videoPlayerController.value.isPlaying
+                                ? _videoPlayerController.pause()
+                                : _videoPlayerController.play();
+                          });
+                        },
+                        child: Icon(_videoPlayerController.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow),
+                      ),
+                    if (showNextQuestion) SizedBox(height: 16),
+                    if (showNextQuestion)
+                      GestureDetector(
+                        onTap: goToNextQuestion,
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              color: Colors.deepPurple[300],
+                              borderRadius: BorderRadius.circular(8)),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override
