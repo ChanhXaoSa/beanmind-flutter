@@ -126,7 +126,7 @@ class _GameListState extends State<GameList> {
             Future.delayed(Duration(seconds: 2), () {
               setState(() {
                 isLoading = false;
-                resetGame();
+                resetAnimal();
               });
             });
           },

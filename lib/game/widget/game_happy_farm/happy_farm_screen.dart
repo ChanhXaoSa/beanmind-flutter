@@ -102,7 +102,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
     }
 
-    if (globalChickenCount == int.parse(userAnswer)) {
+    if (globalBlueBirdCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
       if (userProgress == totalQuestion) {

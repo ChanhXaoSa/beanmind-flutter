@@ -11,7 +11,7 @@ int globalRedBirdCount = 0;
 
 List<int> uppercheck = [];
 
-void resetGame() {
+void resetAnimal() {
   globalBlueFishCount = 0;
   globalRedFishCount = 0;
   globalChickenCount = 0;
