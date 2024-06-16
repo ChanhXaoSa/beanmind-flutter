@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
+import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
@@ -18,6 +22,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   late VideoPlayerController _videoPlayerController;
   late ShopingSplitPanels _shopingSplitPanels;
   bool showResultDialog = false;
+  Timer? _timer;
+  final time = '00:00:00'.obs;
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -28,20 +34,41 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   ];
 
   int userPoint = 0;
+  int userProgress = 0;
+  int totalQuestion = 3;
+
+  // time
 
   void buttonTapped(String button) {
-      if (button == 'RESET') {
-        setState(() {
+    if (button == 'RESET') {
+      setState(() {
         balance = 100;
         lastbalance = 20;
         upper.clear();
         lower = List.from(startLower);
-          _shopingSplitPanels = ShopingSplitPanels();
-        });
-      }
-      if (button == 'CHECK RESULT') {
-        checkResult();
-      }
+        _shopingSplitPanels = ShopingSplitPanels();
+      });
+    }
+    if (button == 'CHECK RESULT') {
+      checkResult();
+    }
+  }
+
+  void resetGame() {
+    setState(() {
+      balance = 100;
+      lastbalance = 20;
+      userPoint = 0;
+      userProgress = 0;
+      upper.clear();
+      lower = List.from(startLower);
+      _shopingSplitPanels = ShopingSplitPanels();
+      showResultDialog = false;
+    });
+  }
+
+  void backtoHome() {
+    GameList();
   }
 
   void checkResult() {
@@ -49,7 +76,6 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       showResultDialog = true;
     });
 
-    // Check if the upper list is empty
     if (upper.isEmpty) {
       _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
       return;
@@ -58,10 +84,110 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     if (balance == lastbalance) {
       userPoint += 1;
       _playSuccessSound();
-      _showDialog('Congratulations!', 'assets/lotties/success.json', true, false);   
+      if (userProgress != 3)
+        _showDialog(
+            'Congratulations!', 'assets/lotties/success.json', true, false);
     } else {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
+      if (userProgress != 3) {
+        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      }
     }
+    userProgress += 1;
+
+    if (userProgress == totalQuestion) {
+      setState(() {
+        resetGame();
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            'assets/lotties/gold-medal.json', userPoint);
+      });
+    }
+  }
+
+  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    SizedBox(height: 16),
+                    Text(
+                      'Số điểm của bạn: $userPoint / 3',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Thời gian hoàn thành trò chơi: $time',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: resetGame,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Chơi lại ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: backtoHome,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Trở về trang chủ ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   void _showDialog(String message, String lottieAsset, bool showNextQuestion,
