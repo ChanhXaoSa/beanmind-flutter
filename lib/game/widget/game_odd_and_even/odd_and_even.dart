@@ -59,8 +59,8 @@ class GameOddAndEven extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: blueBirdScaleFactor,
       animation: blueBirdAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
+      xRange: Range(0.1, 0.95),
+      yRange: Range(0.1, 0.95),
       textureSize: Vector2(470 / 6, 103),
       type: 'blueBird',
     );
@@ -70,8 +70,8 @@ class GameOddAndEven extends FlameGame {
       count: Random().nextInt(10) + 1,
       scaleFactor: redBirdScaleFactor,
       animation: redBirdAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
+      xRange: Range(0.1, 0.95),
+      yRange: Range(0.1, 0.95),
       textureSize: Vector2(466 / 6, 100),
       type: 'redBird',
     );

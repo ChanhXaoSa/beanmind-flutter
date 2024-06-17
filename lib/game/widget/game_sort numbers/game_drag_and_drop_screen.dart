@@ -1,11 +1,12 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
+import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
@@ -22,6 +23,12 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   late SplitPanels _splitPanels;
   bool showResultDialog = false;
 
+  int userPoint = 0;
+  int userProgress = 0;
+  int totalQuestion = 3;
+  String userAnswer = '';
+  var randomNumber = Random();
+
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
@@ -29,9 +36,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     'CHECK RESULT',
     'RESET',
   ];
-
-  String userAnswer = '';
-  int userPoint = 0;
 
   void buttonTapped(String button) {
     setState(() {
@@ -75,7 +79,15 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
     if (isSorted && upper.length == 10) {
       userPoint += 1;
+      userProgress += 1;
       _playSuccessSound();
+      if (userProgress == totalQuestion) {
+        _playSuccessSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, userPoint);
+        return;
+      }
       _showDialog(
           'Congratulations!', 'assets/lotties/success.json', true, false);
     } else if (isSorted) {
@@ -83,6 +95,168 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     } else {
       _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
     }
+  }
+
+  void goToNextQuestion() {
+    if (showResultDialog) {
+      Navigator.of(context).pop();
+      setState(() {
+        resetGameSortNumber();
+        lower = List.from(startLower);
+        _splitPanels = SplitPanels();
+        userAnswer = '';
+      });
+      setState(() {
+        showResultDialog = false;
+      });
+    }
+  }
+
+  void _playSuccessSound() async {
+    try {
+      await _audioPlayer.setAsset('assets/sounds/success.mp3');
+      _audioPlayer.play();
+    } catch (e, stacktrace) {
+      print('Error playing success sound: $e');
+      print(stacktrace);
+    }
+  }
+
+  @override
+  void dispose() {
+    _resultFocusNode.dispose();
+    _audioPlayer.dispose();
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
+      ..initialize().then((value) => {setState(() {})});
+    _splitPanels = SplitPanels();
+  }
+
+  void resetGame() {
+    Navigator.of(context).pop();
+    setState(() {
+      userPoint = 0;
+      userProgress = 0;
+      upper.clear();
+      lower = List.from(startLower);
+      _splitPanels = SplitPanels();
+    });
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAll(() => GameList());
+  }
+
+  String _getLottieAsset(int userPoint) {
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze-medal.json';
+      case 2:
+        return 'assets/lotties/silver-medal.json';
+      case 3:
+        return 'assets/lotties/gold-medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
+    }
+  }
+
+  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    SizedBox(height: 16),
+                    Text(
+                      'Số điểm của bạn: ' +
+                          userPoint.toString() +
+                          '/' +
+                          totalQuestion.toString(),
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Thời gian hoàn thành trò chơi: ',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: resetGame,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Chơi lại ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: backtoHome,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Trở về trang chủ ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   void _showDialog(String message, String lottieAsset, bool showNextQuestion,
@@ -160,48 +334,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
             ),
           );
         });
-  }
-
-  void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        resetGameSortNumber();
-        lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        userAnswer = '';
-      });
-      setState(() {
-        showResultDialog = false;
-      });
-    }
-  }
-
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
-  @override
-  void dispose() {
-    _resultFocusNode.dispose();
-    _audioPlayer.dispose();
-    _videoPlayerController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((value) => {setState(() {})});
-    _splitPanels = SplitPanels();
   }
 
   @override

@@ -1,8 +1,10 @@
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
+import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
@@ -18,6 +20,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   late VideoPlayerController _videoPlayerController;
   late ShopingSplitPanels _shopingSplitPanels;
   bool showResultDialog = false;
+  //Timer? _timer;
+  final time = '00:00:00'.obs;
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -28,46 +32,247 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   ];
 
   int userPoint = 0;
+  int userProgress = 0;
+  int totalQuestion = 3;
+
+  // time
 
   void buttonTapped(String button) {
+    try {
       if (button == 'RESET') {
         setState(() {
-        balance = 100;
-        lastbalance = 20;
-        upper.clear();
-        lower = List.from(startLower);
+          balance = 100;
+          lastbalance = 20;
+          upper.clear();
+          lower = List.from(startLower);
           _shopingSplitPanels = ShopingSplitPanels();
         });
       }
       if (button == 'CHECK RESULT') {
         checkResult();
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void resetGame() {
+    try {
+      Navigator.of(context).pop();
+      setState(() {
+        balance = 100;
+        lastbalance = 20;
+        userPoint = 0;
+        userProgress = 0;
+        upper.clear();
+        lower = List.from(startLower);
+        _shopingSplitPanels = ShopingSplitPanels();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAll(() => GameList());
   }
 
   void checkResult() {
-    setState(() {
-      showResultDialog = true;
-    });
+    try {
+      userProgress += 1;
 
-    // Check if the upper list is empty
-    if (upper.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
-      return;
-    }
+      setState(() {
+        showResultDialog = true;
+      });
 
-    if (balance == lastbalance) {
-      userPoint += 1;
-      _playSuccessSound();
-      _showDialog('Congratulations!', 'assets/lotties/success.json', true, false);   
-    } else {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
+      if (upper.isEmpty) {
+        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      }
+
+      if (balance == lastbalance) {
+        userPoint += 1;
+        _playSuccessSound();
+        if (userProgress == totalQuestion) {
+          _playSuccessSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, userPoint);
+          return;
+        }
+        _showDialog(
+            'Congratulations!', 'assets/lotties/success.json', true, false);
+      } else {
+        if (userProgress == totalQuestion) {
+          _playSuccessSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, userPoint);
+          return;
+        }
+        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      }
+    } catch (e) {
+      print(e);
     }
+  }
+
+  String _getLottieAsset(int userPoint) {
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze-medal.json';
+      case 2:
+        return 'assets/lotties/silver-medal.json';
+      case 3:
+        return 'assets/lotties/gold-medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
+    }
+  }
+
+  void goToNextQuestion() {
+    try {
+      if (showResultDialog) {
+        Navigator.of(context).pop();
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upper.clear();
+          lower = List.from(startLower);
+          _shopingSplitPanels = ShopingSplitPanels();
+        });
+        setState(() {
+          showResultDialog = false;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _playSuccessSound() async {
+    try {
+      await _audioPlayer.setAsset('assets/sounds/success.mp3');
+      _audioPlayer.play();
+    } catch (e, stacktrace) {
+      print('Error playing success sound: $e');
+      print(stacktrace);
+    }
+  }
+
+  @override
+  void dispose() {
+    _resultFocusNode.dispose();
+    _audioPlayer.dispose();
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
+      ..initialize().then((value) => {setState(() {})});
+    _shopingSplitPanels = ShopingSplitPanels();
+  }
+
+  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    SizedBox(height: 16),
+                    Text(
+                      'Số điểm của bạn: ' +
+                          userPoint.toString() +
+                          '/' +
+                          totalQuestion.toString(),
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Thời gian hoàn thành trò chơi: $time',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: resetGame,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Chơi lại ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: backtoHome,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Trở về trang chủ ',
+                                style: whiteTextStyle,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurple[300],
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   void _showDialog(String message, String lottieAsset, bool showNextQuestion,
       bool showVideo) {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -141,53 +346,10 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         });
   }
 
-  void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        balance = 100;
-        lastbalance = 20;
-        upper.clear();
-        lower = List.from(startLower);
-        _shopingSplitPanels = ShopingSplitPanels();
-      });
-      setState(() {
-        showResultDialog = false;
-      });
-    }
-  }
-
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
-  @override
-  void dispose() {
-    _resultFocusNode.dispose();
-    _audioPlayer.dispose();
-    _videoPlayerController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((value) => {setState(() {})});
-    _shopingSplitPanels = ShopingSplitPanels();
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double thresholdWidth = 600;
+    const double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
 
@@ -210,7 +372,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
               ),
@@ -232,7 +394,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                         builder: (context) {
                           return AlertDialog(
                             title: const Text('Hướng dẫn'),
-                            content: Text(
+                            content: const Text(
                               'Nội dung hướng dẫn người chơi...',
                             ),
                             actions: [
@@ -286,7 +448,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 1, // Số cột
                                 childAspectRatio: 4, // Tỷ lệ khung hình
                               ),
@@ -319,7 +481,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 1, // Số cột
                                 childAspectRatio: 4, // Tỷ lệ khung hình
                               ),
@@ -337,7 +499,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
             ),
             Focus(
               focusNode: _resultFocusNode,
-              child: Container(
+              child: const SizedBox(
                 height: 0,
                 width: 0,
               ),
