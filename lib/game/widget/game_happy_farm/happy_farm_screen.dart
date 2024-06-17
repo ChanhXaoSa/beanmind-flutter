@@ -107,20 +107,20 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _playSuccessSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
+            lottieAsset, false, userPoint);
         return;
       }
       _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _playSuccessSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
+            lottieAsset, false, userPoint);
         return;
       }
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
     }
   }
 
@@ -207,10 +207,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         });
   }
 
-  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+  void _showDialogCompleted(
+      String message, String lottieAsset, bool lockScreens, int userPoint) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: lockScreens,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -298,11 +299,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         });
   }
 
-  void _showDialog(String message, String lottieAsset, bool showNextQuestion,
-      bool showVideo) {
+  void _showDialog(String message, String lottieAsset, bool lockScreen,
+      bool showNextQuestion, bool showVideo) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: lockScreen,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,

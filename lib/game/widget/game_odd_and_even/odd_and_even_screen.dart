@@ -92,7 +92,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     });
 
     if (userAnswer.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true, true);
     }
 
     if (userAnswer == 'số lẻ' &&
@@ -103,35 +103,33 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         _playSuccessSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
+            lottieAsset, false, userPoint);
         return;
       }
       _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, false);
-    }
-    
-     else if(userAnswer == 'số chẵn' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0){
-          userPoint += 1;
+          'Congratulations!', 'assets/lotties/success.json', true, true, false);
+    } else if (userAnswer == 'số chẵn' &&
+        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
+      userPoint += 1;
       _playSuccessSound();
       if (userProgress == totalQuestion) {
         _playSuccessSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
+            lottieAsset, false, userPoint);
         return;
       }
       _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, false);    
-      } else {
-        if (userProgress == totalQuestion) {
+          'Congratulations!', 'assets/lotties/success.json', true, true, false);
+    } else {
+      if (userProgress == totalQuestion) {
         _playSuccessSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
+            lottieAsset, false, userPoint);
         return;
       }
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true, true);
     }
   }
 
@@ -190,10 +188,11 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     _gameOddAndEven = GameOddAndEven();
   }
 
-  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+  void _showDialogCompleted(
+      String message, String lottieAsset, bool lockScreen, int userPoint) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: lockScreen,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -281,11 +280,11 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         });
   }
 
-  void _showDialog(String message, String lottieAsset, bool showNextQuestion,
-      bool showVideo) {
+  void _showDialog(String message, String lottieAsset, bool lockScreen,
+      bool showNextQuestion, bool showVideo) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: lockScreen,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
