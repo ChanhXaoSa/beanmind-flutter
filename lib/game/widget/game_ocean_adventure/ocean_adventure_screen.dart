@@ -101,7 +101,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
     }
 
-    if (globalChickenCount == int.parse(userAnswer)) {
+    if (globalBlueFishCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
       if (userProgress == totalQuestion) {

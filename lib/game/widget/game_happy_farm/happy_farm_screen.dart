@@ -98,11 +98,19 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       showResultDialog = true;
     });
 
-    if (userAnswer.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+    if (userAnswer.isEmpty) {  
+      if (userProgress == totalQuestion) {
+        _playSuccessSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, userPoint);
+        return;
+      } else {
+        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      }
     }
 
-    if (globalBlueBirdCount == int.parse(userAnswer)) {
+    if (globalChickenCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
       if (userProgress == totalQuestion) {
