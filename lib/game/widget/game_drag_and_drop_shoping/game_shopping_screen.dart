@@ -38,31 +38,39 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   // time
 
   void buttonTapped(String button) {
-    if (button == 'RESET') {
-      setState(() {
-        balance = 100;
-        lastbalance = 20;
-        upper.clear();
-        lower = List.from(startLower);
-        _shopingSplitPanels = ShopingSplitPanels();
-      });
-    }
-    if (button == 'CHECK RESULT') {
-      checkResult();
+    try {
+      if (button == 'RESET') {
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upper.clear();
+          lower = List.from(startLower);
+          _shopingSplitPanels = ShopingSplitPanels();
+        });
+      }
+      if (button == 'CHECK RESULT') {
+        checkResult();
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
   void resetGame() {
-    Navigator.of(context).pop();
-    setState(() {
-      balance = 100;
-      lastbalance = 20;
-      userPoint = 0;
-      userProgress = 0;
-      upper.clear();
-      lower = List.from(startLower);
-      _shopingSplitPanels = ShopingSplitPanels();
-    });
+    try {
+      Navigator.of(context).pop();
+      setState(() {
+        balance = 100;
+        lastbalance = 20;
+        userPoint = 0;
+        userProgress = 0;
+        upper.clear();
+        lower = List.from(startLower);
+        _shopingSplitPanels = ShopingSplitPanels();
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void backtoHome() {
@@ -71,37 +79,41 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   }
 
   void checkResult() {
-    userProgress += 1;
+    try {
+      userProgress += 1;
 
-    setState(() {
-      showResultDialog = true;
-    });
+      setState(() {
+        showResultDialog = true;
+      });
 
-    if (upper.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
-    }
-
-    if (balance == lastbalance) {
-      userPoint += 1;
-      _playSuccessSound();
-      if (userProgress == totalQuestion) {
-        _playSuccessSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
-        return;
+      if (upper.isEmpty) {
+        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
       }
-      _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, false);
-    } else {
-      if (userProgress == totalQuestion) {
+
+      if (balance == lastbalance) {
+        userPoint += 1;
         _playSuccessSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
-        return;
+        if (userProgress == totalQuestion) {
+          _playSuccessSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, userPoint);
+          return;
+        }
+        _showDialog(
+            'Congratulations!', 'assets/lotties/success.json', true, false);
+      } else {
+        if (userProgress == totalQuestion) {
+          _playSuccessSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, userPoint);
+          return;
+        }
+        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
       }
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -119,18 +131,22 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   }
 
   void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        balance = 100;
-        lastbalance = 20;
-        upper.clear();
-        lower = List.from(startLower);
-        _shopingSplitPanels = ShopingSplitPanels();
-      });
-      setState(() {
-        showResultDialog = false;
-      });
+    try {
+      if (showResultDialog) {
+        Navigator.of(context).pop();
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upper.clear();
+          lower = List.from(startLower);
+          _shopingSplitPanels = ShopingSplitPanels();
+        });
+        setState(() {
+          showResultDialog = false;
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -333,7 +349,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double thresholdWidth = 600;
+    const double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
 
@@ -356,7 +372,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
               ),
@@ -378,7 +394,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                         builder: (context) {
                           return AlertDialog(
                             title: const Text('Hướng dẫn'),
-                            content: Text(
+                            content: const Text(
                               'Nội dung hướng dẫn người chơi...',
                             ),
                             actions: [
@@ -432,7 +448,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 1, // Số cột
                                 childAspectRatio: 4, // Tỷ lệ khung hình
                               ),
@@ -465,7 +481,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 1, // Số cột
                                 childAspectRatio: 4, // Tỷ lệ khung hình
                               ),
@@ -483,7 +499,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
             ),
             Focus(
               focusNode: _resultFocusNode,
-              child: Container(
+              child: const SizedBox(
                 height: 0,
                 width: 0,
               ),
