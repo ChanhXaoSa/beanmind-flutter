@@ -92,24 +92,14 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   }
 
   void checkResult() {
+    if (userAnswer.isEmpty) {
+      _showDialogError('Bạn chưa nhập số !');
+      return;
+    }
     userProgress += 1;
-
     setState(() {
       showResultDialog = true;
     });
-
-    if (userAnswer.isEmpty) {  
-      if (userProgress == totalQuestion) {
-        _playSuccessSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
-        return;
-      } else {
-        _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
-      }
-    }
-
     if (globalChickenCount == int.parse(userAnswer)) {
       userPoint += 1;
       _playSuccessSound();
@@ -121,7 +111,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         return;
       }
       _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', true, false);
     } else {
       if (userProgress == totalQuestion) {
         _playSuccessSound();
@@ -130,18 +120,18 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
             lottieAsset, userPoint);
         return;
       }
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true);
     }
   }
 
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
       case 1:
-        return 'assets/lotties/bronze-medal.json';
+        return 'assets/lotties/bronze_medal.json';
       case 2:
-        return 'assets/lotties/silver-medal.json';
+        return 'assets/lotties/silver_medal.json';
       case 3:
-        return 'assets/lotties/gold-medal.json';
+        return 'assets/lotties/gold_medal.json';
       default:
         return 'assets/lotties/wrong.json';
     }
@@ -188,6 +178,35 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     _happyFarm = HappyFarm();
   }
 
+  void _showDialogError(
+    String message,
+  ) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
     showDialog(
         context: context,
@@ -209,7 +228,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 16),
-                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
                     Text(
                       'Số điểm của bạn: ' +

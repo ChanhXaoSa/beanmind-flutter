@@ -91,15 +91,16 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   }
 
   void checkResult() {
+    if (userAnswer.isEmpty) {
+      _showDialogError('Bạn chưa nhập số !');
+      return;
+    }
+
     userProgress += 1;
 
     setState(() {
       showResultDialog = true;
     });
-
-    if (userAnswer.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
-    }
 
     if (globalBlueFishCount == int.parse(userAnswer)) {
       userPoint += 1;
@@ -111,8 +112,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
             lottieAsset, userPoint);
         return;
       }
-      _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, false);
+      _showDialog('Đúng rồi !', 'assets/lotties/success.json', true, false);
     } else {
       if (userProgress == totalQuestion) {
         _playSuccessSound();
@@ -121,18 +121,18 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
             lottieAsset, userPoint);
         return;
       }
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true);
+      _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, true);
     }
   }
 
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
       case 1:
-        return 'assets/lotties/bronze-medal.json';
+        return 'assets/lotties/bronze_medal.json';
       case 2:
-        return 'assets/lotties/silver-medal.json';
+        return 'assets/lotties/silver_medal.json';
       case 3:
-        return 'assets/lotties/gold-medal.json';
+        return 'assets/lotties/gold_medal.json';
       default:
         return 'assets/lotties/wrong.json';
     }
@@ -180,6 +180,35 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     _gameOceanAdventure = GameOceanAdventure();
   }
 
+  void _showDialogError(
+    String message,
+  ) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
     showDialog(
         context: context,
@@ -201,7 +230,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 16),
-                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
                     Text(
                       'Số điểm của bạn: ' +

@@ -64,7 +64,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
     // Check if the upper list is empty
     if (upper.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
+      _showDialogError(
+          'Bạn chưa đặt các thẻ số lên phía trên \nhãy xếp số theo thứ tự từ bé đến lớn!');
       return;
     }
 
@@ -77,23 +78,36 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       }
     }
 
-    if (isSorted && upper.length == 10) {
-      userPoint += 1;
+    if (upper.length == 10) {
       userProgress += 1;
-      _playSuccessSound();
-      if (userProgress == totalQuestion) {
+      if (isSorted) {
+        userPoint += 1;
         _playSuccessSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, userPoint);
-        return;
+        if (userProgress == totalQuestion) {
+          _playSuccessSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, false, userPoint);
+          return;
+        }
+        _showDialog(
+            'Correct!', 'assets/lotties/success.json', false, true, false);
+      } else {
+        if (userProgress == totalQuestion) {
+          _playSuccessSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, false, userPoint);
+          return;
+        }
+        _showDialog(
+            'Incorrect!', 'assets/lotties/wrong.json', false, true, true);
       }
-      _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, false);
     } else if (isSorted) {
-      _showDialog('Correct!', 'assets/lotties/success.json', false, false);
+      _showDialog(
+          'Correct!', 'assets/lotties/success.json', true, false, false);
     } else {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
+      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, false, true);
     }
   }
 
@@ -158,20 +172,50 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
       case 1:
-        return 'assets/lotties/bronze-medal.json';
+        return 'assets/lotties/bronze_medal.json';
       case 2:
-        return 'assets/lotties/silver-medal.json';
+        return 'assets/lotties/silver_medal.json';
       case 3:
-        return 'assets/lotties/gold-medal.json';
+        return 'assets/lotties/gold_medal.json';
       default:
         return 'assets/lotties/wrong.json';
     }
   }
 
-  void _showDialogCompleted(String message, String lottieAsset, int userPoint) {
+  void _showDialogError(
+    String message,
+  ) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showDialogCompleted(
+      String message, String lottieAsset, bool lockScreen, int userPoint) {
+    showDialog(
+        context: context,
+        barrierDismissible: lockScreen,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -189,7 +233,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 16),
-                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
                     Text(
                       'Số điểm của bạn: ' +
@@ -259,10 +303,11 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         });
   }
 
-  void _showDialog(String message, String lottieAsset, bool showNextQuestion,
-      bool showVideo) {
+  void _showDialog(String message, String lottieAsset, bool lockScreen,
+      bool showNextQuestion, bool showVideo) {
     showDialog(
         context: context,
+        barrierDismissible: lockScreen,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,

@@ -68,28 +68,6 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     });
   }
 
-  // void checkResult() {
-  //   setState(() {
-  //     showResultDialog = true;
-  //   });
-  //   if (userAnswer == 'số lẻ' &&
-  //       (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
-  //     userPoint += 1;
-  //     _playSuccessSound();
-  //     _showDialog('Correct!', 'assets/lotties/success.json', true, false);
-  //   }
-  //   else if (userAnswer == 'số chẵn' &&
-  //       (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
-  //     userPoint += 1;
-  //     _playSuccessSound();
-  //     _showDialog('Correct!', 'assets/lotties/success.json', true, false);
-  //   } else {
-  //     _showDialog('Incorrect!', 'assets/lotties/wrong.json', false, true);
-  //   }
-  // }
-
-
-
   void resetGame() {
     Navigator.of(context).pop();
     setState(() {
@@ -160,11 +138,11 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
       case 1:
-        return 'assets/lotties/bronze-medal.json';
+        return 'assets/lotties/bronze_medal.json';
       case 2:
-        return 'assets/lotties/silver-medal.json';
+        return 'assets/lotties/silver_medal.json';
       case 3:
-        return 'assets/lotties/gold-medal.json';
+        return 'assets/lotties/gold_medal.json';
       default:
         return 'assets/lotties/wrong.json';
     }
@@ -233,7 +211,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 16),
-                    Lottie.asset('assets/lotties/gold-medal.json', height: 100),
+                    Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
                     Text(
                       'Số điểm của bạn: ' +
