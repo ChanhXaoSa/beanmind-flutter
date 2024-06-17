@@ -6,7 +6,6 @@ import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class ShopingSplitPanels extends StatefulWidget {
   const ShopingSplitPanels(

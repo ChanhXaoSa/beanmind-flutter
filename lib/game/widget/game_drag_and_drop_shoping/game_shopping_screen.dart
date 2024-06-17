@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
@@ -7,7 +5,6 @@ import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
@@ -23,7 +20,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   late VideoPlayerController _videoPlayerController;
   late ShopingSplitPanels _shopingSplitPanels;
   bool showResultDialog = false;
-  Timer? _timer;
+  //Timer? _timer;
   final time = '00:00:00'.obs;
 
   var whiteTextStyle = const TextStyle(

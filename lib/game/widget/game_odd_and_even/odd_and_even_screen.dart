@@ -1,11 +1,8 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
-import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
-import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
