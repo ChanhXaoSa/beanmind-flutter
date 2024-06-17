@@ -1,0 +1,82 @@
+[
+    {
+        "price": 5,
+        "image": "/images/item_store/food/item_store_017.png"
+    },
+    {
+        "price": 7,
+        "image": "/images/item_store/food/item_store_043.png"
+    },
+    {
+        "price": 8,
+        "image": "/images/item_store/food/item_store_044.png"
+    },
+    {
+        "price": 6,
+        "image": "/images/item_store/food/item_store_056.png"
+    },
+    {
+        "price": 10,
+        "image": "/images/item_store/food/item_store_057.png"
+    },
+    {
+        "price": 12,
+        "image": "/images/item_store/food/item_store_060.png"
+    },
+    {
+        "price": 15,
+        "image": "/images/item_store/food/item_store_062.png"
+    },
+    {
+        "price": 20,
+        "image": "/images/item_store/food/item_store_063.png"
+    },
+    {
+        "price": 9,
+        "image": "/images/item_store/food/item_store_067.png"
+    },
+    {
+        "price": 18,
+        "image": "/images/item_store/food/item_store_080.png"
+    },
+    {
+        "price": 22,
+        "image": "/images/item_store/food/item_store_085.png"
+    },
+    {
+        "price": 17,
+        "image": "/images/item_store/food/item_store_087.png"
+    },
+    {
+        "price": 11,
+        "image": "/images/item_store/food/item_store_089.png"
+    },
+    {
+        "price": 14,
+        "image": "/images/item_store/food/item_store_091.png"
+    },
+    {
+        "price": 19,
+        "image": "/images/item_store/food/item_store_093.png"
+    },
+    {
+        "price": 23,
+        "image": "/images/item_store/food/item_store_094.png"
+    },
+    {
+        "price": 13,
+        "image": "/images/item_store/food/item_store_095.png"
+    },
+    {
+        "price": 16,
+        "image": "/images/item_store/food/item_store_096.png"
+    },
+    {
+        "price": 21,
+        "image": "/images/item_store/food/item_store_097.png"
+    },
+    {
+        "price": 25,
+        "image": "/images/item_store/food/item_store_098.png"
+    }
+]

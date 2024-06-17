@@ -8,6 +8,7 @@ final fi = FirebaseFirestore.instance;
 final userFR = fi.collection('users');
 final quizePaperFR = fi.collection('quizpapers');
 final leaderBoardFR = fi.collection('leaderboard');
+final gameItemFR = fi.collection('itemstore');
 
 DocumentReference recentQuizesData({required String userId, required String paperId}) => userFR.doc(userId).collection('myrecent_quizes').doc(paperId);
 
@@ -16,6 +17,11 @@ CollectionReference<Map<String, dynamic>> recentQuizes({required String userId})
 CollectionReference<Map<String, dynamic>> getleaderBoard({required String paperId}) => leaderBoardFR.doc(paperId).collection('scores');
 
 DocumentReference questionsFR({required String paperId, required String questionsId}) => quizePaperFR.doc(paperId).collection('questions').doc(questionsId);
+
+// game item store
+CollectionReference<Map<String, dynamic>> getallItems() => gameItemFR;
+DocumentReference gameItemFRDoc({required String itemId}) =>
+    gameItemFR.doc(itemId);
 
 //Reference get firebaseStorage => FirebaseStorage.instanceFor(bucket: 'gs://fire-base-chat-cc3e9.appspot.com').ref();
 Reference get firebaseStorage => FirebaseStorage.instance.ref();
