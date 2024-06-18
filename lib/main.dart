@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       //getPages: AppRoutes.pages(),
       home: BeanMindLayout(),
-    );
+    ); //
   }
 }
 

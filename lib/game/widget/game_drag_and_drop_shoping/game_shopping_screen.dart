@@ -9,6 +9,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../models/game_item_model.dart';
+
 class GameShoppingScreen extends StatefulWidget {
   @override
   _GameShoppingScreenState createState() => _GameShoppingScreenState();

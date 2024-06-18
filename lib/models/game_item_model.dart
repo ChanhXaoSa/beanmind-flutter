@@ -28,3 +28,7 @@ class ItemModel {
         'price': price,
       };
 }
+
+List<ItemModel> upper = [];
+List<ItemModel> lower = [];
+List<ItemModel> startLower = [];

@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:beanmind_flutter/controllers/game/game_shopping_controller.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
+import 'package:beanmind_flutter/models/game_item_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ShopingSplitPanels extends StatefulWidget {
   const ShopingSplitPanels(
@@ -19,19 +22,22 @@ class ShopingSplitPanels extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
+  final GameShoppingController controller = Get.find();
+
   @override
   void initState() {
     super.initState();
     balance = 100;
-    lastbalance = 20; 
+    lastbalance = 20;
     upper.clear();
     lower.clear();
-    lower = List.from(startLower);
+    startLower = controller
+        .getProductsForLowerPanel(); // Initialize with data from the controller
   }
 
   PanelLocation? dragStart;
   PanelLocation? dropPreview;
-  Product? hoveringData;
+  ItemModel? hoveringData;
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
@@ -52,12 +58,10 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
       assert(hoveringData != null, 'Can only drop when data is being dragged');
       setState(() {
         if (dragStart!.$2 == Panel.lower && balance - hoveringData!.price < 0) {
-          // Kéo từ dưới lên trên và số dư không đủ
           _showDialog('Số tiền không đủ');
           return;
         }
         if (upper.length >= 10 && dragStart!.$2 == Panel.lower) {
-          // Kéo từ dưới lên trên và số lượng vượt quá 10
           _showDialog('Số lượng vượt quá 10');
           return;
         }
@@ -88,7 +92,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     }
   }
 
-  void setExternalData(Product data) => hoveringData = data;
+  void setExternalData(ItemModel data) => hoveringData = data;
 
   void updateDropPreview(PanelLocation update) {
     setState(() {
@@ -96,33 +100,32 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     });
   }
 
-  void _showDialog(
-    String message,
-  ) {
+  void _showDialog(String message) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            content: IntrinsicHeight(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      message,
-                      style: whiteTextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          content: IntrinsicHeight(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.deepPurple,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    message,
+                    style: whiteTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -154,17 +157,18 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
             ),
           ),
           Positioned(
-              height: constraints.maxHeight / 2,
-              width: constraints.maxWidth,
-              top: 100,
-              child: MyDropRegion(
-                onDrop: drop,
-                setExternalData: setExternalData,
-                updateDropPreview: updateDropPreview,
-                columns: widget.columns,
-                childSize: itemSize,
-                panel: Panel.upper,
-                child: ItemPanel(
+            height: constraints.maxHeight / 2,
+            width: constraints.maxWidth,
+            top: 100,
+            child: MyDropRegion(
+              onDrop: drop,
+              setExternalData: setExternalData,
+              updateDropPreview: updateDropPreview,
+              columns: widget.columns,
+              childSize: itemSize,
+              panel: Panel.upper,
+              child: Obx(() {
+                return ItemPanel(
                   crossAxisCount: widget.columns,
                   dragStart: dragStart?.$2 == Panel.upper ? dragStart : null,
                   dropPreview:
@@ -172,11 +176,13 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
                   hoveringData:
                       dropPreview?.$2 == Panel.upper ? hoveringData : null,
                   spacing: widget.itemSpacing,
-                  items: upper,
+                  items: upper, // Adjust as needed
                   onDragStart: onDragStart,
                   panel: Panel.upper,
-                ),
-              )),
+                );
+              }),
+            ),
+          ),
           Positioned(
             height: 2,
             width: constraints.maxWidth,
@@ -196,20 +202,23 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
               columns: widget.columns,
               childSize: itemSize,
               panel: Panel.lower,
-              child: ItemPanel(
-                crossAxisCount: widget.columns,
-                dragStart: dragStart?.$2 == Panel.lower ? dragStart : null,
-                dropPreview:
-                    dropPreview?.$2 == Panel.lower ? dropPreview : null,
-                hoveringData:
-                    dropPreview?.$2 == Panel.lower ? hoveringData : null,
-                items: lower,
-                onDragStart: onDragStart,
-                panel: Panel.lower,
-                spacing: widget.itemSpacing,
-              ),
+              child: Obx(() {
+                lower = startLower; // Example assignment
+                return ItemPanel(
+                  crossAxisCount: widget.columns,
+                  dragStart: dragStart?.$2 == Panel.lower ? dragStart : null,
+                  dropPreview:
+                      dropPreview?.$2 == Panel.lower ? dropPreview : null,
+                  hoveringData:
+                      dropPreview?.$2 == Panel.lower ? hoveringData : null,
+                  items: lower,
+                  onDragStart: onDragStart,
+                  panel: Panel.lower,
+                  spacing: widget.itemSpacing,
+                );
+              }),
             ),
-          )
+          ),
         ],
       );
     });
@@ -232,8 +241,8 @@ class ItemPanel extends StatelessWidget {
   final int crossAxisCount;
   final PanelLocation? dragStart;
   final PanelLocation? dropPreview;
-  final Product? hoveringData;
-  final List<Product> items;
+  final ItemModel? hoveringData;
+  final List<ItemModel> items;
   final double spacing;
 
   final Function(PanelLocation) onDragStart;
@@ -241,7 +250,7 @@ class ItemPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemCopy = List<Product>.from(items);
+    final itemCopy = List<ItemModel>.from(items);
 
     PanelLocation? dragStartCopy;
 
@@ -272,7 +281,7 @@ class ItemPanel extends StatelessWidget {
         mainAxisSpacing: spacing,
         crossAxisSpacing: spacing,
         children:
-            items.asMap().entries.map<Widget>((MapEntry<int, Product> entry) {
+            items.asMap().entries.map<Widget>((MapEntry<int, ItemModel> entry) {
           Color textColor =
               entry.key == dragStartCopy?.$1 || entry.key == dropPreviewCopy?.$1
                   ? Colors.grey
@@ -285,7 +294,7 @@ class ItemPanel extends StatelessWidget {
                 Transform.scale(
                   scale: 2.0, // Doubles the size of the child
                   child: Image.asset(
-                    entry.value.image,
+                    entry.value.imageUrl ?? 'default_image_url'!,
                     height: 55, // Original size
                     width: 55, // Original size
                   ),
@@ -329,7 +338,7 @@ class ItemPanel extends StatelessWidget {
           return Draggable(
             feedback: child,
             child: MyDraggableWidget(
-              data: entry.value.image,
+              data: entry.value.imageUrl ?? 'default_image_url'!,
               onDragStart: () => onDragStart((entry.key, panel)),
               child: Center(
                 child: Column(
@@ -338,7 +347,7 @@ class ItemPanel extends StatelessWidget {
                     Transform.scale(
                       scale: 2.0, // Doubles the size of the child
                       child: Image.asset(
-                        entry.value.image,
+                        entry.value.imageUrl ?? 'default_image_url',
                         height: 55, // Original size
                         width: 55, // Original size
                       ),
