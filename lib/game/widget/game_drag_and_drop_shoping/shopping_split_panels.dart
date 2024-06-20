@@ -1,11 +1,10 @@
 import 'dart:math';
-
-import 'package:beanmind_flutter/controllers/game/game_shopping_controller.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/models/game_item_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,8 +21,6 @@ class ShopingSplitPanels extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
-  final GameShoppingController controller = Get.find();
-
   @override
   void initState() {
     super.initState();
@@ -31,8 +28,31 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     lastbalance = 20;
     upper.clear();
     lower.clear();
-    startLower = controller
-        .getProductsForLowerPanel(); // Initialize with data from the controller
+    startLower = [];
+    fetchData();
+    lower = List<ItemModel>.from(startLower);
+  }
+
+  Future<List<ItemModel>> fetchData() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('itemstore').get();
+
+      List<ItemModel> items =
+          snapshot.docs.map((doc) => ItemModel.fromSnapshot(doc)).toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print(
+            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageUrl}');
+      });
+
+      return items;
+    } catch (e) {
+      print('Error fetching data: $e');
+      return [];
+    }
   }
 
   PanelLocation? dragStart;
@@ -137,89 +157,100 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
       final columnWidth = spaceForColumns / widget.columns;
       final itemSize = Size(columnWidth, columnWidth);
 
-      return Stack(
-        children: <Widget>[
-          Positioned(
-            top: 10,
-            left: 10,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Số tiền bạn có: ${balance} \$',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+      return FutureBuilder<List<ItemModel>>(
+        future: fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No items found'));
+          } else {
+            List<ItemModel> startLower = snapshot.data!;
+            List<ItemModel> upper = [];
+            List<ItemModel> lower = [];
+
+            return Stack(
+              children: <Widget>[
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Số tiền bạn có: ${balance} \$',
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      ),
+                      Text(
+                        'Số tiền yêu cầu: ${lastbalance} \$',
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  'Số tiền yêu cầu: ${lastbalance} \$',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+                Positioned(
+                  height: constraints.maxHeight / 2,
+                  width: constraints.maxWidth,
+                  top: 100,
+                  child: MyDropRegion(
+                    onDrop: drop,
+                    setExternalData: setExternalData,
+                    updateDropPreview: updateDropPreview,
+                    columns: widget.columns,
+                    childSize: itemSize,
+                    panel: Panel.upper,
+                    child: ItemPanel(
+                      crossAxisCount: widget.columns,
+                      dragStart: dragStart?.$2 == Panel.upper ? dragStart : null,
+                      dropPreview:
+                          dropPreview?.$2 == Panel.upper ? dropPreview : null,
+                      hoveringData:
+                          dropPreview?.$2 == Panel.upper ? hoveringData : null,
+                      spacing: widget.itemSpacing,
+                      items: upper, // Adjust as needed
+                      onDragStart: onDragStart,
+                      panel: Panel.upper,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  height: 2,
+                  width: constraints.maxWidth,
+                  top: constraints.maxHeight / 2,
+                  child: const ColoredBox(
+                    color: Colors.black,
+                  ),
+                ),
+                Positioned(
+                  height: constraints.maxHeight / 2,
+                  width: constraints.maxWidth,
+                  bottom: 0,
+                  child: MyDropRegion(
+                    onDrop: drop,
+                    setExternalData: setExternalData,
+                    updateDropPreview: updateDropPreview,
+                    columns: widget.columns,
+                    childSize: itemSize,
+                    panel: Panel.lower,
+                    child: ItemPanel(
+                      crossAxisCount: widget.columns,
+                      dragStart: dragStart?.$2 == Panel.lower ? dragStart : null,
+                      dropPreview:
+                          dropPreview?.$2 == Panel.lower ? dropPreview : null,
+                      hoveringData:
+                          dropPreview?.$2 == Panel.lower ? hoveringData : null,
+                      items: lower,
+                      onDragStart: onDragStart,
+                      panel: Panel.lower, spacing: 4,
+                    ),
+                  ),
                 ),
               ],
-            ),
-          ),
-          Positioned(
-            height: constraints.maxHeight / 2,
-            width: constraints.maxWidth,
-            top: 100,
-            child: MyDropRegion(
-              onDrop: drop,
-              setExternalData: setExternalData,
-              updateDropPreview: updateDropPreview,
-              columns: widget.columns,
-              childSize: itemSize,
-              panel: Panel.upper,
-              child: Obx(() {
-                return ItemPanel(
-                  crossAxisCount: widget.columns,
-                  dragStart: dragStart?.$2 == Panel.upper ? dragStart : null,
-                  dropPreview:
-                      dropPreview?.$2 == Panel.upper ? dropPreview : null,
-                  hoveringData:
-                      dropPreview?.$2 == Panel.upper ? hoveringData : null,
-                  spacing: widget.itemSpacing,
-                  items: upper, // Adjust as needed
-                  onDragStart: onDragStart,
-                  panel: Panel.upper,
-                );
-              }),
-            ),
-          ),
-          Positioned(
-            height: 2,
-            width: constraints.maxWidth,
-            top: constraints.maxHeight / 2,
-            child: const ColoredBox(
-              color: Colors.black,
-            ),
-          ),
-          Positioned(
-            height: constraints.maxHeight / 2,
-            width: constraints.maxWidth,
-            bottom: 0,
-            child: MyDropRegion(
-              onDrop: drop,
-              setExternalData: setExternalData,
-              updateDropPreview: updateDropPreview,
-              columns: widget.columns,
-              childSize: itemSize,
-              panel: Panel.lower,
-              child: Obx(() {
-                lower = startLower; // Example assignment
-                return ItemPanel(
-                  crossAxisCount: widget.columns,
-                  dragStart: dragStart?.$2 == Panel.lower ? dragStart : null,
-                  dropPreview:
-                      dropPreview?.$2 == Panel.lower ? dropPreview : null,
-                  hoveringData:
-                      dropPreview?.$2 == Panel.lower ? hoveringData : null,
-                  items: lower,
-                  onDragStart: onDragStart,
-                  panel: Panel.lower,
-                  spacing: widget.itemSpacing,
-                );
-              }),
-            ),
-          ),
-        ],
+            );
+          }
+        },
       );
     });
   }
@@ -293,8 +324,8 @@ class ItemPanel extends StatelessWidget {
               children: <Widget>[
                 Transform.scale(
                   scale: 2.0, // Doubles the size of the child
-                  child: Image.asset(
-                    entry.value.imageUrl ?? 'default_image_url'!,
+                  child: Image.network(
+                    entry.value.imageUrl ?? 'https://via.placeholder.com/150',
                     height: 55, // Original size
                     width: 55, // Original size
                   ),
@@ -338,7 +369,7 @@ class ItemPanel extends StatelessWidget {
           return Draggable(
             feedback: child,
             child: MyDraggableWidget(
-              data: entry.value.imageUrl ?? 'default_image_url'!,
+              data: entry.value.imageUrl ?? 'https://via.placeholder.com/150',
               onDragStart: () => onDragStart((entry.key, panel)),
               child: Center(
                 child: Column(
@@ -346,8 +377,8 @@ class ItemPanel extends StatelessWidget {
                   children: <Widget>[
                     Transform.scale(
                       scale: 2.0, // Doubles the size of the child
-                      child: Image.asset(
-                        entry.value.imageUrl ?? 'default_image_url',
+                      child: Image.network(
+                        entry.value.imageUrl ?? 'https://via.placeholder.com/150',
                         height: 55, // Original size
                         width: 55, // Original size
                       ),

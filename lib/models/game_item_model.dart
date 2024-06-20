@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 class ItemModel {
   final String id;
@@ -14,13 +13,13 @@ class ItemModel {
 
   ItemModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
-        imageUrl = json['images'] as String,
+        imageUrl = json['images'] as String?,
         price = json['price'] as int;
 
   ItemModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        imageUrl = snapshot['images'],
-        price = snapshot['price'];
+        imageUrl = snapshot.data()?['images'] as String?,
+        price = snapshot.data()?['price'] as int;
 
   Map<String, dynamic> toJson() => {
         'id': id,
