@@ -28,6 +28,6 @@ class ItemModel {
       };
 }
 
-List<ItemModel> upper = [];
-List<ItemModel> lower = [];
-List<ItemModel> startLower = [];
+List<ItemModel> upperItemModel = [];
+List<ItemModel> lowerItemModel = [];
+List<ItemModel> startLowerItemModel = [];

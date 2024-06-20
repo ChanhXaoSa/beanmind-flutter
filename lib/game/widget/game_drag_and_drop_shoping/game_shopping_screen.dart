@@ -45,8 +45,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         setState(() {
           balance = 100;
           lastbalance = 20;
-          upper.clear();
-          lower = List.from(startLower);
+          upperItemModel.clear();
+          lowerItemModel = List.from(startLowerItemModel);
           _shopingSplitPanels = ShopingSplitPanels();
         });
       }
@@ -66,8 +66,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         lastbalance = 20;
         userPoint = 0;
         userProgress = 0;
-        upper.clear();
-        lower = List.from(startLower);
+        upperItemModel = [];
+        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
         _shopingSplitPanels = ShopingSplitPanels();
       });
     } catch (e) {
@@ -82,7 +82,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
 
   void checkResult() {
     try {
-      if (upper.isEmpty) {
+      if (upperItemModel.isEmpty) {
         _showDialogError('Bạn chưa chọn sản phẩm nào!');
         return;
       }
@@ -139,8 +139,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         setState(() {
           balance = 100;
           lastbalance = 20;
-          upper.clear();
-          lower = List.from(startLower);
+          upperItemModel.clear();
+          lowerItemModel = List.from(startLowerItemModel);
           _shopingSplitPanels = ShopingSplitPanels();
         });
         setState(() {

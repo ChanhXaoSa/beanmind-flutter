@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/models/game_item_model.dart';
+import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -21,18 +22,15 @@ class ShopingSplitPanels extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
-  List<ItemModel> upper = [];
-  List<ItemModel> lower = [];
-  List<ItemModel> startLower = [];
 
   @override
   void initState() {
     super.initState();
     balance = 100;
     lastbalance = 20;
-    upper.clear();
-    lower.clear();
-    startLower = [];
+    upperItemModel.clear();
+    lowerItemModel.clear();
+    startLowerItemModel = [];
     fetchData();
   }
 
@@ -53,8 +51,8 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
 
       // Update startLower and lower with the fetched items
       setState(() {
-        startLower = items;
-        lower = List<ItemModel>.from(startLower);
+        startLowerItemModel = items;
+        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -69,8 +67,8 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
 
   void onDragStart(PanelLocation start) {
     final data = switch (start.$2) {
-      Panel.lower => lower[start.$1],
-      Panel.upper => upper[start.$1],
+      Panel.lower => lowerItemModel[start.$1],
+      Panel.upper => upperItemModel[start.$1],
     };
     setState(() {
       dragStart = start;
@@ -87,7 +85,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
           _showDialog('Số tiền không đủ');
           return;
         }
-        if (upper.length >= 10 && dragStart!.$2 == Panel.lower) {
+        if (upperItemModel.length >= 10 && dragStart!.$2 == Panel.lower) {
           _showDialog('Số lượng vượt quá 10');
           return;
         }
@@ -97,17 +95,17 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
           }
 
           if (dragStart!.$2 == Panel.upper) {
-            upper.removeAt(dragStart!.$1);
+            upperItemModel.removeAt(dragStart!.$1);
             balance += hoveringData!.price;
           } else {
-            lower.removeAt(dragStart!.$1);
+            lowerItemModel.removeAt(dragStart!.$1);
             balance -= hoveringData!.price;
           }
         }
         if (dropPreview!.$2 == Panel.upper) {
-          upper.insert(min(dropPreview!.$1, upper.length), hoveringData!);
+          upperItemModel.insert(min(dropPreview!.$1, upperItemModel.length), hoveringData!);
         } else {
-          lower.insert(min(dropPreview!.$1, lower.length), hoveringData!);
+          lowerItemModel.insert(min(dropPreview!.$1, lowerItemModel.length), hoveringData!);
         }
         dragStart = null;
         dropPreview = null;
@@ -201,7 +199,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
                   hoveringData:
                       dropPreview?.$2 == Panel.upper ? hoveringData : null,
                   spacing: widget.itemSpacing,
-                  items: upper,
+                  items: upperItemModel,
                   onDragStart: onDragStart,
                   panel: Panel.upper,
                 ),
@@ -232,7 +230,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
                     dropPreview?.$2 == Panel.lower ? dropPreview : null,
                 hoveringData:
                     dropPreview?.$2 == Panel.lower ? hoveringData : null,
-                items: lower,
+                items: lowerItemModel,
                 onDragStart: onDragStart,
                 panel: Panel.lower,
                 spacing: widget.itemSpacing,
@@ -314,10 +312,9 @@ class ItemPanel extends StatelessWidget {
                 Transform.scale(
                   scale: 2.0, // Doubles the size of the child
                   child: Image.network(
-                    entry.value.imageurl ?? 'https://via.placeholder.com/150',
-                    height: 55, // Original size
-                    width: 55, // Original size
-                  ),
+                        entry.value.imageurl ??
+                            'https://via.placeholder.com/150',
+                      ),
                 ),
                 Text(
                   '${entry.value.price} \$',
