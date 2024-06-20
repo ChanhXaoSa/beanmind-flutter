@@ -1,5 +1,6 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,24 +12,30 @@ class GameListScreen extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Obx(() => Text(controller.selectedGame.value != null
-            ? controller.getGameTitle(controller.selectedGame.value!)
-            : 'Thư viện trò chơi')),
-        leading: Obx(() => controller.selectedGame.value != null
-            ? IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            controller.selectedGame.value = null;
-          },
-        )
-            : Container()),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80.0),
+        child: Obx(() {
+          return controller.selectedGame.value != null
+              ? AppBar(
+            title: Text(controller.getGameTitle(controller.selectedGame.value!)),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                controller.selectedGame.value = null;
+              },
+            ),
+          )
+              : CustomAppBar(
+            title: 'Thư viện trò chơi',
+            showActionIcon: false, // or true based on your requirement
+          );
+        }),
       ),
       body: Obx(() => controller.isLoading.value
           ? _buildLoadingIndicator()
           : controller.selectedGame.value != null
-          ? controller.buildGameWidget(controller.selectedGame.value!)
-          : _buildGameGrid()),
+              ? controller.buildGameWidget(controller.selectedGame.value!)
+              : _buildGameGrid()),
       backgroundColor: Colors.blue[100],
     );
   }
@@ -61,7 +68,8 @@ class GameListScreen extends GetView<GameController> {
             });
           },
           child: GridTile(
-            child: Image.asset(controller.gameThumbnailURL + controller.games[index]['image']!,
+            child: Image.asset(
+                controller.gameThumbnailURL + controller.games[index]['image']!,
                 fit: BoxFit.cover),
             footer: GridTileBar(
               backgroundColor: Colors.black54,
