@@ -20,6 +20,7 @@ class AppRoutes {
               Get.put(QuizPaperController());
               Get.put(MyDrawerController());
               Get.put(CourseController());
+              Get.put(GameController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
@@ -48,8 +49,8 @@ class AppRoutes {
             page: () => const QuizOverviewScreen(),
             name: QuizOverviewScreen.routeName),
         GetPage(page: () => const Resultcreen(), name: Resultcreen.routeName),
+        GetPage(name: CourseScreen.routeName, page: () => const CourseScreen()),
         GetPage(
-            name: CourseScreen.routeName,
-            page: () => const CourseScreen()),
+            name: GameListScreen.routeName, page: () => const GameListScreen()),
       ];
 }

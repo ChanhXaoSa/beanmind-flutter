@@ -81,6 +81,10 @@ class CustomDrawer extends GetView<MyDrawerController> {
                   ),
                   const Spacer(flex: 1),
                   _DrawerButton(
+                      onPressed: () => controller.game(),
+                      icon: Icons.gamepad_outlined,
+                      label: 'My Game'),
+                  _DrawerButton(
                       onPressed: () => controller.course(),
                       icon: Icons.book,
                       label: 'My Course'),
