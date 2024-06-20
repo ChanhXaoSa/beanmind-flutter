@@ -28,8 +28,8 @@ class GameShoppingController extends GetxController {
 
       for (var item in itemList) {
         final imageUrl =
-            await Get.find<FireBaseStorageService>().getImage(item.imageUrl);
-        item.imageUrl = imageUrl;
+            await Get.find<FireBaseStorageService>().getImage(item.imageurl);
+        item.imageurl = imageUrl;
       }
       allItem.assignAll(itemList);
     } catch (e) {

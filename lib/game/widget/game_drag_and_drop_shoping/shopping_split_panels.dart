@@ -21,6 +21,9 @@ class ShopingSplitPanels extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
+  List<ItemModel> upper = [];
+  List<ItemModel> startLower = [];
+
   @override
   void initState() {
     super.initState();
@@ -30,10 +33,9 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     lower.clear();
     startLower = [];
     fetchData();
-    lower = List<ItemModel>.from(startLower);
   }
 
-  Future<List<ItemModel>> fetchData() async {
+  Future<void> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
@@ -45,13 +47,16 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
       print('Number of items fetched: ${items.length}');
       items.forEach((item) {
         print(
-            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageUrl}');
+            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
       });
 
-      return items;
+      // Update startLower and lower with the fetched items
+      setState(() {
+        startLower = items;
+        lower = List<ItemModel>.from(startLower);
+      });
     } catch (e) {
       print('Error fetching data: $e');
-      return [];
     }
   }
 
@@ -157,100 +162,83 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
       final columnWidth = spaceForColumns / widget.columns;
       final itemSize = Size(columnWidth, columnWidth);
 
-      return FutureBuilder<List<ItemModel>>(
-        future: fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No items found'));
-          } else {
-            List<ItemModel> startLower = snapshot.data!;
-            List<ItemModel> upper = [];
-            List<ItemModel> lower = [];
-
-            return Stack(
-              children: <Widget>[
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Số tiền bạn có: ${balance} \$',
-                        style: TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                      Text(
-                        'Số tiền yêu cầu: ${lastbalance} \$',
-                        style: TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                    ],
-                  ),
+      return Stack(
+        children: <Widget>[
+          Positioned(
+            top: 10,
+            left: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Số tiền bạn có: ${balance} \$',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
-                Positioned(
-                  height: constraints.maxHeight / 2,
-                  width: constraints.maxWidth,
-                  top: 100,
-                  child: MyDropRegion(
-                    onDrop: drop,
-                    setExternalData: setExternalData,
-                    updateDropPreview: updateDropPreview,
-                    columns: widget.columns,
-                    childSize: itemSize,
-                    panel: Panel.upper,
-                    child: ItemPanel(
-                      crossAxisCount: widget.columns,
-                      dragStart: dragStart?.$2 == Panel.upper ? dragStart : null,
-                      dropPreview:
-                          dropPreview?.$2 == Panel.upper ? dropPreview : null,
-                      hoveringData:
-                          dropPreview?.$2 == Panel.upper ? hoveringData : null,
-                      spacing: widget.itemSpacing,
-                      items: upper, // Adjust as needed
-                      onDragStart: onDragStart,
-                      panel: Panel.upper,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  height: 2,
-                  width: constraints.maxWidth,
-                  top: constraints.maxHeight / 2,
-                  child: const ColoredBox(
-                    color: Colors.black,
-                  ),
-                ),
-                Positioned(
-                  height: constraints.maxHeight / 2,
-                  width: constraints.maxWidth,
-                  bottom: 0,
-                  child: MyDropRegion(
-                    onDrop: drop,
-                    setExternalData: setExternalData,
-                    updateDropPreview: updateDropPreview,
-                    columns: widget.columns,
-                    childSize: itemSize,
-                    panel: Panel.lower,
-                    child: ItemPanel(
-                      crossAxisCount: widget.columns,
-                      dragStart: dragStart?.$2 == Panel.lower ? dragStart : null,
-                      dropPreview:
-                          dropPreview?.$2 == Panel.lower ? dropPreview : null,
-                      hoveringData:
-                          dropPreview?.$2 == Panel.lower ? hoveringData : null,
-                      items: lower,
-                      onDragStart: onDragStart,
-                      panel: Panel.lower, spacing: 4,
-                    ),
-                  ),
+                Text(
+                  'Số tiền yêu cầu: ${lastbalance} \$',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ],
-            );
-          }
-        },
+            ),
+          ),
+          Positioned(
+              height: constraints.maxHeight / 2,
+              width: constraints.maxWidth,
+              top: 100,
+              child: MyDropRegion(
+                onDrop: drop,
+                setExternalData: setExternalData,
+                updateDropPreview: updateDropPreview,
+                columns: widget.columns,
+                childSize: itemSize,
+                panel: Panel.upper,
+                child: ItemPanel(
+                  crossAxisCount: widget.columns,
+                  dragStart: dragStart?.$2 == Panel.upper ? dragStart : null,
+                  dropPreview:
+                      dropPreview?.$2 == Panel.upper ? dropPreview : null,
+                  hoveringData:
+                      dropPreview?.$2 == Panel.upper ? hoveringData : null,
+                  spacing: widget.itemSpacing,
+                  items: upper,
+                  onDragStart: onDragStart,
+                  panel: Panel.upper,
+                ),
+              )),
+          Positioned(
+            height: 2,
+            width: constraints.maxWidth,
+            top: constraints.maxHeight / 2,
+            child: const ColoredBox(
+              color: Colors.black,
+            ),
+          ),
+          Positioned(
+            height: constraints.maxHeight / 2,
+            width: constraints.maxWidth,
+            bottom: 0,
+            child: MyDropRegion(
+              onDrop: drop,
+              setExternalData: setExternalData,
+              updateDropPreview: updateDropPreview,
+              columns: widget.columns,
+              childSize: itemSize,
+              panel: Panel.lower,
+              child: ItemPanel(
+                crossAxisCount: widget.columns,
+                dragStart: dragStart?.$2 == Panel.lower ? dragStart : null,
+                dropPreview:
+                    dropPreview?.$2 == Panel.lower ? dropPreview : null,
+                hoveringData:
+                    dropPreview?.$2 == Panel.lower ? hoveringData : null,
+                items: lower,
+                onDragStart: onDragStart,
+                panel: Panel.lower,
+                spacing: widget.itemSpacing,
+              ),
+            ),
+          )
+        ],
       );
     });
   }
@@ -325,7 +313,7 @@ class ItemPanel extends StatelessWidget {
                 Transform.scale(
                   scale: 2.0, // Doubles the size of the child
                   child: Image.network(
-                    entry.value.imageUrl ?? 'https://via.placeholder.com/150',
+                    entry.value.imageurl ?? 'https://via.placeholder.com/150',
                     height: 55, // Original size
                     width: 55, // Original size
                   ),
@@ -369,7 +357,8 @@ class ItemPanel extends StatelessWidget {
           return Draggable(
             feedback: child,
             child: MyDraggableWidget(
-              data: entry.value.imageUrl ?? 'https://via.placeholder.com/150',
+              data: entry.value.imageurl ??
+                  'gs://beanmind-2911.appspot.com/item_game_images/item_store_002.png',
               onDragStart: () => onDragStart((entry.key, panel)),
               child: Center(
                 child: Column(
@@ -378,9 +367,8 @@ class ItemPanel extends StatelessWidget {
                     Transform.scale(
                       scale: 2.0, // Doubles the size of the child
                       child: Image.network(
-                        entry.value.imageUrl ?? 'https://via.placeholder.com/150',
-                        height: 55, // Original size
-                        width: 55, // Original size
+                        entry.value.imageurl ??
+                            'https://via.placeholder.com/150',
                       ),
                     ),
                     Text(
