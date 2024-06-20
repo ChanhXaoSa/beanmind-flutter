@@ -22,6 +22,7 @@ class ShopingSplitPanels extends StatefulWidget {
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
   List<ItemModel> upper = [];
+  List<ItemModel> lower = [];
   List<ItemModel> startLower = [];
 
   @override
