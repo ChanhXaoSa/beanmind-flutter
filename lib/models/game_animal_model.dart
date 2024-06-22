@@ -25,7 +25,8 @@ class GameAnimalModel {
   factory GameAnimalModel.fromString(String jsonString) =>
       GameAnimalModel.fromJson(json.decode(jsonString));
 
-  factory GameAnimalModel.fromJson(Map<String, dynamic> json) => GameAnimalModel(
+  factory GameAnimalModel.fromJson(Map<String, dynamic> json) =>
+      GameAnimalModel(
         id: json['id'] as String,
         imageurl: json['imageurl'] as String?,
         VectorX: json['VectorX'] as double,
@@ -36,7 +37,9 @@ class GameAnimalModel {
         type: json['type'] as String,
       );
 
-  factory GameAnimalModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) => GameAnimalModel(
+  factory GameAnimalModel.fromSnapshot(
+          DocumentSnapshot<Map<String, dynamic>> snapshot) =>
+      GameAnimalModel(
         id: snapshot.id,
         imageurl: snapshot.data()?['imageurl'] as String?,
         VectorX: snapshot.data()?['VectorX'] as double,
@@ -71,12 +74,29 @@ Future<List<GameAnimalModel>> fetchAnimalData() async {
     print('Number of animals fetched: ${animals.length}');
     animals.forEach((animal) {
       print(
-          'Animal: ${animal.id}, VectorX: ${animal.VectorX}, VectorY: ${animal.VectorY}, ImageUrl: ${animal.imageurl}');
+          'Animal: ${animal.id}, VectorX: ${animal.VectorX}, VectorY: ${animal.VectorY}, ImageUrl: ${animal.imageurl}, Type: ${animal.type}, Sprite: ${animal.sprite}, Steptime: ${animal.steptime}, ScaleFactor: ${animal.scaleFactor}');
     });
 
     return animals;
   } catch (e) {
     print('Error fetching data: $e');
     return [];
+  }
+}
+
+Future<void> saveAnimalData(GameAnimalModel animal) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  try {
+    await firestore.collection('animal').doc(animal.id).set(animal.toJson());
+    print('Animal data saved successfully: ${animal.id}');
+  } catch (e) {
+    print('Error saving animal data: $e');
+  }
+}
+
+Future<void> saveAllAnimalData(List<GameAnimalModel> animals) async {
+  for (var animal in animals) {
+    await saveAnimalData(animal);
   }
 }
