@@ -28,7 +28,7 @@ class AppIntroductionScreen extends StatelessWidget {
                 color: kOnSurfaceTextColor,
               ),
               const Text(
-                'This is not a production app. This quiz app is made for beginner flutter developers to understand the firebase integrations, state management, and the app flow. There are free available all source codes, design files also.',
+                'Beanmind Introduction.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
