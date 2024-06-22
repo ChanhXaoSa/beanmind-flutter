@@ -1,30 +1,33 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 class ItemModel {
   final String id;
-  String? imageUrl;
+  String? imageurl;
   final int price;
 
-  ItemModel({required this.id, this.imageUrl, required this.price});
+  ItemModel({required this.id, this.imageurl, required this.price});
 
   factory ItemModel.fromString(String jsonString) =>
       ItemModel.fromJson(json.decode(jsonString));
 
   ItemModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
-        imageUrl = json['images'] as String,
+        imageurl = json['imageurl'] as String?,
         price = json['price'] as int;
 
   ItemModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
       : id = snapshot.id,
-        imageUrl = snapshot['images'],
-        price = snapshot['price'];
+        imageurl = snapshot.data()?['imageurl'] as String?,
+        price = snapshot.data()?['price'] as int;
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'images': imageUrl,
+        'imageurl': imageurl,
         'price': price,
       };
 }
+
+List<ItemModel> upperItemModel = [];
+List<ItemModel> lowerItemModel = [];
+List<ItemModel> startLowerItemModel = [];

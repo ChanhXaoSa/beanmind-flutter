@@ -1,5 +1,6 @@
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
+import 'package:beanmind_flutter/models/game_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
@@ -19,7 +20,7 @@ class MyDropRegion extends StatefulWidget {
   final int columns;
   final Panel panel;
   final VoidCallback onDrop;
-  final void Function(Product) setExternalData;
+  final void Function(ItemModel) setExternalData;
   final void Function(PanelLocation) updateDropPreview;
   final Widget child;
 

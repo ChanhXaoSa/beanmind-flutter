@@ -1,11 +1,14 @@
 import 'dart:math';
-
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
+import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
+import 'package:beanmind_flutter/models/game_item_model.dart';
+import 'package:beanmind_flutter/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ShopingSplitPanels extends StatefulWidget {
   const ShopingSplitPanels(
@@ -19,26 +22,53 @@ class ShopingSplitPanels extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
+
   @override
   void initState() {
     super.initState();
     balance = 100;
-    lastbalance = 20; 
-    upper.clear();
-    lower.clear();
-    lower = List.from(startLower);
+    lastbalance = 20;
+    upperItemModel.clear();
+    lowerItemModel.clear();
+    startLowerItemModel = [];
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('itemstore').get();
+
+      List<ItemModel> items =
+          snapshot.docs.map((doc) => ItemModel.fromSnapshot(doc)).toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print(
+            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
+      });
+
+      // Update startLower and lower with the fetched items
+      setState(() {
+        startLowerItemModel = items;
+        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
 
   PanelLocation? dragStart;
   PanelLocation? dropPreview;
-  Product? hoveringData;
+  ItemModel? hoveringData;
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   void onDragStart(PanelLocation start) {
     final data = switch (start.$2) {
-      Panel.lower => lower[start.$1],
-      Panel.upper => upper[start.$1],
+      Panel.lower => lowerItemModel[start.$1],
+      Panel.upper => upperItemModel[start.$1],
     };
     setState(() {
       dragStart = start;
@@ -52,12 +82,10 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
       assert(hoveringData != null, 'Can only drop when data is being dragged');
       setState(() {
         if (dragStart!.$2 == Panel.lower && balance - hoveringData!.price < 0) {
-          // Kéo từ dưới lên trên và số dư không đủ
           _showDialog('Số tiền không đủ');
           return;
         }
-        if (upper.length >= 10 && dragStart!.$2 == Panel.lower) {
-          // Kéo từ dưới lên trên và số lượng vượt quá 10
+        if (upperItemModel.length >= 10 && dragStart!.$2 == Panel.lower) {
           _showDialog('Số lượng vượt quá 10');
           return;
         }
@@ -67,17 +95,17 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
           }
 
           if (dragStart!.$2 == Panel.upper) {
-            upper.removeAt(dragStart!.$1);
+            upperItemModel.removeAt(dragStart!.$1);
             balance += hoveringData!.price;
           } else {
-            lower.removeAt(dragStart!.$1);
+            lowerItemModel.removeAt(dragStart!.$1);
             balance -= hoveringData!.price;
           }
         }
         if (dropPreview!.$2 == Panel.upper) {
-          upper.insert(min(dropPreview!.$1, upper.length), hoveringData!);
+          upperItemModel.insert(min(dropPreview!.$1, upperItemModel.length), hoveringData!);
         } else {
-          lower.insert(min(dropPreview!.$1, lower.length), hoveringData!);
+          lowerItemModel.insert(min(dropPreview!.$1, lowerItemModel.length), hoveringData!);
         }
         dragStart = null;
         dropPreview = null;
@@ -88,7 +116,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     }
   }
 
-  void setExternalData(Product data) => hoveringData = data;
+  void setExternalData(ItemModel data) => hoveringData = data;
 
   void updateDropPreview(PanelLocation update) {
     setState(() {
@@ -96,33 +124,32 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     });
   }
 
-  void _showDialog(
-    String message,
-  ) {
+  void _showDialog(String message) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            content: IntrinsicHeight(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                color: Colors.deepPurple,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      message,
-                      style: whiteTextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.deepPurple,
+          content: IntrinsicHeight(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.deepPurple,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    message,
+                    style: whiteTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -172,7 +199,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
                   hoveringData:
                       dropPreview?.$2 == Panel.upper ? hoveringData : null,
                   spacing: widget.itemSpacing,
-                  items: upper,
+                  items: upperItemModel,
                   onDragStart: onDragStart,
                   panel: Panel.upper,
                 ),
@@ -203,7 +230,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
                     dropPreview?.$2 == Panel.lower ? dropPreview : null,
                 hoveringData:
                     dropPreview?.$2 == Panel.lower ? hoveringData : null,
-                items: lower,
+                items: lowerItemModel,
                 onDragStart: onDragStart,
                 panel: Panel.lower,
                 spacing: widget.itemSpacing,
@@ -232,8 +259,8 @@ class ItemPanel extends StatelessWidget {
   final int crossAxisCount;
   final PanelLocation? dragStart;
   final PanelLocation? dropPreview;
-  final Product? hoveringData;
-  final List<Product> items;
+  final ItemModel? hoveringData;
+  final List<ItemModel> items;
   final double spacing;
 
   final Function(PanelLocation) onDragStart;
@@ -241,7 +268,7 @@ class ItemPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemCopy = List<Product>.from(items);
+    final itemCopy = List<ItemModel>.from(items);
 
     PanelLocation? dragStartCopy;
 
@@ -272,7 +299,7 @@ class ItemPanel extends StatelessWidget {
         mainAxisSpacing: spacing,
         crossAxisSpacing: spacing,
         children:
-            items.asMap().entries.map<Widget>((MapEntry<int, Product> entry) {
+            items.asMap().entries.map<Widget>((MapEntry<int, ItemModel> entry) {
           Color textColor =
               entry.key == dragStartCopy?.$1 || entry.key == dropPreviewCopy?.$1
                   ? Colors.grey
@@ -284,11 +311,10 @@ class ItemPanel extends StatelessWidget {
               children: <Widget>[
                 Transform.scale(
                   scale: 2.0, // Doubles the size of the child
-                  child: Image.asset(
-                    entry.value.image,
-                    height: 55, // Original size
-                    width: 55, // Original size
-                  ),
+                  child: Image.network(
+                        entry.value.imageurl ??
+                            'https://via.placeholder.com/150',
+                      ),
                 ),
                 Text(
                   '${entry.value.price} \$',
@@ -329,7 +355,8 @@ class ItemPanel extends StatelessWidget {
           return Draggable(
             feedback: child,
             child: MyDraggableWidget(
-              data: entry.value.image,
+              data: entry.value.imageurl ??
+                  'gs://beanmind-2911.appspot.com/item_game_images/item_store_002.png',
               onDragStart: () => onDragStart((entry.key, panel)),
               child: Center(
                 child: Column(
@@ -337,10 +364,9 @@ class ItemPanel extends StatelessWidget {
                   children: <Widget>[
                     Transform.scale(
                       scale: 2.0, // Doubles the size of the child
-                      child: Image.asset(
-                        entry.value.image,
-                        height: 55, // Original size
-                        width: 55, // Original size
+                      child: Image.network(
+                        entry.value.imageurl ??
+                            'https://via.placeholder.com/150',
                       ),
                     ),
                     Text(
