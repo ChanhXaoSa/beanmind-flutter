@@ -8,7 +8,6 @@ import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ShopingSplitPanels extends StatefulWidget {
   const ShopingSplitPanels(
@@ -174,7 +173,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
                 Text(
-                  'Số tiền yêu cầu: ${lastbalance} \$',
+                  'Số tiền giữ lại theo yêu cầu: ${lastbalance} \$',
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ],

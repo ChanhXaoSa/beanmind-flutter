@@ -1,4 +1,3 @@
-import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/models/game_item_model.dart';
 import 'package:flutter/material.dart';
