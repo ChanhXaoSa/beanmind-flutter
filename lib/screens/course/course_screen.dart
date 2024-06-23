@@ -1,4 +1,3 @@
-
 import 'package:beanmind_flutter/screens/home/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -12,110 +11,108 @@ class CourseScreen extends GetView<CourseController> {
 
   static const String routeName = '/course';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: GetBuilder<MyDrawerController>(
-          builder: (_) => ZoomDrawer(
-            controller: _.zoomDrawerController,
-            borderRadius: 50.0,
-            showShadow: true,
-            angle: 0.0,
-            style: DrawerStyle.defaultStyle,
-            menuScreen: const CustomDrawer(),
-            menuBackgroundColor: Colors.white.withOpacity(0.5),
-            slideWidth: MediaQuery.of(context).size.width * 0.6,
-            mainScreen: Container(
-              decoration: BoxDecoration(gradient: mainGradient(context)),
-              child: SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(kMobileScreenPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Transform.translate(
-                            offset: const Offset(-10, 0),
-                            child: CircularButton(
-                              child: const Icon(AppIcons.menuleft),
-                              // onTap: controller.toggleDrawer,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                const Icon(AppIcons.peace),
-                                Builder(
-                                  builder: (_) {
-                                    final AuthController _auth = Get.find();
-                                    final user = _auth.getUser();
-                                    String _label = '  Hello mate';
-                                    if (user != null) {
-                                      _label = '  Hello ${user.displayName}';
-                                    }
-                                    return Text(_label,
-                                        style: kDetailsTS.copyWith(
-                                            color: kOnSurfaceTextColor));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Text('What Do You Want To Improve Today ?',
-                              style: kHeaderTS),
-                          const SizedBox(height: 15),
-                        ],
+      builder: (_) => ZoomDrawer(
+        controller: _.zoomDrawerController,
+        borderRadius: 50.0,
+        showShadow: true,
+        angle: 0.0,
+        style: DrawerStyle.defaultStyle,
+        menuScreen: const CustomDrawer(),
+        menuBackgroundColor: Colors.white.withOpacity(0.5),
+        slideWidth: MediaQuery.of(context).size.width * 0.6,
+        mainScreen: Container(
+          decoration: BoxDecoration(gradient: mainGradient(context)),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(kMobileScreenPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Transform.translate(
+                        offset: const Offset(-10, 0),
+                        child: const CircularButton(
+                          child: Icon(AppIcons.menuleft),
+                        ),
                       ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            const Icon(AppIcons.peace),
+                            Builder(
+                              builder: (_) {
+                                final AuthController _auth = Get.find();
+                                final user = _auth.getUser();
+                                String _label = '  Xin chào';
+                                if (user != null) {
+                                  _label = '  Xin chào ${user.displayName}';
+                                }
+                                return Text(_label,
+                                    style: kDetailsTS.copyWith(
+                                        color: kOnSurfaceTextColor));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Text('Bạn muốn học gì hôm nay ?', style: kHeaderTS),
+                      const SizedBox(height: 15),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 20,
                     ),
                     Expanded(
-                      child: Center(
-                        child: Text('hellooooooooo'),
+                      flex: 1,
+                      child: Container(
+                        color: Colors.white,
+                        height:  MediaQuery.of(context).size.height * 0.8, // chiều cao của container
                       ),
-                      // child: Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                      //   child: ContentArea(
-                      //     addPadding: false,
-                      //     child: Obx(
-                      //           () => LiquidPullToRefresh(
-                      //         height: 150,
-                      //         springAnimationDurationInMilliseconds: 500,
-                      //         //backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                      //         color:
-                      //         Theme.of(context).primaryColor.withOpacity(0.5),
-                      //         onRefresh: () async {
-                      //           _quizePprContoller.getAllPapers();
-                      //         },
-                      //         child: ListView.separated(
-                      //           padding: UIParameters.screenPadding,
-                      //           shrinkWrap: true,
-                      //           itemCount: _quizePprContoller.allPapers.length,
-                      //           itemBuilder: (BuildContext context, int index) {
-                      //             return QuizPaperCard(
-                      //               model: _quizePprContoller.allPapers[index],
-                      //             );
-                      //           },
-                      //           separatorBuilder:
-                      //               (BuildContext context, int index) {
-                      //             return const SizedBox(
-                      //               height: 20,
-                      //             );
-                      //           },
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    )
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                        flex: 4,
+                        child: Container(
+                          color: Colors.white,
+                          height:  MediaQuery.of(context).size.height * 0.8, // chiều cao của container
+                          child: GridView.builder(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4, // 4 items per row
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                            ),
+                            itemCount: 20, // replace with your item count
+                            itemBuilder: (context, index) {
+                              return Card(
+                                color: Colors.blueAccent,
+                                child: Center(child: Text('Item $index')),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    const SizedBox(
+                      width: 20,)
                   ],
-                ),
-              ),
+                )
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    ));
   }
 }
