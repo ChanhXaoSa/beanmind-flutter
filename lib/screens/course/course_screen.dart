@@ -1,4 +1,6 @@
 import 'package:beanmind_flutter/screens/home/custom_drawer.dart';
+import 'package:beanmind_flutter/utils/customappbar.dart';
+import 'package:beanmind_flutter/utils/dropdownlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
@@ -17,18 +19,13 @@ class CourseScreen extends GetView<CourseController> {
         body: GetBuilder<MyDrawerController>(
       builder: (_) => ZoomDrawer(
         controller: _.zoomDrawerController,
-        borderRadius: 50.0,
         showShadow: true,
         angle: 0.0,
-        style: DrawerStyle.defaultStyle,
         menuScreen: const CustomDrawer(),
-        menuBackgroundColor: Colors.white.withOpacity(0.5),
-        slideWidth: MediaQuery.of(context).size.width * 0.6,
         mainScreen: Container(
           decoration: BoxDecoration(gradient: mainGradient(context)),
           child: SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(kMobileScreenPadding),
@@ -64,49 +61,119 @@ class CourseScreen extends GetView<CourseController> {
                         ),
                       ),
                       const Text('Bạn muốn học gì hôm nay ?', style: kHeaderTS),
-                      const SizedBox(height: 15),
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        color: Colors.white,
-                        height:  MediaQuery.of(context).size.height * 0.8, // chiều cao của container
+                Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 20,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Container(
+                              child: const CustomTabBarsPage(),
+                            ),
+                            Text("CLASS LEVEL"),
+                            Container(
+                              // build checkbox list
+                              child: Column(
+                                children: [
+                                  CheckboxListTile(
+                                    title: const Text('Beginner'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('Intermediate'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('Advanced'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text("CREATED WITHIN"),
+                            Container(
+                              child: const SimpleDropDown(),
+                            ),
+                            Text("CLASS LENGTH"),
+                            Container(
+                              // add list view
+
+                              child: Column(
+                                children: [
+                                  CheckboxListTile(
+                                    title: const Text('< 15 minutes'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('15 - 30 minutes'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('30 - 60 minutes'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Expanded(
                         flex: 4,
                         child: Container(
                           color: Colors.white,
-                          height:  MediaQuery.of(context).size.height * 0.8, // chiều cao của container
+                          height: MediaQuery.of(context).size.height * 0.75,
                           child: GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4, // 4 items per row
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 10,
                             ),
                             itemCount: 20, // replace with your item count
                             itemBuilder: (context, index) {
-                              return Card(
-                                color: Colors.blueAccent,
-                                child: Center(child: Text('Item $index')),
+                              return SizedBox(
+                                child: Container(
+                                  color: Colors.blueAccent,
+                                  child: Column(
+                                    children: [
+                                      const Image(
+                                          image: AssetImage(
+                                              'assets/images/background/background_store.png')),
+                                      const SizedBox(height: 8),
+                                      Text('Course $index',
+                                          style: kHeaderTS.copyWith(
+                                              color: Colors.white)),
+                                    ],
+                                  ),
+                                ),
                               );
                             },
                           ),
                         ),
                       ),
-                    const SizedBox(
-                      width: 20,)
-                  ],
+                      const SizedBox(
+                        width: 15,
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
