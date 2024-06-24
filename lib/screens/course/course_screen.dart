@@ -75,65 +75,51 @@ class CourseScreen extends GetView<CourseController> {
                         flex: 1,
                         child: Column(
                           children: [
-                            Container(
-                              child: const CustomTabBarsPage(),
+                            const CustomTabBarsPage(),
+                            const Text("CLASS LEVEL"),
+                            Column(
+                              children: [
+                                CheckboxListTile(
+                                  title: const Text('Beginner'),
+                                  value: controller.isBlank,
+                                  onChanged: (bool? value) {},
+                                ),
+                                CheckboxListTile(
+                                  title: const Text('Intermediate'),
+                                  value: controller.isBlank,
+                                  onChanged: (bool? value) {},
+                                ),
+                                CheckboxListTile(
+                                  title: const Text('Advanced'),
+                                  value: controller.isBlank,
+                                  onChanged: (bool? value) {},
+                                ),
+                              ],
                             ),
-                            Text("CLASS LEVEL"),
-                            Container(
-                              // build checkbox list
-                              child: Column(
-                                children: [
-                                  CheckboxListTile(
-                                    title: const Text('Beginner'),
-                                    value: controller.isBlank,
-                                    onChanged: (bool? value) {},
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Intermediate'),
-                                    value: controller.isBlank,
-                                    onChanged: (bool? value) {},
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Advanced'),
-                                    value: controller.isBlank,
-                                    onChanged: (bool? value) {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text("CREATED WITHIN"),
-                            Container(
-                              child: const SimpleDropDown(),
-                            ),
-                            Text("CLASS LENGTH"),
-                            Container(
-                              // add list view
-
-                              child: Column(
-                                children: [
-                                  CheckboxListTile(
-                                    title: const Text('< 15 minutes'),
-                                    value: controller.isBlank,
-                                    onChanged: (bool? value) {},
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('15 - 30 minutes'),
-                                    value: controller.isBlank,
-                                    onChanged: (bool? value) {},
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('30 - 60 minutes'),
-                                    value: controller.isBlank,
-                                    onChanged: (bool? value) {},
-                                  ),
-                                ],
-                              ),
+                            const Text("CREATED WITHIN"),
+                            const SimpleDropDown(),
+                            const Text("CLASS LENGTH"),
+                            Column(
+                              children: [
+                                CheckboxListTile(
+                                  title: const Text('< 15 minutes'),
+                                  value: controller.isBlank,
+                                  onChanged: (bool? value) {},
+                                ),
+                                CheckboxListTile(
+                                  title: const Text('15 - 30 minutes'),
+                                  value: controller.isBlank,
+                                  onChanged: (bool? value) {},
+                                ),
+                                CheckboxListTile(
+                                  title: const Text('30 - 60 minutes'),
+                                  value: controller.isBlank,
+                                  onChanged: (bool? value) {},
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        width: 15,
                       ),
                       Expanded(
                         flex: 4,

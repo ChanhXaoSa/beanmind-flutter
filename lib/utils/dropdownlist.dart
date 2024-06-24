@@ -21,10 +21,11 @@ class _SimpleDropDownState extends State<SimpleDropDown> {
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 10),
+                width: 300,
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8.0)),
