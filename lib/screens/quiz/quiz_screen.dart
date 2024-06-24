@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/widgets/dialogs/youtube_video_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
@@ -90,37 +91,54 @@ class QuizeScreen extends GetView<QuizController> {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: Padding(
                       padding: UIParameters.screenPadding,
-                      child: Row(
+                      child: Column(
                         children: [
-                          Visibility(
-                            visible: controller.isFirstQuestion,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: SizedBox(
-                                height: 55,
-                                width: 55,
-                                child: MainButton(
-                                  onTap: () {
-                                    controller.prevQuestion();
-                                  },
-                                  child: const Icon(Icons.arrow_back_ios_new),
-                                ),
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: MainButton(
+                              onTap: () {
+                                const videoId = 'TaBt6snSlgU';
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => YoutubeVideoDialog(videoId: videoId),
+                                );
+                              },
+                              title: 'Nhấn vào để xem video hướng dẫn',
                             ),
                           ),
-                          Expanded(
-                            child: Obx(
-                              () => Visibility(
-                                visible: controller.loadingStatus.value == LoadingStatus.completed,
-                                child: MainButton(
-                                  onTap: () {
-                                    controller.islastQuestion ?  Get.toNamed(QuizOverviewScreen.routeName) : controller.nextQuestion();
-                                  },
-                                  title: controller.islastQuestion ? 'Complete' : 'Next',
+                          Row(
+                            children: [
+                              Visibility(
+                                visible: controller.isFirstQuestion,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 5.0),
+                                  child: SizedBox(
+                                    height: 55,
+                                    width: 55,
+                                    child: MainButton(
+                                      onTap: () {
+                                        controller.prevQuestion();
+                                      },
+                                      child: const Icon(Icons.arrow_back_ios_new),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
+                              Expanded(
+                                child: Obx(
+                                  () => Visibility(
+                                    visible: controller.loadingStatus.value == LoadingStatus.completed,
+                                    child: MainButton(
+                                      onTap: () {
+                                        controller.islastQuestion ?  Get.toNamed(QuizOverviewScreen.routeName) : controller.nextQuestion();
+                                      },
+                                      title: controller.islastQuestion ? 'Complete' : 'Next',
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
                     ),
