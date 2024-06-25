@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/widgets/dialogs/youtube_video_dialog.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
@@ -60,24 +61,38 @@ class QuizeScreen extends GetView<QuizController> {
                                   id: 'answers_list',
                                   builder: (context) {
                                     return GridView.builder(
-                                      itemCount: controller.currentQuestion.value!.answers.length,
+                                      itemCount: controller.currentQuestion
+                                          .value!.answers.length,
                                       shrinkWrap: true,
                                       padding: const EdgeInsets.only(top: 25),
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,  // Number of columns
-                                        crossAxisSpacing: 10,  // Space between columns
-                                        mainAxisSpacing: 10,  // Space between rows
-                                        childAspectRatio: 5,  // Adjust the aspect ratio as needed
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // Number of columns
+                                        crossAxisSpacing:
+                                            10, // Space between columns
+                                        mainAxisSpacing:
+                                            10, // Space between rows
+                                        childAspectRatio:
+                                            5, // Adjust the aspect ratio as needed
                                       ),
-                                      itemBuilder: (BuildContext context, int index) {
-                                        final answer = controller.currentQuestion.value!.answers[index];
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final answer = controller
+                                            .currentQuestion
+                                            .value!
+                                            .answers[index];
                                         return AnswerCard(
-                                          isSelected: answer.identifier == controller.currentQuestion.value!.selectedAnswer,
+                                          isSelected: answer.identifier ==
+                                              controller.currentQuestion.value!
+                                                  .selectedAnswer,
                                           onTap: () {
-                                            controller.selectAnswer(answer.identifier);
+                                            controller.selectAnswer(
+                                                answer.identifier);
                                           },
-                                          answer: '${answer.identifier}. ${answer.answer}',
+                                          answer:
+                                              '${answer.identifier}. ${answer.answer}',
                                         );
                                       },
                                     );
@@ -95,16 +110,31 @@ class QuizeScreen extends GetView<QuizController> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: MainButton(
-                              onTap: () {
-                                const videoId = 'TaBt6snSlgU';
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => YoutubeVideoDialog(videoId: videoId),
-                                );
-                              },
-                              title: 'Nhấn vào để xem video hướng dẫn',
+                            child: RichText(
+                              text: TextSpan(
+                                  text: 'Xem video hướng dẫn',
+                                  style: TextStyle(color: Colors.blue),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      const videoId = 'TaBt6snSlgU';
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            YoutubeVideoDialog(
+                                                videoId: videoId),
+                                      );
+                                    }),
                             ),
+                            // child: MainButton(
+                            //   onTap: () {
+                            //     const videoId = 'TaBt6snSlgU';
+                            //     showDialog(
+                            //       context: context,
+                            //       builder: (context) => YoutubeVideoDialog(videoId: videoId),
+                            //     );
+                            //   },
+                            //   title: 'Xem video hướng dẫn',
+                            // ),
                           ),
                           Row(
                             children: [
@@ -119,7 +149,8 @@ class QuizeScreen extends GetView<QuizController> {
                                       onTap: () {
                                         controller.prevQuestion();
                                       },
-                                      child: const Icon(Icons.arrow_back_ios_new),
+                                      child:
+                                          const Icon(Icons.arrow_back_ios_new),
                                     ),
                                   ),
                                 ),
@@ -127,12 +158,18 @@ class QuizeScreen extends GetView<QuizController> {
                               Expanded(
                                 child: Obx(
                                   () => Visibility(
-                                    visible: controller.loadingStatus.value == LoadingStatus.completed,
+                                    visible: controller.loadingStatus.value ==
+                                        LoadingStatus.completed,
                                     child: MainButton(
                                       onTap: () {
-                                        controller.islastQuestion ?  Get.toNamed(QuizOverviewScreen.routeName) : controller.nextQuestion();
+                                        controller.islastQuestion
+                                            ? Get.toNamed(
+                                                QuizOverviewScreen.routeName)
+                                            : controller.nextQuestion();
                                       },
-                                      title: controller.islastQuestion ? 'Complete' : 'Next',
+                                      title: controller.islastQuestion
+                                          ? 'Complete'
+                                          : 'Next',
                                     ),
                                   ),
                                 ),
