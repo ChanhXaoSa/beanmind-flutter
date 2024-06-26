@@ -15,9 +15,9 @@ class _CustomTabBarsPageState extends State<CustomTabBarsPage>
   final _selectedColor = const Color(0xff1a73e8);
   final _unselectedColor = const Color(0xff5f6368);
   final _tabs = const [
-    Tab(text: 'Tab 1'),
-    Tab(text: 'Tab 2'),
-    Tab(text: 'Tab 3'),
+    Tab(text: 'Tất cả'),
+    Tab(text: 'Khuyến nghị'),
+    Tab(text: 'Đã xem'),
   ];
 
   @override
@@ -35,7 +35,6 @@ class _CustomTabBarsPageState extends State<CustomTabBarsPage>
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
       constraints: const BoxConstraints(maxWidth: 400),
       child: ListView(
         shrinkWrap: true,

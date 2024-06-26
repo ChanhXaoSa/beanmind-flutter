@@ -10,9 +10,11 @@ class SimpleDropDown extends StatefulWidget {
 class _SimpleDropDownState extends State<SimpleDropDown> {
   String? _selectedObj;
   final List<String> _obj = [
-    "All time",
-    "1 week",
-    "1 month",
+    "tất cả",
+    "1 tuần trước",
+    "1 tháng trước",
+    "6 tháng trước",
+    "1 năm trước",
   ];
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class _SimpleDropDownState extends State<SimpleDropDown> {
               _selectedObj = newValue;
             });
           },
-          hint: Text("Select a created", style: hintStyle),
+          hint: Text("Chọn thời gian", style: hintStyle),
           items: _obj
               .map((fruit) =>
                   DropdownMenuItem<String>(value: fruit, child: Text(fruit)))

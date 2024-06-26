@@ -1,6 +1,7 @@
+import 'package:beanmind_flutter/screens/course/components/courselist.dart';
 import 'package:beanmind_flutter/screens/home/custom_drawer.dart';
-import 'package:beanmind_flutter/utils/customappbar.dart';
-import 'package:beanmind_flutter/utils/dropdownlist.dart';
+import 'package:beanmind_flutter/screens/course/components/customappbar.dart';
+import 'package:beanmind_flutter/screens/course/components/dropdownlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
@@ -19,13 +20,12 @@ class CourseScreen extends GetView<CourseController> {
         body: GetBuilder<MyDrawerController>(
       builder: (_) => ZoomDrawer(
         controller: _.zoomDrawerController,
-        showShadow: true,
-        angle: 0.0,
         menuScreen: const CustomDrawer(),
         mainScreen: Container(
           decoration: BoxDecoration(gradient: mainGradient(context)),
           child: SafeArea(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(kMobileScreenPadding),
@@ -65,95 +65,81 @@ class CourseScreen extends GetView<CourseController> {
                   ),
                 ),
                 Container(
+                  padding: const EdgeInsets.only(top: 20),
                   color: Colors.white,
                   child: Row(
                     children: [
-                      const SizedBox(
-                        width: 20,
-                      ),
                       Expanded(
                         flex: 1,
-                        child: Column(
-                          children: [
-                            const CustomTabBarsPage(),
-                            const Text("CLASS LEVEL"),
-                            Column(
-                              children: [
-                                CheckboxListTile(
-                                  title: const Text('Beginner'),
-                                  value: controller.isBlank,
-                                  onChanged: (bool? value) {},
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Intermediate'),
-                                  value: controller.isBlank,
-                                  onChanged: (bool? value) {},
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Advanced'),
-                                  value: controller.isBlank,
-                                  onChanged: (bool? value) {},
-                                ),
-                              ],
-                            ),
-                            const Text("CREATED WITHIN"),
-                            const SimpleDropDown(),
-                            const Text("CLASS LENGTH"),
-                            Column(
-                              children: [
-                                CheckboxListTile(
-                                  title: const Text('< 15 minutes'),
-                                  value: controller.isBlank,
-                                  onChanged: (bool? value) {},
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('15 - 30 minutes'),
-                                  value: controller.isBlank,
-                                  onChanged: (bool? value) {},
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('30 - 60 minutes'),
-                                  value: controller.isBlank,
-                                  onChanged: (bool? value) {},
-                                ),
-                              ],
-                            ),
-                          ],
+                        child: Container(
+                          color: Colors.white,
+                          alignment: Alignment.topLeft,
+                          height: MediaQuery.of(context).size.height * 0.75,
+                          
+                          child: Column(
+                            children: [
+                              const CustomTabBarsPage(),
+                              const Text("CHƯƠNG TRÌNH HỌC"),
+                              Column(
+                                children: [
+                                  CheckboxListTile(
+                                    title: const Text('LỚP 1'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('LỚP 2'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('lỚP 3'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('lỚP 4'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('lỚP 5'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                ],
+                              ),
+                              const Text("THỜI GIAN TẠO"),
+                          
+                              // Dropdown
+                              const SimpleDropDown(),
+                              const Text("Thời gian khoá học"),
+                              Column(
+                                children: [
+                                  CheckboxListTile(
+                                    title: const Text('< 15 phút'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('15 - 30 phút'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                  CheckboxListTile(
+                                    title: const Text('30 - 60 phút'),
+                                    value: controller.isBlank,
+                                    onChanged: (bool? value) {},
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Expanded(
                         flex: 4,
-                        child: Container(
-                          color: Colors.white,
-                          height: MediaQuery.of(context).size.height * 0.75,
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4, // 4 items per row
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                            ),
-                            itemCount: 20, // replace with your item count
-                            itemBuilder: (context, index) {
-                              return SizedBox(
-                                child: Container(
-                                  color: Colors.blueAccent,
-                                  child: Column(
-                                    children: [
-                                      const Image(
-                                          image: AssetImage(
-                                              'assets/images/background/background_store.png')),
-                                      const SizedBox(height: 8),
-                                      Text('Course $index',
-                                          style: kHeaderTS.copyWith(
-                                              color: Colors.white)),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+                        child: Courselist(),
                       ),
                       const SizedBox(
                         width: 15,
