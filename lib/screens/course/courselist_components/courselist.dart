@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/course/course_detail_v2_screen.dart';
 import 'package:beanmind_flutter/screens/course/course_details_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _CourselistState extends State<Courselist> {
           return GestureDetector(
             onTap: () {
               //
-              Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetailsScreen(key: UniqueKey())));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetailV2Screen(key: UniqueKey())));
             },
             child: Container(
               decoration: BoxDecoration(
