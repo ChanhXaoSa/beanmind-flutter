@@ -52,5 +52,8 @@ class AppRoutes {
         GetPage(name: CourseScreen.routeName, page: () => const CourseScreen()),
         GetPage(
             name: GameListScreen.routeName, page: () => const GameListScreen()),
+        GetPage(
+            name: VideoLearningScreen.routeName,
+            page: () => const VideoLearningScreen()),
       ];
 }

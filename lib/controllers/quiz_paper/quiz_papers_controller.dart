@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/video_learning/video_learning_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
@@ -36,19 +37,25 @@ class QuizPaperController extends GetxController {
     }
   }
 
-  void navigatoQuestions({required QuizPaperModel paper, bool isTryAgain = false}) {
+  void navigatoQuestions(
+      {required QuizPaperModel paper, bool isTryAgain = false}) {
     AuthController _authController = Get.find();
 
     if (_authController.isLogedIn()) {
       if (isTryAgain) {
         Get.back();
-        Get.offNamed(QuizeScreen.routeName, arguments: paper, preventDuplicates: false);
+        Get.offNamed(QuizeScreen.routeName,
+            arguments: paper, preventDuplicates: false);
       } else {
         Get.toNamed(QuizeScreen.routeName, arguments: paper);
       }
     } else {
       _authController.showLoginAlertDialog();
     }
+  }
+
+  void navigateToVideo() {
+    Get.toNamed(VideoLearningScreen.routeName);
   }
 
   void navigateToDocument(String url) {

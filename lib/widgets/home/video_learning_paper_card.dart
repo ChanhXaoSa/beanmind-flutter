@@ -24,9 +24,7 @@ class VideoLearningPaperCard extends GetView<QuizPaperController> {
       child: InkWell(
         borderRadius: UIParameters.cardBorderRadius,
         onTap: () {
-          controller.navigatoQuestions(
-              paper: model
-          );
+          controller.navigateToVideo();
         },
         child: Padding(
             padding: const EdgeInsets.all(_padding),
