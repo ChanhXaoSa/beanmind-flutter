@@ -1,121 +1,158 @@
-
-import 'package:beanmind_flutter/screens/home/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
+import 'package:beanmind_flutter/screens/course/courselist_components/courselist.dart';
+import 'package:beanmind_flutter/screens/home/custom_drawer.dart';
+import 'package:beanmind_flutter/screens/course/courselist_components/customappbar.dart';
+import 'package:beanmind_flutter/screens/course/courselist_components/dropdownlist.dart';
 
 class CourseScreen extends GetView<CourseController> {
   const CourseScreen({Key? key}) : super(key: key);
 
   static const String routeName = '/course';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GetBuilder<MyDrawerController>(
-          builder: (_) => ZoomDrawer(
-            controller: _.zoomDrawerController,
-            borderRadius: 50.0,
-            showShadow: true,
-            angle: 0.0,
-            style: DrawerStyle.defaultStyle,
-            menuScreen: const CustomDrawer(),
-            menuBackgroundColor: Colors.white.withOpacity(0.5),
-            slideWidth: MediaQuery.of(context).size.width * 0.6,
-            mainScreen: Container(
-              decoration: BoxDecoration(gradient: mainGradient(context)),
-              child: SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(kMobileScreenPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      body: GetBuilder<MyDrawerController>(
+        builder: (_) => ZoomDrawer(
+          controller: _.zoomDrawerController,
+          menuScreen: const CustomDrawer(),
+          mainScreen: Container(
+            decoration: BoxDecoration(gradient: mainGradient(context)),
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(kMobileScreenPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Transform.translate(
+                          offset: const Offset(-10, 0),
+                          child: const CircularButton(
+                            child: Icon(AppIcons.menuleft),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: [
+                              const Icon(AppIcons.peace),
+                              Builder(
+                                builder: (_) {
+                                  final AuthController _auth = Get.find();
+                                  final user = _auth.getUser();
+                                  String _label = '  Xin chào';
+                                  if (user != null) {
+                                    _label = '  Xin chào ${user.displayName}';
+                                  }
+                                  return Text(_label,
+                                      style: kDetailsTS.copyWith(
+                                          color: kOnSurfaceTextColor));
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Text('Bạn muốn học gì hôm nay ?', style: kHeaderTS),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
                         children: [
-                          Transform.translate(
-                            offset: const Offset(-10, 0),
-                            child: CircularButton(
-                              child: const Icon(AppIcons.menuleft),
-                              // onTap: controller.toggleDrawer,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                const Icon(AppIcons.peace),
-                                Builder(
-                                  builder: (_) {
-                                    final AuthController _auth = Get.find();
-                                    final user = _auth.getUser();
-                                    String _label = '  Hello mate';
-                                    if (user != null) {
-                                      _label = '  Hello ${user.displayName}';
-                                    }
-                                    return Text(_label,
-                                        style: kDetailsTS.copyWith(
-                                            color: kOnSurfaceTextColor));
-                                  },
+                          Expanded(
+                            flex: 1,
+                            child: SingleChildScrollView(
+                              child: Container(
+                                color: Colors.white,
+                                alignment: Alignment.topLeft,
+                                child: Column(
+                                  children: [
+                                    const CustomTabBarsPage(),
+                                    const Text("CHƯƠNG TRÌNH HỌC"),
+                                    Column(
+                                      children: [
+                                        CheckboxListTile(
+                                          title: const Text('LỚP 1'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('LỚP 2'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('LỚP 3'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('LỚP 4'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('LỚP 5'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),  
+                                      ],
+                                    ),
+                                    const Text("THỜI GIAN TẠO"),
+                                    const SimpleDropDown(),
+                                    const Text("Thời gian khoá học"),
+                                    Column(
+                                      children: [
+                                        CheckboxListTile(
+                                          title: const Text('< 15 phút'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('15 - 30 phút'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('30 - 60 phút'),
+                                          value: controller.isBlank,
+                                          onChanged: (bool? value) {},
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                          const Text('What Do You Want To Improve Today ?',
-                              style: kHeaderTS),
-                          const SizedBox(height: 15),
+                          const Expanded(
+                            flex: 4,
+                            child: Courselist(),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Center(
-                        child: Text('hellooooooooo'),
-                      ),
-                      // child: Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                      //   child: ContentArea(
-                      //     addPadding: false,
-                      //     child: Obx(
-                      //           () => LiquidPullToRefresh(
-                      //         height: 150,
-                      //         springAnimationDurationInMilliseconds: 500,
-                      //         //backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                      //         color:
-                      //         Theme.of(context).primaryColor.withOpacity(0.5),
-                      //         onRefresh: () async {
-                      //           _quizePprContoller.getAllPapers();
-                      //         },
-                      //         child: ListView.separated(
-                      //           padding: UIParameters.screenPadding,
-                      //           shrinkWrap: true,
-                      //           itemCount: _quizePprContoller.allPapers.length,
-                      //           itemBuilder: (BuildContext context, int index) {
-                      //             return QuizPaperCard(
-                      //               model: _quizePprContoller.allPapers[index],
-                      //             );
-                      //           },
-                      //           separatorBuilder:
-                      //               (BuildContext context, int index) {
-                      //             return const SizedBox(
-                      //               height: 20,
-                      //             );
-                      //           },
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
