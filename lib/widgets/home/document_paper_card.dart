@@ -99,7 +99,7 @@ class DocumentPaperCard extends GetView<QuizPaperController> {
                       behavior : HitTestBehavior.translucent,
                       onTap: () {
                         // Get.find<NotificationService>().showQuizCompletedNotification(id: 1, title: 'Sampole', body: 'Sample', imageUrl: model.imageUrl, payload: json.encode(model.toJson())  );
-                        // Get.toNamed(LeaderBoardScreen.routeName, arguments:model );
+                        Get.toNamed(LeaderBoardScreen.routeName, arguments:model );
                       },
                       child: Ink(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
