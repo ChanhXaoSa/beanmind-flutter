@@ -14,7 +14,7 @@ class VideoLearningScreen extends GetView<QuizController> {
 
   @override
   Widget build(BuildContext context) {
-    registerVideoIframe('youtube.com/watch?v=d5QASNZ1Nxw');
+    registerVideoIframe('https://www.youtube.com/embed/d5QASNZ1Nxw');
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -29,7 +29,7 @@ class VideoLearningScreen extends GetView<QuizController> {
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: HtmlElementView(
-                    viewType: 'video-iframe-youtube.com/watch?v=d5QASNZ1Nxw',
+                    viewType: 'video-iframe-https://www.youtube.com/embed/d5QASNZ1Nxw',
                   ),
                 ),
               ),
