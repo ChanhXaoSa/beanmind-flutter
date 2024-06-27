@@ -88,37 +88,37 @@ class CustomDrawer extends GetView<MyDrawerController> {
                       onPressed: () => controller.course(),
                       icon: Icons.book,
                       label: 'My Course'),
-                  _DrawerButton(
-                      onPressed: () => controller.github(),
-                      icon: AppIcons.github,
-                      label: 'My GitHub'),
-                  _DrawerButton(
-                    icon: Icons.code,
-                    label: ' Download Source Code',
-                    onPressed: () => controller.downloadSourceCode(),
-                  ),
-                  _DrawerButton(
-                      icon: AppIcons.contact,
-                      label: 'Contact Me',
-                      onPressed: () {}),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _DrawerButton(
-                            icon: AppIcons.web, label: 'Web', onPressed: () {}),
-                        _DrawerButton(
-                            icon: AppIcons.email,
-                            label: 'Email',
-                            onPressed:  () => controller.email()),
-                        // _DrawerButton(
-                        //     icon: AppIcons.github,
-                        //     label: 'GitHub',
-                        //     onPressed: () {}),
-                      ],
-                    ),
-                  ),
+                  // _DrawerButton(
+                  //     onPressed: () => controller.github(),
+                  //     icon: AppIcons.github,
+                  //     label: 'My GitHub'),
+                  // _DrawerButton(
+                  //   icon: Icons.code,
+                  //   label: ' Download Source Code',
+                  //   onPressed: () => controller.downloadSourceCode(),
+                  // ),
+                  // _DrawerButton(
+                  //     icon: AppIcons.contact,
+                  //     label: 'Contact Me',
+                  //     onPressed: () {}),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 25),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //     children: [
+                  //       _DrawerButton(
+                  //           icon: AppIcons.web, label: 'Web', onPressed: () {}),
+                  //       _DrawerButton(
+                  //           icon: AppIcons.email,
+                  //           label: 'Email',
+                  //           onPressed:  () => controller.email()),
+                  //       // _DrawerButton(
+                  //       //     icon: AppIcons.github,
+                  //       //     label: 'GitHub',
+                  //       //     onPressed: () {}),
+                  //     ],
+                  //   ),
+                  // ),
                   const Spacer(flex: 4),
                   _DrawerButton(
                     icon: AppIcons.logout,
