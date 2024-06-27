@@ -6,6 +6,7 @@ import 'package:beanmind_flutter/models/models.dart' show QuizPaperModel;
 import 'package:beanmind_flutter/screens/screens.dart' show QuizeScreen;
 import 'package:beanmind_flutter/services/firebase/firebasestorage_service.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QuizPaperController extends GetxController {
   @override
@@ -47,6 +48,18 @@ class QuizPaperController extends GetxController {
       }
     } else {
       _authController.showLoginAlertDialog();
+    }
+  }
+
+  void navigateToDocument(String url) {
+    _launch(url);
+  }
+
+  Future<void> _launch(String url) async {
+    if (!await launch(
+      url,
+    )) {
+      throw 'Could not launch $url';
     }
   }
 }

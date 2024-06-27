@@ -24,9 +24,7 @@ class DocumentPaperCard extends GetView<QuizPaperController> {
       child: InkWell(
         borderRadius: UIParameters.cardBorderRadius,
         onTap: () {
-          controller.navigatoQuestions(
-              paper: model
-          );
+          controller.navigateToDocument('https://www.clickdimensions.com/links/TestPDFfile.pdf');
         },
         child: Padding(
             padding: const EdgeInsets.all(_padding),
@@ -55,12 +53,12 @@ class DocumentPaperCard extends GetView<QuizPaperController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              model.title,
+                              'Tài Liệu 1',
                               style: cardTitleTs(context),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10, bottom: 15),
-                              child: Text(model.description),
+                              child: Text('Tài liệu học tập 1'),
                             ),
                             FittedBox(
                               fit: BoxFit.scaleDown,
@@ -101,7 +99,7 @@ class DocumentPaperCard extends GetView<QuizPaperController> {
                       behavior : HitTestBehavior.translucent,
                       onTap: () {
                         // Get.find<NotificationService>().showQuizCompletedNotification(id: 1, title: 'Sampole', body: 'Sample', imageUrl: model.imageUrl, payload: json.encode(model.toJson())  );
-                        Get.toNamed(LeaderBoardScreen.routeName, arguments:model );
+                        // Get.toNamed(LeaderBoardScreen.routeName, arguments:model );
                       },
                       child: Ink(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
