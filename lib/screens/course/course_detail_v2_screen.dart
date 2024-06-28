@@ -30,7 +30,7 @@ class _CourseDetailV2ScreenState extends State<CourseDetailV2Screen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(100),
+          padding: const EdgeInsets.only(left: 100, right: 100, top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
