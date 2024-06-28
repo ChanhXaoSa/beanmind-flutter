@@ -32,27 +32,29 @@ class _MyDropRegionState extends State<MyDropRegion> {
 
   @override
   Widget build(BuildContext context) {
-    return DropRegion(
-      formats: Formats.standardFormats,
-      onDropOver: (DropOverEvent event) {
-        _updatePreview(event.position.local);
-        return DropOperation.copy;
-      },
-
-      onPerformDrop: (PerformDropEvent event) async {
-        widget.onDrop();
-      },
-
-      onDropEnter: (DropEvent event) {
-        if (event.session.items.first.dataReader != null) {
-          final dataReader = event.session.items.first.dataReader!;
-          if (!dataReader.canProvide(Formats.plainTextFile)) {
-            // show unsportted file type message
-            return;
+    return Container(
+      child: DropRegion(
+        formats: Formats.standardFormats,
+        onDropOver: (DropOverEvent event) {
+          _updatePreview(event.position.local);
+          return DropOperation.copy;
+        },
+      
+        onPerformDrop: (PerformDropEvent event) async {
+          widget.onDrop();
+        },
+      
+        onDropEnter: (DropEvent event) {
+          if (event.session.items.first.dataReader != null) {
+            final dataReader = event.session.items.first.dataReader!;
+            if (!dataReader.canProvide(Formats.plainTextFile)) {
+              // show unsportted file type message
+              return;
+            }
           }
-        }
-      },
-      child: widget.child,
+        },
+        child: widget.child,
+      ),
     );
     //onPerformDrop: onPerformDrop);
   }
