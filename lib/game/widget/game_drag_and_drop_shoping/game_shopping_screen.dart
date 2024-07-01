@@ -458,7 +458,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Mua hàng đến khi đạt số tiền yêu cầu',
+                      'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
                       style: whiteTextStyle,
                     ),
                   ],

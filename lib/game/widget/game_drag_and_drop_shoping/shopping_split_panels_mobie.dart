@@ -148,14 +148,21 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
         ),
         Expanded(
           flex: 1,
-          child: DragDropList(
-            products: upperItemModel,
-            onDragStart: onDragStart,
-            onDrop: (product) => onDrop(product, true),
-            isUpper: true,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.deepPurple[250],
+              border: Border.all(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DragDropList(
+              products: upperItemModel,
+              onDragStart: onDragStart,
+              onDrop: (product) => onDrop(product, true),
+              isUpper: true,
+            ),
           ),
         ),
-        const Divider(color: Colors.black, height: 2),
+        
         Expanded(
           flex: 2,
           child: DragDropList(
