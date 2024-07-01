@@ -50,6 +50,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           upperItemModel.clear();
           lowerItemModel = List.from(startLowerItemModel);
           _shopingSplitPanels = ShopingSplitPanels();
+          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
         });
       }
       if (button == 'CHECK RESULT') {
