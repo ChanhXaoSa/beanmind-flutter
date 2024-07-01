@@ -1,6 +1,7 @@
 import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
+import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   late VideoPlayerController _videoPlayerController;
   late ShopingSplitPanels _shopingSplitPanels;
+  late ShopingSplitPanelsMobie _shopingSplitPanelsMobie;
   bool showResultDialog = false;
   //Timer? _timer;
   final time = '00:00:00'.obs;
@@ -69,6 +71,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         upperItemModel = [];
         lowerItemModel = List<ItemModel>.from(startLowerItemModel);
         _shopingSplitPanels = ShopingSplitPanels();
+        _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
       });
     } catch (e) {
       print(e);
@@ -142,6 +145,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           upperItemModel.clear();
           lowerItemModel = List.from(startLowerItemModel);
           _shopingSplitPanels = ShopingSplitPanels();
+          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
         });
         setState(() {
           showResultDialog = false;
@@ -177,6 +181,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
     _shopingSplitPanels = ShopingSplitPanels();
+    _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
   }
 
   void _showDialogError(
@@ -468,7 +473,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                           flex: 4,
                           child: Container(
                             alignment: Alignment.topCenter,
-                            child: _shopingSplitPanels,
+                            child: _shopingSplitPanelsMobie,
                           ),
                         ),
                         Expanded(
@@ -501,7 +506,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                           flex: 3,
                           child: Container(
                             alignment: Alignment.topCenter,
-                            child: _shopingSplitPanels,
+                            child: _shopingSplitPanelsMobie,
                           ),
                         ),
                         Expanded(
