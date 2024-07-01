@@ -53,31 +53,62 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
+  bool? wasUpperList;
+  ItemModel? draggedProduct;
   void onDragStart(ItemModel product) {
     setState(() {
-      upperItemModel.remove(product);
-      lowerItemModel.remove(product);
+      // Lưu vị trí và danh sách trước đó của mục được kéo
+      draggedProduct = product;
+      wasUpperList = upperItemModel.contains(product);
     });
   }
 
   void onDrop(ItemModel product, bool isUpper) {
     setState(() {
+      // Loại bỏ mục khỏi danh sách tạm thời
+      upperItemModel.remove(product);
+      lowerItemModel.remove(product);
       // Điều kiện 1: Kiểm tra số dư
       if (isUpper && balance - product.price < 0) {
         _showDialog('Số tiền không đủ');
+        // Thêm lại mục vào danh sách trước đó nếu số dư không đủ
+        if (wasUpperList == true) {
+          upperItemModel.add(draggedProduct!);
+        } else {
+          lowerItemModel.add(draggedProduct!);
+        }
         return;
       }
 
       // Điều kiện 2: Giới hạn số lượng item
       if (isUpper && upperItemModel.length >= 10) {
         _showDialog('Số lượng vượt quá 10');
+        // Thêm lại mục vào danh sách trước đó nếu số lượng vượt quá
+        if (wasUpperList == true) {
+          upperItemModel.add(draggedProduct!);
+        } else {
+          lowerItemModel.add(draggedProduct!);
+        }
         return;
       }
 
+      // Kiểm tra nếu mục được thả vào cùng danh sách thì không làm gì
+      if ((isUpper && wasUpperList == true) ||
+          (!isUpper && wasUpperList == false)) {
+        // Thêm lại mục vào danh sách trước đó
+        if (wasUpperList == true) {
+          upperItemModel.add(draggedProduct!);
+        } else {
+          lowerItemModel.add(draggedProduct!);
+        }
+        return;
+      }
+
+      // Nếu mục được thả vào danh sách mới, cập nhật danh sách và số dư
       if (isUpper) {
         upperItemModel.add(product);
         balance -= product.price;
-      } else if (!isUpper) {
+      } else {
         lowerItemModel.add(product);
         balance += product.price;
       }
