@@ -200,6 +200,10 @@ class ShoppingCartItem extends StatelessWidget {
     // Get the screen height
     double screenHeight = MediaQuery.of(context).size.height;
 
+    double size = screenWidth < screenHeight
+                  ? screenWidth / 8
+                  : screenHeight / 8;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
       child: Center(
@@ -208,13 +212,16 @@ class ShoppingCartItem extends StatelessWidget {
             Card(
               color: Colors.blue[300],
               child: Container(
-                padding: const EdgeInsets.all(50.0), // Add padding if needed
+                height:size,
+                width: size,
+                alignment: Alignment.center,
                 child: Text(
-                  '\$${product.toString()}',
+                  '${product.toString()}',
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 30,
                     color: Colors.white,
                     decoration: TextDecoration.none,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
