@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
@@ -51,7 +49,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   ];
 
   String userAnswer = '';
-  var randomNumber = Random();
 
   void buttonTapped(String button) {
     setState(() {
@@ -90,6 +87,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   void backtoHome() {
     // go to GameList
+    resetAnimal();
     Get.offAll(() => GameList());
   }
 
@@ -177,8 +175,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
-    fetchData();
+    userAnswer = '';
+    userPoint = 0;
+    userProgress = 0;
     resetAnimal();
+    fetchData();
     _happyFarm = HappyFarm(animalslist: animalslist);
   }
 
