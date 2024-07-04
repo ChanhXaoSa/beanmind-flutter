@@ -1,7 +1,9 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -80,13 +82,18 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       userAnswer = '';
       userPoint = 0;
       userProgress = 0;
+      _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       resetAnimal();
-      _gameOceanAdventure = GameOceanAdventure();
     });
   }
 
   void backtoHome() {
     // go to GameList
+    setState(() {
+      userAnswer = '';
+      _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+      resetAnimal();
+    });
     Get.offAll(() => GameList());
   }
 
@@ -142,10 +149,10 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   void goToNextQuestion() {
     if (showResultDialog) {
       Navigator.of(context).pop();
-      setState(() {
-        resetAnimal();
+      setState(() {        
         userAnswer = '';
-        _gameOceanAdventure = GameOceanAdventure();
+        _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+        resetAnimal();
       });
       setState(() {
         showResultDialog = false;
@@ -177,8 +184,38 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
+    userAnswer = '';
+    userPoint = 0;
+    userProgress = 0;
+    fetchData();
+    _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+    resetAnimal();
+  }
 
-    _gameOceanAdventure = GameOceanAdventure();
+  Future<void> fetchData() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    resetAnimal();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('animal').get();
+
+      List<GameAnimalModel> items = snapshot.docs
+          .map((doc) => GameAnimalModel.fromSnapshot(doc))
+          .toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
+      });
+
+      // Update startLower and lower with the fetched items
+      setState(() {
+        animalslist = List<GameAnimalModel>.from(items);
+        _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+        resetAnimal();
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
 
   void _showDialogError(

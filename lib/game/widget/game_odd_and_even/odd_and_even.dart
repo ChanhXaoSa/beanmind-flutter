@@ -1,16 +1,17 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 
 class GameOddAndEven extends FlameGame {
   late SpriteComponent background;
-
-  // Scale factor for animals
-  double blueBirdScaleFactor = 1.2;
-  double redBirdScaleFactor = 1.2;
+  final List<GameAnimalModel> animalslist;
+  GameOddAndEven({required this.animalslist});
+  final networkImages = FlameNetworkImages();
 
   late SpriteAnimation blueBirdAnimation;
   late SpriteAnimation redBirdAnimation;
@@ -27,54 +28,59 @@ class GameOddAndEven extends FlameGame {
       ..size = size;
     add(background);
 
-    // Load Images
-    Image blueBirdIdleImage =
-        await images.load('animal/blue_bird/blue_bird_ilde.png');
-    Image redBirdIdleImage =
-        await images.load('animal/red_bird/red_bird_idle.png');
+    for (var animal in animalslist) {
+      if (animal.type == 'bluebird') {
+        Image blueBirdImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/blue_bird/blue_bird_ilde.png'
+              : animal.imageurl.toString(),
+        );
+        blueBirdAnimation = SpriteAnimation.fromFrameData(
+          blueBirdImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: blueBirdAnimation,
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      } else if (animal.type == 'redbird') {
+        Image redBirdImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/red_bird/red_bird_idle.png'
+              : animal.imageurl.toString(),
+        );
+        redBirdAnimation = SpriteAnimation.fromFrameData(
+          redBirdImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: redBirdAnimation,
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      }
+    }
+  }
 
-    // Load Animations
-
-    blueBirdAnimation = SpriteAnimation.fromFrameData(
-      blueBirdIdleImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(470 / 6, 103),
-        stepTime: 0.1,
-      ),
-    );
-
-    redBirdAnimation = SpriteAnimation.fromFrameData(
-      redBirdIdleImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(466 / 6, 100),
-        stepTime: 0.1,
-      ),
-    );
-
-    // Create Animals
-    // blue bird
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: blueBirdScaleFactor,
-      animation: blueBirdAnimation,
-      xRange: Range(0.1, 0.95),
-      yRange: Range(0.1, 0.95),
-      textureSize: Vector2(470 / 6, 103),
-      type: 'blueBird',
-    );
-
-    // red bird
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: redBirdScaleFactor,
-      animation: redBirdAnimation,
-      xRange: Range(0.1, 0.95),
-      yRange: Range(0.1, 0.95),
-      textureSize: Vector2(466 / 6, 100),
-      type: 'redBird',
-    );
+  int randomNum() {
+    return Random().nextInt(5) + 1;
   }
 
   void createAnimals({
@@ -137,11 +143,14 @@ class GameOddAndEven extends FlameGame {
           flipped: flip,
           type: type,
         );
-        if (type == 'blueBird') {
+        if (type == 'bluebird') {
           globalBlueBirdCount++;
-        } else if (type == 'redBird') {
+        } else if (type == 'redbird') {
           globalRedBirdCount++;
         }
+        // print animal count
+        print('BlueBird: $globalBlueBirdCount');
+        print('RedBird: $globalRedBirdCount');
         add(animal.createComponent());
       }
     }

@@ -13,15 +13,13 @@ class HappyFarm extends FlameGame {
   HappyFarm({required this.animalslist});
   final networkImages = FlameNetworkImages();
 
-  double chickenIdleScaleFactor = 2.0;
-  double duckIdleScaleFactor = 1.0;
-
   late SpriteAnimation chickenIdleAnimation;
   late SpriteAnimation duckIdleAnimation;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    resetAnimal();
 
     // Background
     background = SpriteComponent()
@@ -29,7 +27,6 @@ class HappyFarm extends FlameGame {
       ..size = size;
     add(background);
 
-    // Load Images
     for (var animal in animalslist) {
       if (animal.type == 'chicken') {
         Image chickenIdleImage = await networkImages.load(

@@ -87,7 +87,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   void backtoHome() {
     // go to GameList
-    resetAnimal();
+    setState(() {
+      resetAnimal();
+      userAnswer = '';
+      _happyFarm = HappyFarm(animalslist: animalslist);
+    });
     Get.offAll(() => GameList());
   }
 

@@ -1,6 +1,5 @@
 int globalChickenCount = 0;
 int globalDuckCount = 0;
-
 int globalBlueFishCount = 0;
 int globalRedFishCount = 0;
 int globalVioletFishCount = 0;

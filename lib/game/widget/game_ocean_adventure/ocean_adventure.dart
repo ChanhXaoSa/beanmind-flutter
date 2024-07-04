@@ -1,19 +1,17 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 
 class GameOceanAdventure extends FlameGame {
   late SpriteComponent background;
-
-  // Scale factor for animals
-  double blueFishScaleFactor = 1.0;
-  double moonFishScaleFactor = 1.0;
-  double octopusScaleFactor = 1.0;
-  double redFishScaleFactor = 1.0;
-  double violetFishScaleFactor = 1.0;
+  final List<GameAnimalModel> animalslist;
+  GameOceanAdventure({required this.animalslist});
+  final networkImages = FlameNetworkImages();
 
   late SpriteAnimation blueFishAnimation;
   late SpriteAnimation moonFishAnimation;
@@ -26,124 +24,135 @@ class GameOceanAdventure extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
     // Background
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_ocean.png')
       ..size = size;
     add(background);
 
-    // Load Images
-    Image blueFishImage =
-        await images.load('animal/blue_fish/blue_fish_idle.png');
-    Image moonFishImage =
-        await images.load('animal/moon_fish/moon_fish_idle.png');
-    Image octopusImage = await images.load('animal/octopus/octopus_idle.png');
-    Image redFishImage = await images.load('animal/red_fish/red_fish_idle.png');
-    Image violetFishImage =
-        await images.load('animal/violet_fish/violent_fish_idle.png');
+    for (var animal in animalslist) {
+      if (animal.type == 'bluefish') {
+        Image blueFishImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/blue_fish/blue_fish_idle.png'
+              : animal.imageurl.toString(),
+        );
+        blueFishAnimation = SpriteAnimation.fromFrameData(
+          blueFishImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: blueFishAnimation,
+          xRange: Range(0.05, 0.95),
+          yRange: Range(0.05, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      } else if (animal.type == 'moonfish') {
+        Image moonFishImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/moon_fish/moon_fish_idle.png'
+              : animal.imageurl.toString(),
+        );
+        moonFishAnimation = SpriteAnimation.fromFrameData(
+          moonFishImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: moonFishAnimation,
+          xRange: Range(0.05, 0.95),
+          yRange: Range(0.05, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      } else if (animal.type == 'octopus') {
+        Image octopusImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/octopus/octopus_idle.png'
+              : animal.imageurl.toString(),
+        );
+        octopusAnimation = SpriteAnimation.fromFrameData(
+          octopusImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: octopusAnimation,
+          xRange: Range(0.05, 0.95),
+          yRange: Range(0.05, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      } else if (animal.type == 'redfish') {
+        Image redFishImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/red_fish/red_fish_idle.png'
+              : animal.imageurl.toString(),
+        );
+        redFishAnimation = SpriteAnimation.fromFrameData(
+          redFishImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: redFishAnimation,
+          xRange: Range(0.05, 0.95),
+          yRange: Range(0.05, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      } else if (animal.type == 'violetfish') {
+        Image violetFishImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/violet_fish/violet_fish_idle.png'
+              : animal.imageurl.toString(),
+        );
+        violetFishAnimation = SpriteAnimation.fromFrameData(
+          violetFishImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: randomNum(),
+          scaleFactor: animal.scaleFactor,
+          animation: violetFishAnimation,
+          xRange: Range(0.05, 0.95),
+          yRange: Range(0.05, 0.95),
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      }
+    }
+  }
 
-    // Load Animations
-    blueFishAnimation = SpriteAnimation.fromFrameData(
-      blueFishImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(420 / 6, 50),
-        stepTime: 0.1,
-      ),
-    );
-
-    moonFishAnimation = SpriteAnimation.fromFrameData(
-      moonFishImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(480 / 6, 60),
-        stepTime: 0.1,
-      ),
-    );
-
-    octopusAnimation = SpriteAnimation.fromFrameData(
-      octopusImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(725 / 6, 90),
-        stepTime: 0.1,
-      ),
-    );
-
-    redFishAnimation = SpriteAnimation.fromFrameData(
-      redFishImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(450 / 6, 50),
-        stepTime: 0.1,
-      ),
-    );
-
-    violetFishAnimation = SpriteAnimation.fromFrameData(
-      violetFishImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2(460 / 6, 50),
-        stepTime: 0.1,
-      ),
-    );
-
-    // Create Animals
-    // blueFish
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: blueFishScaleFactor,
-      animation: blueFishAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
-      textureSize: Vector2(420 / 6, 50),
-      type: 'blueFish',
-    );
-
-    // moonFish
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: moonFishScaleFactor,
-      animation: moonFishAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
-      textureSize: Vector2(480 / 6, 60),
-      type: 'moonFish',
-    );
-
-    // octopus
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: octopusScaleFactor,
-      animation: octopusAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
-      textureSize: Vector2(725 / 6, 90),
-      type: 'octopus',
-    );
-
-    // redFish
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: redFishScaleFactor,
-      animation: redFishAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
-      textureSize: Vector2(450 / 6, 50),
-      type: 'redFish',
-    );
-
-    // violetFish
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: violetFishScaleFactor,
-      animation: violetFishAnimation,
-      xRange: Range(0.05, 0.95),
-      yRange: Range(0.05, 0.95),
-      textureSize: Vector2(460 / 6, 50),
-      type: 'violetFish',
-    );
+  //random number 1-5
+  int randomNum() {
+    return Random().nextInt(5) + 1;
   }
 
   void createAnimals({
@@ -206,17 +215,32 @@ class GameOceanAdventure extends FlameGame {
           flipped: flip,
           type: type,
         );
-        if (type == 'blueFish') {
-          globalBlueFishCount++;
-        } else if (type == 'moonFish') {
-          globalMoonFishCount++;
-        } else if (type == 'octopus') {
-          globalOctopusCount++;
-        } else if (type == 'redFish') {
-          globalRedFishCount++;
-        } else if (type == 'violetFish') {
-          globalVioletFishCount++;
+        switch (type) {
+          case 'bluefish':
+            globalBlueFishCount++;
+            break;
+          case 'moonfish':
+            globalMoonFishCount++;
+            break;
+          case 'octopus':
+            globalOctopusCount++;
+            break;
+          case 'redfish':
+            globalRedFishCount++;
+            break;
+          case 'violetfish':
+            globalVioletFishCount++;
+            break;
+          default:
+            break;
         }
+
+        // print all animals count
+        print('globalBlueFishCount: $globalBlueFishCount');
+        print('globalMoonFishCount: $globalMoonFishCount');
+        print('globalOctopusCount: $globalOctopusCount');
+        print('globalRedFishCount: $globalRedFishCount');
+        print('globalVioletFishCount: $globalVioletFishCount');
         add(animal.createComponent());
       }
     }

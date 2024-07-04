@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,8 +76,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       userAnswer = '';
       userPoint = 0;
       userProgress = 0;
+      _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
       resetAnimal();
-      _gameOddAndEven = GameOddAndEven();
     });
   }
 
@@ -152,7 +154,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       setState(() {
         resetAnimal();
         userAnswer = '';
-        _gameOddAndEven = GameOddAndEven();
+        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        resetAnimal();
       });
       setState(() {
         showResultDialog = false;
@@ -185,7 +188,34 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
 
-    _gameOddAndEven = GameOddAndEven();
+    _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+    resetAnimal();
+  }
+
+  Future<void> fetchData() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    resetAnimal();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('animal').get();
+
+      List<GameAnimalModel> items = snapshot.docs
+          .map((doc) => GameAnimalModel.fromSnapshot(doc))
+          .toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
+      });
+
+      // Update startLower and lower with the fetched items
+      setState(() {
+        animalslist = List<GameAnimalModel>.from(items);
+        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        resetAnimal();
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
 
   void _showDialogCompleted(
