@@ -1,7 +1,10 @@
 import 'dart:math';
+import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +27,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   late HappyFarm _happyFarm;
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
-
   int userPoint = 0;
   int userProgress = 0;
   int totalQuestion = 3;
@@ -82,7 +84,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userPoint = 0;
       userProgress = 0;
       resetAnimal();
-      _happyFarm = HappyFarm();
+      _happyFarm = HappyFarm(animalslist: animalslist);
     });
   }
 
@@ -143,7 +145,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       setState(() {
         resetAnimal();
         userAnswer = '';
-        _happyFarm = HappyFarm();
+        _happyFarm = HappyFarm(animalslist: animalslist);
       });
       setState(() {
         showResultDialog = false;
@@ -175,7 +177,34 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
-    _happyFarm = HappyFarm();
+    fetchData();
+    resetAnimal();
+    _happyFarm = HappyFarm(animalslist: animalslist);
+  }
+
+  Future<void> fetchData() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    resetAnimal();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('animal').get();
+
+      List<GameAnimalModel> items = snapshot.docs
+          .map((doc) => GameAnimalModel.fromSnapshot(doc))
+          .toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
+      });
+
+      // Update startLower and lower with the fetched items
+      setState(() {
+        animalslist = List<GameAnimalModel>.from(items);
+        _happyFarm = HappyFarm(animalslist: animalslist);
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
 
   void _showDialogError(

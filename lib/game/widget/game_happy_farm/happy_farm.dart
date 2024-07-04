@@ -1,12 +1,17 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 
 class HappyFarm extends FlameGame {
   late SpriteComponent background;
+  final List<GameAnimalModel> animalslist;
+  HappyFarm({required this.animalslist});
+  final networkImages = FlameNetworkImages();
 
   double chickenIdleScaleFactor = 2.0;
   double duckIdleScaleFactor = 1.0;
@@ -25,49 +30,55 @@ class HappyFarm extends FlameGame {
     add(background);
 
     // Load Images
-    Image chickenIdleImage =
-        await images.load('animal/chicken/chicken_idle.png');
-    Image duckIdleImage = await images.load('animal/duck/duck_stand.png');
-
-    // Load Animations
-    chickenIdleAnimation = SpriteAnimation.fromFrameData(
-      chickenIdleImage,
-      SpriteAnimationData.sequenced(
-        amount: 13,
-        textureSize: Vector2(32, 34),
-        stepTime: 0.05,
-      ),
-    );
-
-    duckIdleAnimation = SpriteAnimation.fromFrameData(
-      duckIdleImage,
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        textureSize: Vector2(230 / 4, 70),
-        stepTime: 0.2,
-      ),
-    );
-
-    // Create Animals
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: chickenIdleScaleFactor,
-      animation: chickenIdleAnimation,
-      xRange: Range(0.05, 0.45),
-      yPosition: size.y * 0.7,
-      textureSize: Vector2(32, 34),
-      type: 'chicken',
-    );
-
-    createAnimals(
-      count: Random().nextInt(10) + 1,
-      scaleFactor: duckIdleScaleFactor,
-      animation: duckIdleAnimation,
-      xRange: Range(0.55, 0.95),
-      yPosition: size.y * 0.7,
-      textureSize: Vector2(230 / 4, 70),
-      type: 'duck',
-    );
+    for (var animal in animalslist) {
+      if (animal.type == 'chicken') {
+        Image chickenIdleImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/chicken/chicken_stand.png'
+              : animal.imageurl.toString(),
+        );
+        chickenIdleAnimation = SpriteAnimation.fromFrameData(
+          chickenIdleImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: Random().nextInt(10) + 1,
+          scaleFactor: animal.scaleFactor,
+          animation: chickenIdleAnimation,
+          xRange: Range(0.05, 0.45),
+          yPosition: size.y * 0.7,
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      } else if (animal.type == 'duck') {
+        Image duckIdleImage = await networkImages.load(
+          animal.imageurl.toString().isEmpty
+              ? 'animal/duck/duck_stand.png'
+              : animal.imageurl.toString(),
+        );
+        duckIdleAnimation = SpriteAnimation.fromFrameData(
+          duckIdleImage,
+          SpriteAnimationData.sequenced(
+            amount: animal.sprite,
+            textureSize: Vector2(animal.vectorX, animal.vectorY),
+            stepTime: animal.steptime,
+          ),
+        );
+        createAnimals(
+          count: Random().nextInt(10) + 1,
+          scaleFactor: animal.scaleFactor,
+          animation: duckIdleAnimation,
+          xRange: Range(0.55, 0.95),
+          yPosition: size.y * 0.7,
+          textureSize: Vector2(animal.vectorX, animal.vectorY),
+          type: animal.type,
+        );
+      }
+    }
   }
 
   void createAnimals({
