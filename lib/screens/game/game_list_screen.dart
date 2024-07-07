@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,10 +61,10 @@ class GameListScreen extends GetView<GameController> {
           onTap: () {
             controller.isLoading.value = true;
             controller.selectedGame.value = controller.games[index]['gameType'];
+            resetAnimal();
             // Simulate a delay for loading the game
             Future.delayed(Duration(seconds: 2), () {
               controller.isLoading.value = false;
-              resetAnimal();
             });
           },
           child: GridTile(

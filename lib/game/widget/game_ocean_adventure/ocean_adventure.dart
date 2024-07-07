@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -150,11 +149,6 @@ class GameOceanAdventure extends FlameGame {
     }
   }
 
-  //random number 1-5
-  int randomNum() {
-    return Random().nextInt(5) + 1;
-  }
-
   void createAnimals({
     required int count,
     required double scaleFactor,
@@ -234,16 +228,15 @@ class GameOceanAdventure extends FlameGame {
           default:
             break;
         }
-
-        // print all animals count
-        print('globalBlueFishCount: $globalBlueFishCount');
-        print('globalMoonFishCount: $globalMoonFishCount');
-        print('globalOctopusCount: $globalOctopusCount');
-        print('globalRedFishCount: $globalRedFishCount');
-        print('globalVioletFishCount: $globalVioletFishCount');
         add(animal.createComponent());
       }
     }
+    // print all animals count
+    print('globalBlueFishCount: $globalBlueFishCount');
+    print('globalMoonFishCount: $globalMoonFishCount');
+    print('globalOctopusCount: $globalOctopusCount');
+    print('globalRedFishCount: $globalRedFishCount');
+    print('globalVioletFishCount: $globalVioletFishCount');
   }
 
   @override

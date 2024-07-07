@@ -7,8 +7,6 @@ import 'package:beanmind_flutter/screens/screens.dart' show QuizeScreen;
 import 'package:beanmind_flutter/services/firebase/firebasestorage_service.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
 
-import '../../game/class/drag_and_drop/shopping.dart';
-
 class GameShoppingController extends GetxController {
   @override
   void onReady() {
@@ -43,7 +41,7 @@ class GameShoppingController extends GetxController {
     return allItem.take(20).toList();
   }
 
-  void navigatoQuestions({required Product item, bool isTryAgain = false}) {
+  void navigatoQuestions({required ItemModel item, bool isTryAgain = false}) {
     AuthController _authController = Get.find();
 
     if (_authController.isLogedIn()) {

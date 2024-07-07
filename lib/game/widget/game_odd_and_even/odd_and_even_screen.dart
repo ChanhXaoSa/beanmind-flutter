@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';

@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -148,12 +147,13 @@ class GameOddAndEven extends FlameGame {
         } else if (type == 'redbird') {
           globalRedBirdCount++;
         }
-        // print animal count
-        print('BlueBird: $globalBlueBirdCount');
-        print('RedBird: $globalRedBirdCount');
+
         add(animal.createComponent());
       }
     }
+    // print animal count
+    print('BlueBird: $globalBlueBirdCount');
+    print('RedBird: $globalRedBirdCount');
   }
 
   @override

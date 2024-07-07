@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/animal/animal.dart';
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -19,8 +18,6 @@ class HappyFarm extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    resetAnimal();
-
     // Background
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_farm.png')
@@ -43,7 +40,7 @@ class HappyFarm extends FlameGame {
           ),
         );
         createAnimals(
-          count: Random().nextInt(10) + 1,
+          count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: chickenIdleAnimation,
           xRange: Range(0.05, 0.45),
@@ -66,7 +63,7 @@ class HappyFarm extends FlameGame {
           ),
         );
         createAnimals(
-          count: Random().nextInt(10) + 1,
+          count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: duckIdleAnimation,
           xRange: Range(0.55, 0.95),
@@ -118,15 +115,18 @@ class HappyFarm extends FlameGame {
         } else if (type == 'duck') {
           globalDuckCount++;
         }
+
         add(animal.createComponent());
       }
       xStart += gap;
-
       // Ensure xStart is within bounds
       if (xStart > xEnd) {
         break; // Exit the loop if the animals exceed the specified x-range
       }
     }
+    //print animal count
+    print('Chicken: $globalChickenCount');
+    print('Duck: $globalDuckCount');
   }
 
   @override

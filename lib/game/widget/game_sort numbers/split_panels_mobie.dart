@@ -1,5 +1,4 @@
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
 import 'package:flutter/material.dart';
 
 class SplitPanelsMobie extends StatefulWidget {
