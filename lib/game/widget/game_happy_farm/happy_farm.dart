@@ -18,6 +18,9 @@ class HappyFarm extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    // Reset animal counts
+    resetAnimal();
+
     // Background
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_farm.png')
@@ -124,7 +127,7 @@ class HappyFarm extends FlameGame {
         break; // Exit the loop if the animals exceed the specified x-range
       }
     }
-    //print animal count
+    // Print animal count
     print('Chicken: $globalChickenCount');
     print('Duck: $globalDuckCount');
   }

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/item_panel_shopphing.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';

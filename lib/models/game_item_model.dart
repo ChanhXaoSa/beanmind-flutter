@@ -31,3 +31,6 @@ class ItemModel {
 List<ItemModel> upperItemModel = [];
 List<ItemModel> lowerItemModel = [];
 List<ItemModel> startLowerItemModel = [];
+
+int balance = 100;
+int lastbalance = 20;

@@ -1,4 +1,3 @@
-import 'package:beanmind_flutter/game/class/drag_and_drop/shopping.dart';
 import 'package:beanmind_flutter/models/game_item_model.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

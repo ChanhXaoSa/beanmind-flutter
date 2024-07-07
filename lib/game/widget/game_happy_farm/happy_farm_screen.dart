@@ -27,6 +27,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   int userPoint = 0;
   int userProgress = 0;
   int totalQuestion = 3;
+  bool _isLoading = true;
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -85,12 +86,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   }
 
   void backtoHome() {
+    resetGame();
     // go to GameList
-    setState(() {
-      resetAnimal();
-      userAnswer = '';
-      _happyFarm = HappyFarm(animalslist: animalslist);
-    });
     Get.offAll(() => GameList());
   }
 
@@ -184,6 +181,9 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     resetAnimal();
     fetchData();
     _happyFarm = HappyFarm(animalslist: animalslist);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<void> fetchData() async {
@@ -205,6 +205,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
         _happyFarm = HappyFarm(animalslist: animalslist);
+        resetAnimal();
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -518,7 +519,17 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           flex: 4,
                           child: Container(
                             alignment: Alignment.topCenter,
-                            child: GameWidget(game: _happyFarm),
+                            child: Stack(
+                              children: [
+                                GameWidget(game: _happyFarm),
+                                Visibility(
+                                  visible: _isLoading,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Expanded(
@@ -549,7 +560,17 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           flex: 3,
                           child: Container(
                             alignment: Alignment.topCenter,
-                            child: GameWidget(game: _happyFarm),
+                            child: Stack(
+                              children: [
+                                GameWidget(game: _happyFarm),
+                                Visibility(
+                                  visible: _isLoading,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Expanded(

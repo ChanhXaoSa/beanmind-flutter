@@ -82,7 +82,7 @@ int globalMoonFishCount = 0;
 int globalBlueBirdCount = 0;
 int globalRedBirdCount = 0;
 
-void resetAnimal() {
+void resetAnimal() async {
   globalBlueFishCount = 0;
   globalRedFishCount = 0;
   globalChickenCount = 0;

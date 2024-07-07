@@ -1,10 +1,10 @@
-import 'package:beanmind_flutter/game/class/animal/count_animal.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/game_shopping_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/game_drag_and_drop_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_math/math_game.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure_screen.dart';
+import 'package:beanmind_flutter/models/models.dart';
 import 'package:flutter/material.dart';
 
 class GameList extends StatefulWidget {
@@ -34,11 +34,7 @@ class _GameListState extends State<GameList> {
       'image': 'mathgame1v1.png',
       'gameType': 'jungle'
     },
-    {
-      'title': 'Sắp xếp số',
-      'image': 'number_sort.png',
-      'gameType': 'desert'
-    },
+    {'title': 'Sắp xếp số', 'image': 'number_sort.png', 'gameType': 'desert'},
     {
       'title': 'Trò chơi mua sắm',
       'image': 'shopping.png',
@@ -63,8 +59,10 @@ class _GameListState extends State<GameList> {
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
+                  Navigator.of(context).pop();
                   setState(() {
-                    selectedGame = null;
+                    selectedGame = null;     
+                    resetAnimal();            
                   });
                 },
               )
