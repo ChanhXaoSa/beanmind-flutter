@@ -31,7 +31,7 @@ class CustomDrawer extends GetView<MyDrawerController> {
                 )),
             Padding(
               padding: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.3),
+                  right: MediaQuery.of(context).size.width * 0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

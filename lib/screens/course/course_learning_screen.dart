@@ -12,7 +12,7 @@ import 'package:beanmind_flutter/widgets/widgets.dart';
 class CourseLearningScreen extends GetView<MyDrawerController> {
   const CourseLearningScreen({Key? key}) : super(key: key);
 
-  static const String routeName = '/home';
+  static const String routeName = '/course_learning';
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class CourseLearningScreen extends GetView<MyDrawerController> {
             style: DrawerStyle.defaultStyle,
             menuScreen: const CustomDrawer(),
             menuBackgroundColor: Colors.white.withOpacity(0.5),
-            slideWidth: MediaQuery.of(context).size.width * 0.6,
+            slideWidth: MediaQuery.of(context).size.width * 0.3,
             mainScreen: Container(
               decoration: BoxDecoration(gradient: mainGradient(context)),
               child: SafeArea(

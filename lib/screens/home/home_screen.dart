@@ -28,7 +28,7 @@ class HomeScreen extends GetView<MyDrawerController> {
         style: DrawerStyle.defaultStyle,
         menuScreen: const CustomDrawer(),
         menuBackgroundColor: Colors.white.withOpacity(0.5),
-        slideWidth: MediaQuery.of(context).size.width * 0.6,
+        slideWidth: MediaQuery.of(context).size.width * 0.3,
         mainScreen: Container(
           decoration: BoxDecoration(gradient: mainGradient(context)),
           child: SafeArea(
