@@ -23,6 +23,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   late GameOddAndEven _gameOddAndEven;
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
+  bool _isLoading = true;
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -186,9 +187,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
-
-    _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-    resetAnimalSky();
+    fetchData();
   }
 
   Future<void> fetchData() async {
@@ -208,9 +207,10 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
 
       // Update startLower and lower with the fetched items
       setState(() {
-        animalslist = List<GameAnimalModel>.from(items);
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
         resetAnimalSky();
+        animalslist = List<GameAnimalModel>.from(items);
+        _isLoading = false;
+        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -393,150 +393,153 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     final double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
-
-    return KeyboardListener(
-      focusNode: FocusNode(),
-      onKeyEvent: (KeyEvent event) {
-        if (event is KeyDownEvent) {
-          final logicalKey = event.logicalKey;
-          if (logicalKey == LogicalKeyboardKey.enter) {
-            if (showResultDialog) {
-              goToNextQuestion();
-            } else {
-              checkResult();
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return KeyboardListener(
+        focusNode: FocusNode(),
+        onKeyEvent: (KeyEvent event) {
+          if (event is KeyDownEvent) {
+            final logicalKey = event.logicalKey;
+            if (logicalKey == LogicalKeyboardKey.enter) {
+              if (showResultDialog) {
+                goToNextQuestion();
+              } else {
+                checkResult();
+              }
+            } else if (logicalKey == LogicalKeyboardKey.backspace) {
+              buttonTapped('DEL');
             }
-          } else if (logicalKey == LogicalKeyboardKey.backspace) {
-            buttonTapped('DEL');
+            final input = logicalKey.keyLabel;
+            if (RegExp(r'^[0-9]$').hasMatch(input)) {
+              handleNumberButtonPress(input);
+            }
           }
-          final input = logicalKey.keyLabel;
-          if (RegExp(r'^[0-9]$').hasMatch(input)) {
-            handleNumberButtonPress(input);
-          }
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.deepPurple[300],
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              height: 60,
-              color: Colors.deepPurple,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: Text(
-                      'Số điểm của bạn : ' + userPoint.toString(),
-                      style: whiteTextStyle,
+        },
+        child: Scaffold(
+          backgroundColor: Colors.deepPurple[300],
+          body: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                height: 60,
+                color: Colors.deepPurple,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Số điểm của bạn : ' + userPoint.toString(),
+                        style: whiteTextStyle,
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Hướng dẫn'),
-                            content: Text(
-                              'Nội dung hướng dẫn người chơi...',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('OK'),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Hướng dẫn'),
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
                               ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('Hướng dẫn'),
-                  ),
-                ],
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Hướng dẫn'),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: isWideScreen
-                  ? Row(
+              Expanded(
+                child: isWideScreen
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: GameWidget(game: _gameOddAndEven),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: GameWidget(game: _gameOddAndEven),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              Container(
+                  height: 120,
+                  color: Colors.deepPurple,
+                  child: Center(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: GameWidget(game: _gameOddAndEven),
+                        Text(
+                          'Số lượng chim là',
+                          style: whiteTextStyle,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            buttonTapped('1');
+                          },
+                          child: const Text(
+                            'số lẻ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                                color: Colors.green),
                           ),
                         ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: GameWidget(game: _gameOddAndEven),
-                          ),
+                        Text(
+                          'hay',
+                          style: whiteTextStyle,
                         ),
+                        TextButton(
+                          onPressed: () {
+                            buttonTapped('2');
+                          },
+                          child: const Text(
+                            'số chẵn',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                                color: Colors.red),
+                          ),
+                        )
                       ],
                     ),
-            ),
-            Container(
-                height: 120,
-                color: Colors.deepPurple,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Số lượng chim là',
-                        style: whiteTextStyle,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          buttonTapped('1');
-                        },
-                        child: const Text(
-                          'số lẻ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32,
-                              color: Colors.green),
-                        ),
-                      ),
-                      Text(
-                        'hay',
-                        style: whiteTextStyle,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          buttonTapped('2');
-                        },
-                        child: const Text(
-                          'số chẵn',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32,
-                              color: Colors.red),
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-            Focus(
-              focusNode: _resultFocusNode,
-              child: Container(
-                height: 0,
-                width: 0,
-              ),
-            )
-          ],
+                  )),
+              Focus(
+                focusNode: _resultFocusNode,
+                child: Container(
+                  height: 0,
+                  width: 0,
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

@@ -175,7 +175,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
-
     fetchData();
   }
 

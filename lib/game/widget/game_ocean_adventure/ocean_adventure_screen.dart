@@ -186,9 +186,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userAnswer = '';
     userPoint = 0;
     userProgress = 0;
-    fetchData();
-    _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
     resetAnimalOcean();
+    fetchData();
   }
 
   Future<void> fetchData() async {
@@ -210,7 +209,6 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-        resetAnimalOcean();
       });
     } catch (e) {
       print('Error fetching data: $e');

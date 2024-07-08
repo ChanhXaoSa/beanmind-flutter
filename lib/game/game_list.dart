@@ -11,7 +11,7 @@ class GameList extends StatefulWidget {
   @override
   _GameListState createState() => _GameListState();
 
-  static const routeName = '/game-list';
+  static const routeName = '/game_list';
 }
 
 class _GameListState extends State<GameList> {
