@@ -82,11 +82,15 @@ class CustomDrawer extends GetView<MyDrawerController> {
                   _DrawerButton(
                       onPressed: () => controller.game(),
                       icon: Icons.gamepad_outlined,
-                      label: 'My Game'),
+                      label: 'Game của tôi'),
                   _DrawerButton(
                       onPressed: () => controller.course(),
                       icon: Icons.book,
-                      label: 'My Course'),
+                      label: 'Khóa học của tôi'),
+                  _DrawerButton(
+                      onPressed: () => controller.courseLearning(),
+                      icon: Icons.book,
+                      label: 'Quá trình học'),
                   // _DrawerButton(
                   //     onPressed: () => controller.github(),
                   //     icon: AppIcons.github,
