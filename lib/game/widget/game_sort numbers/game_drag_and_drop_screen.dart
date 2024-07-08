@@ -1,9 +1,8 @@
 import 'dart:math';
-
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
-import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
+import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -172,7 +171,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
   void backtoHome() {
     // go to GameList
-    Get.offAll(() => GameList());
+    Get.offAllNamed(GameListScreen.routeName);
   }
 
   String _getLottieAsset(int userPoint) {

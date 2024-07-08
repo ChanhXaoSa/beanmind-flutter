@@ -1,7 +1,7 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +83,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
 
   void backtoHome() {
     // go to GameList
-    Get.offAll(() => GameList());
+    Get.offAllNamed(GameListScreen.routeName);
   }
 
   void checkResult() {

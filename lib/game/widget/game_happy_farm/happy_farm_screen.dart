@@ -1,5 +1,5 @@
-import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
@@ -88,7 +88,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   void backtoHome() {
     resetGame();
     // go to GameList
-    Get.offAllNamed(GameList.routeName);
+    Get.offAllNamed(GameListScreen.routeName);
   }
 
   void checkResult() {

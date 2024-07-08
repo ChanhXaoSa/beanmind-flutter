@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
@@ -10,8 +11,6 @@ import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
-
-import '../../game_list.dart';
 
 class OceanAdventureScreen extends StatefulWidget {
   @override
@@ -25,6 +24,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   late GameOceanAdventure _gameOceanAdventure;
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
+  bool _isLoading = true;
 
   int userPoint = 0;
   int userProgress = 0;
@@ -93,7 +93,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       resetAnimalOcean();
     });
-    Get.offAll(() => GameList());
+    Get.offAllNamed(GameListScreen.routeName);
   }
 
   void checkResult() {
@@ -148,7 +148,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   void goToNextQuestion() {
     if (showResultDialog) {
       Navigator.of(context).pop();
-      setState(() {        
+      setState(() {
         userAnswer = '';
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
         resetAnimalOcean();
@@ -186,7 +186,6 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userAnswer = '';
     userPoint = 0;
     userProgress = 0;
-    resetAnimalOcean();
     fetchData();
   }
 
@@ -207,7 +206,9 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
 
       // Update startLower and lower with the fetched items
       setState(() {
+        resetAnimalOcean();
         animalslist = List<GameAnimalModel>.from(items);
+        _isLoading = false;
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       });
     } catch (e) {
@@ -420,175 +421,180 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     final double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
-
-    return KeyboardListener(
-      focusNode: FocusNode(),
-      onKeyEvent: (KeyEvent event) {
-        if (event is KeyDownEvent) {
-          final logicalKey = event.logicalKey;
-          if (logicalKey == LogicalKeyboardKey.enter) {
-            if (showResultDialog) {
-              goToNextQuestion();
-            } else {
-              checkResult();
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return KeyboardListener(
+        focusNode: FocusNode(),
+        onKeyEvent: (KeyEvent event) {
+          if (event is KeyDownEvent) {
+            final logicalKey = event.logicalKey;
+            if (logicalKey == LogicalKeyboardKey.enter) {
+              if (showResultDialog) {
+                goToNextQuestion();
+              } else {
+                checkResult();
+              }
+            } else if (logicalKey == LogicalKeyboardKey.backspace) {
+              buttonTapped('DEL');
             }
-          } else if (logicalKey == LogicalKeyboardKey.backspace) {
-            buttonTapped('DEL');
+            final input = logicalKey.keyLabel;
+            if (RegExp(r'^[0-9]$').hasMatch(input)) {
+              handleNumberButtonPress(input);
+            }
           }
-          final input = logicalKey.keyLabel;
-          if (RegExp(r'^[0-9]$').hasMatch(input)) {
-            handleNumberButtonPress(input);
-          }
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.deepPurple[300],
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              height: 60,
-              color: Colors.deepPurple,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: Text(
-                      'Số điểm của bạn : ' + userPoint.toString(),
-                      style: whiteTextStyle,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Hướng dẫn'),
-                            content: Text(
-                              'Nội dung hướng dẫn người chơi...',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('Hướng dẫn'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
+        },
+        child: Scaffold(
+          backgroundColor: Colors.deepPurple[300],
+          body: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
                 height: 60,
                 color: Colors.deepPurple,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Có bao nhiêu con Blue Fish ? ',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Số điểm của bạn : ' + userPoint.toString(),
                         style: whiteTextStyle,
                       ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                        color: Colors.blue[100],
-                        child: Text(
-                          '$userAnswer',
-                          style: whiteTextStyle.copyWith(color: Colors.orange),
-                        ),
-                      ),
-                      // Text(
-                      //   ' Blue Fish: $globalBlueFishCount',
-                      //   style: whiteTextStyle,
-                      // ),
-                    ],
-                  ),
-                )),
-            Expanded(
-              child: isWideScreen
-                  ? Row(
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Hướng dẫn'),
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Hướng dẫn'),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                  height: 60,
+                  color: Colors.deepPurple,
+                  child: Center(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: GameWidget(game: _gameOceanAdventure),
+                        Text(
+                          'Có bao nhiêu con Blue Fish ? ',
+                          style: whiteTextStyle,
+                        ),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                          color: Colors.blue[100],
+                          child: Text(
+                            '$userAnswer',
+                            style:
+                                whiteTextStyle.copyWith(color: Colors.orange),
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4, childAspectRatio: 0.9),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: GameWidget(game: _gameOceanAdventure),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
+                        // Text(
+                        //   ' Blue Fish: $globalBlueFishCount',
+                        //   style: whiteTextStyle,
+                        // ),
                       ],
                     ),
-            ),
-            Focus(
-              focusNode: _resultFocusNode,
-              child: Container(
-                height: 0,
-                width: 0,
+                  )),
+              Expanded(
+                child: isWideScreen
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: GameWidget(game: _gameOceanAdventure),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 0.9),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: GameWidget(game: _gameOceanAdventure),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-            )
-          ],
+              Focus(
+                focusNode: _resultFocusNode,
+                child: Container(
+                  height: 0,
+                  width: 0,
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

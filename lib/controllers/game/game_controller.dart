@@ -25,11 +25,11 @@ class GameController extends GetxController{
       'image': 'happy_farm.png',
       'gameType': 'space'
     },
-    {
-      'title': 'Trận đấu toán học',
-      'image': 'mathgame1v1.png',
-      'gameType': 'jungle'
-    },
+    // {
+    //   'title': 'Trận đấu toán học',
+    //   'image': 'mathgame1v1.png',
+    //   'gameType': 'jungle'
+    // },
     {
       'title': 'Sắp xếp số',
       'image': 'number_sort.png',
@@ -53,8 +53,8 @@ class GameController extends GetxController{
         return 'Khám phá đại dương';
       case 'space':
         return 'Nông trại vui vẻ';
-      case 'jungle':
-        return 'Trận đấu toán học';
+      // case 'jungle':
+      //   return 'Trận đấu toán học';
       case 'desert':
         return 'Sắp xếp số';
       case 'mountain':
@@ -72,8 +72,8 @@ class GameController extends GetxController{
         return OceanAdventureScreen();
       case 'space':
         return HappyFarmScreen();
-      case 'jungle':
-        return const MathGame();
+      // case 'jungle':
+      //   return const MathGame();
       case 'desert':
         return MathDragAndDropScreen();
       case 'mountain':
