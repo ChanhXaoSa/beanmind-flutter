@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
 
-class MyButton extends StatelessWidget {
+class MyButton extends StatefulWidget {
   final String child;
   final VoidCallback onTap;
-  var buttonColor = Colors.deepPurple[400];
+
   MyButton({Key? key, required this.child, required this.onTap}) : super(key: key);
-  
+
+  @override
+  State<MyButton> createState() => _MyButtonState();
+}
+
+class _MyButtonState extends State<MyButton> {
+  var buttonColor = Colors.deepPurple[400];
+
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   @override
   Widget build(BuildContext context) {
 
-    if(child == 'C') {
+    if(widget.child == 'C') {
       buttonColor = Colors.green;
-    } else if (child == 'DEL') {
+    } else if (widget.child == 'DEL') {
       buttonColor = Colors.red;
-    } else if (child == '=') {
+    } else if (widget.child == '=') {
       buttonColor = Colors.deepPurple;
-    } else if (child == 'CHECK RESULT') {
+    } else if (widget.child == 'CHECK RESULT') {
       buttonColor = Colors.green;
-    } else if (child == 'RESET') {
+    } else if (widget.child == 'RESET') {
       buttonColor = Colors.red;
     }
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: onTap,
+        onTap: widget.onTap,
         child: Container(
           decoration: BoxDecoration(
             color: buttonColor,
@@ -35,7 +42,7 @@ class MyButton extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              child,
+              widget.child,
               style: whiteTextStyle,
             ),
           ),

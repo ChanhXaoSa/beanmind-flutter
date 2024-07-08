@@ -1,6 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/common/screen_background_decoration.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:html';

@@ -1,5 +1,4 @@
 import 'package:beanmind_flutter/screens/course/course_detail_v2_screen.dart';
-import 'package:beanmind_flutter/screens/course/course_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class Courselist extends StatefulWidget {
