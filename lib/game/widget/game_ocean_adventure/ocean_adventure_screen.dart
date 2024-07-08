@@ -82,7 +82,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       userPoint = 0;
       userProgress = 0;
       _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-      resetAnimal();
+      resetAnimalOcean();
     });
   }
 
@@ -91,7 +91,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     setState(() {
       userAnswer = '';
       _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-      resetAnimal();
+      resetAnimalOcean();
     });
     Get.offAll(() => GameList());
   }
@@ -151,7 +151,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       setState(() {        
         userAnswer = '';
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-        resetAnimal();
+        resetAnimalOcean();
       });
       setState(() {
         showResultDialog = false;
@@ -188,12 +188,12 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userProgress = 0;
     fetchData();
     _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-    resetAnimal();
+    resetAnimalOcean();
   }
 
   Future<void> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimal();
+    resetAnimalOcean();
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
@@ -210,7 +210,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-        resetAnimal();
+        resetAnimalOcean();
       });
     } catch (e) {
       print('Error fetching data: $e');

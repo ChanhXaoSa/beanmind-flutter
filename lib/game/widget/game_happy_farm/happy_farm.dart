@@ -19,7 +19,7 @@ class HappyFarm extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
     // Reset animal counts
-    resetAnimal();
+    resetAnimalFarm();
 
     // Background
     background = SpriteComponent()

@@ -61,7 +61,6 @@ class GameListScreen extends GetView<GameController> {
           onTap: () {
             controller.isLoading.value = true;
             controller.selectedGame.value = controller.games[index]['gameType'];
-            resetAnimal();
             // Simulate a delay for loading the game
             Future.delayed(Duration(seconds: 2), () {
               controller.isLoading.value = false;

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 class GameList extends StatefulWidget {
   @override
   _GameListState createState() => _GameListState();
+
+  static const routeName = '/game-list';
 }
 
 class _GameListState extends State<GameList> {
@@ -61,8 +63,7 @@ class _GameListState extends State<GameList> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   setState(() {
-                    selectedGame = null;     
-                    resetAnimal();            
+                    selectedGame = null;              
                   });
                 },
               )

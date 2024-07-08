@@ -80,7 +80,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userAnswer = '';
       userPoint = 0;
       userProgress = 0;
-      resetAnimal();
+      resetAnimalFarm();
       _happyFarm = HappyFarm(animalslist: animalslist);
     });
   }
@@ -88,7 +88,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   void backtoHome() {
     resetGame();
     // go to GameList
-    Get.offAll(() => GameList());
+    Get.offAllNamed(GameList.routeName);
   }
 
   void checkResult() {
@@ -141,7 +141,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        resetAnimal();
+        resetAnimalFarm();
         userAnswer = '';
         _happyFarm = HappyFarm(animalslist: animalslist);
       });
@@ -174,21 +174,13 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     super.initState();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((value) => {setState(() {})});
-    userAnswer = '';
-    userPoint = 0;
-    userProgress = 0;
-    resetAnimal();
+      ..initialize().then((value) => setState(() {}));
+
     fetchData();
-    _happyFarm = HappyFarm(animalslist: animalslist);
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   Future<void> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimal();
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
@@ -201,14 +193,18 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
       });
 
-      // Update startLower and lower with the fetched items
+      // Update animalslist and other related states
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
+        _isLoading = false; // Data has been fetched, loading is complete
+        resetAnimalFarm();
         _happyFarm = HappyFarm(animalslist: animalslist);
-        resetAnimal();
       });
     } catch (e) {
       print('Error fetching data: $e');
+      setState(() {
+        _isLoading = false; // Stop loading even if there's an error
+      });
     }
   }
 
@@ -418,194 +414,196 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
 
-    return KeyboardListener(
-      focusNode: FocusNode(),
-      onKeyEvent: (KeyEvent event) {
-        if (event is KeyDownEvent) {
-          final logicalKey = event.logicalKey;
-          if (logicalKey == LogicalKeyboardKey.enter) {
-            if (showResultDialog) {
-              goToNextQuestion();
-            } else {
-              checkResult();
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return KeyboardListener(
+        focusNode: FocusNode(),
+        onKeyEvent: (KeyEvent event) {
+          if (event is KeyDownEvent) {
+            final logicalKey = event.logicalKey;
+            if (logicalKey == LogicalKeyboardKey.enter) {
+              if (showResultDialog) {
+                goToNextQuestion();
+              } else {
+                checkResult();
+              }
+            } else if (logicalKey == LogicalKeyboardKey.backspace) {
+              buttonTapped('DEL');
             }
-          } else if (logicalKey == LogicalKeyboardKey.backspace) {
-            buttonTapped('DEL');
+            final input = logicalKey.keyLabel;
+            if (RegExp(r'^[0-9]$').hasMatch(input)) {
+              handleNumberButtonPress(input);
+            }
           }
-          final input = logicalKey.keyLabel;
-          if (RegExp(r'^[0-9]$').hasMatch(input)) {
-            handleNumberButtonPress(input);
-          }
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.deepPurple[300],
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              height: 60,
-              color: Colors.deepPurple,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: Text(
-                      'Số điểm của bạn : ' + userPoint.toString(),
-                      style: whiteTextStyle,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Hướng dẫn'),
-                            content: Text(
-                              'Nội dung hướng dẫn người chơi...',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('Hướng dẫn'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
+        },
+        child: Scaffold(
+          backgroundColor: Colors.deepPurple[300],
+          body: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
                 height: 60,
                 color: Colors.deepPurple,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Có bao nhiêu con Con gà ? ',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Số điểm của bạn : ' + userPoint.toString(),
                         style: whiteTextStyle,
                       ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                        color: Colors.blue[100],
-                        child: Text(
-                          '$userAnswer',
-                          style: whiteTextStyle.copyWith(color: Colors.orange),
-                        ),
-                      ),
-                      // Text(
-                      //   ' Số lượng gà: $globalChickenCount',
-                      //   style: whiteTextStyle,
-                      // ),
-                    ],
-                  ),
-                )),
-            Expanded(
-              child: isWideScreen
-                  ? Row(
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Hướng dẫn'),
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Hướng dẫn'),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                  height: 60,
+                  color: Colors.deepPurple,
+                  child: Center(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: Stack(
-                              children: [
-                                GameWidget(game: _happyFarm),
-                                Visibility(
-                                  visible: _isLoading,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        Text(
+                          'Có bao nhiêu con Con gà ? ',
+                          style: whiteTextStyle,
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4, childAspectRatio: 0.9),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: Stack(
-                              children: [
-                                GameWidget(game: _happyFarm),
-                                Visibility(
-                                  visible: _isLoading,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                          color: Colors.blue[100],
+                          child: Text(
+                            '$userAnswer',
+                            style:
+                                whiteTextStyle.copyWith(color: Colors.orange),
                           ),
                         ),
                       ],
                     ),
-            ),
-            Focus(
-              focusNode: _resultFocusNode,
-              child: Container(
-                height: 0,
-                width: 0,
+                  )),
+              Expanded(
+                child: isWideScreen
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: Stack(
+                                children: [
+                                  GameWidget(game: _happyFarm),
+                                  Visibility(
+                                    visible: _isLoading,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 0.9),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: Stack(
+                                children: [
+                                  GameWidget(game: _happyFarm),
+                                  Visibility(
+                                    visible: _isLoading,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-            )
-          ],
+              Focus(
+                focusNode: _resultFocusNode,
+                child: Container(
+                  height: 0,
+                  width: 0,
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

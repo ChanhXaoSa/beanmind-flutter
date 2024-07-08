@@ -76,7 +76,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       userPoint = 0;
       userProgress = 0;
       _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-      resetAnimal();
+      resetAnimalSky();
     });
   }
 
@@ -151,10 +151,10 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        resetAnimal();
+        resetAnimalSky();
         userAnswer = '';
         _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-        resetAnimal();
+        resetAnimalSky();
       });
       setState(() {
         showResultDialog = false;
@@ -188,12 +188,12 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       ..initialize().then((value) => {setState(() {})});
 
     _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-    resetAnimal();
+    resetAnimalSky();
   }
 
   Future<void> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimal();
+    resetAnimalSky();
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
@@ -210,7 +210,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
         _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-        resetAnimal();
+        resetAnimalSky();
       });
     } catch (e) {
       print('Error fetching data: $e');
