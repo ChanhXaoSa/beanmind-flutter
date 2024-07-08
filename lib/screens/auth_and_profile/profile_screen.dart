@@ -43,7 +43,7 @@ class ProfileScreen extends GetView<ProfileController> {
                   const Padding(
                     padding: EdgeInsets.only(top: 20),
                     child: Text(
-                      'My recent tests ',
+                      'Lịch sử làm quiz ',
                       style: TextStyle(
                           color: kOnSurfaceTextColor,
                           fontWeight: FontWeight.bold),
@@ -65,7 +65,9 @@ class ProfileScreen extends GetView<ProfileController> {
                       );
                     },
                     itemBuilder: (BuildContext context, int index) {
-                      return RecentQuizCard(recentTest: controller.allRecentTest[index]);
+                      return Container(
+                          constraints: BoxConstraints(maxWidth: 600),
+                          child: RecentQuizCard(recentTest: controller.allRecentTest[index]));
                     },
                   ),
                 ),

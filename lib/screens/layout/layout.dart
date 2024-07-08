@@ -1,4 +1,3 @@
-import 'package:beanmind_flutter/screens/layout/challenge_page.dart';
 import 'package:beanmind_flutter/game/game_list.dart';
 import 'package:flutter/material.dart';
 

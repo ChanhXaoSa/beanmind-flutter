@@ -31,13 +31,11 @@ class NotificationService extends GetxService {
             iOS: iosInitializationSettings);
     _notifications.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (payload) {
-      if (payload != null) {
-        final QuizPaperModel quizPaperModel =
-            QuizPaperModel.fromJson(json.decode(payload.toString()));
-        Get.toNamed(LeaderBoardScreen.routeName, arguments: quizPaperModel);
-        //MyApp.navigatorKey.currentState!.pushNamed(LeaderBoardScreen.routeName, arguments:quizPaperModel);
-      }
-    });
+      final QuizPaperModel quizPaperModel =
+          QuizPaperModel.fromJson(json.decode(payload.toString()));
+      Get.toNamed(LeaderBoardScreen.routeName, arguments: quizPaperModel);
+      //MyApp.navigatorKey.currentState!.pushNamed(LeaderBoardScreen.routeName, arguments:quizPaperModel);
+        });
   }
 
   Future<void> showQuizCompletedNotification(
@@ -93,5 +91,6 @@ class NotificationService extends GetxService {
     } catch (e) {
       AppLogger.e(e);
     }
+    return null;
   }
 }
