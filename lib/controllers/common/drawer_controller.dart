@@ -31,6 +31,10 @@ class MyDrawerController extends GetxController {
     Get.find<CourseController>().navigateToCourse();
   }
 
+  void courseLearning() {
+    Get.find<CourseController>().navigateToCourseLeaning();
+  }
+
   void github() {
     _launch('https://github.com/CodeFoxLk');
   }
