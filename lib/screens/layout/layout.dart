@@ -1,4 +1,4 @@
-import 'package:beanmind_flutter/game/game_list.dart';
+import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class BeanMindLayout extends StatefulWidget {
@@ -82,7 +82,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
                 // go to GameList()
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GameList()),
+                  MaterialPageRoute(builder: (context) => GameListScreen()),
                 );
               },
             ),
@@ -171,7 +171,7 @@ class _BeanMindLayoutState extends State<BeanMindLayout> {
                     // go to GameList()
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => GameList()),
+                      MaterialPageRoute(builder: (context) => GameListScreen()),
                     );
                   },
                 ),
