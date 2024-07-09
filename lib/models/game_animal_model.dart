@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flame/components.dart';
 
 class GameAnimalModel {
   final String id;
@@ -98,4 +99,34 @@ void resetAnimalOcean() {
 void resetAnimalSky() {
   globalBlueBirdCount = 0;
   globalRedBirdCount = 0;
+}
+
+class Animal {
+  final double scaleFactor;
+  final SpriteAnimation animation;
+  final Vector2 position;
+  final Vector2 textureSize;
+  final bool flipped;
+  final String type;
+
+  Animal({
+    required this.scaleFactor,
+    required this.animation,
+    required this.position,
+    required this.textureSize,
+    required this.flipped,
+    required this.type,
+  });
+
+  SpriteAnimationComponent createComponent() {
+    SpriteAnimationComponent component = SpriteAnimationComponent()
+      ..animation = animation
+      ..size = textureSize * scaleFactor
+      ..position = position;
+
+    if (flipped) {
+      component.flipHorizontally();
+    }
+    return component;
+  }
 }

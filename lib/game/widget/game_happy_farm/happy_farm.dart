@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/class/animal/animal.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';

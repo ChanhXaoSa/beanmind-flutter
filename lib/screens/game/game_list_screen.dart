@@ -1,6 +1,7 @@
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
+import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,7 +49,7 @@ class GameListScreen extends GetView<GameController> {
 
   Widget _buildLoadingIndicator() {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: ProgressWidgets(),
     );
   }
 
