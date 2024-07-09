@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/screens/course/course_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -55,5 +56,14 @@ class AppRoutes {
         GetPage(
             name: VideoLearningScreen.routeName,
             page: () => const VideoLearningScreen()),
+        GetPage(
+            page: () => const CourseLearningScreen(),
+            name: CourseLearningScreen.routeName,
+            binding: BindingsBuilder(() {
+              Get.put(QuizPaperController());
+              Get.put(MyDrawerController());
+              Get.put(CourseController());
+              Get.put(GameController());
+            })),
       ];
 }

@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/widgets/course/course_card.dart';
 import 'package:beanmind_flutter/widgets/home/document_paper_card.dart';
 import 'package:beanmind_flutter/widgets/home/video_learning_paper_card.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class HomeScreen extends GetView<MyDrawerController> {
         style: DrawerStyle.defaultStyle,
         menuScreen: const CustomDrawer(),
         menuBackgroundColor: Colors.white.withOpacity(0.5),
-        slideWidth: MediaQuery.of(context).size.width * 0.6,
+        slideWidth: MediaQuery.of(context).size.width * 0.3,
         mainScreen: Container(
           decoration: BoxDecoration(gradient: mainGradient(context)),
           child: SafeArea(
@@ -57,9 +58,9 @@ class HomeScreen extends GetView<MyDrawerController> {
                               builder: (_) {
                                 late final AuthController _auth = Get.find();
                                 late final user = _auth.getUser();
-                                String _label = '  Hello mate';
+                                String _label = '  Chào mate';
                                 if (user != null) {
-                                  _label = '  Hello ${user.displayName}';
+                                  _label = '  Chào ${user.displayName}';
                                 }
                                 return Text(_label,
                                     style: kDetailsTS.copyWith(
@@ -69,7 +70,7 @@ class HomeScreen extends GetView<MyDrawerController> {
                           ],
                         ),
                       ),
-                      const Text('What Do You Want To Improve Today ?',
+                      const Text('Bạn muốn học gì hôm nay ?',
                           style: kHeaderTS),
                       const SizedBox(height: 15),
                     ],
@@ -90,29 +91,18 @@ class HomeScreen extends GetView<MyDrawerController> {
                           onRefresh: () async {
                             _quizePprController.getAllPapers();
                           },
-                          child: ListView.separated(
+                          child: GridView.builder(
                             padding: UIParameters.screenPadding,
                             shrinkWrap: true,
-                            itemCount: _quizePprController.allPapers.length,
+                            itemCount: _quizePprController.allPapers.length*5,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 6,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.6,
+                            ),
                             itemBuilder: (BuildContext context, int index) {
-                              if(index == 0) {
-                                return DocumentPaperCard(
-                                  model: _quizePprController.allPapers[index],
-                                );
-                              } else if(index == 1) {
-                                return VideoLearningPaperCard(
-                                  model: _quizePprController.allPapers[index],
-                                );
-                              } else {
-                                return QuizPaperCard(
-                                  model: _quizePprController.allPapers[index],
-                                );
-                              }
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return const SizedBox(
-                                height: 20,
+                              return CourseCard(
                               );
                             },
                           ),
@@ -120,7 +110,7 @@ class HomeScreen extends GetView<MyDrawerController> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
