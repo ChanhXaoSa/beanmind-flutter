@@ -1,5 +1,5 @@
+import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,29 +14,35 @@ class GameListScreen extends GetView<GameController> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
-        child: Obx(() {
-          return controller.selectedGame.value != null
-              ? AppBar(
-            title: Text(controller.getGameTitle(controller.selectedGame.value!)),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                controller.selectedGame.value = null;
-              },
-            ),
-          )
-              : CustomAppBar(
-            title: 'Thư viện trò chơi',
-            showActionIcon: false, // or true based on your requirement
-          );
-        }),
+        child: Container(
+          decoration: BoxDecoration(gradient: mainGradient(context)),
+          child: Obx(() {
+            return controller.selectedGame.value != null
+                ? CustomAppBar(
+                    title: (controller
+                        .getGameTitle(controller.selectedGame.value!)),
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        controller.selectedGame.value = null;
+                      },
+                    ),
+                  )
+                : CustomAppBar(
+                    title: 'Thư viện trò chơi',
+                    showActionIcon: false, // or true based on your requirement
+                  );
+          }),
+        ),
       ),
-      body: Obx(() => controller.isLoading.value
-          ? _buildLoadingIndicator()
-          : controller.selectedGame.value != null
-              ? controller.buildGameWidget(controller.selectedGame.value!)
-              : _buildGameGrid()),
-      backgroundColor: Colors.blue[100],
+      body: Container(
+        decoration: BoxDecoration(gradient: mainGradient(context)),
+        child: Obx(() => controller.isLoading.value
+            ? _buildLoadingIndicator()
+            : controller.selectedGame.value != null
+                ? controller.buildGameWidget(controller.selectedGame.value!)
+                : _buildGameGrid()),
+      ),
     );
   }
 
@@ -48,7 +54,7 @@ class GameListScreen extends GetView<GameController> {
 
   Widget _buildGameGrid() {
     return GridView.builder(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 5,
         childAspectRatio: 16 / 9,
@@ -67,12 +73,19 @@ class GameListScreen extends GetView<GameController> {
             });
           },
           child: GridTile(
-            child: Image.asset(
-                controller.gameThumbnailURL + controller.games[index]['image']!,
-                fit: BoxFit.cover),
             footer: GridTileBar(
               backgroundColor: Colors.black54,
-              title: Text(controller.games[index]['title']!),
+              title: Text(controller.games[index]['title']!, style: TextStyle(fontSize: 20),),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5.0), // Bo góc tại đây
+              child: Container(
+                child: Image.asset(
+                  controller.gameThumbnailURL +
+                      controller.games[index]['image']!,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
         );

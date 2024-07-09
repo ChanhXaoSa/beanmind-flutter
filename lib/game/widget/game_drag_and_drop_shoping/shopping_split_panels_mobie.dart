@@ -129,7 +129,8 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
                     Text('Số tiền bạn có: ${balance} \$',
                         style: TextStyle(
                           fontSize: 24,
-                          color: Colors.white,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         )),
                   ],
                 ),
@@ -137,7 +138,7 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
                   children: [
                     Text(
                       'Số tiền giữ lại theo yêu cầu: ${lastbalance} \$',
-                      style: TextStyle(fontSize: 24, color: Colors.white),
+                      style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -275,7 +276,8 @@ class ShoppingCartItem extends StatelessWidget {
             Text('\$${product.price}',
                 style: const TextStyle(
                     fontSize: 20,
-                    color: Colors.white,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none)),
           ],
         ),

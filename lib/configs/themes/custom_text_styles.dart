@@ -16,7 +16,7 @@ TextStyle cardTitleTs(context) => TextStyle(
 const kQuizeTS = TextStyle(fontSize: 16, fontWeight: FontWeight.w800);
 
 const kAppBarTS = TextStyle(
-    fontWeight: FontWeight.bold, fontSize: 16, color: kOnSurfaceTextColor);
+    fontWeight: FontWeight.bold, fontSize: 30, color: kOnSurfaceTextColor);
 
 TextStyle countDownTimerTs(context) => TextStyle(
     letterSpacing: 2,

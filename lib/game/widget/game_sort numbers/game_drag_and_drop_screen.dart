@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
@@ -415,142 +416,145 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.deepPurple[300],
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              height: 60,
-              color: Colors.deepPurple,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: Text(
-                      'Số điểm của bạn : ' + userPoint.toString(),
-                      style: whiteTextStyle,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Hướng dẫn'),
-                            content: Text(
-                              'Nội dung hướng dẫn người chơi...',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('OK'),
+        body: Container(
+          decoration: BoxDecoration(
+                                gradient: mainGradient(context),
                               ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('Hướng dẫn'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 60,
-              color: Colors.deepPurple,
-              child: Center(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                height: 60,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Xếp số theo thứ tự từ bé đến lớn',
-                      style: whiteTextStyle,
+                    Center(
+                      child: Text(
+                        'Số điểm của bạn : ' + userPoint.toString(),
+                        style: whiteTextStyle,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Hướng dẫn'),
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Hướng dẫn'),
                     ),
                   ],
                 ),
               ),
-            ),
-            Expanded(
-              child: isWideScreen
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: _splitPanelsMobie,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1, // Số cột
-                                childAspectRatio: 4, // Tỷ lệ khung hình
-                              ),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.topCenter,
-                            child: _splitPanelsMobie,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: GridView.builder(
-                              itemCount: numberPad.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1, // Số cột
-                                childAspectRatio: 4, // Tỷ lệ khung hình
-                              ),
-                              itemBuilder: (context, index) {
-                                return MyButton(
-                                  child: numberPad[index],
-                                  onTap: () => buttonTapped(numberPad[index]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
-            Focus(
-              focusNode: _resultFocusNode,
-              child: Container(
-                height: 0,
-                width: 0,
+              Container(
+                height: 60,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Xếp số theo thứ tự từ bé đến lớn',
+                        style: whiteTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            )
-          ],
+              Expanded(
+                child: isWideScreen
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: _splitPanelsMobie,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1, // Số cột
+                                  childAspectRatio: 4, // Tỷ lệ khung hình
+                                ),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: _splitPanelsMobie,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1, // Số cột
+                                  childAspectRatio: 4, // Tỷ lệ khung hình
+                                ),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              Focus(
+                focusNode: _resultFocusNode,
+                child: Container(
+                  height: 0,
+                  width: 0,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
