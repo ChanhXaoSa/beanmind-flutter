@@ -16,27 +16,27 @@ class GameController extends GetxController{
   final List<Map<String, String>> games = [
     {
       'title': 'Khám phá đại dương',
-      'image': 'ocean_adventure.png',
+      'image': 'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Focean_adventure.png?alt=media&token=d9ada505-0862-4a8b-afe6-6a11358561bc',
       'gameType': 'ocean'
     },
     {
       'title': 'Nông trại vui vẻ',
-      'image': 'happy_farm.png',
+      'image': 'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fhappy_farm.png?alt=media&token=ed307113-421f-4d74-bea2-e4d45fd18b8f',
       'gameType': 'space'
     },
     {
       'title': 'Sắp xếp số',
-      'image': 'number_sort.png',
+      'image': 'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=5b46e912-4162-4c8d-9c08-0b195d087964',
       'gameType': 'desert'
     },
     {
       'title': 'Trò chơi mua sắm',
-      'image': 'shopping.png',
+      'image': 'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fshopping.png?alt=media&token=2816621f-4247-4f1c-ac61-8baa7f0420f0',
       'gameType': 'mountain'
     },
     {
       'title': 'Số lẻ và số chẵn',
-      'image': 'odd_and_even.png',
+      'image': 'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fodd_and_even.png?alt=media&token=30686705-4ae5-433a-8af7-16a30938461c',
       'gameType': 'odd_even'
     }
   ];

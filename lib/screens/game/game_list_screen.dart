@@ -81,8 +81,7 @@ class GameListScreen extends GetView<GameController> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5.0), // Bo góc tại đây
               child: Container(
-                child: Image.asset(
-                  controller.gameThumbnailURL +
+                child: Image.network(              
                       controller.games[index]['image']!,
                   fit: BoxFit.cover,
                 ),
