@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class ProgressWidgets extends StatefulWidget {
   const ProgressWidgets({super.key});
@@ -12,25 +14,26 @@ class _ProgressWidgetsState extends State<ProgressWidgets> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularPercentIndicator(
-                animation: true,
-                animationDuration: 3000,
-                radius: 100,
-                lineWidth: 40,
-                progressColor: Colors.deepPurple,
-                circularStrokeCap: CircularStrokeCap.round,
-                percent: 1,       
-              )
-            ],
+        body: Center(
+            child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Lottie.asset("assets/lotties/loading_animation_01.json", height: 300),
+        Padding(
+          padding: EdgeInsets.all(15.0),
+          child: new LinearPercentIndicator(
+            width: MediaQuery.of(context).size.width - 100,
+            animation: true,
+            lineHeight: 30.0,
+            animationDuration: 2500,
+            percent: 1,
+            center: Text("Xin chờ ..."),
+            linearStrokeCap: LinearStrokeCap.roundAll,
+            progressColor: Colors.green,
+            alignment: MainAxisAlignment.center,
           ),
-        )
-      )
-    );
+        ),
+      ],
+    )));
   }
 }

@@ -198,17 +198,16 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
       });
 
-      // Update animalslist and other related states
       setState(() {
-        animalslist = List<GameAnimalModel>.from(items);
-        _isLoading = false; // Data has been fetched, loading is complete
+        animalslist = List<GameAnimalModel>.from(items);    
         resetAnimalFarm();
         _happyFarm = HappyFarm(animalslist: animalslist);
+        _isLoading = false;
       });
     } catch (e) {
       print('Error fetching data: $e');
       setState(() {
-        _isLoading = false; // Stop loading even if there's an error
+        _isLoading = false;
       });
     }
   }
@@ -420,7 +419,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     FocusScope.of(context).requestFocus(_resultFocusNode);
 
     if (_isLoading) {
-      return Center(child: ProgressWidgets());
+      return Center(child: CircularProgressIndicator());
     } else {
       return KeyboardListener(
         focusNode: FocusNode(),
