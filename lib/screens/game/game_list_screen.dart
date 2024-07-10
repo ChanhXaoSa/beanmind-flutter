@@ -37,7 +37,7 @@ class GameListScreen extends GetView<GameController> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(gradient: mainGradient(context)),
+        decoration: BoxDecoration(color: Colors.white),
         child: Obx(() => controller.isLoading.value
             ? _buildLoadingIndicator()
             : controller.selectedGame.value != null
@@ -55,9 +55,9 @@ class GameListScreen extends GetView<GameController> {
 
   Widget _buildGameGrid() {
     return GridView.builder(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.all(20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 5,
+        crossAxisCount: 3,
         childAspectRatio: 16 / 9,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,

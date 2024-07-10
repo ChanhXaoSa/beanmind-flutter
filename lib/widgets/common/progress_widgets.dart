@@ -27,7 +27,10 @@ class _ProgressWidgetsState extends State<ProgressWidgets> {
             lineHeight: 30.0,
             animationDuration: 2500,
             percent: 1,
-            center: Text("Xin chờ ..."),
+            center: Text(
+              "Xin chờ ...",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             linearStrokeCap: LinearStrokeCap.roundAll,
             progressColor: Colors.green,
             alignment: MainAxisAlignment.center,

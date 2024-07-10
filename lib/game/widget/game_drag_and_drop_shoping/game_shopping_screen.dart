@@ -74,14 +74,14 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         _shopingSplitPanels = ShopingSplitPanels();
         _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
       });
-    } catch (e) {
+    } catch (e) {   
       print(e);
     }
   }
 
   void backtoHome() {
     // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
+    Get.offAll(GameListScreen.routeName);
   }
 
   void checkResult() {

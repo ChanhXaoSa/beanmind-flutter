@@ -89,7 +89,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   void backtoHome() {
     resetGame();
     // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
+    Get.toNamed(GameListScreen.routeName);
   }
 
   void checkResult() {
