@@ -1,6 +1,5 @@
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/game_shopping_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_math/math_game.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even_screen.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/game_drag_and_drop_screen.dart';

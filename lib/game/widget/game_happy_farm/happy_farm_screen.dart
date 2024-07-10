@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
@@ -14,8 +15,10 @@ import 'package:video_player/video_player.dart';
 import 'happy_farm.dart';
 
 class HappyFarmScreen extends StatefulWidget {
+  const HappyFarmScreen({Key? key}) : super(key: key);
+  static const String routeName = '/happy_farm';
   @override
-  _HappyFarmScreenState createState() => _HappyFarmScreenState();
+  State<HappyFarmScreen> createState() => _HappyFarmScreenState();
 }
 
 class _HappyFarmScreenState extends State<HappyFarmScreen> {
@@ -88,8 +91,9 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   void backtoHome() {
     resetGame();
-    // go to GameList
-    Get.toNamed(GameListScreen.routeName);
+    setState(() {
+      Get.offAll(GameListScreen());
+    });
   }
 
   void checkResult() {
@@ -199,7 +203,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       });
 
       setState(() {
-        animalslist = List<GameAnimalModel>.from(items);    
+        animalslist = List<GameAnimalModel>.from(items);
         resetAnimalFarm();
         _happyFarm = HappyFarm(animalslist: animalslist);
         _isLoading = false;
