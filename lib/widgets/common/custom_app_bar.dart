@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/widgets/common/audio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
@@ -48,7 +49,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       child:  CircularButton(child: const Icon(AppIcons.menu), onTap: onMenuActionTap ?? (){
                         Get.toNamed(QuizOverviewScreen.routeName);
                       },),
-                    )
+                    ),
+                    AudioButton(),         
                 ],
               ),
             ],

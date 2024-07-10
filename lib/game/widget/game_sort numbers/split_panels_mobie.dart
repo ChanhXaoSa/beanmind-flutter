@@ -1,4 +1,4 @@
-import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
+import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
 import 'package:flutter/material.dart';
 

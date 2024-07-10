@@ -107,6 +107,7 @@ flutter:
     - assets/images/item_store/food/
     
     - assets/sounds/
+    - assets/sounds/music_background/
     - assets/lotties/
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
+import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';

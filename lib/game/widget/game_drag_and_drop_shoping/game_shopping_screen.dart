@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
-import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
+import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -180,7 +180,6 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       ..initialize().then((value) => {setState(() {})});
     _shopingSplitPanels = ShopingSplitPanels();
     _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
-    _isLoading = true;
   }
 
   void _showDialogError(
