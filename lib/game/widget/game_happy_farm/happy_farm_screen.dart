@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
@@ -23,7 +24,7 @@ class HappyFarmScreen extends StatefulWidget {
 
 class _HappyFarmScreenState extends State<HappyFarmScreen> {
   final FocusNode _resultFocusNode = FocusNode();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late HappyFarm _happyFarm;
   bool isFirstKeyEvent = true;
@@ -55,6 +56,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   String userAnswer = '';
 
   void buttonTapped(String button) {
+    _audio.playButtonSound();
     setState(() {
       if (button == '=') {
         checkResult();
@@ -92,7 +94,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   void backtoHome() {
     resetGame();
     setState(() {
-      Get.offAll(GameListScreen());
+      Get.toNamed(GameListScreen.routeName);
     });
   }
 
@@ -107,9 +109,9 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     });
     if (globalChickenCount == int.parse(userAnswer)) {
       userPoint += 1;
-      _playSuccessSound();
+      _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
@@ -119,12 +121,13 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
           'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
     } else {
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
       }
+      _audio.playWrongSound();
       _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
     }
   }
@@ -156,20 +159,9 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     }
   }
 
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
   @override
   void dispose() {
     _resultFocusNode.dispose();
-    _audioPlayer.dispose();
     _videoPlayerController.dispose();
     super.dispose();
   }

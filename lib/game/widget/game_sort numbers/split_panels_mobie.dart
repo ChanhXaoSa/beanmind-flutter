@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class SplitPanelsMobie extends StatefulWidget {
 }
 
 class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
+  final Audio _audio = Audio();
   @override
   void initState() {
     super.initState();
@@ -27,6 +29,7 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
   bool? wasUpperList;
   int? draggedProduct;
   void onDragStart(int product) {
+    _audio.playMouseClickSound(); 
     setState(() {
       // Lưu vị trí và danh sách trước đó của mục được kéo
       draggedProduct = product;
@@ -45,8 +48,10 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
         _showDialog('Số lượng vượt quá 10');
         // Thêm lại mục vào danh sách trước đó nếu số lượng vượt quá
         if (wasUpperList == true) {
+          _audio.playDropSound();
           upper.add(draggedProduct!);
         } else {
+          _audio.playDropSound();
           lower.add(draggedProduct!);
         }
         return;
@@ -57,8 +62,10 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
           (!isUpper && wasUpperList == false)) {
         // Thêm lại mục vào danh sách trước đó
         if (wasUpperList == true) {
+          _audio.playDropSound();
           upper.add(draggedProduct!);
         } else {
+          _audio.playDropSound();
           lower.add(draggedProduct!);
         }
         return;
@@ -66,8 +73,10 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
 
       // Nếu mục được thả vào danh sách mới, cập nhật danh sách và số dư
       if (isUpper) {
+        _audio.playDropSound();
         upper.add(product);
       } else {
+        _audio.playDropSound();
         lower.add(product);
       }
     });

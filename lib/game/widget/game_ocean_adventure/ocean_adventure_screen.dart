@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -19,7 +20,7 @@ class OceanAdventureScreen extends StatefulWidget {
 
 class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   final FocusNode _resultFocusNode = FocusNode();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late GameOceanAdventure _gameOceanAdventure;
   bool isFirstKeyEvent = true;
@@ -52,6 +53,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   ];
 
   void buttonTapped(String button) {
+    _audio.playButtonSound();
     setState(() {
       if (button == '=') {
         checkResult();
@@ -110,9 +112,9 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
 
     if (globalBlueFishCount == int.parse(userAnswer)) {
       userPoint += 1;
-      _playSuccessSound();
+      _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
@@ -122,12 +124,13 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
           'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
     } else {
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
       }
+      _audio.playWrongSound();
       _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, true, true);
     }
   }
@@ -159,20 +162,9 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     }
   }
 
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
   @override
   void dispose() {
     _resultFocusNode.dispose();
-    _audioPlayer.dispose();
     _videoPlayerController.dispose();
     super.dispose();
   }

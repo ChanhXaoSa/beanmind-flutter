@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
+import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
@@ -19,7 +20,7 @@ class MathDragAndDropScreen extends StatefulWidget {
 
 class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   final FocusNode _resultFocusNode = FocusNode();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late SplitPanels _splitPanels;
   late SplitPanelsMobie _splitPanelsMobie;
@@ -85,32 +86,33 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       userProgress += 1;
       if (isSorted) {
         userPoint += 1;
-        _playSuccessSound();
+        _audio.playSuccessSound();
         if (userProgress == totalQuestion) {
-          _playSuccessSound();
+          _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
-        }
+        }     
         _showDialog(
-            'Correct!', 'assets/lotties/success.json', false, true, false);
+            'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
       } else {
         if (userProgress == totalQuestion) {
-          _playSuccessSound();
+          _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
         }
         _showDialog(
-            'Incorrect!', 'assets/lotties/wrong.json', false, true, true);
+            'Sai rồi !', 'assets/lotties/wrong.json', false, true, true);
       }
     } else if (isSorted) {
       _showDialog(
-          'Correct!', 'assets/lotties/success.json', true, false, false);
+          'Đúng rồi !', 'assets/lotties/success.json', true, false, false);
     } else {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, false, true);
+      _audio.playWrongSound();
+      _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, false, true);
     }
   }
 
@@ -130,20 +132,9 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     }
   }
 
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
   @override
   void dispose() {
     _resultFocusNode.dispose();
-    _audioPlayer.dispose();
     _videoPlayerController.dispose();
     super.dispose();
   }

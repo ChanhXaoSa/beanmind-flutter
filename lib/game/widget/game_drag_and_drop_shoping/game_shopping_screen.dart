@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
+import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -19,7 +20,7 @@ class GameShoppingScreen extends StatefulWidget {
 
 class _GameShoppingScreenState extends State<GameShoppingScreen> {
   final FocusNode _resultFocusNode = FocusNode();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late ShopingSplitPanels _shopingSplitPanels;
   late ShopingSplitPanelsMobie _shopingSplitPanelsMobie;
@@ -97,9 +98,9 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       });
       if (balance == lastbalance) {
         userPoint += 1;
-        _playSuccessSound();
+        _audio.playSuccessSound();();
         if (userProgress == totalQuestion) {
-          _playSuccessSound();
+          _audio.playCompleteSound();();
           String lottieAsset = _getLottieAsset(userPoint);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
@@ -109,12 +110,13 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
             'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
       } else {
         if (userProgress == totalQuestion) {
-          _playSuccessSound();
+          _audio.playCompleteSound();();
           String lottieAsset = _getLottieAsset(userPoint);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
         }
+        _audio.playWrongSound();();
         _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
       }
     } catch (e) {
@@ -157,20 +159,9 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     }
   }
 
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
   @override
   void dispose() {
     _resultFocusNode.dispose();
-    _audioPlayer.dispose();
     _videoPlayerController.dispose();
     super.dispose();
   }

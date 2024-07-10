@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:beanmind_flutter/game/class/drag_and_drop/audio.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -18,7 +19,7 @@ class GameOddAndEvenScreen extends StatefulWidget {
 
 class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   final FocusNode _resultFocusNode = FocusNode();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late GameOddAndEven _gameOddAndEven;
   bool isFirstKeyEvent = true;
@@ -51,6 +52,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   int totalQuestion = 3;
 
   void buttonTapped(String button) {
+    _audio.playButtonSound();
     setState(() {
       if (button == '1') {
         userAnswer = 'số lẻ';
@@ -94,44 +96,46 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     });
 
     if (userAnswer.isEmpty) {
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true, true);
+      _audio.playWrongSound();
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
     }
 
     if (userAnswer == 'số lẻ' &&
         (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
       userPoint += 1;
-      _playSuccessSound();
+      _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
       }
       _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
     } else if (userAnswer == 'số chẵn' &&
         (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
       userPoint += 1;
-      _playSuccessSound();
+      _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
       }
       _showDialog(
-          'Congratulations!', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
     } else {
       if (userProgress == totalQuestion) {
-        _playSuccessSound();
+        _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
       }
-      _showDialog('Incorrect!', 'assets/lotties/wrong.json', true, true, true);
+      _audio.playWrongSound();
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
     }
   }
 
@@ -163,20 +167,9 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     }
   }
 
-  void _playSuccessSound() async {
-    try {
-      await _audioPlayer.setAsset('assets/sounds/success.mp3');
-      _audioPlayer.play();
-    } catch (e, stacktrace) {
-      print('Error playing success sound: $e');
-      print(stacktrace);
-    }
-  }
-
   @override
   void dispose() {
     _resultFocusNode.dispose();
-    _audioPlayer.dispose();
     _videoPlayerController.dispose();
     super.dispose();
   }
