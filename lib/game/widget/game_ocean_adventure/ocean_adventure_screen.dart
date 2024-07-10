@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventur
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
+import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -200,7 +201,6 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       setState(() {
         resetAnimalOcean();
         animalslist = List<GameAnimalModel>.from(items);
-        _isLoading = false;
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       });
     } catch (e) {
@@ -413,8 +413,13 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     final double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: ProgressWidgets());
     } else {
       return KeyboardListener(
         focusNode: FocusNode(),

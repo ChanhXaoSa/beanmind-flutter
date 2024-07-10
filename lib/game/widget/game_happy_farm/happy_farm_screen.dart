@@ -198,7 +198,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         animalslist = List<GameAnimalModel>.from(items);
         resetAnimalFarm();
         _happyFarm = HappyFarm(animalslist: animalslist);
-        _isLoading = false;
+        // delay 3s
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -413,9 +413,13 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     final double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
-
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: ProgressWidgets());
     } else {
       return KeyboardListener(
         focusNode: FocusNode(),

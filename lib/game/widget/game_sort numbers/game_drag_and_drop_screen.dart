@@ -6,6 +6,7 @@ import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.da
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
+import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   late SplitPanels _splitPanels;
   late SplitPanelsMobie _splitPanelsMobie;
   bool showResultDialog = false;
+  bool _isLoading = true;
 
   int userPoint = 0;
   int userProgress = 0;
@@ -93,7 +95,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
-        }     
+        }
         _showDialog(
             'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
       } else {
@@ -384,170 +386,180 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     final double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
-
-    return KeyboardListener(
-      focusNode: FocusNode(),
-      onKeyEvent: (KeyEvent event) {
-        if (event is KeyDownEvent) {
-          final logicalKey = event.logicalKey;
-          if (logicalKey == LogicalKeyboardKey.enter) {
-            if (showResultDialog) {
-              goToNextQuestion();
-            } else {
-              checkResult();
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    if (_isLoading) {
+      return Center(child: ProgressWidgets());
+    } else {
+      return KeyboardListener(
+        focusNode: FocusNode(),
+        onKeyEvent: (KeyEvent event) {
+          if (event is KeyDownEvent) {
+            final logicalKey = event.logicalKey;
+            if (logicalKey == LogicalKeyboardKey.enter) {
+              if (showResultDialog) {
+                goToNextQuestion();
+              } else {
+                checkResult();
+              }
+            } else if (logicalKey == LogicalKeyboardKey.backspace) {
+              buttonTapped('DEL');
             }
-          } else if (logicalKey == LogicalKeyboardKey.backspace) {
-            buttonTapped('DEL');
+            final input = logicalKey.keyLabel;
+            if (RegExp(r'^[0-9]$').hasMatch(input)) {
+              handleNumberButtonPress(input);
+            }
           }
-          final input = logicalKey.keyLabel;
-          if (RegExp(r'^[0-9]$').hasMatch(input)) {
-            handleNumberButtonPress(input);
-          }
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.deepPurple[300],
-        body: Container(
-          decoration: BoxDecoration(
-                                gradient: mainGradient(context),
-                              ),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Số điểm của bạn : ' + userPoint.toString(),
-                        style: whiteTextStyle,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: const Text('Hướng dẫn'),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 60,
-                child: Center(
+        },
+        child: Scaffold(
+          backgroundColor: Colors.deepPurple[300],
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: mainGradient(context),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  height: 60,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Xếp số theo thứ tự từ bé đến lớn',
-                        style: whiteTextStyle,
+                      Center(
+                        child: Text(
+                          'Số điểm của bạn : ' + userPoint.toString(),
+                          style: whiteTextStyle,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Hướng dẫn'),
+                                content: Text(
+                                  'Nội dung hướng dẫn người chơi...',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Text('Hướng dẫn'),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: isWideScreen
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: _splitPanelsMobie,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: GridView.builder(
-                                itemCount: numberPad.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 1, // Số cột
-                                  childAspectRatio: 4, // Tỷ lệ khung hình
-                                ),
-                                itemBuilder: (context, index) {
-                                  return MyButton(
-                                    child: numberPad[index],
-                                    onTap: () => buttonTapped(numberPad[index]),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: _splitPanelsMobie,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: GridView.builder(
-                                itemCount: numberPad.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 1, // Số cột
-                                  childAspectRatio: 4, // Tỷ lệ khung hình
-                                ),
-                                itemBuilder: (context, index) {
-                                  return MyButton(
-                                    child: numberPad[index],
-                                    onTap: () => buttonTapped(numberPad[index]),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-              Focus(
-                focusNode: _resultFocusNode,
-                child: Container(
-                  height: 0,
-                  width: 0,
+                Container(
+                  height: 60,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Xếp số theo thứ tự từ bé đến lớn',
+                          style: whiteTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              )
-            ],
+                Expanded(
+                  child: isWideScreen
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                child: _splitPanelsMobie,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: GridView.builder(
+                                  itemCount: numberPad.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1, // Số cột
+                                    childAspectRatio: 4, // Tỷ lệ khung hình
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return MyButton(
+                                      child: numberPad[index],
+                                      onTap: () =>
+                                          buttonTapped(numberPad[index]),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                child: _splitPanelsMobie,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: GridView.builder(
+                                  itemCount: numberPad.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1, // Số cột
+                                    childAspectRatio: 4, // Tỷ lệ khung hình
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return MyButton(
+                                      child: numberPad[index],
+                                      onTap: () =>
+                                          buttonTapped(numberPad[index]),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+                Focus(
+                  focusNode: _resultFocusNode,
+                  child: Container(
+                    height: 0,
+                    width: 0,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

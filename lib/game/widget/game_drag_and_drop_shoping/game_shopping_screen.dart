@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
+import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   late ShopingSplitPanels _shopingSplitPanels;
   late ShopingSplitPanelsMobie _shopingSplitPanelsMobie;
   bool showResultDialog = false;
+  bool _isLoading = true;
   //Timer? _timer;
   final time = '00:00:00'.obs;
 
@@ -75,7 +77,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         _shopingSplitPanels = ShopingSplitPanels();
         _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
       });
-    } catch (e) {   
+    } catch (e) {
       print(e);
     }
   }
@@ -98,9 +100,11 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       });
       if (balance == lastbalance) {
         userPoint += 1;
-        _audio.playSuccessSound();();
+        _audio.playSuccessSound();
+        ();
         if (userProgress == totalQuestion) {
-          _audio.playCompleteSound();();
+          _audio.playCompleteSound();
+          ();
           String lottieAsset = _getLottieAsset(userPoint);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
@@ -110,13 +114,15 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
             'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
       } else {
         if (userProgress == totalQuestion) {
-          _audio.playCompleteSound();();
+          _audio.playCompleteSound();
+          ();
           String lottieAsset = _getLottieAsset(userPoint);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
         }
-        _audio.playWrongSound();();
+        _audio.playWrongSound();
+        ();
         _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
       }
     } catch (e) {
@@ -174,6 +180,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       ..initialize().then((value) => {setState(() {})});
     _shopingSplitPanels = ShopingSplitPanels();
     _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+    _isLoading = true;
   }
 
   void _showDialogError(
@@ -381,92 +388,134 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     const double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
-
-    return Container(
-      decoration: BoxDecoration(gradient: mainGradient(context)),
-      child: KeyboardListener(
-        focusNode: FocusNode(),
-        onKeyEvent: (KeyEvent event) {
-          if (event is KeyDownEvent) {
-            final logicalKey = event.logicalKey;
-            if (logicalKey == LogicalKeyboardKey.enter) {
-              if (showResultDialog) {
-                goToNextQuestion();
-              } else {
-                checkResult();
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    if (_isLoading) {
+      return Center(child: ProgressWidgets());
+    } else {
+      return Container(
+        decoration: BoxDecoration(gradient: mainGradient(context)),
+        child: KeyboardListener(
+          focusNode: FocusNode(),
+          onKeyEvent: (KeyEvent event) {
+            if (event is KeyDownEvent) {
+              final logicalKey = event.logicalKey;
+              if (logicalKey == LogicalKeyboardKey.enter) {
+                if (showResultDialog) {
+                  goToNextQuestion();
+                } else {
+                  checkResult();
+                }
               }
             }
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white70,
-          body: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                height: 60,
-                decoration: BoxDecoration(gradient: mainGradient(context)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Số điểm của bạn : ' + userPoint.toString(),
-                        style: whiteTextStyle,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Hướng dẫn'),
-                              content: const Text(
-                                'Nội dung hướng dẫn người chơi...',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: const Text('Hướng dẫn'),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 60,
-                decoration: BoxDecoration(gradient: mainGradient(context)),
-                child: Center(
+          },
+          child: Scaffold(
+            backgroundColor: Colors.white70,
+            body: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  height: 60,
+                  decoration: BoxDecoration(gradient: mainGradient(context)),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
-                        style: whiteTextStyle,
+                      Center(
+                        child: Text(
+                          'Số điểm của bạn : ' + userPoint.toString(),
+                          style: whiteTextStyle,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Hướng dẫn'),
+                                content: const Text(
+                                  'Nội dung hướng dẫn người chơi...',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Text('Hướng dẫn'),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: isWideScreen
-                    ? Container(
-                      color: Colors.white70,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                Container(
+                  height: 60,
+                  decoration: BoxDecoration(gradient: mainGradient(context)),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
+                          style: whiteTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: isWideScreen
+                      ? Container(
+                          color: Colors.white70,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  child: _shopingSplitPanelsMobie,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Column(
                           children: [
                             Expanded(
-                              flex: 4,
+                              flex: 3,
                               child: Container(
                                 alignment: Alignment.topCenter,
                                 child: _shopingSplitPanelsMobie,
@@ -475,7 +524,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                             Expanded(
                               flex: 1,
                               child: Container(
-                                alignment: Alignment.center,                            
+                                alignment: Alignment.center,
                                 child: GridView.builder(
                                   itemCount: numberPad.length,
                                   physics: NeverScrollableScrollPhysics(),
@@ -488,7 +537,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                                   itemBuilder: (context, index) {
                                     return MyButton(
                                       child: numberPad[index],
-                                      onTap: () => buttonTapped(numberPad[index]),
+                                      onTap: () =>
+                                          buttonTapped(numberPad[index]),
                                     );
                                   },
                                 ),
@@ -496,52 +546,19 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                             ),
                           ],
                         ),
-                    )
-                    : Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: _shopingSplitPanelsMobie,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: GridView.builder(
-                                itemCount: numberPad.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 1, // Số cột
-                                  childAspectRatio: 4, // Tỷ lệ khung hình
-                                ),
-                                itemBuilder: (context, index) {
-                                  return MyButton(
-                                    child: numberPad[index],
-                                    onTap: () => buttonTapped(numberPad[index]),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-              Focus(
-                focusNode: _resultFocusNode,
-                child: const SizedBox(
-                  height: 0,
-                  width: 0,
                 ),
-              )
-            ],
+                Focus(
+                  focusNode: _resultFocusNode,
+                  child: const SizedBox(
+                    height: 0,
+                    width: 0,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

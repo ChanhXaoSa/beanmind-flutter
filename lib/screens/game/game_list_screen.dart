@@ -69,7 +69,7 @@ class GameListScreen extends GetView<GameController> {
             controller.isLoading.value = true;
             controller.selectedGame.value = controller.games[index]['gameType'];
             // Simulate a delay for loading the game
-            Future.delayed(Duration(seconds: 2), () {
+            Future.delayed(Duration(seconds: 0), () {
               controller.isLoading.value = false;
             });
           },
