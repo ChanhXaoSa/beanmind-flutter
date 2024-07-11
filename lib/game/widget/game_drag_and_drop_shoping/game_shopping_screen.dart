@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
@@ -25,10 +27,12 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   late VideoPlayerController _videoPlayerController;
   late ShopingSplitPanels _shopingSplitPanels;
   late ShopingSplitPanelsMobie _shopingSplitPanelsMobie;
+
+  Timer? _timer;
+  int _seconds = 0;
+
   bool showResultDialog = false;
   bool _isLoading = true;
-  //Timer? _timer;
-  final time = '00:00:00'.obs;
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -43,6 +47,21 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   int totalQuestion = 3;
 
   // time
+  void startTimer() {
+    const Duration oneSecond = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSecond, (Timer timer) {
+      setState(() {
+        _seconds++;
+      });
+    });
+  }
+
+  void stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+      _timer = null; // Set _timer to null to ensure it stops
+    }
+  }
 
   void buttonTapped(String button) {
     try {
@@ -72,6 +91,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         lastbalance = 20;
         userPoint = 0;
         userProgress = 0;
+        _seconds = 0;
+        startTimer();
         upperItemModel = [];
         lowerItemModel = List<ItemModel>.from(startLowerItemModel);
         _shopingSplitPanels = ShopingSplitPanels();
@@ -106,6 +127,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           _audio.playCompleteSound();
           ();
           String lottieAsset = _getLottieAsset(userPoint);
+          stopTimer();
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -117,6 +139,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           _audio.playCompleteSound();
           ();
           String lottieAsset = _getLottieAsset(userPoint);
+          stopTimer();
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -169,6 +192,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   void dispose() {
     _resultFocusNode.dispose();
     _videoPlayerController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -180,6 +204,12 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       ..initialize().then((value) => {setState(() {})});
     _shopingSplitPanels = ShopingSplitPanels();
     _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+    // delay 3s to show the dialog
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        startTimer();
+      });
+    }); 
   }
 
   void _showDialogError(
@@ -244,7 +274,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Thời gian hoàn thành trò chơi: $time',
+                      'Thời gian hoàn thành trò chơi: $_seconds giây', 
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),
@@ -455,7 +485,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                       ),
                     ],
                   ),
-                ),
+                ),  
                 Container(
                   height: 60,
                   decoration: BoxDecoration(gradient: mainGradient(context)),
