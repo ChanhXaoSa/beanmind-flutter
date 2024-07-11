@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/models/game_item_model.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,6 +13,7 @@ class ShopingSplitPanelsMobie extends StatefulWidget {
 }
 
 class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
+  final Audio _audio = Audio();
   late int columns;
   @override
   void initState() {
@@ -55,6 +57,7 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
   bool? wasUpperList;
   ItemModel? draggedProduct;
   void onDragStart(ItemModel product) {
+    _audio.playMouseClickSound();
     setState(() {
       // Lưu vị trí và danh sách trước đó của mục được kéo
       draggedProduct = product;
@@ -72,8 +75,10 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
         _showDialog('Số tiền không đủ');
         // Thêm lại mục vào danh sách trước đó nếu số dư không đủ
         if (wasUpperList == true) {
+          _audio.playDropSound();
           upperItemModel.add(draggedProduct!);
         } else {
+          _audio.playDropSound();
           lowerItemModel.add(draggedProduct!);
         }
         return;
@@ -84,8 +89,10 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
         _showDialog('Số lượng vượt quá 10');
         // Thêm lại mục vào danh sách trước đó nếu số lượng vượt quá
         if (wasUpperList == true) {
+          _audio.playDropSound();
           upperItemModel.add(draggedProduct!);
         } else {
+          _audio.playDropSound();
           lowerItemModel.add(draggedProduct!);
         }
         return;
@@ -96,8 +103,10 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
           (!isUpper && wasUpperList == false)) {
         // Thêm lại mục vào danh sách trước đó
         if (wasUpperList == true) {
+          _audio.playDropSound();
           upperItemModel.add(draggedProduct!);
         } else {
+          _audio.playDropSound();
           lowerItemModel.add(draggedProduct!);
         }
         return;
@@ -105,9 +114,11 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
 
       // Nếu mục được thả vào danh sách mới, cập nhật danh sách và số dư
       if (isUpper) {
+        _audio.playDropSound();
         upperItemModel.add(product);
         balance -= product.price;
       } else {
+        _audio.playDropSound();
         lowerItemModel.add(product);
         balance += product.price;
       }
