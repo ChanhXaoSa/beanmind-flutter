@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -24,6 +25,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late GameOceanAdventure _gameOceanAdventure;
+  TimeRecord _timeRecord = TimeRecord();
+
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
   bool _isLoading = true;
@@ -84,6 +87,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       userAnswer = '';
       userPoint = 0;
       userProgress = 0;
+      _timeRecord.seconds = 0;
+      _timeRecord.startTimer();
       _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       resetAnimalOcean();
     });
@@ -117,6 +122,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -127,6 +133,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -167,6 +174,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   void dispose() {
     _resultFocusNode.dispose();
     _videoPlayerController.dispose();
+    _timeRecord.timer?.cancel();
     super.dispose();
   }
 
@@ -180,6 +188,11 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userPoint = 0;
     userProgress = 0;
     fetchData();
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _timeRecord.startTimer();
+      });
+    });
   }
 
   Future<void> fetchData() async {
@@ -270,7 +283,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Thời gian hoàn thành trò chơi: ',
+                      'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),

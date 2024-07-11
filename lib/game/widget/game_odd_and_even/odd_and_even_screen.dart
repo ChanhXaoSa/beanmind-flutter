@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -23,6 +24,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
   late GameOddAndEven _gameOddAndEven;
+  late TimeRecord _timeRecord = TimeRecord();
+
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
   bool _isLoading = true;
@@ -79,6 +82,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       userAnswer = '';
       userPoint = 0;
       userProgress = 0;
+      _timeRecord.seconds = 0;
+      _timeRecord.startTimer();
       _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
       resetAnimalSky();
     });
@@ -108,6 +113,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -121,6 +127,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -131,6 +138,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -172,6 +180,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   void dispose() {
     _resultFocusNode.dispose();
     _videoPlayerController.dispose();
+    _timeRecord.timer?.cancel();
     super.dispose();
   }
 
@@ -182,6 +191,11 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
     fetchData();
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _timeRecord.startTimer();
+      });
+    });
   }
 
   Future<void> fetchData() async {
@@ -243,7 +257,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Thời gian hoàn thành trò chơi: ',
+                      'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
+import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -25,6 +26,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   late VideoPlayerController _videoPlayerController;
   late SplitPanels _splitPanels;
   late SplitPanelsMobie _splitPanelsMobie;
+  late TimeRecord _timeRecord = TimeRecord();
+
   bool showResultDialog = false;
   bool _isLoading = true;
 
@@ -92,6 +95,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         if (userProgress == totalQuestion) {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
+          _timeRecord.stopTimer();
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -102,6 +106,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         if (userProgress == totalQuestion) {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
+          _timeRecord.stopTimer();
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -138,6 +143,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   void dispose() {
     _resultFocusNode.dispose();
     _videoPlayerController.dispose();
+    _timeRecord.timer?.cancel();
     super.dispose();
   }
 
@@ -149,6 +155,11 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       ..initialize().then((value) => {setState(() {})});
     _splitPanels = SplitPanels();
     _splitPanelsMobie = SplitPanelsMobie();
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _timeRecord.startTimer();
+      });
+    });
   }
 
   void resetGame() {
@@ -158,6 +169,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       userProgress = 0;
       upper.clear();
       lower = List.from(startLower);
+      _timeRecord.seconds = 0;
+      _timeRecord.startTimer();
       _splitPanels = SplitPanels();
       _splitPanelsMobie = SplitPanelsMobie();
     });
@@ -243,7 +256,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Thời gian hoàn thành trò chơi: ',
+                      'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),
