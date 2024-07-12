@@ -1,5 +1,8 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/game/class/font_style.dart';
+import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_level.dart';
+import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
@@ -11,7 +14,6 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
@@ -26,19 +28,10 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   late VideoPlayerController _videoPlayerController;
   late GameOceanAdventure _gameOceanAdventure;
   TimeRecord _timeRecord = TimeRecord();
-
-  bool isFirstKeyEvent = true;
-  bool showResultDialog = false;
-  bool _isLoading = true;
-
-  int userPoint = 0;
-  int userProgress = 0;
-  int totalQuestion = 3;
-  String userAnswer = '';
   var randomNumber = Random();
 
-  var whiteTextStyle = const TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
+  bool _isLoading = true;
+  bool isCorrect = false;
 
   List<String> numberPad = [
     '7',
@@ -109,14 +102,41 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       _showDialogError('Bạn chưa nhập số !');
       return;
     }
-
     userProgress += 1;
-
     setState(() {
       showResultDialog = true;
     });
 
-    if (globalBlueFishCount == int.parse(userAnswer)) {
+    if (currentLevel == 1) {
+      // Level 1: Counting
+      if (currentQuestionType == 'bluefish') {
+        isCorrect = globalBlueFishCount == int.parse(userAnswer);
+      } else if (currentQuestionType == 'redfish') {
+        isCorrect = globalRedFishCount == int.parse(userAnswer);
+      } else if (currentQuestionType == 'violetfish') {
+        isCorrect = globalVioletFishCount == int.parse(userAnswer);
+      } else if (currentQuestionType == 'moonfish') {
+        isCorrect = globalMoonFishCount == int.parse(userAnswer);
+      } else if (currentQuestionType == 'octopus') {
+        isCorrect = globalOctopusCount == int.parse(userAnswer);
+      }
+    } else if (currentLevel == 2) {
+      // Level 2: Addition and Subtraction
+      int num1 = globalChickenCount;
+      int num2 = globalDuckCount;
+      String operator = currentQuestionOperator;
+      int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
+      isCorrect = correctAnswer == int.parse(userAnswer);
+    } else if (currentLevel == 3) {
+      // Level 3: Addition, Subtraction, Multiplication, and Division
+      int num1 = globalChickenCount;
+      int num2 = globalDuckCount;
+      String operator = currentQuestionOperator;
+      int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+      isCorrect = correctAnswer == int.parse(userAnswer);
+    }
+
+    if (isCorrect) {
       userPoint += 1;
       _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
@@ -139,7 +159,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
     }
   }
 
@@ -163,6 +183,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         userAnswer = '';
         _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
         resetAnimalOcean();
+        generateQuestion();
       });
       setState(() {
         showResultDialog = false;
@@ -188,6 +209,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userPoint = 0;
     userProgress = 0;
     fetchData();
+    generateQuestion();
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _timeRecord.startTimer();
@@ -507,8 +529,11 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Có bao nhiêu con Blue Fish ? ',
+                          question,
                           style: whiteTextStyle,
+                        ),
+                        SizedBox(
+                          width: 10,
                         ),
                         Container(
                           padding:
@@ -520,10 +545,6 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                                 whiteTextStyle.copyWith(color: Colors.orange),
                           ),
                         ),
-                        // Text(
-                        //   ' Blue Fish: $globalBlueFishCount',
-                        //   style: whiteTextStyle,
-                        // ),
                       ],
                     ),
                   )),

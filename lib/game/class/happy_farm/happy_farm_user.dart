@@ -1,5 +1,4 @@
-
-// user
+// happy farm level
 String userAnswer = '';
 bool isFirstKeyEvent = true;
 bool showResultDialog = false;

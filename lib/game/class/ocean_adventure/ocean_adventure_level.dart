@@ -1,21 +1,37 @@
 import 'dart:math';
 
-import 'package:beanmind_flutter/game/class/happy_farm/user.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
 
-int currentLevel = 2;
-String currentQuestionType = ''; // To track if the question is about chickens or ducks
+int currentLevel = 1;
+String currentQuestionType =
+    ''; // To track if the question is about chickens or ducks
 String currentQuestionOperator = '';
+int randomIndex = 0;
 
 void generateQuestion() {
+  randomIndex = Random().nextInt(5);
   if (currentLevel == 1) {
-    // Level 1: Only counting questions
-    if (Random().nextBool()) {
-      currentQuestionType = 'chicken';
-      question = 'Có bao nhiêu con gà?';
-    } else {
-      currentQuestionType = 'duck';
-      question = 'Có bao nhiêu con vịt?';
+    switch (randomIndex) {
+      case 0:
+        currentQuestionType = 'bluefish';
+        question = 'Có bao nhiêu con cá màu xanh dương ?';
+        break;
+      case 1:
+        currentQuestionType = 'redfish';
+        question = 'Có bao nhiêu con cá màu đỏ ?';
+        break;
+      case 2:
+        currentQuestionType = 'violetfish';
+        question = 'Có bao nhiêu con cá màu tím ?';
+        break;
+      case 3:
+        currentQuestionType = 'moonfish';
+        question = 'Có bao nhiêu con cá mặt trăng ?';
+        break;
+      case 4:
+        currentQuestionType = 'octopus';
+        question = 'Có bao nhiêu con bạch tuộc ?';
+        break;
     }
   } else if (currentLevel == 2) {
     // Level 2: Addition and Subtraction
