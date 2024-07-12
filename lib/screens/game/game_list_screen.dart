@@ -28,10 +28,11 @@ class GameListScreen extends GetView<GameController> {
                         controller.selectedGame.value = null;
                       },
                     ),
+                    showAudioButton: true,
                   )
                 : CustomAppBar(
                     title: 'Thư viện trò chơi',
-                    showActionIcon: false, // or true based on your requirement
+              showAudioButton: true,
                   );
           }),
         ),
@@ -76,13 +77,16 @@ class GameListScreen extends GetView<GameController> {
           child: GridTile(
             footer: GridTileBar(
               backgroundColor: Colors.black54,
-              title: Text(controller.games[index]['title']!, style: TextStyle(fontSize: 20),),
+              title: Text(
+                controller.games[index]['title']!,
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5.0), // Bo góc tại đây
               child: Container(
-                child: Image.network(              
-                      controller.games[index]['image']!,
+                child: Image.network(
+                  controller.games[index]['image']!,
                   fit: BoxFit.cover,
                 ),
               ),

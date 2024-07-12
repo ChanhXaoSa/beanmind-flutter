@@ -10,6 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     this.title = '',
     this.showActionIcon = false,
+    this.showAudioButton = false,
     this.leading,
     this.titleWidget, this.onMenuActionTap,
   }) : super(key: key);
@@ -19,6 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showActionIcon;
   final Widget? leading;
   final VoidCallback? onMenuActionTap;
+  final bool showAudioButton;
   
 
   @override
@@ -50,7 +52,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Get.toNamed(QuizOverviewScreen.routeName);
                       },),
                     ),
-                    AudioButton(),         
+                    if(showAudioButton)
+                      AudioButton(),
                 ],
               ),
             ],
