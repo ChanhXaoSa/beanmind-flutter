@@ -2,11 +2,17 @@ import 'dart:math';
 
 import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
 
-int currentLevel = 1;
-String currentQuestionType =
-    ''; // To track if the question is about chickens or ducks
+int currentLevel = 2;
+String currentQuestionType = ''; // To track the type of animal
 String currentQuestionOperator = '';
 int randomIndex = 0;
+List<String> animals = [
+  'bluefish',
+  'redfish',
+  'violetfish',
+  'moonfish',
+  'octopus'
+];
 
 void generateQuestion() {
   randomIndex = Random().nextInt(5);
@@ -34,13 +40,25 @@ void generateQuestion() {
         break;
     }
   } else if (currentLevel == 2) {
-    // Level 2: Addition and Subtraction
+    // Level 2: Addition and Subtraction with different animal types
+    String animal1 = animals[Random().nextInt(animals.length)];
+    String animal2 = animals[Random().nextInt(animals.length)];
+    while (animal1 == animal2) {
+      animal2 = animals[Random().nextInt(animals.length)];
+    }
     currentQuestionOperator = getRandomOperatorLevel2();
-    question = 'Số lượng con gà $currentQuestionOperator con vịt là ';
+    question =
+        'Số lượng $animal1 $currentQuestionOperator số lượng $animal2 là ';
   } else if (currentLevel == 3) {
-    // Level 3: Addition, Subtraction, Multiplication, and Division
+    // Level 3: Addition, Subtraction, Multiplication, and Division with different animal types
+    String animal1 = animals[Random().nextInt(animals.length)];
+    String animal2 = animals[Random().nextInt(animals.length)];
+    while (animal1 == animal2) {
+      animal2 = animals[Random().nextInt(animals.length)];
+    }
     currentQuestionOperator = getRandomOperatorLevel3();
-    question = 'Số lượng con gà $currentQuestionOperator con vịt là ';
+    question =
+        'Số lượng $animal1 $currentQuestionOperator số lượng $animal2 là ';
   }
 }
 
@@ -74,6 +92,9 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
     case '*':
       return num1 * num2;
     case '/':
+      if (num2 == 0) {
+        throw ArgumentError('Division by zero is not allowed');
+      }
       return num1 ~/ num2;
     default:
       throw ArgumentError('Invalid operator for Level 3');
