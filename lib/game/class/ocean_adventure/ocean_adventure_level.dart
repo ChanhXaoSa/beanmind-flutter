@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 
-int currentLevel = 2;
+int currentLevel = 3;
 String currentQuestionType = ''; // To track the type of animal
 String currentQuestionOperator = '';
 int randomIndex = 0;
@@ -47,8 +48,18 @@ void generateQuestion() {
       animal2 = animals[Random().nextInt(animals.length)];
     }
     currentQuestionOperator = getRandomOperatorLevel2();
+    if (currentQuestionOperator == '-') {
+      int count1 = getAnimalCountByType(animal1);
+      int count2 = getAnimalCountByType(animal2);
+      if (count1 < count2) {
+        String tempAnimal = animal1;
+        animal1 = animal2;
+        animal2 = tempAnimal;
+      }
+    }
     question =
-        'Số lượng $animal1 $currentQuestionOperator số lượng $animal2 là ';
+        'Số lượng ${getDisplayAnimalName(animal1)} $currentQuestionOperator số lượng ${getDisplayAnimalName(animal2)} là ';
+    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   } else if (currentLevel == 3) {
     // Level 3: Addition, Subtraction, Multiplication, and Division with different animal types
     String animal1 = animals[Random().nextInt(animals.length)];
@@ -57,8 +68,18 @@ void generateQuestion() {
       animal2 = animals[Random().nextInt(animals.length)];
     }
     currentQuestionOperator = getRandomOperatorLevel3();
+    if (currentQuestionOperator == '-') {
+      int count1 = getAnimalCountByType(animal1);
+      int count2 = getAnimalCountByType(animal2);
+      if (count1 < count2) {
+        String tempAnimal = animal1;
+        animal1 = animal2;
+        animal2 = tempAnimal;
+      }
+    }
     question =
-        'Số lượng $animal1 $currentQuestionOperator số lượng $animal2 là ';
+        'Số lượng ${getDisplayAnimalName(animal1)} $currentQuestionOperator số lượng ${getDisplayAnimalName(animal2)} là ';
+    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   }
 }
 
@@ -98,5 +119,48 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
       return num1 ~/ num2;
     default:
       throw ArgumentError('Invalid operator for Level 3');
+  }
+}
+
+int getAnimalCountByType(String animal) {
+  switch (animal) {
+    case 'bluefish':
+      return globalBlueFishCount;
+    case 'redfish':
+      return globalRedFishCount;
+    case 'violetfish':
+      return globalVioletFishCount;
+    case 'moonfish':
+      return globalMoonFishCount;
+    case 'octopus':
+      return globalOctopusCount;
+    default:
+      throw ArgumentError('Invalid animal type');
+  }
+}
+
+String getDisplayAnimalName(String animal) {
+  switch (animal) {
+    case 'bluefish':
+      return 'cá màu xanh dương';
+    case 'redfish':
+      return 'cá màu đỏ';
+    case 'violetfish':
+      return 'cá màu tím';
+    case 'moonfish':
+      return 'cá mặt trăng';
+    case 'octopus':
+      return 'bạch tuộc';
+    default:
+      throw ArgumentError('Invalid animal type');
+  }
+}
+
+String getAnimalFromOperator(String operator, String position) {
+  List<String> parts = operator.split(' ');
+  if (position == 'first') {
+    return parts[0];
+  } else {
+    return parts[parts.length - 1];
   }
 }
