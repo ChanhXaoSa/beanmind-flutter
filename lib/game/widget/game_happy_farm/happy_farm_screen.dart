@@ -36,6 +36,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   int userProgress = 0;
   int totalQuestion = 3;
   bool _isLoading = true;
+  String question = '';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
