@@ -1,5 +1,7 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/game/class/happy_farm/level.dart';
+import 'package:beanmind_flutter/game/class/happy_farm/user.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -30,13 +32,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   late HappyFarm _happyFarm;
   TimeRecord _timeRecord = TimeRecord();
 
-  bool isFirstKeyEvent = true;
-  bool showResultDialog = false;
-  int userPoint = 0;
-  int userProgress = 0;
-  int totalQuestion = 3;
   bool _isLoading = true;
-  String question = '';
+  bool isCorrect = false;
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -56,8 +53,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     '=',
     '0'
   ];
-
-  String userAnswer = '';
 
   void buttonTapped(String button) {
     _audio.playButtonSound();
@@ -113,7 +108,31 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     setState(() {
       showResultDialog = true;
     });
-    if (globalChickenCount == int.parse(userAnswer)) {
+
+    if (currentLevel == 1) {
+      // Level 1: Counting
+      if (currentQuestionType == 'chicken') {
+        isCorrect = globalChickenCount == int.parse(userAnswer);
+      } else if (currentQuestionType == 'duck') {
+        isCorrect = globalDuckCount == int.parse(userAnswer);
+      }
+    } else if (currentLevel == 2) {
+      // Level 2: Addition and Subtraction
+      int num1 = globalChickenCount;
+      int num2 = globalDuckCount;
+      String operator = currentQuestionOperator;
+      int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
+      isCorrect = correctAnswer == int.parse(userAnswer);
+    } else if (currentLevel == 3) {
+      // Level 3: Addition, Subtraction, Multiplication, and Division
+      int num1 = globalChickenCount;
+      int num2 = globalDuckCount;
+      String operator = currentQuestionOperator;
+      int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+      isCorrect = correctAnswer == int.parse(userAnswer);
+    }
+
+    if (isCorrect) {
       userPoint += 1;
       _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
@@ -140,6 +159,42 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     }
   }
 
+  // void checkResult() {
+  //   if (userAnswer.isEmpty) {
+  //     _showDialogError('Bạn chưa nhập số !');
+  //     return;
+  //   }
+  //   userProgress += 1;
+  //   setState(() {
+  //     showResultDialog = true;
+  //   });
+  //   if (globalChickenCount == int.parse(userAnswer)) {
+  //     userPoint += 1;
+  //     _audio.playSuccessSound();
+  //     if (userProgress == totalQuestion) {
+  //       _audio.playCompleteSound();
+  //       String lottieAsset = _getLottieAsset(userPoint);
+  //       _timeRecord.stopTimer();
+  //       _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+  //           lottieAsset, false, userPoint);
+  //       return;
+  //     }
+  //     _showDialog(
+  //         'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
+  //   } else {
+  //     if (userProgress == totalQuestion) {
+  //       _audio.playCompleteSound();
+  //       String lottieAsset = _getLottieAsset(userPoint);
+  //       _timeRecord.stopTimer();
+  //       _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+  //           lottieAsset, false, userPoint);
+  //       return;
+  //     }
+  //     _audio.playWrongSound();
+  //     _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+  //   }
+  // }
+
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
       case 1:
@@ -157,6 +212,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
+        generateQuestion();
         resetAnimalFarm();
         userAnswer = '';
         _happyFarm = HappyFarm(animalslist: animalslist);
@@ -181,6 +237,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
+    generateQuestion();
     fetchData();
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
@@ -508,9 +565,10 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Có bao nhiêu con Con gà ? ',
+                          question,
                           style: whiteTextStyle,
                         ),
+                        SizedBox(width: 10),
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 15, vertical: 0),
