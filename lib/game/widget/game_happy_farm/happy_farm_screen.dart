@@ -503,8 +503,12 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
+                              content: Column(
+                                children: [
+                                  Text(
+                                    'Nội dung hướng dẫn người chơi...',
+                                  ),
+                                ],
                               ),
                               actions: [
                                 TextButton(
@@ -516,7 +520,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           },
                         );
                       },
-                      child: const Text('Hướng dẫn'),
+                      child: const Icon(Icons.help),
                     ),
                   ],
                 ),
