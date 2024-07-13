@@ -94,9 +94,9 @@ class CourseCard extends GetView<QuizPaperController> {
                             SizedBox(
                               width: 12,
                               height: 12,
-                              child: SvgPicture.network(
-                                'assets/vectors/iconsocialperson_outline_24_px_344_x2.svg',
-                              ),
+                              // child: SvgPicture.network(
+                              //   'assets/vectors/iconsocialperson_outline_24_px_344_x2.svg',
+                              // ),
                             ),
                           ),
                         ],
@@ -135,9 +135,9 @@ class CourseCard extends GetView<QuizPaperController> {
                           SizedBox(
                             width: 12,
                             height: 12,
-                            child: SvgPicture.network(
-                              'assets/vectors/iconsocialperson_outline_24_px_430_x2.svg',
-                            ),
+                            // child: SvgPicture.network(
+                            //   'assets/vectors/iconsocialperson_outline_24_px_430_x2.svg',
+                            // ),
                           ),
                         ),
                         Text(
@@ -189,9 +189,9 @@ class CourseCard extends GetView<QuizPaperController> {
                                   SizedBox(
                                     width: 11.4,
                                     height: 10.9,
-                                    child: SvgPicture.network(
-                                      'assets/vectors/icontogglestar_purple_50024_px_711_x2.svg',
-                                    ),
+                                    // child: SvgPicture.network(
+                                    //   'assets/vectors/icontogglestar_purple_50024_px_711_x2.svg',
+                                    // ),
                                   ),
                                 ),
                                 Container(
@@ -202,9 +202,9 @@ class CourseCard extends GetView<QuizPaperController> {
                                   SizedBox(
                                     width: 11.4,
                                     height: 10.9,
-                                    child: SvgPicture.network(
-                                      'assets/vectors/icontogglestar_purple_50024_px_780_x2.svg',
-                                    ),
+                                    // child: SvgPicture.network(
+                                    //   'assets/vectors/icontogglestar_purple_50024_px_780_x2.svg',
+                                    // ),
                                   ),
                                 ),
                                 Container(
@@ -215,9 +215,9 @@ class CourseCard extends GetView<QuizPaperController> {
                                   SizedBox(
                                     width: 11.4,
                                     height: 10.9,
-                                    child: SvgPicture.network(
-                                      'assets/vectors/icontogglestar_purple_50024_px_784_x2.svg',
-                                    ),
+                                    // child: SvgPicture.network(
+                                    //   'assets/vectors/icontogglestar_purple_50024_px_784_x2.svg',
+                                    // ),
                                   ),
                                 ),
                                 Container(
@@ -228,9 +228,9 @@ class CourseCard extends GetView<QuizPaperController> {
                                   SizedBox(
                                     width: 11.4,
                                     height: 10.9,
-                                    child: SvgPicture.network(
-                                      'assets/vectors/icontogglestar_purple_50024_px_476_x2.svg',
-                                    ),
+                                    // child: SvgPicture.network(
+                                    //   'assets/vectors/icontogglestar_purple_50024_px_476_x2.svg',
+                                    // ),
                                   ),
                                 ),
                                 Container(
@@ -240,9 +240,9 @@ class CourseCard extends GetView<QuizPaperController> {
                                   SizedBox(
                                     width: 11.4,
                                     height: 10.9,
-                                    child: SvgPicture.network(
-                                      'assets/vectors/icontogglestar_half_24_px_115_x2.svg',
-                                    ),
+                                    // child: SvgPicture.network(
+                                    //   'assets/vectors/icontogglestar_half_24_px_115_x2.svg',
+                                    // ),
                                   ),
                                 ),
                               ],
