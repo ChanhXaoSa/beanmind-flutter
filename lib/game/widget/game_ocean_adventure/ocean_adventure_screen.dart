@@ -136,7 +136,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
@@ -147,7 +147,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
   }
 

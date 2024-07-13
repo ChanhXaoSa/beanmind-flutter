@@ -144,7 +144,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
@@ -155,7 +155,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
   }
 
@@ -559,13 +559,10 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                                   top: 15, left: 15, bottom: 15),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: Colors
-                                      .black, // Change this to your desired border color
-                                  width:
-                                      2, // Change this to your desired border width
+                                  color: Colors.black,
+                                  width: 2,
                                 ),
-                                borderRadius: BorderRadius.circular(
-                                    10), // Optional: To round the corners
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Stack(
                                 children: [
