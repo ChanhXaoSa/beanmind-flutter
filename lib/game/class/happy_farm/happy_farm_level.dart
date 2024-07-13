@@ -4,7 +4,7 @@ import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 
-int currentLevel = 2;
+int currentLevel = 3;
 String currentQuestionType = '';
 String currentQuestionOperator = '';
 int randomIndex = 0;
@@ -13,7 +13,7 @@ List<String> animals = [
   'duck',
 ];
 
-void generateQuestion() {
+void generateQuestion() async {
   randomIndex = Random().nextInt(2);
   if (currentLevel == 1) {
     // Level 1: Only counting questions
@@ -54,13 +54,22 @@ void generateQuestion() {
       animal2 = animals[Random().nextInt(animals.length)];
     }
     currentQuestionOperator = getRandomOperatorLevel3();
+    if (currentQuestionOperator == '-') {
+      int num1 = getAnimalCountByType(animal1);
+      int num2 = getAnimalCountByType(animal2);
+      if (num1 < num2) {
+        String temp = animal1;
+        animal1 = animal2;
+        animal2 = temp;
+      }
+    } 
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
   }
 }
 
 String getRandomOperatorLevel2() {
-  List<String> operators = ['-', '-'];
+  List<String> operators = ['+', '-'];
   return operators[Random().nextInt(operators.length)];
 }
 
@@ -88,6 +97,9 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
     case '+':
       return num1 + num2;
     case '-':
+      if (num1 < num2) {
+        return num2 - num1;
+      }
       return num1 - num2;
     case '*':
       return num1 * num2;

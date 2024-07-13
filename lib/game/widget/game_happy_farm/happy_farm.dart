@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
+import 'package:get/get_utils/src/platform/platform_web.dart';
 
 class HappyFarm extends FlameGame {
   late SpriteComponent background;
@@ -21,27 +22,26 @@ class HappyFarm extends FlameGame {
     // Reset animal counts
     resetAnimalFarm();
 
-    // Background
+    // Load background
+    await loadBackground();
+
+    // Load animals
+    await loadAnimals();
+
+    generateQuestion();
+  }
+
+  Future<void> loadBackground() async {
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_farm.png')
       ..size = size;
     add(background);
+  }
 
+  Future<void> loadAnimals() async {
     for (var animal in animalslist) {
       if (animal.type == 'chicken') {
-        Image chickenIdleImage = await networkImages.load(
-          animal.imageurl.toString().isEmpty
-              ? 'animal/chicken/chicken_stand.png'
-              : animal.imageurl.toString(),
-        );
-        chickenIdleAnimation = SpriteAnimation.fromFrameData(
-          chickenIdleImage,
-          SpriteAnimationData.sequenced(
-            amount: animal.sprite,
-            textureSize: Vector2(animal.vectorX, animal.vectorY),
-            stepTime: animal.steptime,
-          ),
-        );
+        chickenIdleAnimation = await loadAnimalAnimation(animal);
         createAnimals(
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
@@ -52,19 +52,7 @@ class HappyFarm extends FlameGame {
           type: animal.type,
         );
       } else if (animal.type == 'duck') {
-        Image duckIdleImage = await networkImages.load(
-          animal.imageurl.toString().isEmpty
-              ? 'animal/duck/duck_stand.png'
-              : animal.imageurl.toString(),
-        );
-        duckIdleAnimation = SpriteAnimation.fromFrameData(
-          duckIdleImage,
-          SpriteAnimationData.sequenced(
-            amount: animal.sprite,
-            textureSize: Vector2(animal.vectorX, animal.vectorY),
-            stepTime: animal.steptime,
-          ),
-        );
+        duckIdleAnimation = await loadAnimalAnimation(animal);
         createAnimals(
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
@@ -76,6 +64,22 @@ class HappyFarm extends FlameGame {
         );
       }
     }
+  }
+
+  Future<SpriteAnimation> loadAnimalAnimation(GameAnimalModel animal) async {
+    Image animalImage = await networkImages.load(
+      animal.imageurl.toString().isEmpty
+          ? 'animal/${animal.type}/${animal.type}_stand.png'
+          : animal.imageurl.toString(),
+    );
+    return SpriteAnimation.fromFrameData(
+      animalImage,
+      SpriteAnimationData.sequenced(
+        amount: animal.sprite,
+        textureSize: Vector2(animal.vectorX, animal.vectorY),
+        stepTime: animal.steptime,
+      ),
+    );
   }
 
   void createAnimals({
@@ -130,7 +134,6 @@ class HappyFarm extends FlameGame {
     // Print animal count
     print('Chicken: $globalChickenCount');
     print('Duck: $globalDuckCount');
-    generateQuestion();
   }
 
   @override

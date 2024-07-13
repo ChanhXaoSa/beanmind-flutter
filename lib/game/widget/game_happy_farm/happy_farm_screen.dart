@@ -195,7 +195,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     super.initState();
     resetAnimalFarm();
     fetchData();
-    generateQuestion();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
@@ -229,7 +228,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
       });
 
-      setState(() {
+      setState(() {       
         animalslist = List<GameAnimalModel>.from(items);
         _happyFarm = HappyFarm(animalslist: animalslist);
       });
