@@ -43,7 +43,7 @@ Future<void> generateQuestion() async {
         animal1 = animal2;
         animal2 = temp;
       }
-    } 
+    }
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
   } else if (currentLevel == 3) {
@@ -62,7 +62,7 @@ Future<void> generateQuestion() async {
         animal1 = animal2;
         animal2 = temp;
       }
-    } 
+    }
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
   }
@@ -74,7 +74,8 @@ String getRandomOperatorLevel2() {
 }
 
 String getRandomOperatorLevel3() {
-  List<String> operators = ['+', '-', '*', '/'];
+  //List<String> operators = ['+', '-', '*', '/'];
+  List<String> operators = ['/', '/', '/', '/'];
   return operators[Random().nextInt(operators.length)];
 }
 
@@ -92,7 +93,7 @@ int calculateAnswerLevel2(int num1, int num2, String operator) {
   }
 }
 
-int calculateAnswerLevel3(int num1, int num2, String operator) {
+double calculateAnswerLevel3(double num1, double num2, String operator) {
   switch (operator) {
     case '+':
       return num1 + num2;
@@ -107,7 +108,7 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
       if (num2 == 0) {
         throw ArgumentError('Division by zero is not allowed');
       }
-      return num1 ~/ num2;
+      return (num1 / num2);
     default:
       throw ArgumentError('Invalid operator for Level 3');
   }

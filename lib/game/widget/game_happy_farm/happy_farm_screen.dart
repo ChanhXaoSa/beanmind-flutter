@@ -1,4 +1,3 @@
-import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_level.dart';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 import 'happy_farm.dart';
@@ -51,7 +49,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     '2',
     '3',
     '=',
-    '0'
+    '0',
+    '/'
   ];
 
   void buttonTapped(String button) {
@@ -124,11 +123,26 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       isCorrect = correctAnswer == int.parse(userAnswer);
     } else if (currentLevel == 3) {
       // Level 3: Addition, Subtraction, Multiplication, and Division
-      int num1 = globalChickenCount;
-      int num2 = globalDuckCount;
+      double num1 = globalChickenCount.toDouble();
+      double num2 = globalDuckCount.toDouble();
       String operator = currentQuestionOperator;
-      int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
-      isCorrect = correctAnswer == int.parse(userAnswer);
+      double correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+
+      if (userAnswer.contains('/')) {
+        List<String> parts = userAnswer.split('/');
+        double numerator = double.parse(parts[0]);
+        double denominator = double.parse(parts[1]);
+
+        // Perform integer division and modulus
+        double quotient = calculateAnswerLevel3(numerator, denominator, '/');
+        double remainder = calculateAnswerLevel3(numerator, denominator, '%');
+
+        // Check if either quotient or remainder matches correct answer
+        isCorrect = (quotient == correctAnswer || remainder == correctAnswer);
+      } else {
+        // Handle other operations
+        isCorrect = correctAnswer == double.parse(userAnswer);
+      }
     }
 
     if (isCorrect) {
@@ -228,7 +242,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
       });
 
-      setState(() {       
+      setState(() {
         animalslist = List<GameAnimalModel>.from(items);
         _happyFarm = HappyFarm(animalslist: animalslist);
       });
