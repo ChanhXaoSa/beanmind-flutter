@@ -20,16 +20,9 @@ class HappyFarm extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
     question = 'Đang tải câu hỏi...';
-    // Reset animal counts
     resetAnimalFarm();
-
-    // Load background
     await loadBackground();
-
-    // Load animals
     await loadAnimals();
-
-    // load question
     await generateQuestion();
   }
 

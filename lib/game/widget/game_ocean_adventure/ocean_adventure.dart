@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_level.dart';
+import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -22,12 +24,21 @@ class GameOceanAdventure extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Background
+    question = 'Đang tải câu hỏi...';
+    resetAnimalOcean();
+    await loadBackground();
+    await loadAnimals();
+    generateQuestion();
+  }
+
+  Future<void> loadBackground() async {
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_ocean.png')
       ..size = size;
     add(background);
+  }
 
+  Future<void> loadAnimals() async {
     for (var animal in animalslist) {
       if (animal.type == 'bluefish') {
         Image blueFishImage = await networkImages.load(
