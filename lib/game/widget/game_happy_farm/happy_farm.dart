@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_level.dart';
+import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
-import 'package:get/get_utils/src/platform/platform_web.dart';
 
 class HappyFarm extends FlameGame {
   late SpriteComponent background;
@@ -19,6 +19,7 @@ class HappyFarm extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    question = 'Đang tải câu hỏi...';
     // Reset animal counts
     resetAnimalFarm();
 
@@ -28,7 +29,8 @@ class HappyFarm extends FlameGame {
     // Load animals
     await loadAnimals();
 
-    generateQuestion();
+    // load question
+    await generateQuestion();
   }
 
   Future<void> loadBackground() async {
@@ -131,14 +133,6 @@ class HappyFarm extends FlameGame {
         break; // Exit the loop if the animals exceed the specified x-range
       }
     }
-    // Print animal count
-    print('Chicken: $globalChickenCount');
-    print('Duck: $globalDuckCount');
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
   }
 }
 

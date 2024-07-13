@@ -13,7 +13,7 @@ List<String> animals = [
   'duck',
 ];
 
-void generateQuestion() async {
+Future<void> generateQuestion() async {
   randomIndex = Random().nextInt(2);
   if (currentLevel == 1) {
     // Level 1: Only counting questions
