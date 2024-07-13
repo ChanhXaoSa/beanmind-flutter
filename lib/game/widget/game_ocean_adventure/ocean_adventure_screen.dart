@@ -84,6 +84,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       _timeRecord.startTimer();
       _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       resetAnimalOcean();
+      generateQuestion();
     });
   }
 
@@ -109,30 +110,17 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
 
     if (currentLevel == 1) {
       // Level 1: Counting
-      if (currentQuestionType == 'bluefish') {
-        isCorrect = globalBlueFishCount == int.parse(userAnswer);
-      } else if (currentQuestionType == 'redfish') {
-        isCorrect = globalRedFishCount == int.parse(userAnswer);
-      } else if (currentQuestionType == 'violetfish') {
-        isCorrect = globalVioletFishCount == int.parse(userAnswer);
-      } else if (currentQuestionType == 'moonfish') {
-        isCorrect = globalMoonFishCount == int.parse(userAnswer);
-      } else if (currentQuestionType == 'octopus') {
-        isCorrect = globalOctopusCount == int.parse(userAnswer);
-      }
-    } else if (currentLevel == 2) {
-      // Level 2: Addition and Subtraction
-      int num1 = globalChickenCount;
-      int num2 = globalDuckCount;
-      String operator = currentQuestionOperator;
-      int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
-      isCorrect = correctAnswer == int.parse(userAnswer);
-    } else if (currentLevel == 3) {
-      // Level 3: Addition, Subtraction, Multiplication, and Division
-      int num1 = globalChickenCount;
-      int num2 = globalDuckCount;
-      String operator = currentQuestionOperator;
-      int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+      int correctCount = getAnimalCountByType(currentQuestionType);
+      isCorrect = correctCount == int.parse(userAnswer);
+    } else if (currentLevel == 2 || currentLevel == 3) {
+      // Level 2 and Level 3
+      List<String> questionParts = currentQuestionType.split(' ');
+      int num1 = getAnimalCountByType(questionParts[0]); // First animal
+      int num2 = getAnimalCountByType(questionParts[2]); // Second animal
+      String operator = questionParts[1];
+      int correctAnswer = currentLevel == 2
+          ? calculateAnswerLevel2(num1, num2, operator)
+          : calculateAnswerLevel3(num1, num2, operator);
       isCorrect = correctAnswer == int.parse(userAnswer);
     }
 
@@ -148,7 +136,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
@@ -159,7 +147,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
   }
 

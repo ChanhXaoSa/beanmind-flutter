@@ -87,7 +87,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      resetAnimalFarm();
       _happyFarm = HappyFarm(animalslist: animalslist);
     });
   }
@@ -144,7 +143,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
@@ -155,45 +154,9 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
   }
-
-  // void checkResult() {
-  //   if (userAnswer.isEmpty) {
-  //     _showDialogError('Bạn chưa nhập số !');
-  //     return;
-  //   }
-  //   userProgress += 1;
-  //   setState(() {
-  //     showResultDialog = true;
-  //   });
-  //   if (globalChickenCount == int.parse(userAnswer)) {
-  //     userPoint += 1;
-  //     _audio.playSuccessSound();
-  //     if (userProgress == totalQuestion) {
-  //       _audio.playCompleteSound();
-  //       String lottieAsset = _getLottieAsset(userPoint);
-  //       _timeRecord.stopTimer();
-  //       _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-  //           lottieAsset, false, userPoint);
-  //       return;
-  //     }
-  //     _showDialog(
-  //         'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
-  //   } else {
-  //     if (userProgress == totalQuestion) {
-  //       _audio.playCompleteSound();
-  //       String lottieAsset = _getLottieAsset(userPoint);
-  //       _timeRecord.stopTimer();
-  //       _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-  //           lottieAsset, false, userPoint);
-  //       return;
-  //     }
-  //     _audio.playWrongSound();
-  //     _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
-  //   }
-  // }
 
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
@@ -212,12 +175,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        generateQuestion();
-        resetAnimalFarm();
         userAnswer = '';
         _happyFarm = HappyFarm(animalslist: animalslist);
-      });
-      setState(() {
         showResultDialog = false;
       });
     }
@@ -234,12 +193,19 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   @override
   void initState() {
     super.initState();
+    resetAnimalFarm();
+    fetchData();
+    generateQuestion();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
-    generateQuestion();
-    fetchData();
-    Future.delayed(const Duration(seconds: 3), () {
+    delay3Seconds();
+  }
+
+  // delay 3 seconds
+  Future<void> delay3Seconds() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
       setState(() {
         _timeRecord.startTimer();
       });
@@ -251,12 +217,10 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
-
       // print json data
       snapshot.docs.forEach((doc) {
         print(doc.data());
       });
-
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
@@ -267,9 +231,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
-        resetAnimalFarm();
         _happyFarm = HappyFarm(animalslist: animalslist);
-        // delay 3s
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -539,8 +501,12 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
+                              content: Column(
+                                children: [
+                                  Text(
+                                    'Nội dung hướng dẫn người chơi...',
+                                  ),
+                                ],
                               ),
                               actions: [
                                 TextButton(
@@ -552,7 +518,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           },
                         );
                       },
-                      child: const Text('Hướng dẫn'),
+                      child: const Icon(Icons.help),
                     ),
                   ],
                 ),
@@ -591,6 +557,15 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                             flex: 4,
                             child: Container(
                               alignment: Alignment.topCenter,
+                              margin: EdgeInsets.only(
+                                  top: 15, left: 15, bottom: 15),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Stack(
                                 children: [
                                   GameWidget(game: _happyFarm),

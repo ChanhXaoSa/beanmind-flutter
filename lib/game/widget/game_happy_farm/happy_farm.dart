@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_level.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -129,6 +130,7 @@ class HappyFarm extends FlameGame {
     // Print animal count
     print('Chicken: $globalChickenCount');
     print('Duck: $globalDuckCount');
+    generateQuestion();
   }
 
   @override

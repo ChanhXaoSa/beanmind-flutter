@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
+import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_level.dart';
+import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_user.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
@@ -74,22 +75,32 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     // Check if the upper list is empty
     if (upper.isEmpty) {
       _showDialogError(
-          'Bạn chưa đặt các thẻ số lên phía trên \nhãy xếp số theo thứ tự từ bé đến lớn!');
+          'Bạn chưa đặt các thẻ số lên phía trên \nhãy xếp số theo thứ tự đề bài yêu cầu!');
       return;
     }
 
     // Check if the upper list is sorted in ascending order
-    bool isSorted = true;
+    bool isSortedAscending = true;
     for (int i = 0; i < upper.length - 1; i++) {
       if (upper[i] > upper[i + 1]) {
-        isSorted = false;
+        isSortedAscending = false;
+        break;
+      }
+    }
+
+    // Check if the upper list is sorted in descending order
+    bool isSortedDescending = true;
+    for (int i = 0; i < upper.length - 1; i++) {
+      if (upper[i] < upper[i + 1]) {
+        isSortedDescending = false;
         break;
       }
     }
 
     if (upper.length == 10) {
       userProgress += 1;
-      if (isSorted) {
+      if ((sortingOrder == 'ascending' && isSortedAscending) ||
+          (sortingOrder == 'descending' && isSortedDescending)) {
         userPoint += 1;
         _audio.playSuccessSound();
         if (userProgress == totalQuestion) {
@@ -114,7 +125,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         _showDialog(
             'Sai rồi !', 'assets/lotties/wrong.json', false, true, true);
       }
-    } else if (isSorted) {
+    } else if ((sortingOrder == 'ascending' && isSortedAscending) ||
+        (sortingOrder == 'descending' && isSortedDescending)) {
       _showDialog(
           'Đúng rồi !', 'assets/lotties/success.json', true, false, false);
     } else {
@@ -132,6 +144,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         _splitPanels = SplitPanels();
         _splitPanelsMobie = SplitPanelsMobie();
         userAnswer = '';
+        generateSortingQuestion();
       });
       setState(() {
         showResultDialog = false;
@@ -155,6 +168,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       ..initialize().then((value) => {setState(() {})});
     _splitPanels = SplitPanels();
     _splitPanelsMobie = SplitPanelsMobie();
+    generateSortingQuestion();
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _timeRecord.startTimer();
@@ -173,6 +187,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       _timeRecord.startTimer();
       _splitPanels = SplitPanels();
       _splitPanelsMobie = SplitPanelsMobie();
+      generateSortingQuestion();
     });
   }
 
@@ -482,7 +497,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Xếp số theo thứ tự từ bé đến lớn',
+                          question,
                           style: whiteTextStyle,
                         ),
                       ],
@@ -497,6 +512,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                             Expanded(
                               flex: 4,
                               child: Container(
+                                margin: EdgeInsets.only(left: 15),
                                 alignment: Alignment.topCenter,
                                 child: _splitPanelsMobie,
                               ),

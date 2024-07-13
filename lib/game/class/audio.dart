@@ -67,7 +67,9 @@ class Audio {
   void playBackgroundMusicHappyFarm() async {
     try {
       await Future.delayed(Duration(seconds: 3));
-      await _backgroundMusic.setAsset('assets/sounds/music_background/music_happy_farm.mp3');
+      await _backgroundMusic
+          .setAsset('assets/sounds/music_background/music_happy_farm.mp3');
+      _backgroundMusic.setLoopMode(LoopMode.one);
       _backgroundMusic.play();
     } catch (e, stacktrace) {
       print('Error playing background music: $e');
@@ -78,7 +80,9 @@ class Audio {
   void playBackgroundMusicAdventure() async {
     try {
       await Future.delayed(Duration(seconds: 3));
-      await _backgroundMusic.setAsset('assets/sounds/music_background/music_adventure.mp3');
+      await _backgroundMusic
+          .setAsset('assets/sounds/music_background/music_adventure.mp3');
+      _backgroundMusic.setLoopMode(LoopMode.one);
       _backgroundMusic.play();
     } catch (e, stacktrace) {
       print('Error playing background music: $e');
