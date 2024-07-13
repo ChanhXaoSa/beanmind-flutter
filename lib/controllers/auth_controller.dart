@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/firebase/references.dart';
 import 'package:beanmind_flutter/screens/screens.dart' show AppIntroductionScreen, HomeScreen, LoginScreen;
 import 'package:beanmind_flutter/utils/utils.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
   @override
@@ -13,18 +14,29 @@ class AuthController extends GetxController {
     super.onReady();
   }
 
-  late FirebaseAuth _auth;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
 
   void initAuth() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? hasSeenIntroduction = prefs.getBool('hasSeenIntroduction');
+
     await Future.delayed(const Duration(seconds: 2)); // waiting in splash
-    _auth = FirebaseAuth.instance;
+    // _auth = FirebaseAuth.instance;
     _authStateChanges = _auth.authStateChanges();
     _authStateChanges.listen((User? user) {
       _user.value = user;
+      // if(user == null) {
+      //   navigateToLogin();
+      // } else {
+      //   navigateToHome();
+      // }
     });
-    navigateToIntroduction();
+    if (hasSeenIntroduction == null || !hasSeenIntroduction) {
+      navigateToIntroduction();
+      prefs.setBool('hasSeenIntroduction', true);
+    }
   }
 
   Future<void> siginInWithGoogle() async {

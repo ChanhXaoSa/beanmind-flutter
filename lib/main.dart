@@ -1,4 +1,6 @@
 import 'package:beanmind_flutter/bindings/initial_binding.dart';
+import 'package:beanmind_flutter/controllers/auth_controller.dart';
+import 'package:beanmind_flutter/controllers/common/drawer_controller.dart';
 import 'package:beanmind_flutter/controllers/common/theme_controller.dart';
 import 'package:beanmind_flutter/firebase_options.dart';
 import 'package:beanmind_flutter/routes/app_routes.dart';
