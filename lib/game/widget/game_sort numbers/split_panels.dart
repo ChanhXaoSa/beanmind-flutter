@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort.dart';
+import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_level.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/item_panel.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/my_drop_region.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
