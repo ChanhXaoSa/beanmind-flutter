@@ -59,8 +59,7 @@ class CourseCard extends GetView<QuizPaperController> {
                                       child:
                                       Text(
                                         'Best Seller',
-                                        style: GoogleFonts.getFont(
-                                          'Roboto Condensed',
+                                        style: kDetailsTS.copyWith(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 8,
                                           height: 1.3,
@@ -80,8 +79,7 @@ class CourseCard extends GetView<QuizPaperController> {
                                     child:
                                     Text(
                                       '20% OFF',
-                                      style: GoogleFonts.getFont(
-                                        'Roboto Condensed',
+                                      style: kDetailsTS.copyWith(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 8,
                                         height: 1.3,
@@ -117,8 +115,7 @@ class CourseCard extends GetView<QuizPaperController> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       'VUE JS SCRATCH COURSE',
-                      style: GoogleFonts.getFont(
-                        'Roboto Condensed',
+                      style: kDetailsTS.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
                         height: 1.3,
@@ -150,8 +147,7 @@ class CourseCard extends GetView<QuizPaperController> {
                         ),
                         Text(
                           'Kitani Studio',
-                          style: GoogleFonts.getFont(
-                            'Roboto Condensed',
+                          style: kDetailsTS.copyWith(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             height: 1.3,
@@ -166,8 +162,7 @@ class CourseCard extends GetView<QuizPaperController> {
                   margin: EdgeInsets.fromLTRB(0, 0, 9.4, 22),
                   child: Text(
                     'More than 8yr Experience as Illustrator. Learn how to becoming professional Illustrator Now...',
-                    style: GoogleFonts.getFont(
-                      'Roboto Condensed',
+                    style: kDetailsTS.copyWith(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       height: 1.3,
@@ -261,8 +256,7 @@ class CourseCard extends GetView<QuizPaperController> {
                         ),
                         Text(
                           '(1.2K)',
-                          style: GoogleFonts.getFont(
-                            'Roboto Condensed',
+                          style: kDetailsTS.copyWith(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             height: 1.3,
@@ -283,8 +277,7 @@ class CourseCard extends GetView<QuizPaperController> {
                         margin: EdgeInsets.fromLTRB(0, 0, 6.7, 0),
                         child: Text(
                           '\$24.92',
-                          style: GoogleFonts.getFont(
-                            'Roboto Condensed',
+                          style: kDetailsTS.copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
                             height: 1.3,
@@ -296,8 +289,7 @@ class CourseCard extends GetView<QuizPaperController> {
                         margin: EdgeInsets.fromLTRB(0, 1, 0, 1),
                         child: Text(
                           '\$32.90',
-                          style: GoogleFonts.getFont(
-                            'Roboto Condensed',
+                          style: kDetailsTS.copyWith(
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
                             decoration: TextDecoration.lineThrough,
