@@ -87,7 +87,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      resetAnimalFarm();
       _happyFarm = HappyFarm(animalslist: animalslist);
     });
   }
@@ -176,12 +175,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        generateQuestion();
-        resetAnimalFarm();
         userAnswer = '';
         _happyFarm = HappyFarm(animalslist: animalslist);
-      });
-      setState(() {
         showResultDialog = false;
       });
     }
@@ -198,12 +193,19 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   @override
   void initState() {
     super.initState();
+    resetAnimalFarm();
+    fetchData();
+    generateQuestion();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
-    generateQuestion();
-    fetchData();
-    Future.delayed(const Duration(seconds: 3), () {
+    delay3Seconds();
+  }
+
+  // delay 3 seconds
+  Future<void> delay3Seconds() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
       setState(() {
         _timeRecord.startTimer();
       });
@@ -215,12 +217,10 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
-
       // print json data
       snapshot.docs.forEach((doc) {
         print(doc.data());
       });
-
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
@@ -231,9 +231,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
-        resetAnimalFarm();
         _happyFarm = HappyFarm(animalslist: animalslist);
-        // delay 3s
       });
     } catch (e) {
       print('Error fetching data: $e');

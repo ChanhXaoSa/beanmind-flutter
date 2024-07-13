@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
+import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 
-int currentLevel = 3;
+int currentLevel = 2;
 String currentQuestionType = '';
 String currentQuestionOperator = '';
 int randomIndex = 0;
@@ -35,17 +36,16 @@ void generateQuestion() {
     }
     currentQuestionOperator = getRandomOperatorLevel2();
     if (currentQuestionOperator == '-') {
-      int count1 = getAnimalCountByType(animal1);
-      int count2 = getAnimalCountByType(animal2);
-      if (count1 < count2) {
-        String tempAnimal = animal1;
+      int num1 = getAnimalCountByType(animal1);
+      int num2 = getAnimalCountByType(animal2);
+      if (num1 < num2) {
+        String temp = animal1;
         animal1 = animal2;
-        animal2 = tempAnimal;
+        animal2 = temp;
       }
-    }
+    } 
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
-    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   } else if (currentLevel == 3) {
     // Level 3: Addition, Subtraction, Multiplication, and Division with different animal types
     String animal1 = animals[Random().nextInt(animals.length)];
@@ -54,23 +54,13 @@ void generateQuestion() {
       animal2 = animals[Random().nextInt(animals.length)];
     }
     currentQuestionOperator = getRandomOperatorLevel3();
-    if (currentQuestionOperator == '-') {
-      int count1 = getAnimalCountByType(animal1);
-      int count2 = getAnimalCountByType(animal2);
-      if (count1 < count2) {
-        String tempAnimal = animal1;
-        animal1 = animal2;
-        animal2 = tempAnimal;
-      }
-    }
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
-    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   }
 }
 
 String getRandomOperatorLevel2() {
-  List<String> operators = ['+', '-'];
+  List<String> operators = ['-', '-'];
   return operators[Random().nextInt(operators.length)];
 }
 
@@ -84,6 +74,9 @@ int calculateAnswerLevel2(int num1, int num2, String operator) {
     case '+':
       return num1 + num2;
     case '-':
+      if (num1 < num2) {
+        return num2 - num1;
+      }
       return num1 - num2;
     default:
       throw ArgumentError('Invalid operator for Level 2');
