@@ -1,30 +1,71 @@
 import 'dart:math';
 
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
+import 'package:beanmind_flutter/models/game_animal_model.dart';
 
-int currentLevel = 1;
-String currentQuestionType =
-    ''; // To track if the question is about chickens or ducks
+int currentLevel = 3;
+String currentQuestionType = '';
 String currentQuestionOperator = '';
+int randomIndex = 0;
+List<String> animals = [
+  'chicken',
+  'duck',
+];
 
 void generateQuestion() {
+  randomIndex = Random().nextInt(2);
   if (currentLevel == 1) {
     // Level 1: Only counting questions
-    if (Random().nextBool()) {
-      currentQuestionType = 'chicken';
-      question = 'Có bao nhiêu con gà?';
-    } else {
-      currentQuestionType = 'duck';
-      question = 'Có bao nhiêu con vịt?';
+    switch (randomIndex) {
+      case 0:
+        currentQuestionType = 'chicken';
+        question = 'Có bao nhiêu con gà ?';
+        break;
+      case 1:
+        currentQuestionType = 'duck';
+        question = 'Có bao nhiêu con vịt ?';
+        break;
     }
   } else if (currentLevel == 2) {
-    // Level 2: Addition and Subtraction
+    // Level 2: Addition and Subtraction with different animal types
+    String animal1 = animals[Random().nextInt(animals.length)];
+    String animal2 = animals[Random().nextInt(animals.length)];
+    while (animal1 == animal2) {
+      animal2 = animals[Random().nextInt(animals.length)];
+    }
     currentQuestionOperator = getRandomOperatorLevel2();
-    question = 'Số lượng con gà $currentQuestionOperator con vịt là ';
+    if (currentQuestionOperator == '-') {
+      int count1 = getAnimalCountByType(animal1);
+      int count2 = getAnimalCountByType(animal2);
+      if (count1 < count2) {
+        String tempAnimal = animal1;
+        animal1 = animal2;
+        animal2 = tempAnimal;
+      }
+    }
+    question =
+        'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
+    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   } else if (currentLevel == 3) {
-    // Level 3: Addition, Subtraction, Multiplication, and Division
+    // Level 3: Addition, Subtraction, Multiplication, and Division with different animal types
+    String animal1 = animals[Random().nextInt(animals.length)];
+    String animal2 = animals[Random().nextInt(animals.length)];
+    while (animal1 == animal2) {
+      animal2 = animals[Random().nextInt(animals.length)];
+    }
     currentQuestionOperator = getRandomOperatorLevel3();
-    question = 'Số lượng con gà $currentQuestionOperator con vịt là ';
+    if (currentQuestionOperator == '-') {
+      int count1 = getAnimalCountByType(animal1);
+      int count2 = getAnimalCountByType(animal2);
+      if (count1 < count2) {
+        String tempAnimal = animal1;
+        animal1 = animal2;
+        animal2 = tempAnimal;
+      }
+    }
+    question =
+        'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
+    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   }
 }
 
@@ -58,8 +99,57 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
     case '*':
       return num1 * num2;
     case '/':
+      if (num2 == 0) {
+        throw ArgumentError('Division by zero is not allowed');
+      }
       return num1 ~/ num2;
     default:
       throw ArgumentError('Invalid operator for Level 3');
+  }
+}
+
+String getDisplayOperator(String operator) {
+  switch (operator) {
+    case '+':
+      return 'cộng với';
+    case '-':
+      return 'trừ đi';
+    case '*':
+      return 'nhân với';
+    case '/':
+      return 'chia cho';
+    default:
+      throw ArgumentError('Invalid operator');
+  }
+}
+
+int getAnimalCountByType(String animal) {
+  switch (animal) {
+    case 'chicken':
+      return globalChickenCount;
+    case 'duck':
+      return globalDuckCount;
+    default:
+      throw ArgumentError('Invalid animal type');
+  }
+}
+
+String getDisplayAnimalName(String animal) {
+  switch (animal) {
+    case 'chicken':
+      return 'con gà';
+    case 'duck':
+      return 'con vịt';
+    default:
+      throw ArgumentError('Invalid animal type');
+  }
+}
+
+String getAnimalFromOperator(String operator, String position) {
+  List<String> parts = operator.split(' ');
+  if (position == 'first') {
+    return parts[0];
+  } else {
+    return parts[parts.length - 1];
   }
 }

@@ -58,7 +58,7 @@ void generateQuestion() {
       }
     }
     question =
-        'Số lượng ${getDisplayAnimalName(animal1)} $currentQuestionOperator số lượng ${getDisplayAnimalName(animal2)} là ';
+        'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
     currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   } else if (currentLevel == 3) {
     // Level 3: Addition, Subtraction, Multiplication, and Division with different animal types
@@ -78,7 +78,7 @@ void generateQuestion() {
       }
     }
     question =
-        'Số lượng ${getDisplayAnimalName(animal1)} $currentQuestionOperator số lượng ${getDisplayAnimalName(animal2)} là ';
+        'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
     currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   }
 }
@@ -119,6 +119,21 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
       return num1 ~/ num2;
     default:
       throw ArgumentError('Invalid operator for Level 3');
+  }
+}
+
+String getDisplayOperator(String operator) {
+  switch (operator) {
+    case '+':
+      return 'cộng với';
+    case '-':
+      return 'trừ đi';
+    case '*':
+      return 'nhân với';
+    case '/':
+      return 'chia cho';
+    default:
+      throw ArgumentError('Invalid operator');
   }
 }
 
