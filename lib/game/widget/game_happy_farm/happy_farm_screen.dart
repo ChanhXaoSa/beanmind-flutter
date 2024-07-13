@@ -159,42 +159,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     }
   }
 
-  // void checkResult() {
-  //   if (userAnswer.isEmpty) {
-  //     _showDialogError('Bạn chưa nhập số !');
-  //     return;
-  //   }
-  //   userProgress += 1;
-  //   setState(() {
-  //     showResultDialog = true;
-  //   });
-  //   if (globalChickenCount == int.parse(userAnswer)) {
-  //     userPoint += 1;
-  //     _audio.playSuccessSound();
-  //     if (userProgress == totalQuestion) {
-  //       _audio.playCompleteSound();
-  //       String lottieAsset = _getLottieAsset(userPoint);
-  //       _timeRecord.stopTimer();
-  //       _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-  //           lottieAsset, false, userPoint);
-  //       return;
-  //     }
-  //     _showDialog(
-  //         'Đúng rồi !', 'assets/lotties/success.json', true, true, false);
-  //   } else {
-  //     if (userProgress == totalQuestion) {
-  //       _audio.playCompleteSound();
-  //       String lottieAsset = _getLottieAsset(userPoint);
-  //       _timeRecord.stopTimer();
-  //       _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-  //           lottieAsset, false, userPoint);
-  //       return;
-  //     }
-  //     _audio.playWrongSound();
-  //     _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
-  //   }
-  // }
-
   String _getLottieAsset(int userPoint) {
     switch (userPoint) {
       case 1:
@@ -591,6 +555,18 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                             flex: 4,
                             child: Container(
                               alignment: Alignment.topCenter,
+                              margin: EdgeInsets.only(
+                                  top: 15, left: 15, bottom: 15),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors
+                                      .black, // Change this to your desired border color
+                                  width:
+                                      2, // Change this to your desired border width
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    10), // Optional: To round the corners
+                              ),
                               child: Stack(
                                 children: [
                                   GameWidget(game: _happyFarm),

@@ -497,6 +497,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                             Expanded(
                               flex: 4,
                               child: Container(
+                                margin: EdgeInsets.only(left: 15),
                                 alignment: Alignment.topCenter,
                                 child: _splitPanelsMobie,
                               ),
