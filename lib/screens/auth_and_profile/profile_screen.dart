@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/auth_and_profile/profile_component.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
@@ -26,10 +27,11 @@ class ProfileScreen extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children:  [
+                    children: [
                       CircleAvatar(
                         radius: 35,
-                        foregroundImage: NetworkImage(_auth.getUser()!.photoURL!),
+                        foregroundImage:
+                            NetworkImage(_auth.getUser()!.photoURL!),
                       ),
                       const SizedBox(
                         width: 20,
@@ -53,26 +55,12 @@ class ProfileScreen extends GetView<ProfileController> {
               ),
             ),
             Expanded(
-              child: Obx(
-               () =>  ContentArea(
-                  addPadding: false,
-                  child: ListView.separated(
-                   padding: UIParameters.screenPadding,
-                    itemCount: controller.allRecentTest.length,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(
-                        height: 15,
-                      );
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                          constraints: BoxConstraints(maxWidth: 600),
-                          child: RecentQuizCard(recentTest: controller.allRecentTest[index]));
-                    },
-                  ),
-                ),
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: NavigationRailPage(),
               ),
-            )
+            ),
           ],
         ),
       ),
