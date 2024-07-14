@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 class GameController extends GetxController{
   var isLoading = false.obs;
   var selectedGame = RxnString();
+  var shouldReset = false.obs;
 
   String gameThumbnailURL = '/images/game_thumbnail/';
 
@@ -85,6 +86,16 @@ class GameController extends GetxController{
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    ever(selectedGame, (_){
+      if(selectedGame.value == null) {
+
+      }
+    });
   }
 
   void navigateToGameList() {

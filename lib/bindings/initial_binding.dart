@@ -10,5 +10,6 @@ class InitialBinding implements Bindings {
     Get.put(AuthController(), permanent: true);
     Get.put(NotificationService());
     Get.lazyPut(() =>  FireBaseStorageService());
+    Get.put(GameController());
   }
 }
