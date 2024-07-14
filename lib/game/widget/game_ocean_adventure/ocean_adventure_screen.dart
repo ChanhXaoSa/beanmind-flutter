@@ -563,6 +563,16 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                             flex: 4,
                             child: Container(
                               alignment: Alignment.topCenter,
+                              margin: EdgeInsets.only(
+                                  top: 15, left: 15, bottom: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    width: 5,
+                                    color: Theme.of(context)
+                                        .cardColor
+                                        .withAlpha(100)),
+                              ),
                               child: GameWidget(game: _gameOceanAdventure),
                             ),
                           ),

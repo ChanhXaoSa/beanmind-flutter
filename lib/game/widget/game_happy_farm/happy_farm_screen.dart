@@ -588,11 +588,12 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                               margin: EdgeInsets.only(
                                   top: 15, left: 15, bottom: 15),
                               decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: Colors.black,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
+                                    width: 5,
+                                    color: Theme.of(context)
+                                        .cardColor
+                                        .withAlpha(100)),
                               ),
                               child: Stack(
                                 children: [
