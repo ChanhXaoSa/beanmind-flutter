@@ -57,9 +57,6 @@ class ProfileScreen extends GetView<ProfileController> {
             Expanded(
               flex: 1,
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                ),
                 padding: EdgeInsets.all(10),
                 child: NavigationRailPage(),
               ),
