@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_level.dart';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
@@ -8,7 +9,7 @@ import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -125,21 +126,27 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       isCorrect = correctAnswer == int.parse(userAnswer);
     } else if (currentLevel == 3) {
       // Level 3: Addition, Subtraction, Multiplication, and Division
-      int num1 = globalChickenCount;
-      int num2 = globalDuckCount;
-      String operator = currentQuestionOperator;
+      List<String> questionParts = currentQuestionType.split(' ');
+      int num1 = getAnimalCountByType(questionParts[0]); // First animal
+      int num2 = getAnimalCountByType(questionParts[2]); // Second animal
+      print('num1: $num1, num2: $num2');
+      String operator = questionParts[1];
 
       if (operator == '/') {
         if (userAnswer.contains('/')) {
           int correctAnswerQuotient = calculateAnswerLevel3(num1, num2, '/');
           int correctAnswerRemainder = calculateAnswerLevel3(num1, num2, '%');
+          print(
+              'Correct Answer: $correctAnswerQuotient, $correctAnswerRemainder');
 
           List<String> parts = userAnswer.split('/');
           int numerator = int.parse(parts[0]);
           int denominator = int.parse(parts[1]);
+          print('$numerator / $denominator');
           // Perform integer division and modulus
           int quotient = calculateAnswerLevel3(numerator, denominator, '/');
           int remainder = calculateAnswerLevel3(numerator, denominator, '%');
+          print('Quotient: $quotient, Remainder: $remainder');
           isCorrect = (quotient == correctAnswerQuotient && remainder == correctAnswerRemainder);
         } else {
           int correctAnswer = calculateAnswerLevel3(num1, num2, operator);

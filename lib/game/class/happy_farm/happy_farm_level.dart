@@ -46,6 +46,7 @@ Future<void> generateQuestion() async {
     }
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
+    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   } else if (currentLevel == 3) {
     // Level 3: Addition, Subtraction, Multiplication, and Division with different animal types
     String animal1 = animals[Random().nextInt(animals.length)];
@@ -65,6 +66,7 @@ Future<void> generateQuestion() async {
     }
     question =
         'Số lượng ${getDisplayAnimalName(animal1)} ${getDisplayOperator(currentQuestionOperator)} số lượng ${getDisplayAnimalName(animal2)} là ';
+    currentQuestionType = '$animal1 $currentQuestionOperator $animal2';
   }
 }
 
@@ -107,7 +109,7 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
       }
       return num1 ~/ num2;
     case '%':
-      return num1 % num2;  
+      return num1 % num2;
     default:
       throw ArgumentError('Invalid operator for Level 3');
   }
