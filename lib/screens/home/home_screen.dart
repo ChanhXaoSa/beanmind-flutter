@@ -96,7 +96,7 @@ class HomeScreen extends GetView<MyDrawerController> {
                             shrinkWrap: true,
                             itemCount: _quizePprController.allPapers.length*5,
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 6,
+                              crossAxisCount: 4,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
                               childAspectRatio: 0.6,

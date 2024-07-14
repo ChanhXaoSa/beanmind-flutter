@@ -91,9 +91,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   }
 
   void backtoHome() {
+    final GameController controller = Get.find();
     resetGame();
     setState(() {
-      Get.toNamed(GameListScreen.routeName);
+      controller.shouldReset.value = true;
+      Get.offAllNamed(GameListScreen.routeName);
     });
   }
 

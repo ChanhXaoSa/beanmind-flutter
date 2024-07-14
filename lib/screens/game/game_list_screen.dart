@@ -12,6 +12,15 @@ class GameListScreen extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(controller.shouldReset.value) {
+        controller.selectedGame.value = null;
+        controller.shouldReset.value = false;
+      }
+    });
+
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
