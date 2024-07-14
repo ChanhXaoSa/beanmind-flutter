@@ -123,25 +123,29 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       isCorrect = correctAnswer == int.parse(userAnswer);
     } else if (currentLevel == 3) {
       // Level 3: Addition, Subtraction, Multiplication, and Division
-      double num1 = globalChickenCount.toDouble();
-      double num2 = globalDuckCount.toDouble();
+      int num1 = globalChickenCount;
+      int num2 = globalDuckCount;
       String operator = currentQuestionOperator;
-      double correctAnswer = calculateAnswerLevel3(num1, num2, operator);
 
-      if (userAnswer.contains('/')) {
-        List<String> parts = userAnswer.split('/');
-        double numerator = double.parse(parts[0]);
-        double denominator = double.parse(parts[1]);
+      if (operator == '/') {
+        if (userAnswer.contains('/')) {
+          int correctAnswerQuotient = calculateAnswerLevel3(num1, num2, '/');
+          int correctAnswerRemainder = calculateAnswerLevel3(num1, num2, '%');
 
-        // Perform integer division and modulus
-        double quotient = calculateAnswerLevel3(numerator, denominator, '/');
-        double remainder = calculateAnswerLevel3(numerator, denominator, '%');
-
-        // Check if either quotient or remainder matches correct answer
-        isCorrect = (quotient == correctAnswer || remainder == correctAnswer);
+          List<String> parts = userAnswer.split('/');
+          int numerator = int.parse(parts[0]);
+          int denominator = int.parse(parts[1]);
+          // Perform integer division and modulus
+          int quotient = calculateAnswerLevel3(numerator, denominator, '/');
+          int remainder = calculateAnswerLevel3(numerator, denominator, '%');
+          isCorrect = (quotient == correctAnswerQuotient && remainder == correctAnswerRemainder);
+        } else {
+          int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+          isCorrect = correctAnswer == int.parse(userAnswer);
+        }
       } else {
-        // Handle other operations
-        isCorrect = correctAnswer == double.parse(userAnswer);
+        int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+        isCorrect = correctAnswer == int.parse(userAnswer);
       }
     }
 
