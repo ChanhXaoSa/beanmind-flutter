@@ -4,7 +4,7 @@ import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm.dart';
 import 'package:beanmind_flutter/models/game_animal_model.dart';
 
-int currentLevel = 3;
+int currentLevel = 2;
 String currentQuestionType = '';
 String currentQuestionOperator = '';
 int randomIndex = 0;
@@ -71,13 +71,14 @@ Future<void> generateQuestion() async {
 }
 
 String getRandomOperatorLevel2() {
+  //List<String> operators = ['+', '-'];
   List<String> operators = ['+', '-'];
   return operators[Random().nextInt(operators.length)];
 }
 
 String getRandomOperatorLevel3() {
-  //List<String> operators = ['+', '-', '*', '/'];
-  List<String> operators = ['/', '/', '/', '/'];
+  List<String> operators = ['+', '-', '*', '/'];
+  //List<String> operators = ['/', '/', '/', '/'];
   return operators[Random().nextInt(operators.length)];
 }
 

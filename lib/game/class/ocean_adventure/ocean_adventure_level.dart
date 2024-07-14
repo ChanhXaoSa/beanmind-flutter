@@ -90,6 +90,7 @@ String getRandomOperatorLevel2() {
 
 String getRandomOperatorLevel3() {
   List<String> operators = ['+', '-', '*', '/'];
+  //List<String> operators = ['/', '/', '/', '/'];
   return operators[Random().nextInt(operators.length)];
 }
 
@@ -117,6 +118,8 @@ int calculateAnswerLevel3(int num1, int num2, String operator) {
         throw ArgumentError('Division by zero is not allowed');
       }
       return num1 ~/ num2;
+    case '%':
+      return num1 % num2;
     default:
       throw ArgumentError('Invalid operator for Level 3');
   }

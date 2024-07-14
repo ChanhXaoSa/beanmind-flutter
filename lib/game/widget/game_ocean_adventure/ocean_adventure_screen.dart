@@ -46,7 +46,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     '2',
     '3',
     '=',
-    '0'
+    '0',
+    '/'
   ];
 
   void buttonTapped(String button) {
@@ -118,10 +119,27 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       int num1 = getAnimalCountByType(questionParts[0]); // First animal
       int num2 = getAnimalCountByType(questionParts[2]); // Second animal
       String operator = questionParts[1];
-      int correctAnswer = currentLevel == 2
-          ? calculateAnswerLevel2(num1, num2, operator)
-          : calculateAnswerLevel3(num1, num2, operator);
-      isCorrect = correctAnswer == int.parse(userAnswer);
+
+      if (operator == '/' && userAnswer.contains('/')) {
+        // Handle division with remainder for level 3
+        int correctAnswerQuotient = calculateAnswerLevel3(num1, num2, '/');
+        int correctAnswerRemainder = calculateAnswerLevel3(num1, num2, '%');
+
+        List<String> parts = userAnswer.split('/');
+        int numerator = int.parse(parts[0]);
+        int denominator = int.parse(parts[1]);
+
+        int quotient = calculateAnswerLevel3(numerator, denominator, '/');
+        int remainder = calculateAnswerLevel3(numerator, denominator, '%');
+
+        isCorrect = (quotient == correctAnswerQuotient &&
+            remainder == correctAnswerRemainder);
+      } else {
+        int correctAnswer = currentLevel == 2
+            ? calculateAnswerLevel2(num1, num2, operator)
+            : calculateAnswerLevel3(num1, num2, operator);
+        isCorrect = correctAnswer == int.parse(userAnswer);
+      }
     }
 
     if (isCorrect) {

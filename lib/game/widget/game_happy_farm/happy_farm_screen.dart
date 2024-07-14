@@ -119,9 +119,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       }
     } else if (currentLevel == 2) {
       // Level 2: Addition and Subtraction
-      int num1 = globalChickenCount;
-      int num2 = globalDuckCount;
-      String operator = currentQuestionOperator;
+      List<String> questionParts = currentQuestionType.split(' ');
+      int num1 = getAnimalCountByType(questionParts[0]); // First animal
+      int num2 = getAnimalCountByType(questionParts[2]); // Second animal
+      print('num1: $num1, num2: $num2');
+      String operator = questionParts[1];
       int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
       isCorrect = correctAnswer == int.parse(userAnswer);
     } else if (currentLevel == 3) {
