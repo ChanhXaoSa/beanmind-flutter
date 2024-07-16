@@ -3,9 +3,10 @@ import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/font_style.dart';
 import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_level.dart';
 import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
+import 'package:beanmind_flutter/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
@@ -32,6 +33,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
 
   bool _isLoading = true;
   bool isCorrect = false;
+  String gameId = 'game001';
 
   List<String> numberPad = [
     '7',
@@ -149,6 +151,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -160,6 +164,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;

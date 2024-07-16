@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
 import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 
 int currentLevel = 2;
 String currentQuestionType = '';

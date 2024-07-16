@@ -12,14 +12,12 @@ class GameListScreen extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if(controller.shouldReset.value) {
+      if (controller.shouldReset.value) {
         controller.selectedGame.value = null;
         controller.shouldReset.value = false;
       }
     });
-
 
     return Scaffold(
       appBar: PreferredSize(
@@ -41,7 +39,7 @@ class GameListScreen extends GetView<GameController> {
                   )
                 : CustomAppBar(
                     title: 'Thư viện trò chơi',
-              showAudioButton: true,
+                    showAudioButton: true,
                   );
           }),
         ),
@@ -77,7 +75,7 @@ class GameListScreen extends GetView<GameController> {
         return GestureDetector(
           onTap: () {
             controller.isLoading.value = true;
-            controller.selectedGame.value = controller.games[index]['gameType'];
+            controller.selectedGame.value = controller.games[index]['gameId'];
             // Simulate a delay for loading the game
             Future.delayed(Duration(seconds: 0), () {
               controller.isLoading.value = false;

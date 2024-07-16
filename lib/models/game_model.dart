@@ -3,6 +3,41 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/components.dart';
 
+class GameModel {
+  final String id;
+  final String name;
+  final String description;
+  final String image;
+  final String price;
+  final String rating;
+  final String publisher;
+  final String releaseDate;
+
+  GameModel({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.price,
+    required this.rating,
+    required this.publisher,
+    required this.releaseDate,
+  });
+
+  factory GameModel.fromJson(Map<String, dynamic> json) {
+    return GameModel(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      image: json['image'],
+      price: json['price'],
+      rating: json['rating'],
+      publisher: json['publisher'],
+      releaseDate: json['releaseDate'],
+    );
+  }
+}
+
 class GameAnimalModel {
   final String id;
   String? imageurl;
@@ -130,3 +165,37 @@ class Animal {
     return component;
   }
 }
+
+class ItemModel {
+  final String id;
+  String? imageurl;
+  final int price;
+
+  ItemModel({required this.id, this.imageurl, required this.price});
+
+  factory ItemModel.fromString(String jsonString) =>
+      ItemModel.fromJson(json.decode(jsonString));
+
+  ItemModel.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        imageurl = json['imageurl'] as String?,
+        price = json['price'] as int;
+
+  ItemModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
+      : id = snapshot.id,
+        imageurl = snapshot.data()?['imageurl'] as String?,
+        price = snapshot.data()?['price'] as int;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'imageurl': imageurl,
+        'price': price,
+      };
+}
+
+// Game Shopping
+List<ItemModel> upperItemModel = [];
+List<ItemModel> lowerItemModel = [];
+List<ItemModel> startLowerItemModel = [];
+int balance = 100;
+int lastbalance = 20;

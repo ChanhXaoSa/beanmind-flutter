@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
@@ -11,10 +12,9 @@ import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
-import '../../../models/game_item_model.dart';
+import '../../../models/game_model.dart';
 
 class GameShoppingScreen extends StatefulWidget {
   @override
@@ -31,6 +31,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
 
   bool showResultDialog = false;
   bool _isLoading = true;
+  String gameId = 'game004';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -111,6 +112,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           ();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -123,6 +126,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           ();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;

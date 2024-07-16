@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/models/game_item_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

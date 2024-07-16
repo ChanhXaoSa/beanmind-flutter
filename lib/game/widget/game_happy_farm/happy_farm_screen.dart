@@ -2,8 +2,9 @@ import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_level.dart';
 import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
+import 'package:beanmind_flutter/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
@@ -33,6 +34,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   bool _isLoading = true;
   bool isCorrect = false;
+  String gameId = 'game002';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -167,6 +169,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -178,6 +182,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
