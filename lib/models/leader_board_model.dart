@@ -47,3 +47,42 @@ class UserData{
 
   UserData.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot, ) : name = snapshot['name'] as String, image = snapshot['profilepic'] as String;
 }
+
+class LeaderBoardGameData {
+  final String? correctCount;
+  final String? userId;
+  final int? time;
+  final String? paperId;
+  final int? points;
+  late UserData user;
+
+  LeaderBoardGameData({
+    this.correctCount,
+    this.userId,
+    this.time,
+    this.paperId,
+    this.points,
+  });
+
+  LeaderBoardGameData.fromJson(Map<String, dynamic> json)
+    : correctCount = json['correct_count'] as String?,
+      userId = json['user_id'] as String?,
+      time = json['time'] as int?,
+      paperId = json['paper_id'] as String?,
+      points = json['points'] as int?;
+
+  LeaderBoardGameData.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
+    : correctCount = snapshot['correct_count'] as String?,
+      userId = snapshot['user_id'] as String?,
+      time = snapshot['time'] as int,
+      paperId = snapshot['paper_id'] as String?,
+      points = snapshot['points'] as int?;    
+
+  Map<String, dynamic> toJson() => {
+    'correct_count' : correctCount,
+    'user_id' : userId,
+    'time' : time,
+    'paper_id' : paperId,
+    'points' : points
+  };
+}

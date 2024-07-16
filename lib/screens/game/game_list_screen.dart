@@ -1,5 +1,7 @@
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
+import 'package:beanmind_flutter/configs/themes/app_icons_icons.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/game/widget/game_leader_board/game_leader_board_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
@@ -91,11 +93,36 @@ class GameListScreen extends GetView<GameController> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5.0), // Bo góc tại đây
-              child: Container(
-                child: Image.network(
-                  controller.games[index]['image']!,
-                  fit: BoxFit.cover,
-                ),
+              child: Stack(
+                children: [
+                  Image.network(
+                    controller.games[index]['image']!,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: -10,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Get.toNamed(GameLeaderBoardScreen.routeName,
+                            arguments: controller.games[index]['gameId']);
+                      },
+                      child: Ink(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
+                        child: CircleAvatar(
+                          radius: 30, // Adjust the radius as needed
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: Icon(
+                            AppIcons.trophyoutline,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
