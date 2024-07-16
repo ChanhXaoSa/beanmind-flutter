@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/item_panel_shopphing.dart';
 import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_drop_region.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
-import 'package:beanmind_flutter/models/game_item_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

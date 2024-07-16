@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
-import 'package:beanmind_flutter/models/game_item_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:flutter/material.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 

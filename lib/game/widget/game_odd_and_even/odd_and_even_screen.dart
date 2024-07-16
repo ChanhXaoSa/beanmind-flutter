@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +30,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
   bool _isLoading = true;
+  String gameId = 'game005';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -128,6 +130,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -139,6 +143,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;

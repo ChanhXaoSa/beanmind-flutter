@@ -3,6 +3,7 @@ import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/game/class/audio.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_level.dart';
 import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_user.dart';
+import 'package:beanmind_flutter/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/game/class/timer.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
@@ -37,6 +38,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   int totalQuestion = 3;
   String userAnswer = '';
   var randomNumber = Random();
+  String gameId = 'game003';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -107,6 +109,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -118,6 +122,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
-import 'package:beanmind_flutter/models/game_animal_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 
 int currentLevel = 3;
 String currentQuestionType = ''; // To track the type of animal
