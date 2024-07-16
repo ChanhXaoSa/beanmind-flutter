@@ -41,12 +41,44 @@ class HomeScreen extends GetView<MyDrawerController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Transform.translate(
-                        offset: const Offset(-10, 0),
-                        child: CircularButton(
-                          child: const Icon(AppIcons.menuleft),
-                          onTap: controller.toggleDrawer,
-                        ),
+                      Row(
+                        children: [
+                          Transform.translate(
+                            offset: const Offset(-10, 0),
+                            child: CircularButton(
+                              child: const Icon(AppIcons.menuleft),
+                              onTap: controller.toggleDrawer,
+                            ),
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Tìm kiếm khóa học',
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: Icon(Icons.filter_list),
+                            onPressed: () {
+                              // TODO: Implement filter functionality
+                            },
+                          ),
+                          Spacer(),
+                          IconButton(
+                            icon: Icon(Icons.notifications),
+                            onPressed: () {
+                            },
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 10),
                       Padding(
@@ -70,9 +102,15 @@ class HomeScreen extends GetView<MyDrawerController> {
                           ],
                         ),
                       ),
-                      const Text('Bạn muốn học gì hôm nay ?',
-                          style: kHeaderTS),
-                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          const SizedBox(width: 10),
+
+                        ],
+                      ),
+                      // const Text('Bạn muốn học gì hôm nay ?',
+                      //     style: kHeaderTS),
+                      // const SizedBox(height: 15),
                     ],
                   ),
                 ),

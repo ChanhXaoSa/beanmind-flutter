@@ -14,4 +14,6 @@ export 'leader_board/leader_board_controller.dart';
 
 export 'course/course_controller.dart';
 
+export 'course_detail/course_detail_controller.dart';
+
 export 'game/game_controller.dart';

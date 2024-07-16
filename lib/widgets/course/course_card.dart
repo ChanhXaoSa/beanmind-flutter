@@ -4,7 +4,7 @@ import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/controllers/quiz_paper/quiz_papers_controller.dart';
 
-class CourseCard extends GetView<QuizPaperController> {
+class CourseCard extends GetView<CourseController> {
   const CourseCard({super.key});
 
   @override
@@ -17,7 +17,9 @@ class CourseCard extends GetView<QuizPaperController> {
       ),
       child: InkWell(
         borderRadius: UIParameters.cardBorderRadius,
-        onTap: () {},
+        onTap: () {
+          controller.navigateToCourseDetail();
+        },
         child: Padding(
           padding: const EdgeInsets.all(_padding),
           child: Column(
