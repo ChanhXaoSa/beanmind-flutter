@@ -9,9 +9,10 @@ import 'package:beanmind_flutter/widgets/widgets.dart';
 
 class GameLeaderBoardScreen extends GetView<LeaderBoardController> {
   GameLeaderBoardScreen({Key? key}) : super(key: key) {
-    SchedulerBinding.instance.addPostFrameCallback((d) {  
-      controller.getAllGame("game001");
-      controller.getMyGameScores("game001");
+    SchedulerBinding.instance.addPostFrameCallback((d) {
+      final paper = Get.arguments as GameModel;
+      controller.getAllGame(paper.id);
+      controller.getMyGameScores(paper.id);
     });
   }
 

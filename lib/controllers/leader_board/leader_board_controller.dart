@@ -62,8 +62,8 @@ class LeaderBoardController extends GetxController {
     gameloadingStatus.value = LoadingStatus.loading;
     try {
       final QuerySnapshot<Map<String, dynamic>> _leaderBoardSnapShot =
-          await getleaderBoardGame(gameId: gameId)
-              .orderBy("time", descending: false)
+          await getleaderBoardGame(paperId: gameId)
+              .orderBy("time", descending: true)
               .orderBy("points", descending: true)
               .limit(10)
               .get();
@@ -92,7 +92,7 @@ class LeaderBoardController extends GetxController {
     }
     try {
       final DocumentSnapshot<Map<String, dynamic>> _leaderBoardGameSnapShot =
-          await getleaderBoardGame(gameId: gameId).doc(user.email).get();
+          await getleaderBoardGame(paperId: gameId).doc(user.email).get();
       final _myGameScores = LeaderBoardGameData.fromSnapShot(_leaderBoardGameSnapShot);
       _myGameScores.user = UserData(name: user.displayName!, image: user.photoURL);
       myGameScores.value = _myGameScores;

@@ -10,7 +10,7 @@ final userFR = fi.collection('users');
 final quizePaperFR = fi.collection('quizpapers');
 final leaderBoardFR = fi.collection('leaderboard');
 final gameItemFR = fi.collection('itemstore');
-final gameFR = fi.collection('leaderboard');
+final gameFR = fi.collection('games');
 
 DocumentReference recentQuizesData(
         {required String userId, required String paperId}) =>
@@ -33,8 +33,8 @@ CollectionReference<Map<String, dynamic>> getleaderBoard(
     leaderBoardFR.doc(paperId).collection('scores');
 
 CollectionReference<Map<String, dynamic>> getleaderBoardGame(
-        {required String gameId}) =>
-    leaderBoardFR.doc(gameId).collection('game_scores');
+        {required String paperId}) =>
+    leaderBoardFR.doc(paperId).collection('game_scores');
 
 DocumentReference questionsFR(
         {required String paperId, required String questionsId}) =>
@@ -42,12 +42,13 @@ DocumentReference questionsFR(
 
 // game item store
 CollectionReference<Map<String, dynamic>> getallItems() => gameItemFR;
-DocumentReference gameItemFRDoc({required String itemId}) =>
-    gameItemFR.doc(itemId);
+DocumentReference gameItemFRDoc({required String id}) =>
+    gameItemFR.doc(id);
 
 // game store
 CollectionReference<Map<String, dynamic>> getallGames() => gameFR;
-DocumentReference gameFRDoc({required String gameId}) => gameFR.doc(gameId);  
+
+DocumentReference gameFRDoc({required String id}) => gameFR.doc(id);  
 
 //Reference get firebaseStorage => FirebaseStorage.instanceFor(bucket: 'gs://fire-base-chat-cc3e9.appspot.com').ref();
 Reference get firebaseStorage => FirebaseStorage.instance.ref();
