@@ -12,6 +12,7 @@ class LeaderBoardController extends GetxController {
   final myScores = Rxn<LeaderBoardData>();
   final myGameScores = Rxn<LeaderBoardGameData>();
   final loadingStatus = LoadingStatus.completed.obs;
+  final gameloadingStatus = LoadingStatus.completed.obs;
 
   void getAll(String paperId) async {
     loadingStatus.value = LoadingStatus.loading;
@@ -58,7 +59,7 @@ class LeaderBoardController extends GetxController {
 
   // leader board for game
   void getAllGame(String gameId) async {
-    loadingStatus.value = LoadingStatus.loading;
+    gameloadingStatus.value = LoadingStatus.loading;
     try {
       final QuerySnapshot<Map<String, dynamic>> _leaderBoardSnapShot =
           await getleaderBoardGame(gameId: gameId)
@@ -76,9 +77,9 @@ class LeaderBoardController extends GetxController {
       }
 
       leaderBoardGame.assignAll(allData);
-      loadingStatus.value = LoadingStatus.completed;
+      gameloadingStatus.value = LoadingStatus.completed;
     } catch (e) {
-      loadingStatus.value = LoadingStatus.error;
+      gameloadingStatus.value = LoadingStatus.error;
       AppLogger.e(e);
     }
   }

@@ -9,10 +9,9 @@ import 'package:beanmind_flutter/widgets/widgets.dart';
 
 class GameLeaderBoardScreen extends GetView<LeaderBoardController> {
   GameLeaderBoardScreen({Key? key}) : super(key: key) {
-    SchedulerBinding.instance.addPostFrameCallback((d) {
-      final paper = Get.arguments;
-      controller.getAllGame(paper);
-      controller.getMyGameScores(paper);
+    SchedulerBinding.instance.addPostFrameCallback((d) {  
+      controller.getAllGame("game001");
+      controller.getMyGameScores("game001");
     });
   }
 
@@ -33,7 +32,7 @@ class GameLeaderBoardScreen extends GetView<LeaderBoardController> {
         child: BackgroundDecoration(
           showGradient: true,
           child: Obx(
-            () => controller.loadingStatus.value == LoadingStatus.loading
+            () => controller.gameloadingStatus.value == LoadingStatus.loading
                 ? const ContentArea(
                     addPadding: true,
                     child: LeaderBoardPlaceHolder(),

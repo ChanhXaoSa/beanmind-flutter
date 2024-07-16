@@ -10,7 +10,7 @@ final userFR = fi.collection('users');
 final quizePaperFR = fi.collection('quizpapers');
 final leaderBoardFR = fi.collection('leaderboard');
 final gameItemFR = fi.collection('itemstore');
-final gameFR = fi.collection('games');
+final gameFR = fi.collection('leaderboard');
 
 DocumentReference recentQuizesData(
         {required String userId, required String paperId}) =>
@@ -34,7 +34,7 @@ CollectionReference<Map<String, dynamic>> getleaderBoard(
 
 CollectionReference<Map<String, dynamic>> getleaderBoardGame(
         {required String gameId}) =>
-    gameFR.doc(gameId).collection('game_scores');
+    leaderBoardFR.doc(gameId).collection('game_scores');
 
 DocumentReference questionsFR(
         {required String paperId, required String questionsId}) =>
