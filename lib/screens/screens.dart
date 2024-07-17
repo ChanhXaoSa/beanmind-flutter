@@ -9,6 +9,11 @@ export 'quiz/quiz_screen.dart';
 export 'quiz/answer_check_screen.dart';
 export 'quiz/quiz_overview_screen.dart';
 export 'quiz/result_screen.dart';
+
 export 'course/course_screen.dart';
+export 'course/course_learning_screen.dart';
+export 'course/course_detail_screen.dart';
+
 export 'game/game_list_screen.dart';
+
 export 'video_learning/video_learning_screen.dart';
