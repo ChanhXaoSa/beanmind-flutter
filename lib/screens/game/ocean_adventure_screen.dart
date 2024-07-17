@@ -528,7 +528,15 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                           },
                         );
                       },
-                      child: const Text('Hướng dẫn'),
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding:
+                            EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                      ),
+                      child: Icon(
+                        Icons.help,
+                        size: 30,
+                      ),
                     ),
                   ],
                 ),
@@ -589,7 +597,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                               child: GridView.builder(
                                 itemCount: numberPad.length,
                                 physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                padding: EdgeInsets.fromLTRB(10, 12, 10, 0),
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 4,

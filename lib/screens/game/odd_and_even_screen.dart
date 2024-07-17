@@ -474,7 +474,15 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                           },
                         );
                       },
-                      child: const Text('Hướng dẫn'),
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding:
+                            EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                      ),
+                      child: Icon(
+                        Icons.help,
+                        size: 30,
+                      ),
                     ),
                   ],
                 ),

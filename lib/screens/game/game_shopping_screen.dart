@@ -456,7 +456,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text('Hướng dẫn'),
-                                content: const Text(
+                                content: Text(
                                   'Nội dung hướng dẫn người chơi...',
                                 ),
                                 actions: [
@@ -469,7 +469,15 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                             },
                           );
                         },
-                        child: const Text('Hướng dẫn'),
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding:
+                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                        ),
+                        child: Icon(
+                          Icons.help,
+                          size: 30,
+                        ),
                       ),
                     ],
                   ),
