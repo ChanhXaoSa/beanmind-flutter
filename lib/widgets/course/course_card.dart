@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/controllers/quiz_paper/quiz_papers_controller.dart';
 
 class CourseCard extends GetView<CourseController> {
   const CourseCard({super.key});
