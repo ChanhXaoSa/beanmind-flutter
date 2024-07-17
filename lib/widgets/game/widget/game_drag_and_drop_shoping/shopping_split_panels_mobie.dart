@@ -127,21 +127,6 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double baseScreenWidth =
-        1100; // Chiều rộng cơ bản mà bạn muốn bắt đầu từ 17 cột.
-    double baseColumns = 14; // Số cột cho chiều rộng cơ bản.
-
-// Tính toán tỉ lệ giữa chiều rộng màn hình hiện tại và chiều rộng cơ bản.
-    double ratio = screenWidth / baseScreenWidth;
-
-// Tính toán số cột dựa trên tỉ lệ. Bạn có thể làm tròn số này để có số cột nguyên.
-    int columns = (baseColumns * ratio).round();
-
-// Đảm bảo rằng số cột không vượt quá một giới hạn nhất định nếu cần.
-    columns = columns.clamp(13, 14); // Giới hạn số cột từ 13 đến 17.
-    double size = screenWidth / columns;
-
     return Column(
       children: <Widget>[
         Expanded(
@@ -263,7 +248,7 @@ class DragDropList extends StatelessWidget {
             crossAxisCount: 10, // Số lượng mục trong một hàng
             mainAxisSpacing: 1, // Khoảng cách giữa các hàng
             crossAxisSpacing: 1, // Khoảng cách giữa các cột
-            childAspectRatio: 1, // Tỷ lệ chiều rộng/chiều cao của mục
+            childAspectRatio: 0.8, // Tỷ lệ chiều rộng/chiều cao của mục
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
@@ -299,12 +284,12 @@ class ShoppingCartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Center(
+      child: FittedBox(
         child: Column(
           children: [
             Image.network(
               product.imageurl ?? '',
-              scale: 0.6,
+              scale: 1,
             ),
             Text('\$${product.price}',
                 style: const TextStyle(
@@ -312,6 +297,7 @@ class ShoppingCartItem extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none)),
+                    SizedBox(height: 10,),
           ],
         ),
       ),
