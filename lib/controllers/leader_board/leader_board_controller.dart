@@ -56,7 +56,6 @@ class LeaderBoardController extends GetxController {
     }
   }
 
-
   // leader board for game
   void getAllGame(String gameId) async {
     gameloadingStatus.value = LoadingStatus.loading;
