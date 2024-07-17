@@ -127,6 +127,21 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double baseScreenWidth =
+        1100; // Chiều rộng cơ bản mà bạn muốn bắt đầu từ 17 cột.
+    double baseColumns = 14; // Số cột cho chiều rộng cơ bản.
+
+// Tính toán tỉ lệ giữa chiều rộng màn hình hiện tại và chiều rộng cơ bản.
+    double ratio = screenWidth / baseScreenWidth;
+
+// Tính toán số cột dựa trên tỉ lệ. Bạn có thể làm tròn số này để có số cột nguyên.
+    int columns = (baseColumns * ratio).round();
+
+// Đảm bảo rằng số cột không vượt quá một giới hạn nhất định nếu cần.
+    columns = columns.clamp(13, 14); // Giới hạn số cột từ 13 đến 17.
+    double size = screenWidth / columns;
+
     return Column(
       children: <Widget>[
         Expanded(
@@ -139,8 +154,8 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
                   children: [
                     Text('Số tiền bạn có: ${balance} \$',
                         style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
+                          fontSize: 30,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         )),
                   ],
@@ -149,7 +164,7 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
                   children: [
                     Text(
                       'Số tiền giữ lại theo yêu cầu: ${lastbalance} \$',
-                      style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -161,10 +176,17 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
           flex: 1,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.deepPurple[250],
-              border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            border: Border.all(color: Colors.white, width: 2),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
             child: DragDropList(
               products: upperItemModel,
               onDragStart: onDragStart,
@@ -238,7 +260,7 @@ class DragDropList extends StatelessWidget {
       builder: (context, candidateData, rejectedData) {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 8, // Số lượng mục trong một hàng
+            crossAxisCount: 10, // Số lượng mục trong một hàng
             mainAxisSpacing: 1, // Khoảng cách giữa các hàng
             crossAxisSpacing: 1, // Khoảng cách giữa các cột
             childAspectRatio: 1, // Tỷ lệ chiều rộng/chiều cao của mục
@@ -282,12 +304,12 @@ class ShoppingCartItem extends StatelessWidget {
           children: [
             Image.network(
               product.imageurl ?? '',
-              scale: 0.7,
+              scale: 0.6,
             ),
             Text('\$${product.price}',
                 style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                    fontSize: 22,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none)),
           ],

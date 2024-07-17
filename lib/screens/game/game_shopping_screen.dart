@@ -414,7 +414,6 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       return Center(child: ProgressWidgets());
     } else {
       return Container(
-        decoration: BoxDecoration(gradient: mainGradient(context)),
         child: KeyboardListener(
           focusNode: FocusNode(),
           onKeyEvent: (KeyEvent event) {
@@ -430,13 +429,12 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
             }
           },
           child: Scaffold(
-            backgroundColor: Colors.white70,
             body: Column(
               children: [
                 Container(
                   padding: const EdgeInsets.only(
                     left: 20,
-                    right: 20,
+                    right: 25,
                   ),
                   height: 60,
                   decoration: BoxDecoration(gradient: mainGradient(context)),
@@ -500,7 +498,17 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                 Expanded(
                   child: isWideScreen
                       ? Container(
-                          color: Colors.white70,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage(
+                                  'images/background/background_shopping_game.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.7),
+                                BlendMode.darken,
+                              ),
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -537,39 +545,52 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                             ],
                           ),
                         )
-                      : Column(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                child: _shopingSplitPanelsMobie,
+                      : Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage(
+                                  'images/background/background_shopping_game.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.5),
+                                BlendMode.darken,
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: GridView.builder(
-                                  itemCount: numberPad.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Số cột
-                                    childAspectRatio: 4, // Tỷ lệ khung hình
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return MyButton(
-                                      child: numberPad[index],
-                                      onTap: () =>
-                                          buttonTapped(numberPad[index]),
-                                    );
-                                  },
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  child: _shopingSplitPanelsMobie,
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                 ),
                 Focus(
