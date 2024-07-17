@@ -14,16 +14,17 @@ class AuthController extends GetxController {
     super.onReady();
   }
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  late FirebaseAuth _auth;
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
 
   void initAuth() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? hasSeenIntroduction = prefs.getBool('hasSeenIntroduction');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // bool? hasSeenIntroduction = prefs.getBool('hasSeenIntroduction');
 
     await Future.delayed(const Duration(seconds: 2)); // waiting in splash
-    // _auth = FirebaseAuth.instance;
+    _auth = FirebaseAuth.instance;
     _authStateChanges = _auth.authStateChanges();
     _authStateChanges.listen((User? user) {
       _user.value = user;
@@ -33,10 +34,11 @@ class AuthController extends GetxController {
       //   navigateToHome();
       // }
     });
-    if (hasSeenIntroduction == null || !hasSeenIntroduction) {
-      navigateToIntroduction();
-      prefs.setBool('hasSeenIntroduction', true);
-    }
+    navigateToIntroduction();
+    // if (hasSeenIntroduction == null || !hasSeenIntroduction) {
+    //   navigateToIntroduction();
+    //   prefs.setBool('hasSeenIntroduction', true);
+    // }
   }
 
   Future<void> siginInWithGoogle() async {

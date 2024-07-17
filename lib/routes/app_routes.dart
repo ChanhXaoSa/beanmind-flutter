@@ -62,10 +62,9 @@ class AppRoutes {
               Get.put(MyDrawerController());
               Get.put(CourseController());
               Get.put(GameController());
-            })
-        ),
-    GetPage(
-        name: CourseDetailScreen.routeName,
-        page: () => const CourseDetailScreen()),
+            })),
+        GetPage(
+            name: CourseDetailScreen.routeName,
+            page: () => const CourseDetailScreen()),
       ];
 }
