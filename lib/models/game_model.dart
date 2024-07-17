@@ -6,36 +6,50 @@ import 'package:flame/components.dart';
 class GameModel {
   final String id;
   final String name;
-  final String description;
-  final String image;
-  final String price;
-  final String rating;
-  final String publisher;
-  final String releaseDate;
+  // final String description;
+  // final String image;
+  // final String price;
+  // final String rating;
+  // final String publisher;
+  // final String releaseDate;
 
   GameModel({
     required this.id,
     required this.name,
-    required this.description,
-    required this.image,
-    required this.price,
-    required this.rating,
-    required this.publisher,
-    required this.releaseDate,
+    // required this.description,
+    // required this.image,
+    // required this.price,
+    // required this.rating,
+    // required this.publisher,
+    // required this.releaseDate,
   });
+
+  factory GameModel.fromString(String jsonString) =>
+      GameModel.fromJson(json.decode(jsonString));
 
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
-      image: json['image'],
-      price: json['price'],
-      rating: json['rating'],
-      publisher: json['publisher'],
-      releaseDate: json['releaseDate'],
+      // description: json['description'],
+      // image: json['image'],
+      // price: json['price'],
+      // rating: json['rating'],
+      // publisher: json['publisher'],
+      // releaseDate: json['releaseDate'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        // 'description': description,
+        // 'image': image,
+        // 'price': price,
+        // 'rating': rating,
+        // 'publisher': publisher,
+        // 'releaseDate': releaseDate,
+      };
 }
 
 class GameAnimalModel {

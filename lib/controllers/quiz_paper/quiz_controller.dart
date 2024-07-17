@@ -33,8 +33,6 @@ class QuizController extends GetxController {
     super.onClose();
   }
 
-  
-
   Future<bool> onExitOfQuiz() async{
     return Dialogs.quizEndDialog( );
   }
