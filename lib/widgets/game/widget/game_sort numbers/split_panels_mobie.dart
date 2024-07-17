@@ -1,5 +1,5 @@
-import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_level.dart';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_level.dart';
 import 'package:flutter/material.dart';
 
 class SplitPanelsMobie extends StatefulWidget {

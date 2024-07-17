@@ -1,43 +1,39 @@
-import 'package:beanmind_flutter/controllers/game/game_controller.dart';
-import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_level.dart';
-import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
-import 'package:beanmind_flutter/game/class/save_game_result.dart';
-import 'package:beanmind_flutter/game/class/timer.dart';
+import 'dart:math';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/font_style.dart';
+import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_level.dart';
+import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_user.dart';
+import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/timer.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
-import 'happy_farm.dart';
 
-class HappyFarmScreen extends StatefulWidget {
-  const HappyFarmScreen({Key? key}) : super(key: key);
-  static const String routeName = '/happy_farm';
+class OceanAdventureScreen extends StatefulWidget {
   @override
-  State<HappyFarmScreen> createState() => _HappyFarmScreenState();
+  _OceanAdventureScreenState createState() => _OceanAdventureScreenState();
 }
 
-class _HappyFarmScreenState extends State<HappyFarmScreen> {
+class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   final FocusNode _resultFocusNode = FocusNode();
   final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
-  late HappyFarm _happyFarm;
+  late GameOceanAdventure _gameOceanAdventure;
   TimeRecord _timeRecord = TimeRecord();
+  var randomNumber = Random();
 
   bool _isLoading = true;
   bool isCorrect = false;
-  String gameId = 'game002';
-
-  var whiteTextStyle = const TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
+  String gameId = 'game001';
 
   List<String> numberPad = [
     '7',
@@ -89,17 +85,20 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _happyFarm = HappyFarm(animalslist: animalslist);
+      _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+      resetAnimalOcean();
+      generateQuestion();
     });
   }
 
   void backtoHome() {
-    final GameController controller = Get.find();
-    resetGame();
+    // go to GameList
     setState(() {
-      controller.shouldReset.value = true;
-      Get.offAllNamed(GameListScreen.routeName);
+      userAnswer = '';
+      _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+      resetAnimalOcean();
     });
+    Get.offAllNamed(GameListScreen.routeName);
   }
 
   void checkResult() {
@@ -114,50 +113,33 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
     if (currentLevel == 1) {
       // Level 1: Counting
-      if (currentQuestionType == 'chicken') {
-        isCorrect = globalChickenCount == int.parse(userAnswer);
-      } else if (currentQuestionType == 'duck') {
-        isCorrect = globalDuckCount == int.parse(userAnswer);
-      }
-    } else if (currentLevel == 2) {
-      // Level 2: Addition and Subtraction
+      int correctCount = getAnimalCountByType(currentQuestionType);
+      isCorrect = correctCount == int.parse(userAnswer);
+    } else if (currentLevel == 2 || currentLevel == 3) {
+      // Level 2 and Level 3
       List<String> questionParts = currentQuestionType.split(' ');
       int num1 = getAnimalCountByType(questionParts[0]); // First animal
       int num2 = getAnimalCountByType(questionParts[2]); // Second animal
-      print('num1: $num1, num2: $num2');
-      String operator = questionParts[1];
-      int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
-      isCorrect = correctAnswer == int.parse(userAnswer);
-    } else if (currentLevel == 3) {
-      // Level 3: Addition, Subtraction, Multiplication, and Division
-      List<String> questionParts = currentQuestionType.split(' ');
-      int num1 = getAnimalCountByType(questionParts[0]); // First animal
-      int num2 = getAnimalCountByType(questionParts[2]); // Second animal
-      print('num1: $num1, num2: $num2');
       String operator = questionParts[1];
 
-      if (operator == '/') {
-        if (userAnswer.contains('/')) {
-          int correctAnswerQuotient = calculateAnswerLevel3(num1, num2, '/');
-          int correctAnswerRemainder = calculateAnswerLevel3(num1, num2, '%');
-          print(
-              'Correct Answer: $correctAnswerQuotient, $correctAnswerRemainder');
+      if (operator == '/' && userAnswer.contains('/')) {
+        // Handle division with remainder for level 3
+        int correctAnswerQuotient = calculateAnswerLevel3(num1, num2, '/');
+        int correctAnswerRemainder = calculateAnswerLevel3(num1, num2, '%');
 
-          List<String> parts = userAnswer.split('/');
-          int numerator = int.parse(parts[0]);
-          int denominator = int.parse(parts[1]);
-          print('$numerator / $denominator');
-          // Perform integer division and modulus
-          int quotient = calculateAnswerLevel3(numerator, denominator, '/');
-          int remainder = calculateAnswerLevel3(numerator, denominator, '%');
-          print('Quotient: $quotient, Remainder: $remainder');
-          isCorrect = (quotient == correctAnswerQuotient && remainder == correctAnswerRemainder);
-        } else {
-          int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
-          isCorrect = correctAnswer == int.parse(userAnswer);
-        }
+        List<String> parts = userAnswer.split('/');
+        int numerator = int.parse(parts[0]);
+        int denominator = int.parse(parts[1]);
+
+        int quotient = calculateAnswerLevel3(numerator, denominator, '/');
+        int remainder = calculateAnswerLevel3(numerator, denominator, '%');
+
+        isCorrect = (quotient == correctAnswerQuotient &&
+            remainder == correctAnswerRemainder);
       } else {
-        int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+        int correctAnswer = currentLevel == 2
+            ? calculateAnswerLevel2(num1, num2, operator)
+            : calculateAnswerLevel3(num1, num2, operator);
         isCorrect = correctAnswer == int.parse(userAnswer);
       }
     }
@@ -211,7 +193,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       Navigator.of(context).pop();
       setState(() {
         userAnswer = '';
-        _happyFarm = HappyFarm(animalslist: animalslist);
+        _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+        resetAnimalOcean();
+        generateQuestion();
+      });
+      setState(() {
         showResultDialog = false;
       });
     }
@@ -228,18 +214,15 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   @override
   void initState() {
     super.initState();
-    resetAnimalFarm();
-    fetchData();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((value) => setState(() {}));
-    delay3Seconds();
-  }
-
-  // delay 3 seconds
-  Future<void> delay3Seconds() async {
-    await Future.delayed(Duration(seconds: 3));
-    setState(() {
+      ..initialize().then((value) => {setState(() {})});
+    userAnswer = '';
+    userPoint = 0;
+    userProgress = 0;
+    fetchData();
+    generateQuestion();
+    Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _timeRecord.startTimer();
       });
@@ -248,13 +231,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   Future<void> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    resetAnimalOcean();
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
-      // print json data
-      snapshot.docs.forEach((doc) {
-        print(doc.data());
-      });
+
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
@@ -263,15 +244,14 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
       });
 
+      // Update startLower and lower with the fetched items
       setState(() {
+        resetAnimalOcean();
         animalslist = List<GameAnimalModel>.from(items);
-        _happyFarm = HappyFarm(animalslist: animalslist);
+        _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
       });
     } catch (e) {
       print('Error fetching data: $e');
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -305,10 +285,10 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   }
 
   void _showDialogCompleted(
-      String message, String lottieAsset, bool lockScreens, int userPoint) {
+      String message, String lottieAsset, bool lockScreen, int userPoint) {
     showDialog(
         context: context,
-        barrierDismissible: lockScreens,
+        barrierDismissible: lockScreen,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -535,12 +515,8 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('Hướng dẫn'),
-                              content: Column(
-                                children: [
-                                  Text(
-                                    'Nội dung hướng dẫn người chơi...',
-                                  ),
-                                ],
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
                               ),
                               actions: [
                                 TextButton(
@@ -552,7 +528,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           },
                         );
                       },
-                      child: const Icon(Icons.help),
+                      child: const Text('Hướng dẫn'),
                     ),
                   ],
                 ),
@@ -568,7 +544,9 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                           question,
                           style: whiteTextStyle,
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 15, vertical: 0),
@@ -601,17 +579,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                                         .cardColor
                                         .withAlpha(100)),
                               ),
-                              child: Stack(
-                                children: [
-                                  GameWidget(game: _happyFarm),
-                                  Visibility(
-                                    visible: _isLoading,
-                                    child: Center(
-                                      child: ProgressWidgets(),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: GameWidget(game: _gameOceanAdventure),
                             ),
                           ),
                           Expanded(
@@ -643,17 +611,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                             flex: 3,
                             child: Container(
                               alignment: Alignment.topCenter,
-                              child: Stack(
-                                children: [
-                                  GameWidget(game: _happyFarm),
-                                  Visibility(
-                                    visible: _isLoading,
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: GameWidget(game: _gameOceanAdventure),
                             ),
                           ),
                           Expanded(

@@ -1,4 +1,4 @@
-import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

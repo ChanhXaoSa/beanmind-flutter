@@ -1,36 +1,40 @@
-import 'dart:math';
-import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/game/class/save_game_result.dart';
-import 'package:beanmind_flutter/game/class/timer.dart';
-import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even.dart';
+import 'package:beanmind_flutter/controllers/game/game_controller.dart';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/happy_farm/happy_farm_level.dart';
+import 'package:beanmind_flutter/widgets/game/class/happy_farm/happy_farm_user.dart';
+import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
+import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
+import '../../widgets/game/widget/game_happy_farm/happy_farm.dart';
 
-class GameOddAndEvenScreen extends StatefulWidget {
+class HappyFarmScreen extends StatefulWidget {
+  const HappyFarmScreen({Key? key}) : super(key: key);
+  static const String routeName = '/happy_farm';
   @override
-  _GameOddAndEvenScreenState createState() => _GameOddAndEvenScreenState();
+  State<HappyFarmScreen> createState() => _HappyFarmScreenState();
 }
 
-class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
+class _HappyFarmScreenState extends State<HappyFarmScreen> {
   final FocusNode _resultFocusNode = FocusNode();
   final Audio _audio = Audio();
   late VideoPlayerController _videoPlayerController;
-  late GameOddAndEven _gameOddAndEven;
-  late TimeRecord _timeRecord = TimeRecord();
+  late HappyFarm _happyFarm;
+  TimeRecord _timeRecord = TimeRecord();
 
-  bool isFirstKeyEvent = true;
-  bool showResultDialog = false;
   bool _isLoading = true;
-  String gameId = 'game005';
+  bool isCorrect = false;
+  String gameId = 'game002';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -48,24 +52,23 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     '2',
     '3',
     '=',
-    '0'
+    '0',
+    '/'
   ];
-
-  String userAnswer = '';
-  int userPoint = 0;
-  var randomNumber = Random();
-  int userProgress = 0;
-  int totalQuestion = 3;
 
   void buttonTapped(String button) {
     _audio.playButtonSound();
     setState(() {
-      if (button == '1') {
-        userAnswer = 'số lẻ';
+      if (button == '=') {
         checkResult();
-      } else if (button == '2') {
-        userAnswer = 'số chẵn';
-        checkResult();
+      } else if (button == 'C') {
+        userAnswer = '';
+      } else if (button == 'DEL') {
+        if (userAnswer.isNotEmpty) {
+          userAnswer = userAnswer.substring(0, userAnswer.length - 1);
+        }
+      } else if (userAnswer.length < 4) {
+        userAnswer += button;
       }
     });
   }
@@ -86,44 +89,80 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-      resetAnimalSky();
+      _happyFarm = HappyFarm(animalslist: animalslist);
     });
   }
 
   void backtoHome() {
-    // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
+    final GameController controller = Get.find();
+    resetGame();
+    setState(() {
+      controller.shouldReset.value = true;
+      Get.offAllNamed(GameListScreen.routeName);
+    });
   }
 
   void checkResult() {
+    if (userAnswer.isEmpty) {
+      _showDialogError('Bạn chưa nhập số !');
+      return;
+    }
     userProgress += 1;
-
     setState(() {
       showResultDialog = true;
     });
 
-    if (userAnswer.isEmpty) {
-      _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+    if (currentLevel == 1) {
+      // Level 1: Counting
+      if (currentQuestionType == 'chicken') {
+        isCorrect = globalChickenCount == int.parse(userAnswer);
+      } else if (currentQuestionType == 'duck') {
+        isCorrect = globalDuckCount == int.parse(userAnswer);
+      }
+    } else if (currentLevel == 2) {
+      // Level 2: Addition and Subtraction
+      List<String> questionParts = currentQuestionType.split(' ');
+      int num1 = getAnimalCountByType(questionParts[0]); // First animal
+      int num2 = getAnimalCountByType(questionParts[2]); // Second animal
+      print('num1: $num1, num2: $num2');
+      String operator = questionParts[1];
+      int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
+      isCorrect = correctAnswer == int.parse(userAnswer);
+    } else if (currentLevel == 3) {
+      // Level 3: Addition, Subtraction, Multiplication, and Division
+      List<String> questionParts = currentQuestionType.split(' ');
+      int num1 = getAnimalCountByType(questionParts[0]); // First animal
+      int num2 = getAnimalCountByType(questionParts[2]); // Second animal
+      print('num1: $num1, num2: $num2');
+      String operator = questionParts[1];
+
+      if (operator == '/') {
+        if (userAnswer.contains('/')) {
+          int correctAnswerQuotient = calculateAnswerLevel3(num1, num2, '/');
+          int correctAnswerRemainder = calculateAnswerLevel3(num1, num2, '%');
+          print(
+              'Correct Answer: $correctAnswerQuotient, $correctAnswerRemainder');
+
+          List<String> parts = userAnswer.split('/');
+          int numerator = int.parse(parts[0]);
+          int denominator = int.parse(parts[1]);
+          print('$numerator / $denominator');
+          // Perform integer division and modulus
+          int quotient = calculateAnswerLevel3(numerator, denominator, '/');
+          int remainder = calculateAnswerLevel3(numerator, denominator, '%');
+          print('Quotient: $quotient, Remainder: $remainder');
+          isCorrect = (quotient == correctAnswerQuotient && remainder == correctAnswerRemainder);
+        } else {
+          int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+          isCorrect = correctAnswer == int.parse(userAnswer);
+        }
+      } else {
+        int correctAnswer = calculateAnswerLevel3(num1, num2, operator);
+        isCorrect = correctAnswer == int.parse(userAnswer);
+      }
     }
 
-    if (userAnswer == 'số lẻ' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
-      userPoint += 1;
-      _audio.playSuccessSound();
-      if (userProgress == totalQuestion) {
-        _audio.playCompleteSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _timeRecord.stopTimer();
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, false, userPoint);
-        return;
-      }
-      _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
-    } else if (userAnswer == 'số chẵn' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
+    if (isCorrect) {
       userPoint += 1;
       _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
@@ -137,7 +176,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
@@ -150,7 +189,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
   }
 
@@ -171,12 +210,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        resetAnimalSky();
         userAnswer = '';
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-        resetAnimalSky();
-      });
-      setState(() {
+        _happyFarm = HappyFarm(animalslist: animalslist);
         showResultDialog = false;
       });
     }
@@ -193,11 +228,18 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   @override
   void initState() {
     super.initState();
+    resetAnimalFarm();
+    fetchData();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-      ..initialize().then((value) => {setState(() {})});
-    fetchData();
-    Future.delayed(const Duration(seconds: 3), () {
+      ..initialize().then((value) => setState(() {}));
+    delay3Seconds();
+  }
+
+  // delay 3 seconds
+  Future<void> delay3Seconds() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
       setState(() {
         _timeRecord.startTimer();
       });
@@ -206,11 +248,13 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
 
   Future<void> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimalSky();
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
-
+      // print json data
+      snapshot.docs.forEach((doc) {
+        print(doc.data());
+      });
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
@@ -219,22 +263,52 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
       });
 
-      // Update startLower and lower with the fetched items
       setState(() {
-        resetAnimalSky();
         animalslist = List<GameAnimalModel>.from(items);
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        _happyFarm = HappyFarm(animalslist: animalslist);
       });
     } catch (e) {
       print('Error fetching data: $e');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
-  void _showDialogCompleted(
-      String message, String lottieAsset, bool lockScreen, int userPoint) {
+  void _showDialogError(
+    String message,
+  ) {
     showDialog(
         context: context,
-        barrierDismissible: lockScreen,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            content: IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.deepPurple,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      message,
+                      style: whiteTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showDialogCompleted(
+      String message, String lottieAsset, bool lockScreens, int userPoint) {
+    showDialog(
+        context: context,
+        barrierDismissible: lockScreens,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.deepPurple,
@@ -461,8 +535,12 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
+                              content: Column(
+                                children: [
+                                  Text(
+                                    'Nội dung hướng dẫn người chơi...',
+                                  ),
+                                ],
                               ),
                               actions: [
                                 TextButton(
@@ -474,11 +552,36 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                           },
                         );
                       },
-                      child: const Text('Hướng dẫn'),
+                      child: const Icon(Icons.help),
                     ),
                   ],
                 ),
               ),
+              Container(
+                  height: 60,
+                  color: Colors.deepPurple,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          question,
+                          style: whiteTextStyle,
+                        ),
+                        SizedBox(width: 10),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                          color: Colors.blue[100],
+                          child: Text(
+                            '$userAnswer',
+                            style:
+                                whiteTextStyle.copyWith(color: Colors.orange),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
               Expanded(
                 child: isWideScreen
                     ? Row(
@@ -488,7 +591,48 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                             flex: 4,
                             child: Container(
                               alignment: Alignment.topCenter,
-                              child: GameWidget(game: _gameOddAndEven),
+                              margin: EdgeInsets.only(
+                                  top: 15, left: 15, bottom: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    width: 5,
+                                    color: Theme.of(context)
+                                        .cardColor
+                                        .withAlpha(100)),
+                              ),
+                              child: Stack(
+                                children: [
+                                  GameWidget(game: _happyFarm),
+                                  Visibility(
+                                    visible: _isLoading,
+                                    child: Center(
+                                      child: ProgressWidgets(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 0.9),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -499,54 +643,42 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                             flex: 3,
                             child: Container(
                               alignment: Alignment.topCenter,
-                              child: GameWidget(game: _gameOddAndEven),
+                              child: Stack(
+                                children: [
+                                  GameWidget(game: _happyFarm),
+                                  Visibility(
+                                    visible: _isLoading,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: GridView.builder(
+                                itemCount: numberPad.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4),
+                                itemBuilder: (context, index) {
+                                  return MyButton(
+                                    child: numberPad[index],
+                                    onTap: () => buttonTapped(numberPad[index]),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],
                       ),
               ),
-              Container(
-                  height: 120,
-                  color: Colors.deepPurple,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Số lượng chim là',
-                          style: whiteTextStyle,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            buttonTapped('1');
-                          },
-                          child: const Text(
-                            'số lẻ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: Colors.green),
-                          ),
-                        ),
-                        Text(
-                          'hay',
-                          style: whiteTextStyle,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            buttonTapped('2');
-                          },
-                          child: const Text(
-                            'số chẵn',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: Colors.red),
-                          ),
-                        )
-                      ],
-                    ),
-                  )),
               Focus(
                 focusNode: _resultFocusNode,
                 child: Container(

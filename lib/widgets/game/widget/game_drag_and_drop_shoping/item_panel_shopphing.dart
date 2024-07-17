@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/types.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_draggable_widget.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_sort%20numbers/types.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';

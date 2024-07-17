@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
-import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/game/class/save_game_result.dart';
-import 'package:beanmind_flutter/game/class/timer.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/timer.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
@@ -14,7 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
-import '../../../models/game_model.dart';
+import '../../models/game_model.dart';
 
 class GameShoppingScreen extends StatefulWidget {
   @override

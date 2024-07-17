@@ -1,30 +1,43 @@
 import 'dart:math';
 
-import 'package:beanmind_flutter/game/class/happy_farm/happy_farm_user.dart';
-import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm.dart';
+import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_user.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 
-int currentLevel = 2;
-String currentQuestionType = '';
+int currentLevel = 3;
+String currentQuestionType = ''; // To track the type of animal
 String currentQuestionOperator = '';
 int randomIndex = 0;
 List<String> animals = [
-  'chicken',
-  'duck',
+  'bluefish',
+  'redfish',
+  'violetfish',
+  'moonfish',
+  'octopus'
 ];
 
-Future<void> generateQuestion() async {
-  randomIndex = Random().nextInt(2);
+void generateQuestion() {
+  randomIndex = Random().nextInt(5);
   if (currentLevel == 1) {
-    // Level 1: Only counting questions
     switch (randomIndex) {
       case 0:
-        currentQuestionType = 'chicken';
-        question = 'Có bao nhiêu con gà ?';
+        currentQuestionType = 'bluefish';
+        question = 'Có bao nhiêu con cá màu xanh dương ?';
         break;
       case 1:
-        currentQuestionType = 'duck';
-        question = 'Có bao nhiêu con vịt ?';
+        currentQuestionType = 'redfish';
+        question = 'Có bao nhiêu con cá màu đỏ ?';
+        break;
+      case 2:
+        currentQuestionType = 'violetfish';
+        question = 'Có bao nhiêu con cá màu tím ?';
+        break;
+      case 3:
+        currentQuestionType = 'moonfish';
+        question = 'Có bao nhiêu con cá mặt trăng ?';
+        break;
+      case 4:
+        currentQuestionType = 'octopus';
+        question = 'Có bao nhiêu con bạch tuộc ?';
         break;
     }
   } else if (currentLevel == 2) {
@@ -36,12 +49,12 @@ Future<void> generateQuestion() async {
     }
     currentQuestionOperator = getRandomOperatorLevel2();
     if (currentQuestionOperator == '-') {
-      int num1 = getAnimalCountByType(animal1);
-      int num2 = getAnimalCountByType(animal2);
-      if (num1 < num2) {
-        String temp = animal1;
+      int count1 = getAnimalCountByType(animal1);
+      int count2 = getAnimalCountByType(animal2);
+      if (count1 < count2) {
+        String tempAnimal = animal1;
         animal1 = animal2;
-        animal2 = temp;
+        animal2 = tempAnimal;
       }
     }
     question =
@@ -56,12 +69,12 @@ Future<void> generateQuestion() async {
     }
     currentQuestionOperator = getRandomOperatorLevel3();
     if (currentQuestionOperator == '-') {
-      int num1 = getAnimalCountByType(animal1);
-      int num2 = getAnimalCountByType(animal2);
-      if (num1 < num2) {
-        String temp = animal1;
+      int count1 = getAnimalCountByType(animal1);
+      int count2 = getAnimalCountByType(animal2);
+      if (count1 < count2) {
+        String tempAnimal = animal1;
         animal1 = animal2;
-        animal2 = temp;
+        animal2 = tempAnimal;
       }
     }
     question =
@@ -71,7 +84,6 @@ Future<void> generateQuestion() async {
 }
 
 String getRandomOperatorLevel2() {
-  //List<String> operators = ['+', '-'];
   List<String> operators = ['+', '-'];
   return operators[Random().nextInt(operators.length)];
 }
@@ -87,9 +99,6 @@ int calculateAnswerLevel2(int num1, int num2, String operator) {
     case '+':
       return num1 + num2;
     case '-':
-      if (num1 < num2) {
-        return num2 - num1;
-      }
       return num1 - num2;
     default:
       throw ArgumentError('Invalid operator for Level 2');
@@ -133,10 +142,16 @@ String getDisplayOperator(String operator) {
 
 int getAnimalCountByType(String animal) {
   switch (animal) {
-    case 'chicken':
-      return globalChickenCount;
-    case 'duck':
-      return globalDuckCount;
+    case 'bluefish':
+      return globalBlueFishCount;
+    case 'redfish':
+      return globalRedFishCount;
+    case 'violetfish':
+      return globalVioletFishCount;
+    case 'moonfish':
+      return globalMoonFishCount;
+    case 'octopus':
+      return globalOctopusCount;
     default:
       throw ArgumentError('Invalid animal type');
   }
@@ -144,10 +159,16 @@ int getAnimalCountByType(String animal) {
 
 String getDisplayAnimalName(String animal) {
   switch (animal) {
-    case 'chicken':
-      return 'con gà';
-    case 'duck':
-      return 'con vịt';
+    case 'bluefish':
+      return 'cá màu xanh dương';
+    case 'redfish':
+      return 'cá màu đỏ';
+    case 'violetfish':
+      return 'cá màu tím';
+    case 'moonfish':
+      return 'cá mặt trăng';
+    case 'octopus':
+      return 'bạch tuộc';
     default:
       throw ArgumentError('Invalid animal type');
   }

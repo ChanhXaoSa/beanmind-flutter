@@ -1,9 +1,9 @@
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
-import 'package:beanmind_flutter/game/widget/game_drag_and_drop_shoping/game_shopping_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_happy_farm/happy_farm_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_ocean_adventure/ocean_adventure_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_odd_and_even/odd_and_even_screen.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/game_drag_and_drop_screen.dart';
+import 'package:beanmind_flutter/screens/game/game_shopping_screen.dart';
+import 'package:beanmind_flutter/screens/game/happy_farm_screen.dart';
+import 'package:beanmind_flutter/screens/game/ocean_adventure_screen.dart';
+import 'package:beanmind_flutter/screens/game/odd_and_even_screen.dart';
+import 'package:beanmind_flutter/screens/game/game_drag_and_drop_screen.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:flutter/material.dart';
