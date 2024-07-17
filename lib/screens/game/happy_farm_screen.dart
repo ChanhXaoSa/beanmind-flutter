@@ -315,7 +315,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
               Focus(
                 focusNode: _resultFocusNode,
                 child: Container(
-                  height: 10,
+                  height: 0,
                   width: 0,
                 ),
               )

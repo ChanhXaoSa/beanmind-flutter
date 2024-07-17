@@ -39,6 +39,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   String userAnswer = '';
   var randomNumber = Random();
   String gameId = 'game003';
+    String background = 'images/background/background_math_sort_1.png';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -47,116 +48,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     'CHECK RESULT',
     'RESET',
   ];
-
-  void buttonTapped(String button) {
-    setState(() {
-      if (button == 'CHECK RESULT') {
-        checkResult();
-      } else if (button == 'RESET') {
-        upper.clear();
-        lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        _splitPanelsMobie = SplitPanelsMobie();
-      }
-    });
-  }
-
-  void handleNumberButtonPress(String number) {
-    setState(() {
-      if (userAnswer.length < 4) {
-        userAnswer += number;
-      }
-    });
-  }
-
-  void checkResult() {
-    setState(() {
-      showResultDialog = true;
-    });
-
-    // Check if the upper list is empty
-    if (upper.isEmpty) {
-      _showDialogError(
-          'Bạn chưa đặt các thẻ số lên phía trên \nhãy xếp số theo thứ tự đề bài yêu cầu!');
-      return;
-    }
-
-    // Check if the upper list is sorted in ascending order
-    bool isSortedAscending = true;
-    for (int i = 0; i < upper.length - 1; i++) {
-      if (upper[i] > upper[i + 1]) {
-        isSortedAscending = false;
-        break;
-      }
-    }
-
-    // Check if the upper list is sorted in descending order
-    bool isSortedDescending = true;
-    for (int i = 0; i < upper.length - 1; i++) {
-      if (upper[i] < upper[i + 1]) {
-        isSortedDescending = false;
-        break;
-      }
-    }
-
-    if (upper.length == 10) {
-      userProgress += 1;
-      if ((sortingOrder == 'ascending' && isSortedAscending) ||
-          (sortingOrder == 'descending' && isSortedDescending)) {
-        userPoint += 1;
-        _audio.playSuccessSound();
-        if (userProgress == totalQuestion) {
-          _audio.playCompleteSound();
-          String lottieAsset = _getLottieAsset(userPoint);
-          _timeRecord.stopTimer();
-          saveGameResults(
-              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
-          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-              lottieAsset, false, userPoint);
-          return;
-        }
-        _showDialog(
-            'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
-      } else {
-        if (userProgress == totalQuestion) {
-          _audio.playCompleteSound();
-          String lottieAsset = _getLottieAsset(userPoint);
-          _timeRecord.stopTimer();
-          saveGameResults(
-              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
-          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-              lottieAsset, false, userPoint);
-          return;
-        }
-        _showDialog(
-            'Sai rồi !', 'assets/lotties/wrong.json', false, true, true);
-      }
-    } else if ((sortingOrder == 'ascending' && isSortedAscending) ||
-        (sortingOrder == 'descending' && isSortedDescending)) {
-      _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, false, false);
-    } else {
-      _audio.playWrongSound();
-      _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, false, true);
-    }
-  }
-
-  void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        resetGameSortNumber();
-        lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        _splitPanelsMobie = SplitPanelsMobie();
-        userAnswer = '';
-        generateSortingQuestion();
-      });
-      setState(() {
-        showResultDialog = false;
-      });
-    }
-  }
 
   @override
   void dispose() {
@@ -169,6 +60,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   @override
   void initState() {
     super.initState();
+    resetGameSortNumber();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
@@ -182,36 +74,188 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     });
   }
 
-  void resetGame() {
-    Navigator.of(context).pop();
-    setState(() {
-      userPoint = 0;
-      userProgress = 0;
-      upper.clear();
-      lower = List.from(startLower);
-      _timeRecord.seconds = 0;
-      _timeRecord.startTimer();
-      _splitPanels = SplitPanels();
-      _splitPanelsMobie = SplitPanelsMobie();
-      generateSortingQuestion();
+  @override
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double thresholdWidth = 600;
+    final bool isWideScreen = screenSize.width > thresholdWidth;
+    FocusScope.of(context).requestFocus(_resultFocusNode);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
     });
-  }
-
-  void backtoHome() {
-    // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
-  }
-
-  String _getLottieAsset(int userPoint) {
-    switch (userPoint) {
-      case 1:
-        return 'assets/lotties/bronze_medal.json';
-      case 2:
-        return 'assets/lotties/silver_medal.json';
-      case 3:
-        return 'assets/lotties/gold_medal.json';
-      default:
-        return 'assets/lotties/wrong.json';
+    if (_isLoading) {
+      return Center(child: ProgressWidgets());
+    } else {
+      return Scaffold(
+        body: AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          child: Container(
+            key: ValueKey<String>(background),
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(background),
+                fit: BoxFit.fill,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.5),
+                  BlendMode.darken,
+                ),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 25,
+                  ),
+                  height: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Số điểm của bạn : ' + userPoint.toString(),
+                          style: whiteTextStyle,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Hướng dẫn'),
+                                content: Text(
+                                  'Nội dung hướng dẫn người chơi...',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding:
+                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                        ),
+                        child: Icon(
+                          Icons.help,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 60,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          question,
+                          style: whiteTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: isWideScreen
+                      ? Container(
+                          padding: EdgeInsets.all(30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 15),
+                                  alignment: Alignment.topCenter,
+                                  child: _splitPanelsMobie,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                child: _splitPanelsMobie,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: GridView.builder(
+                                  itemCount: numberPad.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1, // Số cột
+                                    childAspectRatio: 4, // Tỷ lệ khung hình
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return MyButton(
+                                      child: numberPad[index],
+                                      onTap: () => buttonTapped(numberPad[index]),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+                Focus(
+                  focusNode: _resultFocusNode,
+                  child: Container(
+                    height: 0,
+                    width: 0,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
     }
   }
 
@@ -414,195 +458,175 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double thresholdWidth = 600;
-    final bool isWideScreen = screenSize.width > thresholdWidth;
-    FocusScope.of(context).requestFocus(_resultFocusNode);
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
+  void buttonTapped(String button) {
+    setState(() {
+      if (button == 'CHECK RESULT') {
+        checkResult();
+      } else if (button == 'RESET') {
+        upper.clear();
+        lower = List.from(startLower);
+        _splitPanels = SplitPanels();
+        _splitPanelsMobie = SplitPanelsMobie();
+      }
     });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
-    } else {
-      return KeyboardListener(
-        focusNode: FocusNode(),
-        onKeyEvent: (KeyEvent event) {
-          if (event is KeyDownEvent) {
-            final logicalKey = event.logicalKey;
-            if (logicalKey == LogicalKeyboardKey.enter) {
-              if (showResultDialog) {
-                goToNextQuestion();
-              } else {
-                checkResult();
-              }
-            } else if (logicalKey == LogicalKeyboardKey.backspace) {
-              buttonTapped('DEL');
-            }
-            final input = logicalKey.keyLabel;
-            if (RegExp(r'^[0-9]$').hasMatch(input)) {
-              handleNumberButtonPress(input);
-            }
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.deepPurple[300],
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: mainGradient(context),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
-                  height: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Số điểm của bạn : ' + userPoint.toString(),
-                          style: whiteTextStyle,
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Hướng dẫn'),
-                                content: Text(
-                                  'Nội dung hướng dẫn người chơi...',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding:
-                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                        ),
-                        child: Icon(
-                          Icons.help,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          question,
-                          style: whiteTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: isWideScreen
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                margin: EdgeInsets.only(left: 15),
-                                alignment: Alignment.topCenter,
-                                child: _splitPanelsMobie,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: GridView.builder(
-                                  itemCount: numberPad.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Số cột
-                                    childAspectRatio: 4, // Tỷ lệ khung hình
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return MyButton(
-                                      child: numberPad[index],
-                                      onTap: () =>
-                                          buttonTapped(numberPad[index]),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                child: _splitPanelsMobie,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: GridView.builder(
-                                  itemCount: numberPad.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Số cột
-                                    childAspectRatio: 4, // Tỷ lệ khung hình
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return MyButton(
-                                      child: numberPad[index],
-                                      onTap: () =>
-                                          buttonTapped(numberPad[index]),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-                Focus(
-                  focusNode: _resultFocusNode,
-                  child: Container(
-                    height: 0,
-                    width: 0,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      );
+  }
+
+  void handleNumberButtonPress(String number) {
+    setState(() {
+      if (userAnswer.length < 4) {
+        userAnswer += number;
+      }
+    });
+  }
+
+  void checkResult() {
+    setState(() {
+      showResultDialog = true;
+    });
+
+    // Check if the upper list is empty
+    if (upper.isEmpty) {
+      _showDialogError(
+          'Bạn chưa đặt các thẻ số lên phía trên \nhãy xếp số theo thứ tự đề bài yêu cầu!');
+      return;
     }
+
+    // Check if the upper list is sorted in ascending order
+    bool isSortedAscending = true;
+    for (int i = 0; i < upper.length - 1; i++) {
+      if (upper[i] > upper[i + 1]) {
+        isSortedAscending = false;
+        break;
+      }
+    }
+
+    // Check if the upper list is sorted in descending order
+    bool isSortedDescending = true;
+    for (int i = 0; i < upper.length - 1; i++) {
+      if (upper[i] < upper[i + 1]) {
+        isSortedDescending = false;
+        break;
+      }
+    }
+
+    if (upper.length == 10) {
+      userProgress += 1;
+      setState(() {
+        changeBackgroundColor();
+      });
+      if ((sortingOrder == 'ascending' && isSortedAscending) ||
+          (sortingOrder == 'descending' && isSortedDescending)) {
+        userPoint += 1;
+        _audio.playSuccessSound();
+        if (userProgress == totalQuestion) {
+          _audio.playCompleteSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+          setState(() {
+            resetGameSortNumber();
+          });
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, false, userPoint);
+          return;
+        }
+        setState(() {
+          resetGameSortNumber();
+        });
+        _showDialog(
+            'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
+      } else {
+        if (userProgress == totalQuestion) {
+          _audio.playCompleteSound();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+          setState(() {
+            resetGameSortNumber();
+          });
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, false, userPoint);
+          return;
+        }
+        setState(() {
+          resetGameSortNumber();
+        });
+        _showDialog(
+            'Sai rồi !', 'assets/lotties/wrong.json', false, true, true);
+      }
+    } else if ((sortingOrder == 'ascending' && isSortedAscending) ||
+        (sortingOrder == 'descending' && isSortedDescending)) {
+      _showDialog(
+          'Đúng rồi !', 'assets/lotties/success.json', true, false, false);
+    } else {
+      _audio.playWrongSound();
+      _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, false, true);
+    }
+  }
+
+  void goToNextQuestion() {
+    if (showResultDialog) {
+      Navigator.of(context).pop();
+      setState(() {
+        resetGameSortNumber();
+        lower = List.from(startLower);
+        _splitPanels = SplitPanels();
+        _splitPanelsMobie = SplitPanelsMobie();
+        userAnswer = '';
+        generateSortingQuestion();
+      });
+      setState(() {
+        showResultDialog = false;
+      });
+    }
+  }
+
+  void resetGame() {
+    Navigator.of(context).pop();
+    setState(() {
+      userPoint = 0;
+      userProgress = 0;
+      resetGameSortNumber();
+      _timeRecord.seconds = 0;
+      _timeRecord.startTimer();
+      _splitPanels = SplitPanels();
+      _splitPanelsMobie = SplitPanelsMobie();
+      generateSortingQuestion();
+      changeBackgroundColor();
+    });
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAllNamed(GameListScreen.routeName);
+  }
+
+  String _getLottieAsset(int userPoint) {
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze_medal.json';
+      case 2:
+        return 'assets/lotties/silver_medal.json';
+      case 3:
+        return 'assets/lotties/gold_medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
+    }
+  }
+
+  void changeBackgroundColor() {
+    setState(() {
+      if (userProgress == 0) {
+        background = 'images/background/background_math_sort_1.png';
+      } else if (userProgress == 1) {
+        background = 'images/background/background_math_sort_2.png';
+      } else if (userProgress == 2) {
+        background = 'images/background/background_math_sort_3.png';
+      } else {
+        background = 'images/background/background_math_sort_1.png';
+      }
+    });
   }
 }

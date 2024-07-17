@@ -15,7 +15,7 @@ void randomNumber() {
     uniqueNumbers.add(random.nextInt(99) + 1);
   }
   startLower.addAll(uniqueNumbers);
-  lower.addAll(uniqueNumbers);
+  lower = startLower;
 }
 
 void resetGameSortNumber() {

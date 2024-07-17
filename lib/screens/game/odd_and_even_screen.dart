@@ -26,161 +26,18 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   late VideoPlayerController _videoPlayerController;
   late GameOddAndEven _gameOddAndEven;
   late TimeRecord _timeRecord = TimeRecord();
+  var whiteTextStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
   bool _isLoading = true;
   String gameId = 'game005';
 
-  var whiteTextStyle = const TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
-
-  List<String> numberPad = [
-    '7',
-    '8',
-    '9',
-    'C',
-    '4',
-    '5',
-    '6',
-    'DEL',
-    '1',
-    '2',
-    '3',
-    '=',
-    '0'
-  ];
-
   String userAnswer = '';
   int userPoint = 0;
   var randomNumber = Random();
   int userProgress = 0;
   int totalQuestion = 3;
-
-  void buttonTapped(String button) {
-    _audio.playButtonSound();
-    setState(() {
-      if (button == '1') {
-        userAnswer = 'số lẻ';
-        checkResult();
-      } else if (button == '2') {
-        userAnswer = 'số chẵn';
-        checkResult();
-      }
-    });
-  }
-
-  void handleNumberButtonPress(String number) {
-    setState(() {
-      if (userAnswer.length < 4) {
-        userAnswer += number;
-      }
-    });
-  }
-
-  void resetGame() {
-    Navigator.of(context).pop();
-    setState(() {
-      userAnswer = '';
-      userPoint = 0;
-      userProgress = 0;
-      _timeRecord.seconds = 0;
-      _timeRecord.startTimer();
-      _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-      resetAnimalSky();
-    });
-  }
-
-  void backtoHome() {
-    // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
-  }
-
-  void checkResult() {
-    userProgress += 1;
-
-    setState(() {
-      showResultDialog = true;
-    });
-
-    if (userAnswer.isEmpty) {
-      _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
-    }
-
-    if (userAnswer == 'số lẻ' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
-      userPoint += 1;
-      _audio.playSuccessSound();
-      if (userProgress == totalQuestion) {
-        _audio.playCompleteSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _timeRecord.stopTimer();
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, false, userPoint);
-        return;
-      }
-      _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
-    } else if (userAnswer == 'số chẵn' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
-      userPoint += 1;
-      _audio.playSuccessSound();
-      if (userProgress == totalQuestion) {
-        _audio.playCompleteSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _timeRecord.stopTimer();
-        saveGameResults(
-            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, false, userPoint);
-        return;
-      }
-      _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
-    } else {
-      if (userProgress == totalQuestion) {
-        _audio.playCompleteSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _timeRecord.stopTimer();
-        saveGameResults(
-            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, false, userPoint);
-        return;
-      }
-      _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
-    }
-  }
-
-  String _getLottieAsset(int userPoint) {
-    switch (userPoint) {
-      case 1:
-        return 'assets/lotties/bronze_medal.json';
-      case 2:
-        return 'assets/lotties/silver_medal.json';
-      case 3:
-        return 'assets/lotties/gold_medal.json';
-      default:
-        return 'assets/lotties/wrong.json';
-    }
-  }
-
-  void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        resetAnimalSky();
-        userAnswer = '';
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
-        resetAnimalSky();
-      });
-      setState(() {
-        showResultDialog = false;
-      });
-    }
-  }
 
   @override
   void dispose() {
@@ -204,29 +61,184 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     });
   }
 
-  Future<void> fetchData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimalSky();
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await firestore.collection('animal').get();
-
-      List<GameAnimalModel> items = snapshot.docs
-          .map((doc) => GameAnimalModel.fromSnapshot(doc))
-          .toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
-      });
-
-      // Update startLower and lower with the fetched items
+  @override
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final bool isWideScreen = screenSize.width / screenSize.height > 16 / 9;
+    double fontSize;
+    if (MediaQuery.of(context).size.width < 1200 || MediaQuery.of(context).size.height < 850) {
+      fontSize = 40; // Assuming you want a smaller font size for smaller screens
+    } else if (MediaQuery.of(context).size.width < 1400 || MediaQuery.of(context).size.height < 1100) {
+      fontSize = 48;
+    } else {
+      fontSize = 56;
+    }
+    FocusScope.of(context).requestFocus(_resultFocusNode);
+    Future.delayed(const Duration(seconds: 3), () {
       setState(() {
-        resetAnimalSky();
-        animalslist = List<GameAnimalModel>.from(items);
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        _isLoading = false;
       });
-    } catch (e) {
-      print('Error fetching data: $e');
+    });
+    if (_isLoading) {
+      return Center(child: ProgressWidgets());
+    } else {
+      return KeyboardListener(
+        focusNode: FocusNode(),
+        onKeyEvent: (KeyEvent event) {
+          if (event is KeyDownEvent) {
+            final logicalKey = event.logicalKey;
+            if (logicalKey == LogicalKeyboardKey.enter) {
+              if (showResultDialog) {
+                goToNextQuestion();
+              } else {
+                checkResult();
+              }
+            } else if (logicalKey == LogicalKeyboardKey.backspace) {
+              buttonTapped('DEL');
+            }
+            final input = logicalKey.keyLabel;
+            if (RegExp(r'^[0-9]$').hasMatch(input)) {
+              handleNumberButtonPress(input);
+            }
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.deepPurple[300],
+          body: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                height: 60,
+                color: Colors.deepPurple,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Số điểm của bạn : ' + userPoint.toString(),
+                        style: whiteTextStyle,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Hướng dẫn'),
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding:
+                            EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                      ),
+                      child: Icon(
+                        Icons.help,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: isWideScreen
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: GameWidget(game: _gameOddAndEven),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: GameWidget(game: _gameOddAndEven),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple[600],
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Số lượng chim là',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize, color: Colors.white),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              buttonTapped('1');
+                            },
+                            child: Text(
+                              'số lẻ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize,
+                                  color: Colors.green),
+                            ),
+                          ),
+                          Text(
+                            'hay',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize, color: Colors.white),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              buttonTapped('2');
+                            },
+                            child: Text(
+                              'số chẵn',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize,
+                                  color: Colors.red),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+              Focus(
+                focusNode: _resultFocusNode,
+                child: Container(
+                  height: 0,
+                  width: 0,
+                ),
+              )
+            ],
+          ),
+        ),
+      );
     }
   }
 
@@ -400,172 +412,154 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double thresholdWidth = 600;
-    final bool isWideScreen = screenSize.width > thresholdWidth;
-    FocusScope.of(context).requestFocus(_resultFocusNode);
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
+  void buttonTapped(String button) {
+    _audio.playButtonSound();
+    setState(() {
+      if (button == '1') {
+        userAnswer = 'số lẻ';
+        checkResult();
+      } else if (button == '2') {
+        userAnswer = 'số chẵn';
+        checkResult();
+      }
     });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
+  }
+
+  void handleNumberButtonPress(String number) {
+    setState(() {
+      if (userAnswer.length < 4) {
+        userAnswer += number;
+      }
+    });
+  }
+
+  void resetGame() {
+    Navigator.of(context).pop();
+    setState(() {
+      userAnswer = '';
+      userPoint = 0;
+      userProgress = 0;
+      _timeRecord.seconds = 0;
+      _timeRecord.startTimer();
+      _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+      resetAnimalSky();
+    });
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAllNamed(GameListScreen.routeName);
+  }
+
+  void checkResult() {
+    userProgress += 1;
+
+    setState(() {
+      showResultDialog = true;
+    });
+
+    if (userAnswer.isEmpty) {
+      _audio.playWrongSound();
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+    }
+
+    if (userAnswer == 'số lẻ' &&
+        (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
+      userPoint += 1;
+      _audio.playSuccessSound();
+      if (userProgress == totalQuestion) {
+        _audio.playCompleteSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, false, userPoint);
+        return;
+      }
+      _showDialog(
+          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
+    } else if (userAnswer == 'số chẵn' &&
+        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
+      userPoint += 1;
+      _audio.playSuccessSound();
+      if (userProgress == totalQuestion) {
+        _audio.playCompleteSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, false, userPoint);
+        return;
+      }
+      _showDialog(
+          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
     } else {
-      return KeyboardListener(
-        focusNode: FocusNode(),
-        onKeyEvent: (KeyEvent event) {
-          if (event is KeyDownEvent) {
-            final logicalKey = event.logicalKey;
-            if (logicalKey == LogicalKeyboardKey.enter) {
-              if (showResultDialog) {
-                goToNextQuestion();
-              } else {
-                checkResult();
-              }
-            } else if (logicalKey == LogicalKeyboardKey.backspace) {
-              buttonTapped('DEL');
-            }
-            final input = logicalKey.keyLabel;
-            if (RegExp(r'^[0-9]$').hasMatch(input)) {
-              handleNumberButtonPress(input);
-            }
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.deepPurple[300],
-          body: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                height: 60,
-                color: Colors.deepPurple,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Số điểm của bạn : ' + userPoint.toString(),
-                        style: whiteTextStyle,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding:
-                            EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                      ),
-                      child: Icon(
-                        Icons.help,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: isWideScreen
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: GameWidget(game: _gameOddAndEven),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: GameWidget(game: _gameOddAndEven),
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-              Container(
-                  height: 120,
-                  color: Colors.deepPurple,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Số lượng chim là',
-                          style: whiteTextStyle,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            buttonTapped('1');
-                          },
-                          child: const Text(
-                            'số lẻ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: Colors.green),
-                          ),
-                        ),
-                        Text(
-                          'hay',
-                          style: whiteTextStyle,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            buttonTapped('2');
-                          },
-                          child: const Text(
-                            'số chẵn',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: Colors.red),
-                          ),
-                        )
-                      ],
-                    ),
-                  )),
-              Focus(
-                focusNode: _resultFocusNode,
-                child: Container(
-                  height: 0,
-                  width: 0,
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+      if (userProgress == totalQuestion) {
+        _audio.playCompleteSound();
+        String lottieAsset = _getLottieAsset(userPoint);
+        _timeRecord.stopTimer();
+        saveGameResults(
+            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+            lottieAsset, false, userPoint);
+        return;
+      }
+      _audio.playWrongSound();
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+    }
+  }
+
+  String _getLottieAsset(int userPoint) {
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze_medal.json';
+      case 2:
+        return 'assets/lotties/silver_medal.json';
+      case 3:
+        return 'assets/lotties/gold_medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
+    }
+  }
+
+  void goToNextQuestion() {
+    if (showResultDialog) {
+      Navigator.of(context).pop();
+      setState(() {
+        resetAnimalSky();
+        userAnswer = '';
+        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        resetAnimalSky();
+      });
+      setState(() {
+        showResultDialog = false;
+      });
+    }
+  }
+
+  Future<void> fetchData() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    resetAnimalSky();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('animal').get();
+
+      List<GameAnimalModel> items = snapshot.docs
+          .map((doc) => GameAnimalModel.fromSnapshot(doc))
+          .toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
+      });
+
+      // Update startLower and lower with the fetched items
+      setState(() {
+        resetAnimalSky();
+        animalslist = List<GameAnimalModel>.from(items);
+        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
     }
   }
 }

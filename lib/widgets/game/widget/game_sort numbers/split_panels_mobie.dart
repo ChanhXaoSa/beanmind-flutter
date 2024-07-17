@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_level.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,7 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
   bool? wasUpperList;
   int? draggedProduct;
   void onDragStart(int product) {
-    _audio.playMouseClickSound(); 
+    _audio.playMouseClickSound();
     setState(() {
       // Lưu vị trí và danh sách trước đó của mục được kéo
       draggedProduct = product;
@@ -84,26 +86,45 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double baseScreenWidth =
+        1100; // Chiều rộng cơ bản mà bạn muốn bắt đầu từ 17 cột.
+    double baseColumns = 14; // Số cột cho chiều rộng cơ bản.
+
+// Tính toán tỉ lệ giữa chiều rộng màn hình hiện tại và chiều rộng cơ bản.
+    double ratio = screenWidth / baseScreenWidth;
+
+// Tính toán số cột dựa trên tỉ lệ. Bạn có thể làm tròn số này để có số cột nguyên.
+    int columns = (baseColumns * ratio).round();
+
+// Đảm bảo rằng số cột không vượt quá một giới hạn nhất định nếu cần.
+    columns = columns.clamp(13, 14); // Giới hạn số cột từ 13 đến 17.
+    double size = screenWidth / columns;
     return Column(
       children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.deepPurple[250],
-              border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: DragDropList(
-              products: upper,
-              onDragStart: onDragStart,
-              onDrop: (product) => onDrop(product, true),
-              isUpper: true,
-            ),
+        Container(
+          height: size+5,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: DragDropList(
+            products: upper,
+            onDragStart: onDragStart,
+            onDrop: (product) => onDrop(product, true),
+            isUpper: true,
           ),
         ),
-        Expanded(
-          flex: 3,
+        Container(
+          height: 300,
           child: DragDropList(
             products: lower,
             onDragStart: onDragStart,
@@ -165,7 +186,7 @@ class DragDropList extends StatelessWidget {
       onAccept: onDrop,
       builder: (context, candidateData, rejectedData) {
         return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 10, // Số lượng mục trong một hàng
             mainAxisSpacing: 1, // Khoảng cách giữa các hàng
             crossAxisSpacing: 1, // Khoảng cách giữa các cột
@@ -203,14 +224,22 @@ class ShoppingCartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
-    // Get the screen height
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    double size = screenWidth < screenHeight
-                  ? screenWidth / 8
-                  : screenHeight / 8;
+    int columns;
+    if (screenWidth < 1100) {
+      columns = 20;
+    } else if (screenWidth < 1200) {
+      columns = 19;
+    } else if (screenWidth < 1400) {
+      columns = 18;
+    } else if (screenWidth < 1500) {
+      columns = 17;
+    } else if (screenWidth < 1600) {
+      columns = 16;
+    } else {
+      columns = 16;
+    }
+    double size = screenWidth / columns;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -220,7 +249,7 @@ class ShoppingCartItem extends StatelessWidget {
             Card(
               color: Colors.blue[300],
               child: Container(
-                height:size,
+                height: size,
                 width: size,
                 alignment: Alignment.center,
                 child: Text(
