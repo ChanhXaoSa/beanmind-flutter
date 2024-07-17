@@ -1,6 +1,3 @@
-import 'package:beanmind_flutter/screens/course/course_detail_screen.dart';
-import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
-import 'package:beanmind_flutter/screens/course/course_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
@@ -39,7 +36,7 @@ class AppRoutes {
               Get.put(LeaderBoardController());
             })),
         GetPage(
-            page: () => QuizeScreen(),
+            page: () => const QuizeScreen(),
             name: QuizeScreen.routeName,
             binding: BindingsBuilder(() {
               Get.put<QuizController>(QuizController());
