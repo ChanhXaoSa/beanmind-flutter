@@ -46,7 +46,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     '4',
     '5',
     '6',
-    'DEL',
+    '\u2190',
     '1',
     '2',
     '3',
@@ -67,7 +67,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
     '9',
     '0',
     'C',
-    'DEL',
+    '\u2190',
     '/',
     '='
   ];
@@ -116,7 +116,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                 checkResult();
               }
             } else if (logicalKey == LogicalKeyboardKey.backspace) {
-              buttonTapped('DEL');
+              buttonTapped('\u2190');
             }
             final input = logicalKey.keyLabel;
             if (RegExp(r'^[0-9]$').hasMatch(input)) {
@@ -535,7 +535,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         checkResult();
       } else if (button == 'C') {
         userAnswer = '';
-      } else if (button == 'DEL') {
+      } else if (button == '\u2190') {
         if (userAnswer.isNotEmpty) {
           userAnswer = userAnswer.substring(0, userAnswer.length - 1);
         }

@@ -45,8 +45,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   List<String> numberPad = [
-    'CHECK RESULT',
-    'RESET',
+    'XONG',
+    'KHÔI PHỤC',
   ];
 
   @override
@@ -460,9 +460,9 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
   void buttonTapped(String button) {
     setState(() {
-      if (button == 'CHECK RESULT') {
+      if (button == 'XONG') {
         checkResult();
-      } else if (button == 'RESET') {
+      } else if (button == 'KHÔI PHỤC') {
         upper.clear();
         lower = List.from(startLower);
         _splitPanels = SplitPanels();

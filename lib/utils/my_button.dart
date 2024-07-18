@@ -22,13 +22,13 @@ class _MyButtonState extends State<MyButton> {
 
     if(widget.child == 'C') {
       buttonColor = Colors.green;
-    } else if (widget.child == 'DEL') {
+    } else if (widget.child == '\u2190') {
       buttonColor = Colors.red;
     } else if (widget.child == '=') {
       buttonColor = Colors.deepPurple;
-    } else if (widget.child == 'CHECK RESULT') {
+    } else if (widget.child == 'XONG') {
       buttonColor = Colors.green;
-    } else if (widget.child == 'RESET') {
+    } else if (widget.child == 'KHÔI PHỤC') {
       buttonColor = Colors.red;
     } else if (widget.child =='/'){
       buttonColor = Colors.green;

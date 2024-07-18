@@ -37,144 +37,13 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   List<String> numberPad = [
-    'CHECK RESULT',
-    'RESET',
+    'XONG',
+    'KHÔI PHỤC',
   ];
 
   int userPoint = 0;
   int userProgress = 0;
   int totalQuestion = 3;
-
-  // time
-
-  void buttonTapped(String button) {
-    try {
-      if (button == 'RESET') {
-        setState(() {
-          balance = 100;
-          lastbalance = 20;
-          upperItemModel.clear();
-          lowerItemModel = List.from(startLowerItemModel);
-          _shopingSplitPanels = ShopingSplitPanels();
-          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
-        });
-      }
-      if (button == 'CHECK RESULT') {
-        checkResult();
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void resetGame() {
-    try {
-      Navigator.of(context).pop();
-      setState(() {
-        balance = 100;
-        lastbalance = 20;
-        userPoint = 0;
-        userProgress = 0;
-        _timeRecord.seconds = 0;
-        _timeRecord.startTimer();
-        upperItemModel = [];
-        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
-        _shopingSplitPanels = ShopingSplitPanels();
-        _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void backtoHome() {
-    // go to GameList
-    Get.offAll(GameListScreen.routeName);
-  }
-
-  void checkResult() {
-    try {
-      if (upperItemModel.isEmpty) {
-        _showDialogError('Bạn chưa chọn sản phẩm nào!');
-        return;
-      }
-
-      userProgress += 1;
-      setState(() {
-        showResultDialog = true;
-      });
-      if (balance == lastbalance) {
-        userPoint += 1;
-        _audio.playSuccessSound();
-        ();
-        if (userProgress == totalQuestion) {
-          _audio.playCompleteSound();
-          ();
-          String lottieAsset = _getLottieAsset(userPoint);
-          _timeRecord.stopTimer();
-          saveGameResults(
-              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
-          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-              lottieAsset, false, userPoint);
-          return;
-        }
-        _showDialog(
-            'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
-      } else {
-        if (userProgress == totalQuestion) {
-          _audio.playCompleteSound();
-          ();
-          String lottieAsset = _getLottieAsset(userPoint);
-          _timeRecord.stopTimer();
-          saveGameResults(
-              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
-          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-              lottieAsset, false, userPoint);
-          return;
-        }
-        _audio.playWrongSound();
-        ();
-        _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  String _getLottieAsset(int userPoint) {
-    print(userPoint);
-    switch (userPoint) {
-      case 1:
-        return 'assets/lotties/bronze_medal.json';
-      case 2:
-        return 'assets/lotties/silver_medal.json';
-      case 3:
-        return 'assets/lotties/gold_medal.json';
-      default:
-        return 'assets/lotties/wrong.json';
-    }
-  }
-
-  void goToNextQuestion() {
-    try {
-      if (showResultDialog) {
-        Navigator.of(context).pop();
-        setState(() {
-          balance = 100;
-          lastbalance = 20;
-          upperItemModel.clear();
-          lowerItemModel = List.from(startLowerItemModel);
-          _shopingSplitPanels = ShopingSplitPanels();
-          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
-        });
-        setState(() {
-          showResultDialog = false;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   void dispose() {
@@ -200,6 +69,218 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    const double thresholdWidth = 600;
+    final bool isWideScreen = screenSize.width > thresholdWidth;
+    FocusScope.of(context).requestFocus(_resultFocusNode);
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    if (_isLoading) {
+      return Center(child: ProgressWidgets());
+    } else {
+      return Container(
+        child: KeyboardListener(
+          focusNode: FocusNode(),
+          onKeyEvent: (KeyEvent event) {
+            if (event is KeyDownEvent) {
+              final logicalKey = event.logicalKey;
+              if (logicalKey == LogicalKeyboardKey.enter) {
+                if (showResultDialog) {
+                  goToNextQuestion();
+                } else {
+                  checkResult();
+                }
+              }
+            }
+          },
+          child: Scaffold(
+            body: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 25,
+                  ),
+                  height: 60,
+                  decoration: BoxDecoration(gradient: mainGradient(context)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Số điểm của bạn : ' + userPoint.toString(),
+                          style: whiteTextStyle,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Hướng dẫn'),
+                                content: Text(
+                                  'Nội dung hướng dẫn người chơi...',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding:
+                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                        ),
+                        child: Icon(
+                          Icons.help,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 60,
+                  decoration: BoxDecoration(gradient: mainGradient(context)),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
+                          style: whiteTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: isWideScreen
+                      ? Container(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage(
+                                  'images/background/background_shopping_game.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.7),
+                                BlendMode.darken,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  child: _shopingSplitPanelsMobie,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage(
+                                  'images/background/background_shopping_game.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.5),
+                                BlendMode.darken,
+                              ),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  child: _shopingSplitPanelsMobie,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                Focus(
+                  focusNode: _resultFocusNode,
+                  child: const SizedBox(
+                    height: 0,
+                    width: 0,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  
   void _showDialogError(
     String message,
   ) {
@@ -399,212 +480,132 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    const double thresholdWidth = 600;
-    final bool isWideScreen = screenSize.width > thresholdWidth;
-    FocusScope.of(context).requestFocus(_resultFocusNode);
-    Future.delayed(const Duration(seconds: 3), () {
+  void buttonTapped(String button) {
+    try {
+      if (button == 'KHÔI PHỤC') {
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upperItemModel.clear();
+          lowerItemModel = List.from(startLowerItemModel);
+          _shopingSplitPanels = ShopingSplitPanels();
+          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+        });
+      }
+      if (button == 'XONG') {
+        checkResult();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void resetGame() {
+    try {
+      Navigator.of(context).pop();
       setState(() {
-        _isLoading = false;
+        balance = 100;
+        lastbalance = 20;
+        userPoint = 0;
+        userProgress = 0;
+        _timeRecord.seconds = 0;
+        _timeRecord.startTimer();
+        upperItemModel = [];
+        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
+        _shopingSplitPanels = ShopingSplitPanels();
+        _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
       });
-    });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
-    } else {
-      return Container(
-        child: KeyboardListener(
-          focusNode: FocusNode(),
-          onKeyEvent: (KeyEvent event) {
-            if (event is KeyDownEvent) {
-              final logicalKey = event.logicalKey;
-              if (logicalKey == LogicalKeyboardKey.enter) {
-                if (showResultDialog) {
-                  goToNextQuestion();
-                } else {
-                  checkResult();
-                }
-              }
-            }
-          },
-          child: Scaffold(
-            body: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 25,
-                  ),
-                  height: 60,
-                  decoration: BoxDecoration(gradient: mainGradient(context)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Số điểm của bạn : ' + userPoint.toString(),
-                          style: whiteTextStyle,
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Hướng dẫn'),
-                                content: Text(
-                                  'Nội dung hướng dẫn người chơi...',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding:
-                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                        ),
-                        child: Icon(
-                          Icons.help,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60,
-                  decoration: BoxDecoration(gradient: mainGradient(context)),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
-                          style: whiteTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: isWideScreen
-                      ? Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: const AssetImage(
-                                  'images/background/background_shopping_game.png'),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.7),
-                                BlendMode.darken,
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  alignment: Alignment.topCenter,
-                                  child: _shopingSplitPanelsMobie,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: GridView.builder(
-                                    itemCount: numberPad.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1, // Số cột
-                                      childAspectRatio: 4, // Tỷ lệ khung hình
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return MyButton(
-                                        child: numberPad[index],
-                                        onTap: () =>
-                                            buttonTapped(numberPad[index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: const AssetImage(
-                                  'images/background/background_shopping_game.png'),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.5),
-                                BlendMode.darken,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  alignment: Alignment.topCenter,
-                                  child: _shopingSplitPanelsMobie,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: GridView.builder(
-                                    itemCount: numberPad.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1, // Số cột
-                                      childAspectRatio: 4, // Tỷ lệ khung hình
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return MyButton(
-                                        child: numberPad[index],
-                                        onTap: () =>
-                                            buttonTapped(numberPad[index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                ),
-                Focus(
-                  focusNode: _resultFocusNode,
-                  child: const SizedBox(
-                    height: 0,
-                    width: 0,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAll(GameListScreen.routeName);
+  }
+
+  void checkResult() {
+    try {
+      if (upperItemModel.isEmpty) {
+        _showDialogError('Bạn chưa chọn sản phẩm nào!');
+        return;
+      }
+
+      userProgress += 1;
+      setState(() {
+        showResultDialog = true;
+      });
+      if (balance == lastbalance) {
+        userPoint += 1;
+        _audio.playSuccessSound();
+        ();
+        if (userProgress == totalQuestion) {
+          _audio.playCompleteSound();
+          ();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, false, userPoint);
+          return;
+        }
+        _showDialog(
+            'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
+      } else {
+        if (userProgress == totalQuestion) {
+          _audio.playCompleteSound();
+          ();
+          String lottieAsset = _getLottieAsset(userPoint);
+          _timeRecord.stopTimer();
+          saveGameResults(
+              gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+          _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
+              lottieAsset, false, userPoint);
+          return;
+        }
+        _audio.playWrongSound();
+        ();
+        _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  String _getLottieAsset(int userPoint) {
+    print(userPoint);
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze_medal.json';
+      case 2:
+        return 'assets/lotties/silver_medal.json';
+      case 3:
+        return 'assets/lotties/gold_medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
+    }
+  }
+
+  void goToNextQuestion() {
+    try {
+      if (showResultDialog) {
+        Navigator.of(context).pop();
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upperItemModel.clear();
+          lowerItemModel = List.from(startLowerItemModel);
+          _shopingSplitPanels = ShopingSplitPanels();
+          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+        });
+        setState(() {
+          showResultDialog = false;
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
