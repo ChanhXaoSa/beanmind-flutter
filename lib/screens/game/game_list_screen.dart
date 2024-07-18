@@ -1,6 +1,9 @@
+import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/configs/themes/app_icons_icons.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/models/models.dart';
+import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +11,6 @@ import 'package:get/get.dart';
 
 class GameListScreen extends GetView<GameController> {
   const GameListScreen({Key? key}) : super(key: key);
-
   static const String routeName = '/game_list';
 
   @override
@@ -97,6 +99,29 @@ class GameListScreen extends GetView<GameController> {
                   Image.network(
                     controller.games[index]['image']!,
                     fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: -10,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        // Get.find<NotificationService>().showQuizCompletedNotification(id: 1, title: 'Sampole', body: 'Sample', imageUrl: model.imageUrl, payload: json.encode(model.toJson())  );
+                        Get.toNamed(GameLeaderboardScreen.routeName,
+                            arguments: 'game001');
+                      },
+                      child: Ink(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
+                        child: const Icon(AppIcons.trophyoutline),
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
