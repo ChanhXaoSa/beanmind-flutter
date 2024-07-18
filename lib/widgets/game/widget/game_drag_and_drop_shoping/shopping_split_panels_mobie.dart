@@ -1,4 +1,4 @@
-import 'package:beanmind_flutter/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -139,8 +139,8 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
                   children: [
                     Text('Số tiền bạn có: ${balance} \$',
                         style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
+                          fontSize: 30,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         )),
                   ],
@@ -149,7 +149,7 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
                   children: [
                     Text(
                       'Số tiền giữ lại theo yêu cầu: ${lastbalance} \$',
-                      style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -161,10 +161,17 @@ class _ShopingSplitPanelsMobieState extends State<ShopingSplitPanelsMobie> {
           flex: 1,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.deepPurple[250],
-              border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            border: Border.all(color: Colors.white, width: 2),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
             child: DragDropList(
               products: upperItemModel,
               onDragStart: onDragStart,
@@ -238,10 +245,10 @@ class DragDropList extends StatelessWidget {
       builder: (context, candidateData, rejectedData) {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 8, // Số lượng mục trong một hàng
+            crossAxisCount: 10, // Số lượng mục trong một hàng
             mainAxisSpacing: 1, // Khoảng cách giữa các hàng
             crossAxisSpacing: 1, // Khoảng cách giữa các cột
-            childAspectRatio: 1, // Tỷ lệ chiều rộng/chiều cao của mục
+            childAspectRatio: 0.8, // Tỷ lệ chiều rộng/chiều cao của mục
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
@@ -277,19 +284,20 @@ class ShoppingCartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Center(
+      child: FittedBox(
         child: Column(
           children: [
             Image.network(
               product.imageurl ?? '',
-              scale: 0.7,
+              scale: 1,
             ),
             Text('\$${product.price}',
                 style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                    fontSize: 22,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none)),
+                    SizedBox(height: 10,),
           ],
         ),
       ),

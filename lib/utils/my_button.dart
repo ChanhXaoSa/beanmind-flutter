@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyButton extends StatefulWidget {
   final String child;
@@ -11,10 +12,10 @@ class MyButton extends StatefulWidget {
 }
 
 class _MyButtonState extends State<MyButton> {
-  var buttonColor = Colors.deepPurple[400];
+  var buttonColor = Colors.deepPurple[600];
 
   var whiteTextStyle = const TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
+      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white,);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,8 @@ class _MyButtonState extends State<MyButton> {
       buttonColor = Colors.green;
     } else if (widget.child == 'RESET') {
       buttonColor = Colors.red;
+    } else if (widget.child =='/'){
+      buttonColor = Colors.green;
     }
 
     return Padding(
@@ -38,12 +41,14 @@ class _MyButtonState extends State<MyButton> {
         child: Container(
           decoration: BoxDecoration(
             color: buttonColor,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Center(
             child: Text(
               widget.child,
-              style: whiteTextStyle,
+              style: GoogleFonts.aBeeZee(
+                textStyle: whiteTextStyle,
+              )
             ),
           ),
         ),

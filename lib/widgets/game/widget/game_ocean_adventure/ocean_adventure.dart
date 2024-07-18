@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_level.dart';
-import 'package:beanmind_flutter/game/class/ocean_adventure/ocean_adventure_user.dart';
+import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_level.dart';
+import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_user.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';

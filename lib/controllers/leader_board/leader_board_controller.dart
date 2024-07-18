@@ -7,11 +7,14 @@ import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
 
 class LeaderBoardController extends GetxController {
+  // quiz
   final leaderBoard = <LeaderBoardData>[].obs;
-  final leaderBoardGame = <LeaderBoardGameData>[].obs;
   final myScores = Rxn<LeaderBoardData>();
-  final myGameScores = Rxn<LeaderBoardGameData>();
   final loadingStatus = LoadingStatus.completed.obs;
+
+  // game
+  final leaderBoardGame = <LeaderBoardGameData>[].obs;
+  final myGameScores = Rxn<LeaderBoardGameData>();
   final gameloadingStatus = LoadingStatus.completed.obs;
 
   void getAll(String paperId) async {
@@ -92,8 +95,10 @@ class LeaderBoardController extends GetxController {
     try {
       final DocumentSnapshot<Map<String, dynamic>> _leaderBoardGameSnapShot =
           await getleaderBoardGame(paperId: gameId).doc(user.email).get();
-      final _myGameScores = LeaderBoardGameData.fromSnapShot(_leaderBoardGameSnapShot);
-      _myGameScores.user = UserData(name: user.displayName!, image: user.photoURL);
+      final _myGameScores =
+          LeaderBoardGameData.fromSnapShot(_leaderBoardGameSnapShot);
+      _myGameScores.user =
+          UserData(name: user.displayName!, image: user.photoURL);
       myGameScores.value = _myGameScores;
     } catch (e) {
       AppLogger.e(e);

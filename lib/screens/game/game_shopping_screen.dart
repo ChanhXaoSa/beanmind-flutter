@@ -1,44 +1,37 @@
-import 'dart:math';
+import 'dart:async';
+
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
-import 'package:beanmind_flutter/game/class/audio.dart';
-import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_level.dart';
-import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_user.dart';
-import 'package:beanmind_flutter/game/class/save_game_result.dart';
-import 'package:beanmind_flutter/game/class/timer.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels.dart';
-import 'package:beanmind_flutter/game/widget/game_sort%20numbers/split_panels_mobie.dart';
+import 'package:beanmind_flutter/widgets/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/timer.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
+import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
+import '../../models/game_model.dart';
 
-class MathDragAndDropScreen extends StatefulWidget {
+class GameShoppingScreen extends StatefulWidget {
   @override
-  _MathDragAndDropScreenState createState() => _MathDragAndDropScreenState();
+  _GameShoppingScreenState createState() => _GameShoppingScreenState();
 }
 
-class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
+class _GameShoppingScreenState extends State<GameShoppingScreen> {
   final FocusNode _resultFocusNode = FocusNode();
-  final Audio _audio = Audio();
+  final _audio = Audio();
   late VideoPlayerController _videoPlayerController;
-  late SplitPanels _splitPanels;
-  late SplitPanelsMobie _splitPanelsMobie;
-  late TimeRecord _timeRecord = TimeRecord();
+  late ShopingSplitPanels _shopingSplitPanels;
+  late ShopingSplitPanelsMobie _shopingSplitPanelsMobie;
+  TimeRecord _timeRecord = TimeRecord();
 
   bool showResultDialog = false;
   bool _isLoading = true;
-
-  int userPoint = 0;
-  int userProgress = 0;
-  int totalQuestion = 3;
-  String userAnswer = '';
-  var randomNumber = Random();
-  String gameId = 'game003';
+  String gameId = 'game004';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -48,65 +41,75 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     'RESET',
   ];
 
+  int userPoint = 0;
+  int userProgress = 0;
+  int totalQuestion = 3;
+
+  // time
+
   void buttonTapped(String button) {
-    setState(() {
+    try {
+      if (button == 'RESET') {
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upperItemModel.clear();
+          lowerItemModel = List.from(startLowerItemModel);
+          _shopingSplitPanels = ShopingSplitPanels();
+          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+        });
+      }
       if (button == 'CHECK RESULT') {
         checkResult();
-      } else if (button == 'RESET') {
-        upper.clear();
-        lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        _splitPanelsMobie = SplitPanelsMobie();
       }
-    });
+    } catch (e) {
+      print(e);
+    }
   }
 
-  void handleNumberButtonPress(String number) {
-    setState(() {
-      if (userAnswer.length < 4) {
-        userAnswer += number;
-      }
-    });
+  void resetGame() {
+    try {
+      Navigator.of(context).pop();
+      setState(() {
+        balance = 100;
+        lastbalance = 20;
+        userPoint = 0;
+        userProgress = 0;
+        _timeRecord.seconds = 0;
+        _timeRecord.startTimer();
+        upperItemModel = [];
+        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
+        _shopingSplitPanels = ShopingSplitPanels();
+        _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void backtoHome() {
+    // go to GameList
+    Get.offAll(GameListScreen.routeName);
   }
 
   void checkResult() {
-    setState(() {
-      showResultDialog = true;
-    });
-
-    // Check if the upper list is empty
-    if (upper.isEmpty) {
-      _showDialogError(
-          'Bạn chưa đặt các thẻ số lên phía trên \nhãy xếp số theo thứ tự đề bài yêu cầu!');
-      return;
-    }
-
-    // Check if the upper list is sorted in ascending order
-    bool isSortedAscending = true;
-    for (int i = 0; i < upper.length - 1; i++) {
-      if (upper[i] > upper[i + 1]) {
-        isSortedAscending = false;
-        break;
+    try {
+      if (upperItemModel.isEmpty) {
+        _showDialogError('Bạn chưa chọn sản phẩm nào!');
+        return;
       }
-    }
 
-    // Check if the upper list is sorted in descending order
-    bool isSortedDescending = true;
-    for (int i = 0; i < upper.length - 1; i++) {
-      if (upper[i] < upper[i + 1]) {
-        isSortedDescending = false;
-        break;
-      }
-    }
-
-    if (upper.length == 10) {
       userProgress += 1;
-      if ((sortingOrder == 'ascending' && isSortedAscending) ||
-          (sortingOrder == 'descending' && isSortedDescending)) {
+      setState(() {
+        showResultDialog = true;
+      });
+      if (balance == lastbalance) {
         userPoint += 1;
         _audio.playSuccessSound();
+        ();
         if (userProgress == totalQuestion) {
           _audio.playCompleteSound();
+          ();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
           saveGameResults(
@@ -120,6 +123,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       } else {
         if (userProgress == totalQuestion) {
           _audio.playCompleteSound();
+          ();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
           saveGameResults(
@@ -128,33 +132,47 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
               lottieAsset, false, userPoint);
           return;
         }
-        _showDialog(
-            'Sai rồi !', 'assets/lotties/wrong.json', false, true, true);
+        _audio.playWrongSound();
+        ();
+        _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
       }
-    } else if ((sortingOrder == 'ascending' && isSortedAscending) ||
-        (sortingOrder == 'descending' && isSortedDescending)) {
-      _showDialog(
-          'Đúng rồi !', 'assets/lotties/success.json', true, false, false);
-    } else {
-      _audio.playWrongSound();
-      _showDialog('Sai rồi !', 'assets/lotties/wrong.json', true, false, true);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  String _getLottieAsset(int userPoint) {
+    print(userPoint);
+    switch (userPoint) {
+      case 1:
+        return 'assets/lotties/bronze_medal.json';
+      case 2:
+        return 'assets/lotties/silver_medal.json';
+      case 3:
+        return 'assets/lotties/gold_medal.json';
+      default:
+        return 'assets/lotties/wrong.json';
     }
   }
 
   void goToNextQuestion() {
-    if (showResultDialog) {
-      Navigator.of(context).pop();
-      setState(() {
-        resetGameSortNumber();
-        lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        _splitPanelsMobie = SplitPanelsMobie();
-        userAnswer = '';
-        generateSortingQuestion();
-      });
-      setState(() {
-        showResultDialog = false;
-      });
+    try {
+      if (showResultDialog) {
+        Navigator.of(context).pop();
+        setState(() {
+          balance = 100;
+          lastbalance = 20;
+          upperItemModel.clear();
+          lowerItemModel = List.from(startLowerItemModel);
+          _shopingSplitPanels = ShopingSplitPanels();
+          _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+        });
+        setState(() {
+          showResultDialog = false;
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -172,47 +190,14 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
-    _splitPanels = SplitPanels();
-    _splitPanelsMobie = SplitPanelsMobie();
-    generateSortingQuestion();
+    _shopingSplitPanels = ShopingSplitPanels();
+    _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+    // delay 3s to show the dialog
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _timeRecord.startTimer();
       });
     });
-  }
-
-  void resetGame() {
-    Navigator.of(context).pop();
-    setState(() {
-      userPoint = 0;
-      userProgress = 0;
-      upper.clear();
-      lower = List.from(startLower);
-      _timeRecord.seconds = 0;
-      _timeRecord.startTimer();
-      _splitPanels = SplitPanels();
-      _splitPanelsMobie = SplitPanelsMobie();
-      generateSortingQuestion();
-    });
-  }
-
-  void backtoHome() {
-    // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
-  }
-
-  String _getLottieAsset(int userPoint) {
-    switch (userPoint) {
-      case 1:
-        return 'assets/lotties/bronze_medal.json';
-      case 2:
-        return 'assets/lotties/silver_medal.json';
-      case 3:
-        return 'assets/lotties/gold_medal.json';
-      default:
-        return 'assets/lotties/wrong.json';
-    }
   }
 
   void _showDialogError(
@@ -417,7 +402,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double thresholdWidth = 600;
+    const double thresholdWidth = 600;
     final bool isWideScreen = screenSize.width > thresholdWidth;
     FocusScope.of(context).requestFocus(_resultFocusNode);
     Future.delayed(const Duration(seconds: 3), () {
@@ -428,40 +413,31 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     if (_isLoading) {
       return Center(child: ProgressWidgets());
     } else {
-      return KeyboardListener(
-        focusNode: FocusNode(),
-        onKeyEvent: (KeyEvent event) {
-          if (event is KeyDownEvent) {
-            final logicalKey = event.logicalKey;
-            if (logicalKey == LogicalKeyboardKey.enter) {
-              if (showResultDialog) {
-                goToNextQuestion();
-              } else {
-                checkResult();
+      return Container(
+        child: KeyboardListener(
+          focusNode: FocusNode(),
+          onKeyEvent: (KeyEvent event) {
+            if (event is KeyDownEvent) {
+              final logicalKey = event.logicalKey;
+              if (logicalKey == LogicalKeyboardKey.enter) {
+                if (showResultDialog) {
+                  goToNextQuestion();
+                } else {
+                  checkResult();
+                }
               }
-            } else if (logicalKey == LogicalKeyboardKey.backspace) {
-              buttonTapped('DEL');
             }
-            final input = logicalKey.keyLabel;
-            if (RegExp(r'^[0-9]$').hasMatch(input)) {
-              handleNumberButtonPress(input);
-            }
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.deepPurple[300],
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: mainGradient(context),
-            ),
-            child: Column(
+          },
+          child: Scaffold(
+            body: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
-                    right: 20,
+                    right: 25,
                   ),
                   height: 60,
+                  decoration: BoxDecoration(gradient: mainGradient(context)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -491,19 +467,28 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                             },
                           );
                         },
-                        child: const Text('Hướng dẫn'),
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding:
+                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                        ),
+                        child: Icon(
+                          Icons.help,
+                          size: 30,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
                   height: 60,
+                  decoration: BoxDecoration(gradient: mainGradient(context)),
                   child: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          question,
+                          'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
                           style: whiteTextStyle,
                         ),
                       ],
@@ -512,80 +497,105 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                 ),
                 Expanded(
                   child: isWideScreen
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                margin: EdgeInsets.only(left: 15),
-                                alignment: Alignment.topCenter,
-                                child: _splitPanelsMobie,
+                      ? Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage(
+                                  'images/background/background_shopping_game.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.7),
+                                BlendMode.darken,
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: GridView.builder(
-                                  itemCount: numberPad.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Số cột
-                                    childAspectRatio: 4, // Tỷ lệ khung hình
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return MyButton(
-                                      child: numberPad[index],
-                                      onTap: () =>
-                                          buttonTapped(numberPad[index]),
-                                    );
-                                  },
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  child: _shopingSplitPanelsMobie,
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         )
-                      : Column(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                child: _splitPanelsMobie,
+                      : Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage(
+                                  'images/background/background_shopping_game.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.5),
+                                BlendMode.darken,
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: GridView.builder(
-                                  itemCount: numberPad.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Số cột
-                                    childAspectRatio: 4, // Tỷ lệ khung hình
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return MyButton(
-                                      child: numberPad[index],
-                                      onTap: () =>
-                                          buttonTapped(numberPad[index]),
-                                    );
-                                  },
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  child: _shopingSplitPanelsMobie,
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1, // Số cột
+                                      childAspectRatio: 4, // Tỷ lệ khung hình
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                 ),
                 Focus(
                   focusNode: _resultFocusNode,
-                  child: Container(
+                  child: const SizedBox(
                     height: 0,
                     width: 0,
                   ),

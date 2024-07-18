@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:beanmind_flutter/game/class/drag_and_drop/math_sort_user.dart';
+import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_user.dart';
 
 List<int> upper = [];
 List<int> lower = [];
@@ -15,7 +15,7 @@ void randomNumber() {
     uniqueNumbers.add(random.nextInt(99) + 1);
   }
   startLower.addAll(uniqueNumbers);
-  lower.addAll(uniqueNumbers);
+  lower = startLower;
 }
 
 void resetGameSortNumber() {
