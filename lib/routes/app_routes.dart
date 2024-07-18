@@ -48,7 +48,6 @@ class AppRoutes {
             page: () => const QuizOverviewScreen(),
             name: QuizOverviewScreen.routeName),
         GetPage(page: () => const Resultcreen(), name: Resultcreen.routeName),
-        GetPage(name: CourseScreen.routeName, page: () => const CourseScreen()),
         GetPage(
             name: GameListScreen.routeName, page: () => const GameListScreen()),
         GetPage(

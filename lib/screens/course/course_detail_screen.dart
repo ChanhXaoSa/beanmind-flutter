@@ -59,7 +59,8 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 0, 20, 0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                       image: const DecorationImage(
