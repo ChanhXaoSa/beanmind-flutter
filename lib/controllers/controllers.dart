@@ -11,6 +11,7 @@ export 'quiz_paper/quiz_result_extention_qc.dart';
 export 'profile/profile_controller.dart';
 
 export 'leader_board/leader_board_controller.dart';
+export 'leader_board/game_leader_board_controller.dart';
 
 export 'course/course_controller.dart';
 

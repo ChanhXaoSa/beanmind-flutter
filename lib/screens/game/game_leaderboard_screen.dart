@@ -7,7 +7,7 @@ import 'package:beanmind_flutter/firebase/firebase_configs.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
 
-class GameLeaderboardScreen extends GetView<LeaderBoardController> {
+class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
   GameLeaderboardScreen({Key? key}) : super(key: key) {
     SchedulerBinding.instance.addPostFrameCallback((d) {
       final paper = Get.arguments as GameModel;
@@ -20,9 +20,11 @@ class GameLeaderboardScreen extends GetView<LeaderBoardController> {
 
   @override
   Widget build(BuildContext context) {
+    final paper = Get.arguments as GameModel;
+    String nameGame = paper.name ??'';
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(title: 'Bảng xếp hạng trò chơi $nameGame',),
       bottomNavigationBar: Obx(() => controller.myGameScores.value == null
           ? const SizedBox()
           : GameLeaderBoardCard(
@@ -38,8 +40,20 @@ class GameLeaderboardScreen extends GetView<LeaderBoardController> {
                     addPadding: true,
                     child: LeaderBoardPlaceHolder(),
                   )
-                : ContentArea(
-                    addPadding: false,
+                : Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/background/background_math_sort_3.png'),
+                            fit: BoxFit.fill,
+                            colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.5),
+                              BlendMode.darken,
+                            ),
+                          ),
+                        ),             
+                        padding: const EdgeInsets.only(left: 400, right: 400, top: 50),
                     child: ListView.separated(
                       itemCount: controller.leaderBoardGame.length,
                       separatorBuilder: (BuildContext context, int index) {
@@ -54,6 +68,7 @@ class GameLeaderboardScreen extends GetView<LeaderBoardController> {
                       },
                     ),
                   ),
+                ),
           ),
         ),
       ),
@@ -73,7 +88,8 @@ class GameLeaderBoardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const tsStyle = TextStyle(fontWeight: FontWeight.bold);
+    var whiteTextStyle = const TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
     return ListTile(
       leading: CircleAvatar(
         foregroundImage:
@@ -81,7 +97,7 @@ class GameLeaderBoardCard extends StatelessWidget {
       ),
       title: Text(
         data.user.name,
-        style: tsStyle,
+        style: whiteTextStyle,
       ),
       subtitle: EasySeparatedRow(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,37 +111,40 @@ class GameLeaderBoardCard extends StatelessWidget {
             icon: Icon(
               Icons.done_all,
               color: Theme.of(context).primaryColor,
+              size: 30,
             ),
             text: Text(
               data.correctCount!,
-              style: tsStyle,
+              style: whiteTextStyle,
             ),
           ),
           IconWithText(
             icon: Icon(
               Icons.timer,
               color: Theme.of(context).primaryColor,
+              size: 30,
             ),
             text: Text(
               '${data.time!}',
-              style: tsStyle,
+              style: whiteTextStyle,
             ),
           ),
           IconWithText(
             icon: Icon(
               Icons.emoji_events_outlined,
               color: Theme.of(context).primaryColor,
+              size: 30,
             ),
             text: Text(
               '${data.points!}',
-              style: tsStyle,
+              style: whiteTextStyle,
             ),
           ),
         ],
       ),
       trailing: Text(
         '#' + '${index + 1}'.padLeft(2, "0"),
-        style: tsStyle,
+        style: whiteTextStyle,
       ),
     );
   }

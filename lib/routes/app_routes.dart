@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
@@ -35,6 +36,12 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(LeaderBoardController());
             })),
+        GetPage(
+            page: () => GameLeaderboardScreen(),
+            name: GameLeaderboardScreen.routeName,
+            binding: BindingsBuilder(() {
+              Get.put(GameLeaderBoardController());
+            })),    
         GetPage(
             page: () => const QuizeScreen(),
             name: QuizeScreen.routeName,

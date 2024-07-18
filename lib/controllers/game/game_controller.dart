@@ -1,4 +1,6 @@
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
+import 'package:beanmind_flutter/firebase/firebase_configs.dart';
+import 'package:beanmind_flutter/firebase/loading_status.dart';
 import 'package:beanmind_flutter/screens/game/game_shopping_screen.dart';
 import 'package:beanmind_flutter/screens/game/happy_farm_screen.dart';
 import 'package:beanmind_flutter/screens/game/ocean_adventure_screen.dart';
@@ -6,13 +8,17 @@ import 'package:beanmind_flutter/screens/game/odd_and_even_screen.dart';
 import 'package:beanmind_flutter/screens/game/game_drag_and_drop_screen.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
+import 'package:beanmind_flutter/utils/logger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GameController extends GetxController {
+  final loadingStatus = LoadingStatus.loading.obs;
   var isLoading = false.obs;
   var selectedGame = RxnString();
   var shouldReset = false.obs;
+  late GameModel gamePaperModel;
 
   String gameThumbnailURL = '/images/game_thumbnail/';
 
@@ -100,10 +106,31 @@ class GameController extends GetxController {
     super.onInit();
     ever(selectedGame, (_) {
       if (selectedGame.value == null) {}
-    }); 
+    });
   }
 
   void navigateToGameList() {
     Get.toNamed(GameListScreen.routeName);
+  }
+
+  void loadData(GameModel gamePaper) async {
+    gamePaperModel = gamePaper;
+    loadingStatus.value = LoadingStatus.loading;
+    try {
+      // Assuming 'games' collection contains documents with 'id' and 'name'
+      final QuerySnapshot<Map<String, dynamic>> gamesQuery =
+          await gameFR.doc(gamePaper.id).collection('').get();
+      final games =
+          gamesQuery.docs.map((game) => GameModel.fromSnapshot(game)).toList();
+
+      // Assuming you want to do something with the fetched games
+      // For example, assigning them to a variable or processing them further
+      // This part of the code needs to be adjusted based on what you want to do with the games data
+
+      loadingStatus.value = LoadingStatus.completed;
+    } catch (e) {
+      AppLogger.e(e);
+      loadingStatus.value = LoadingStatus.error;
+    }
   }
 }

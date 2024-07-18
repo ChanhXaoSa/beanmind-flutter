@@ -101,28 +101,25 @@ class GameListScreen extends GetView<GameController> {
                     fit: BoxFit.cover,
                   ),
                   Positioned(
-                    top: 0,
-                    right: -10,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        // Get.find<NotificationService>().showQuizCompletedNotification(id: 1, title: 'Sampole', body: 'Sample', imageUrl: model.imageUrl, payload: json.encode(model.toJson())  );
-                        Get.toNamed(GameLeaderboardScreen.routeName,
-                            arguments: 'game001');
-                      },
-                      child: Ink(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 20),
-                        child: const Icon(AppIcons.trophyoutline),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          color: Colors.deepPurple,
-                        ),
-                      ),
-                    ),
-                  ),
+  top: 10,
+  right: 10,
+  child: ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Colors.deepPurple, backgroundColor: Colors.white, // Ripple color (on press)
+      shape: CircleBorder(), // Circular shape
+      elevation: 5, // Shadow elevation
+      padding: EdgeInsets.all(20), // Button padding
+    ),
+    onPressed: () {
+      // Your onTap functionality here
+      Get.toNamed(GameLeaderboardScreen.routeName,
+          arguments: GameModel(
+              id: controller.games[index]['gameId'] ?? 'game001',
+              name: controller.games[index]['title'] ?? ''));
+    },
+    child: Icon(AppIcons.trophyoutline, color: Colors.deepPurple), // Icon with deepPurple color
+  ),
+),
                 ],
               ),
             ),

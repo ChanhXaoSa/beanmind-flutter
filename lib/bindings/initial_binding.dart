@@ -11,5 +11,6 @@ class InitialBinding implements Bindings {
     Get.put(NotificationService());
     Get.lazyPut(() =>  FireBaseStorageService());
     Get.put(GameController());
+    Get.put(GameLeaderBoardController());
   }
 }
