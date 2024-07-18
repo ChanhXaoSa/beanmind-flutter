@@ -101,25 +101,30 @@ class GameListScreen extends GetView<GameController> {
                     fit: BoxFit.cover,
                   ),
                   Positioned(
-  top: 10,
-  right: 10,
-  child: ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      foregroundColor: Colors.deepPurple, backgroundColor: Colors.white, // Ripple color (on press)
-      shape: CircleBorder(), // Circular shape
-      elevation: 5, // Shadow elevation
-      padding: EdgeInsets.all(20), // Button padding
-    ),
-    onPressed: () {
-      // Your onTap functionality here
-      Get.toNamed(GameLeaderboardScreen.routeName,
-          arguments: GameModel(
-              id: controller.games[index]['gameId'] ?? 'game001',
-              name: controller.games[index]['title'] ?? ''));
-    },
-    child: Icon(AppIcons.trophyoutline, color: Colors.deepPurple), // Icon with deepPurple color
-  ),
-),
+                    top: 10,
+                    right: 10,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.deepPurple,
+                        backgroundColor:
+                            Colors.white, // Ripple color (on press)
+                        shape: CircleBorder(), // Circular shape
+                        elevation: 5, // Shadow elevation
+                        padding: EdgeInsets.all(20), // Button padding
+                      ),
+                      onPressed: () {
+                        // Your onTap functionality here
+                        Get.toNamed(GameLeaderboardScreen.routeName,
+                            arguments: GameModel(
+                                id: controller.games[index]['gameId'] ??
+                                    'game001',
+                                name: controller.games[index]['title'] ?? ''));
+                      },
+                      child: Icon(AppIcons.trophyoutline,
+                          color:
+                              Colors.deepPurple), // Icon with deepPurple color
+                    ),
+                  ),
                 ],
               ),
             ),
