@@ -21,7 +21,7 @@ class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
   @override
   Widget build(BuildContext context) {
     final paper = Get.arguments as GameModel;
-    String nameGame = paper.name ??'';
+    String nameGame = paper.title ??'';
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(title: 'Bảng xếp hạng trò chơi $nameGame',),

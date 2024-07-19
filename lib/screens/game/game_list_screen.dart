@@ -30,8 +30,7 @@ class GameListScreen extends GetView<GameController> {
           child: Obx(() {
             return controller.selectedGame.value != null
                 ? CustomAppBar(
-                    title: (controller
-                        .getGameTitle(controller.selectedGame.value!)),
+                    title: controller.getGameTitle(controller.selectedGame.value!),
                     leading: IconButton(
                       icon: const Icon(Icons.arrow_back),
                       onPressed: () {
@@ -40,7 +39,7 @@ class GameListScreen extends GetView<GameController> {
                     ),
                     showAudioButton: true,
                   )
-                : CustomAppBar(
+                : const CustomAppBar(
                     title: 'Thư viện trò chơi',
                     showAudioButton: true,
                   );
@@ -48,7 +47,7 @@ class GameListScreen extends GetView<GameController> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Obx(() => controller.isLoading.value
             ? _buildLoadingIndicator()
             : controller.selectedGame.value != null
@@ -75,10 +74,11 @@ class GameListScreen extends GetView<GameController> {
       ),
       itemCount: controller.games.length,
       itemBuilder: (context, index) {
+        final game = controller.games[index];
         return GestureDetector(
           onTap: () {
             controller.isLoading.value = true;
-            controller.selectedGame.value = controller.games[index]['gameId'];
+            controller.selectedGame.value = game['gameId'];
             // Simulate a delay for loading the game
             Future.delayed(Duration(seconds: 0), () {
               controller.isLoading.value = false;
@@ -88,16 +88,16 @@ class GameListScreen extends GetView<GameController> {
             footer: GridTileBar(
               backgroundColor: Colors.black54,
               title: Text(
-                controller.games[index]['title']!,
-                style: TextStyle(fontSize: 20),
+                game['title'] ?? '',
+                style: const TextStyle(fontSize: 20),
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.0), // Bo góc tại đây
+              borderRadius: BorderRadius.circular(5.0),
               child: Stack(
                 children: [
                   Image.network(
-                    controller.games[index]['image']!,
+                    game['imageUrl'] ?? '',
                     fit: BoxFit.cover,
                   ),
                   Positioned(
@@ -106,23 +106,21 @@ class GameListScreen extends GetView<GameController> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.deepPurple,
-                        backgroundColor:
-                            Colors.white, // Ripple color (on press)
-                        shape: CircleBorder(), // Circular shape
+                        backgroundColor: Colors.white, // Ripple color (on press)
+                        shape: const CircleBorder(), // Circular shape
                         elevation: 5, // Shadow elevation
-                        padding: EdgeInsets.all(20), // Button padding
+                        padding: const EdgeInsets.all(20), // Button padding
                       ),
                       onPressed: () {
                         // Your onTap functionality here
-                        Get.toNamed(GameLeaderboardScreen.routeName,
-                            arguments: GameModel(
-                                id: controller.games[index]['gameId'] ??
-                                    'game001',
-                                name: controller.games[index]['title'] ?? ''));
+                        Get.toNamed(GameLeaderboardScreen.routeName, arguments: GameModel(
+                          id: game['id']!,
+                          gameId: game['gameId']!,
+                          title: game['title']!,
+                          imageUrl: game['imageUrl'] ?? '',
+                          description: game['description'] ?? ''));
                       },
-                      child: Icon(AppIcons.trophyoutline,
-                          color:
-                              Colors.deepPurple), // Icon with deepPurple color
+                      child: const Icon(AppIcons.trophyoutline, color: Colors.deepPurple),
                     ),
                   ),
                 ],
@@ -134,3 +132,4 @@ class GameListScreen extends GetView<GameController> {
     );
   }
 }
+

@@ -5,28 +5,30 @@ import 'package:flame/components.dart';
 
 class GameModel {
   final String id;
-  final String? name;
+  final String gameId;
+  final String title;
+  final String imageUrl;
+  final String description;
 
   GameModel({
     required this.id,
-    required this.name,
+    required this.gameId,
+    required this.title,
+    required this.imageUrl,
+    required this.description,
   });
 
-  factory GameModel.fromString(String jsonString) => GameModel.fromJson(json.decode(jsonString));
-
-  GameModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as String,
-        name = json['name'] as String?;
-
-  GameModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
-      : id = snapshot.id,
-        name = snapshot.data()?['name'] as String?;
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-      };
+  factory GameModel.fromJson(Map<String, dynamic> json) {
+    return GameModel(
+      id: json['id'],
+      gameId: json['gameId'],
+      title: json['title'],
+      imageUrl: json['imageUrl'],
+      description: json['description'],
+    );
+  }
 }
+
 
 class GameAnimalModel {
   final String id;
