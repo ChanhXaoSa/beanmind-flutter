@@ -39,7 +39,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   String userAnswer = '';
   var randomNumber = Random();
   String gameId = 'game003';
-    String background = 'images/background/background_math_sort_1.png';
+  String background =
+      'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_1.png?alt=media&token=39e27f13-3fc8-42b8-9365-0b635c9ee860';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -97,7 +98,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
             alignment: Alignment.topCenter,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(background),
+                image: NetworkImage(
+                    background), // Thay 'url' bằng đường dẫn URL thực tế của hình ảnh
                 fit: BoxFit.fill,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5),
@@ -235,7 +237,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                                   itemBuilder: (context, index) {
                                     return MyButton(
                                       child: numberPad[index],
-                                      onTap: () => buttonTapped(numberPad[index]),
+                                      onTap: () =>
+                                          buttonTapped(numberPad[index]),
                                     );
                                   },
                                 ),
@@ -619,13 +622,17 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   void changeBackgroundColor() {
     setState(() {
       if (userProgress == 0) {
-        background = 'images/background/background_math_sort_1.png';
+        background =
+            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_1.png?alt=media&token=39e27f13-3fc8-42b8-9365-0b635c9ee860';
       } else if (userProgress == 1) {
-        background = 'images/background/background_math_sort_2.png';
+        background =
+            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_2.png?alt=media&token=e408883e-3659-40a8-98c2-8f67f652aaf7';
       } else if (userProgress == 2) {
-        background = 'images/background/background_math_sort_3.png';
+        background =
+            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_3.png?alt=media&token=4ef2ebe9-0629-4016-b813-3aae768bfc7e';
       } else {
-        background = 'images/background/background_math_sort_1.png';
+        background =
+            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_1.png?alt=media&token=39e27f13-3fc8-42b8-9365-0b635c9ee860';
       }
     });
   }

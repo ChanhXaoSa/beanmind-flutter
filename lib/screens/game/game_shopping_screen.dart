@@ -171,8 +171,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                           padding: EdgeInsets.only(left: 20, right: 20),
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: const AssetImage(
-                                  'images/background/background_shopping_game.png'),
+                              image: const NetworkImage(
+                                  'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_shopping_game.png?alt=media&token=31e87e92-f432-4c3f-a661-b29f6d4cdf33'),
                               fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
                                 Colors.black.withOpacity(0.7),
@@ -220,8 +220,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: const AssetImage(
-                                  'images/background/background_shopping_game.png'),
+                              image: const NetworkImage(
+                                  'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_shopping_game.png?alt=media&token=31e87e92-f432-4c3f-a661-b29f6d4cdf33'),
                               fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
                                 Colors.black.withOpacity(0.5),
