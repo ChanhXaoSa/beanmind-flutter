@@ -3,6 +3,7 @@ import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/happy_farm/happy_farm_level.dart';
 import 'package:beanmind_flutter/widgets/game/class/happy_farm/happy_farm_user.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
@@ -391,6 +392,11 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                     SizedBox(height: 10),
                     Text(
                       'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Số điểm bạn đạt được: ${calculateScore(userPoint, totalQuestion, _timeRecord.seconds).toString()}',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),

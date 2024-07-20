@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_level.dart';
 import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_user.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/widgets/game/widget/game_sort%20numbers/split_panels.dart';
 import 'package:beanmind_flutter/widgets/game/widget/game_sort%20numbers/split_panels_mobie.dart';
@@ -317,7 +318,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                     Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
                     Text(
-                      'Số điểm của bạn: ' +
+                      'Số câu trả lời đúng: ' +
                           userPoint.toString() +
                           '/' +
                           totalQuestion.toString(),
@@ -326,6 +327,11 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                     SizedBox(height: 10),
                     Text(
                       'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Số điểm bạn đạt được: ${calculateScore(userPoint, totalQuestion, _timeRecord.seconds).toString()}',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),

@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/widgets/game/class/font_style.dart';
 import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_level.dart';
 import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_user.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/widgets/game/widget/game_ocean_adventure/ocean_adventure.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
@@ -376,6 +377,11 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                     SizedBox(height: 10),
                     Text(
                       'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Số điểm bạn đạt được: ${calculateScore(userPoint, totalQuestion, _timeRecord.seconds).toString()}',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),

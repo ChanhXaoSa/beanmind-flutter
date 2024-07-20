@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/widgets/game/widget/game_odd_and_even/odd_and_even.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
@@ -277,6 +278,11 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                     SizedBox(height: 10),
                     Text(
                       'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Số điểm bạn đạt được: ${calculateScore(userPoint, totalQuestion, _timeRecord.seconds).toString()}',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),

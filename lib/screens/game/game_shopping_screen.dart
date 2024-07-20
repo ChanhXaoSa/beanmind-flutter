@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
+import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_split_panels.dart';
 import 'package:beanmind_flutter/widgets/game/widget/game_drag_and_drop_shoping/shopping_split_panels_mobie.dart';
@@ -345,6 +346,11 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                     SizedBox(height: 10),
                     Text(
                       'Thời gian hoàn thành trò chơi: ${_timeRecord.seconds} giây',
+                      style: whiteTextStyle,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Số điểm bạn đạt được: ${calculateScore(userPoint, totalQuestion, _timeRecord.seconds).toString()}',
                       style: whiteTextStyle,
                     ),
                     SizedBox(height: 16),
