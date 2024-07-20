@@ -44,8 +44,7 @@ class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
                   child: Container(
                     decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage(
-                                'images/background/background_math_sort_3.png'),
+                            image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_3.png?alt=media&token=4ef2ebe9-0629-4016-b813-3aae768bfc7e'),
                             fit: BoxFit.fill,
                             colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.5),
