@@ -19,6 +19,9 @@ class AuthController extends GetxController {
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
 
+  Future<UserInfo?> login(String email, String password) async {
+  }
+
   void initAuth() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // bool? hasSeenIntroduction = prefs.getBool('hasSeenIntroduction');

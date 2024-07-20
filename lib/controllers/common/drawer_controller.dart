@@ -27,10 +27,6 @@ class MyDrawerController extends GetxController {
     Get.find<GameController>().navigateToGameList();
   }
 
-  void course() {
-    Get.find<CourseController>().navigateToCourse();
-  }
-
   void courseLearning() {
     Get.find<CourseController>().navigateToCourseLeaning();
   }
