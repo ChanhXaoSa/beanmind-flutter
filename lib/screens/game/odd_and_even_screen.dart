@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
@@ -448,7 +449,12 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
 
   void backtoHome() {
     // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
+    final GameController controller = Get.find();
+    resetGame();
+    setState(() {
+      controller.shouldReset.value = true;
+      Get.offAllNamed(GameListScreen.routeName);
+    });
   }
 
   void checkResult() {

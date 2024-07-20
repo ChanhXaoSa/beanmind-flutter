@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
+import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_level.dart';
 import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_user.dart';
@@ -603,7 +604,11 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
   void backtoHome() {
     // go to GameList
-    Get.offAllNamed(GameListScreen.routeName);
+    final GameController controller = Get.find();
+    setState(() {
+      controller.shouldReset.value = true;
+      Get.offAllNamed(GameListScreen.routeName);
+    });
   }
 
   String _getLottieAsset(int userPoint) {

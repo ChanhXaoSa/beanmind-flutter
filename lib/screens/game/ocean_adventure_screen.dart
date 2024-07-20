@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/font_style.dart';
 import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_level.dart';
@@ -553,12 +554,12 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
 
   void backtoHome() {
     // go to GameList
+    final GameController controller = Get.find();
+    resetGame();
     setState(() {
-      userAnswer = '';
-      _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
-      resetAnimalOcean();
+      controller.shouldReset.value = true;
+      Get.offAllNamed(GameListScreen.routeName);
     });
-    Get.offAllNamed(GameListScreen.routeName);
   }
 
   void checkResult() {
