@@ -17,6 +17,7 @@ class GameController extends GetxController {
   var isLoading = false.obs;
   var selectedGame = RxnString();
   var shouldReset = false.obs;
+  List<dynamic> games = [];
 
   @override
   void onInit() {
@@ -30,8 +31,6 @@ class GameController extends GetxController {
   void navigateToGameList() {
     Get.toNamed(GameListScreen.routeName);
   }
-
-  List<dynamic> games = [];
 
   Future<void> fetchGameList() async {
     loadingStatus.value = LoadingStatus.loading;
