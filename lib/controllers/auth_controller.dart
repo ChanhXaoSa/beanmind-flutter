@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:beanmind_flutter/models/login_model.dart';
+import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,8 +11,12 @@ import 'package:beanmind_flutter/screens/screens.dart' show AppIntroductionScree
 import 'package:beanmind_flutter/utils/utils.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController {
+  var user = <UserModel>[].obs;
+  var loginModel = Rxn<LoginModel>();
+
   @override
   void onReady() {
     initAuth();
@@ -19,7 +28,52 @@ class AuthController extends GetxController {
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
 
-  Future<UserInfo?> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
+    try {
+      final loginResponse = await http.post(
+        Uri.parse('${baseApiUrl}/auth/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+        }),
+      );
+      if (loginResponse.statusCode == 200) {
+        final loginModel = LoginModel.fromJson(json.decode(loginResponse.body));
+
+        if (loginModel.success) {
+          String accessToken = loginModel.data.accessToken;
+
+          final userResponse = await http.get(
+            Uri.parse('${baseApiUrl}/users/info'),
+            headers: <String, String>{
+              'Authorization': 'Bearer $accessToken',
+            },
+          );
+
+          if (userResponse.statusCode == 200) {
+            final userModel = UserModel.fromJson(json.decode(userResponse.body));
+            if(userModel.success == true) {
+              user.value = [userModel];
+              navigateToHome();
+            } else {
+              throw Exception(userModel.message);
+            }
+          } else {
+            throw Exception('Failed to load user info');
+          }
+        } else {
+          throw Exception('Login failed: ${loginModel.message}');
+        }
+      } else {
+        throw Exception('Failed to login');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw e;
+    }
   }
 
   void initAuth() async {

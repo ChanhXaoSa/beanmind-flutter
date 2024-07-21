@@ -139,6 +139,9 @@ class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -152,6 +155,7 @@ class __FormContentState extends State<_FormContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: _emailController,
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
@@ -176,6 +180,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             _gap(),
             TextFormField(
+              controller: _passwordController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Ô này không được để trống';
@@ -234,7 +239,9 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    /// do something
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
+                    Get.find<AuthController>().login(email, password);
                   }
                 },
               ),
