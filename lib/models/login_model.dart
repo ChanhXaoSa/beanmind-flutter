@@ -11,22 +11,22 @@ String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 class LoginModel {
   String message;
   bool success;
-  Data data;
+  Data? data;
   dynamic errors;
   dynamic fieldErrors;
 
   LoginModel({
     required this.message,
     required this.success,
-    required this.data,
-    required this.errors,
-    required this.fieldErrors,
+    this.data,
+    this.errors,
+    this.fieldErrors,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-    message: json["message"],
-    success: json["success"],
-    data: Data.fromJson(json["data"]),
+    message: json["message"] ?? '',
+    success: json["success"] ?? false,
+    data: json["data"] != null ? Data.fromJson(json["data"]) : null,
     errors: json["errors"],
     fieldErrors: json["fieldErrors"],
   );
@@ -34,7 +34,7 @@ class LoginModel {
   Map<String, dynamic> toJson() => {
     "message": message,
     "success": success,
-    "data": data.toJson(),
+    "data": data?.toJson(),
     "errors": errors,
     "fieldErrors": fieldErrors,
   };
@@ -54,10 +54,10 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    tokenType: json["tokenType"],
-    accessToken: json["accessToken"],
-    expiresIn: json["expiresIn"],
-    refreshToken: json["refreshToken"],
+    tokenType: json["tokenType"] ?? '',
+    accessToken: json["accessToken"] ?? '',
+    expiresIn: json["expiresIn"] ?? 0,
+    refreshToken: json["refreshToken"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {

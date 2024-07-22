@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:beanmind_flutter/firebase/references.dart';
-import 'package:beanmind_flutter/screens/screens.dart' show AppIntroductionScreen, HomeScreen, LoginScreen;
+import 'package:beanmind_flutter/screens/screens.dart'
+    show AppIntroductionScreen, HomeScreen, LoginScreen;
 import 'package:beanmind_flutter/utils/utils.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,7 @@ class AuthController extends GetxController {
   }
 
   // final FirebaseAuth _auth = FirebaseAuth.instance;
-  late FirebaseAuth _auth;
+  // late FirebaseAuth _auth;
   final _user = Rxn<User>();
   late Stream<User?> _authStateChanges;
 
@@ -44,7 +45,7 @@ class AuthController extends GetxController {
         final loginModel = LoginModel.fromJson(json.decode(loginResponse.body));
 
         if (loginModel.success) {
-          String accessToken = loginModel.data.accessToken;
+          String accessToken = loginModel.data!.accessToken;
 
           final userResponse = await http.get(
             Uri.parse('${baseApiUrl}/users/info'),
@@ -54,9 +55,11 @@ class AuthController extends GetxController {
           );
 
           if (userResponse.statusCode == 200) {
-            final userModel = UserModel.fromJson(json.decode(userResponse.body));
-            if(userModel.success == true) {
+            final userModel =
+                UserModel.fromJson(json.decode(userResponse.body));
+            if (userModel.success == true) {
               user.value = [userModel];
+              await _saveUserSession(userModel);
               navigateToHome();
             } else {
               throw Exception(userModel.message);
@@ -76,53 +79,79 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> _saveUserSession(UserModel userModel) async {
+    final prefs = await SharedPreferences.getInstance();
+    String userJson = jsonEncode(userModel.toJson());
+    await prefs.setString('user_model', userJson);
+  }
+
+  Future<UserModel?> _getUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userJson = prefs.getString('user_model');
+    if (userJson != null) {
+      Map<String, dynamic> userMap = jsonDecode(userJson);
+      return UserModel.fromJson(userMap);
+    }
+    return null;
+  }
+
   void initAuth() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // bool? hasSeenIntroduction = prefs.getBool('hasSeenIntroduction');
 
     await Future.delayed(const Duration(seconds: 2)); // waiting in splash
-    _auth = FirebaseAuth.instance;
-    _authStateChanges = _auth.authStateChanges();
-    _authStateChanges.listen((User? user) {
-      _user.value = user;
-      // if(user == null) {
-      //   navigateToLogin();
-      // } else {
-      //   navigateToHome();
-      // }
-    });
-    navigateToIntroduction();
+    // _auth = FirebaseAuth.instance;
+    // _authStateChanges = _auth.authStateChanges();
+    // _authStateChanges.listen((User? user) {
+    //   _user.value = user;
+    //   // if(user == null) {
+    //   //   navigateToLogin();
+    //   // } else {
+    //   //   navigateToHome();
+    //   // }
+    // });
+    UserModel? sessionUser = await _getUserSession();
+    if (sessionUser != null) {
+      user.value = [sessionUser];
+      navigateToIntroduction();
+    } else {
+      navigateToLogin();
+    }
+    // navigateToIntroduction();
     // if (hasSeenIntroduction == null || !hasSeenIntroduction) {
     //   navigateToIntroduction();
     //   prefs.setBool('hasSeenIntroduction', true);
     // }
   }
 
-  Future<void> siginInWithGoogle() async {
-    final GoogleSignIn _googleSignIn = GoogleSignIn(
-      clientId: '505548876025-5ts10r3vh4ou7e3rv8589bei4uq6d8vo.apps.googleusercontent.com',
-    );
-
-    try {
-      GoogleSignInAccount? account = await _googleSignIn.signIn();
-      if (account != null) {
-        final _gAuthentication = await account.authentication;
-        final _credential = GoogleAuthProvider.credential(
-            idToken: _gAuthentication.idToken,
-            accessToken: _gAuthentication.accessToken);
-        await _auth.signInWithCredential(_credential);
-        await saveUser(account);
-        navigateToHome();
-      }
-    } on Exception catch (error) {
-      AppLogger.e(error);
-    }
-  }
+  // Future<void> siginInWithGoogle() async {
+  //   final GoogleSignIn _googleSignIn = GoogleSignIn(
+  //     clientId:
+  //         '505548876025-5ts10r3vh4ou7e3rv8589bei4uq6d8vo.apps.googleusercontent.com',
+  //   );
+  //
+  //   try {
+  //     GoogleSignInAccount? account = await _googleSignIn.signIn();
+  //     if (account != null) {
+  //       final _gAuthentication = await account.authentication;
+  //       final _credential = GoogleAuthProvider.credential(
+  //           idToken: _gAuthentication.idToken,
+  //           accessToken: _gAuthentication.accessToken);
+  //       await _auth.signInWithCredential(_credential);
+  //       await saveUser(account);
+  //       navigateToHome();
+  //     }
+  //   } on Exception catch (error) {
+  //     AppLogger.e(error);
+  //   }
+  // }
 
   Future<void> signOut() async {
     AppLogger.d("Sign out");
     try {
-      await _auth.signOut();
+      // await _auth.signOut();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('user_model');
       navigateToHome();
     } on FirebaseAuthException catch (e) {
       AppLogger.e(e);
@@ -130,18 +159,21 @@ class AuthController extends GetxController {
   }
 
   Future<void> saveUser(GoogleSignInAccount account) async {
-    userFR
-        .doc(account.email)
-        .set({"email" : account.email, "name": account.displayName, "profilepic": account.photoUrl});
+    userFR.doc(account.email).set({
+      "email": account.email,
+      "name": account.displayName,
+      "profilepic": account.photoUrl
+    });
   }
 
   User? getUser() {
-    _user.value = _auth.currentUser;
+    // _user.value = _auth.currentUser;
     return _user.value;
   }
 
   bool isLogedIn() {
-    return _auth.currentUser != null;
+    // return _auth.currentUser != null;
+    return false;
   }
 
   void navigateToHome() {
@@ -158,7 +190,7 @@ class AuthController extends GetxController {
 
   void showLoginAlertDialog() {
     Get.dialog(
-      Dialogs.quizStartDialog(onTap: (){
+      Dialogs.quizStartDialog(onTap: () {
         Get.back();
         navigateToLogin();
       }),
