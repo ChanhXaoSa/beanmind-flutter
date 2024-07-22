@@ -59,10 +59,11 @@ class CustomDrawer extends GetView<MyDrawerController> {
                                   const EdgeInsets.only(top: 12, bottom: 10),
                               child: CircleAvatar(
                                 foregroundImage:
-                                    controller.user.value!.photoURL == null
-                                        ? null
-                                        : NetworkImage(
-                                            controller.user.value!.photoURL!),
+                                    // controller.user.value!.photoURL == null
+                                    //     ?
+                                    null,
+                                        // : NetworkImage(
+                                        //     controller.user.value!.photoURL!),
                                 backgroundColor: Colors.white,
                                 radius: 40,
                               ),
@@ -72,7 +73,8 @@ class CustomDrawer extends GetView<MyDrawerController> {
                   Obx(
                     () => controller.user.value == null
                         ? const SizedBox()
-                        : Text(controller.user.value!.displayName ?? '',
+                        // : Text(controller.user.value!.displayName ?? '',
+                        : Text(controller.user.value!.first.data.userName ?? '',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 18,

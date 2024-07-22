@@ -152,7 +152,7 @@ class AuthController extends GetxController {
       // await _auth.signOut();
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('user_model');
-      navigateToHome();
+      navigateToLogin();
     } on FirebaseAuthException catch (e) {
       AppLogger.e(e);
     }
@@ -169,6 +169,16 @@ class AuthController extends GetxController {
   User? getUser() {
     // _user.value = _auth.currentUser;
     return _user.value;
+  }
+
+  Future<UserModel?> getUserLocal() async {
+    // _user.value = _auth.currentUser;
+    // return _user.value;
+    UserModel? sessionUser = await _getUserSession();
+    if (sessionUser != null) {
+      user.value = [sessionUser];
+      return sessionUser;
+    }
   }
 
   bool isLogedIn() {
