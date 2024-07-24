@@ -66,6 +66,7 @@ dependencies:
   sidebarx: ^0.17.1
   easy_sidemenu: ^0.6.0
   colour: ^1.0.5
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
