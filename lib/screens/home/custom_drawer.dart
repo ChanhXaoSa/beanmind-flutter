@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/screens/auth_and_profile/profile_screen.dart';
+import 'package:beanmind_flutter/screens/profile/profile_screen.dart';
 
 class CustomDrawer extends GetView<MyDrawerController> {
   const CustomDrawer({Key? key}) : super(key: key);

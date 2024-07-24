@@ -1,7 +1,7 @@
-import 'package:beanmind_flutter/screens/auth_and_profile/profile_component.dart';
+import 'package:beanmind_flutter/screens/profile/desktop_profile_component.dart';
+import 'package:beanmind_flutter/screens/profile/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
 
