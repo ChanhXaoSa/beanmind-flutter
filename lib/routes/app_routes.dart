@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
               Get.put(MyDrawerController());
               Get.put(CourseController());
               Get.put(GameController());
+              Get.put(AppBarController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
