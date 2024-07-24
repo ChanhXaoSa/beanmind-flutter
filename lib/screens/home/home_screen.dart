@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/widgets/common/custom_home_app_bar.dart';
 import 'package:beanmind_flutter/widgets/course/course_card.dart';
 import 'package:beanmind_flutter/widgets/home/document_paper_card.dart';
 import 'package:beanmind_flutter/widgets/home/video_learning_paper_card.dart';
@@ -20,17 +21,8 @@ class HomeScreen extends GetView<MyDrawerController> {
   Widget build(BuildContext context) {
     QuizPaperController _quizePprController = Get.find();
     return Scaffold(
-        body: GetBuilder<MyDrawerController>(
-      builder: (_) => ZoomDrawer(
-        controller: _.zoomDrawerController,
-        borderRadius: 50.0,
-        showShadow: true,
-        angle: 0.0,
-        style: DrawerStyle.defaultStyle,
-        menuScreen: const CustomDrawer(),
-        menuBackgroundColor: Colors.white.withOpacity(0.5),
-        slideWidth: MediaQuery.of(context).size.width * 0.3,
-        mainScreen: Container(
+      appBar: CustomHomeAppBar(),
+        body: Container(
           decoration: BoxDecoration(gradient: mainGradient(context)),
           child: SafeArea(
             child: Column(
@@ -151,8 +143,6 @@ class HomeScreen extends GetView<MyDrawerController> {
                 ),
               ],
             ),
-          ),
-        ),
       ),
     ));
   }

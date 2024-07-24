@@ -113,7 +113,7 @@ class AuthController extends GetxController {
     UserModel? sessionUser = await _getUserSession();
     if (sessionUser != null) {
       user.value = [sessionUser];
-      navigateToIntroduction();
+      navigateToHome();
     } else {
       navigateToLogin();
     }
