@@ -123,6 +123,8 @@ class Screen1 extends StatelessWidget {
                                   context, 'Khóa học 3', 0.3, '3/10', '5 giờ'),
                               buildProgressItem(
                                   context, 'Khóa học 4', 0.7, '7/10', '10 giờ'),
+                              buildProgressItem(
+                                  context, 'Khóa học 5', 1, '10/10', '10 giờ'),
                               // Thêm nhiều item hơn nếu cần
                             ],
                           ),
@@ -300,17 +302,17 @@ Widget buildProgressItem(BuildContext context, String title, double progress,
       ],
     ),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,  
       children: [
         Text(
           title,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 5),
+        SizedBox(height: 5),     
         LinearProgressIndicator(
           value: progress,
           backgroundColor: Colors.grey[300],
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          valueColor: AlwaysStoppedAnimation<Color>(progress >= 1 ? Colors.green : Colors.blue),
         ),
         SizedBox(height: 5),
         Text(
