@@ -78,7 +78,7 @@ class GameListScreen extends GetView<GameController> {
         return GestureDetector(
           onTap: () {
             controller.isLoading.value = true;
-            controller.selectedGame.value = game['gameId'];
+            controller.selectedGame.value = game['id'];
             // Simulate a delay for loading the game
             Future.delayed(Duration(seconds: 0), () {
               controller.isLoading.value = false;
@@ -114,8 +114,7 @@ class GameListScreen extends GetView<GameController> {
                       onPressed: () {
                         // Your onTap functionality here
                         Get.toNamed(GameLeaderboardScreen.routeName, arguments: GameModel(
-                          id: game['id']!,
-                          gameId: game['gameId']!,
+                                id: game['id']!,
                           title: game['title']!,
                           imageUrl: game['imageUrl'] ?? '',
                           description: game['description'] ?? ''));

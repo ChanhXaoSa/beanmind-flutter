@@ -63,6 +63,7 @@ dependencies:
   firebase_auth: ^5.0.0
   flame_network_assets: ^0.3.2
   percent_indicator: ^4.2.3
+  sidebarx: ^0.17.1
 
 dev_dependencies:
   flutter_test:

@@ -5,14 +5,12 @@ import 'package:flame/components.dart';
 
 class GameModel {
   final String id;
-  final String gameId;
   final String title;
   final String imageUrl;
   final String description;
 
   GameModel({
     required this.id,
-    required this.gameId,
     required this.title,
     required this.imageUrl,
     required this.description,
@@ -21,7 +19,6 @@ class GameModel {
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
       id: json['id'],
-      gameId: json['gameId'],
       title: json['title'],
       imageUrl: json['imageUrl'],
       description: json['description'],
