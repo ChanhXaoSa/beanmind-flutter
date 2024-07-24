@@ -12,57 +12,13 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _auth = Get.find<AuthController>();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const CustomAppBar(),
-      body: BackgroundDecoration(
-        showGradient: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: UIParameters.screenPadding.copyWith(top: 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        foregroundImage:
-                            NetworkImage(_auth.getUser()!.photoURL!),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        _auth.getUser()!.displayName ?? '',
-                        style: kHeaderTS,
-                      )
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      'Lịch sử làm quiz ',
-                      style: TextStyle(
-                          color: kOnSurfaceTextColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: NavigationRailPage(),
-              ),
-            ),
-          ],
-        ),
+      body: ResponsiveLayout(
+        //mobileBody: const MobileScaffold(),
+        //tabletBody: const TabletScaffold(),
+        desktopBody: const DesktopScaffold(),
       ),
     );
   }

@@ -30,7 +30,8 @@ class GameListScreen extends GetView<GameController> {
           child: Obx(() {
             return controller.selectedGame.value != null
                 ? CustomAppBar(
-                    title: controller.getGameTitle(controller.selectedGame.value!),
+                    title:
+                        controller.getGameTitle(controller.selectedGame.value!),
                     leading: IconButton(
                       icon: const Icon(Icons.arrow_back),
                       onPressed: () {
@@ -106,20 +107,23 @@ class GameListScreen extends GetView<GameController> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.deepPurple,
-                        backgroundColor: Colors.white, // Ripple color (on press)
+                        backgroundColor:
+                            Colors.white, // Ripple color (on press)
                         shape: const CircleBorder(), // Circular shape
                         elevation: 5, // Shadow elevation
                         padding: const EdgeInsets.all(20), // Button padding
                       ),
                       onPressed: () {
                         // Your onTap functionality here
-                        Get.toNamed(GameLeaderboardScreen.routeName, arguments: GameModel(
+                        Get.toNamed(GameLeaderboardScreen.routeName,
+                            arguments: GameModel(
                                 id: game['id']!,
-                          title: game['title']!,
-                          imageUrl: game['imageUrl'] ?? '',
-                          description: game['description'] ?? ''));
+                                title: game['title']!,
+                                imageUrl: game['imageUrl'] ?? '',
+                                description: game['description'] ?? ''));
                       },
-                      child: const Icon(AppIcons.trophyoutline, color: Colors.deepPurple),
+                      child: const Icon(AppIcons.trophyoutline,
+                          color: Colors.deepPurple),
                     ),
                   ),
                 ],
@@ -131,4 +135,3 @@ class GameListScreen extends GetView<GameController> {
     );
   }
 }
-
