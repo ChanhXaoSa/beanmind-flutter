@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 class Screen1 extends StatelessWidget {
   @override
@@ -22,7 +23,7 @@ class Screen1 extends StatelessWidget {
                   children: [
                     // first 4 boxes in grid
                     AspectRatio(
-                      aspectRatio: 5,
+                      aspectRatio: 6,
                       child: SizedBox(
                         width: double.infinity,
                         child: Container(
@@ -32,7 +33,7 @@ class Screen1 extends StatelessWidget {
                             color: Colors.grey[400],
                             gradient: mainGradient(context),
                           ),
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(15),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -105,8 +106,8 @@ class Screen1 extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
                     ),
-                    Expanded(
-                      flex: 4,
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.3,
                       child: ScrollConfiguration(
                         behavior: MyCustomScrollBehavior(),
                         child: Scrollbar(
@@ -148,8 +149,8 @@ class Screen1 extends StatelessWidget {
                               fontWeight: FontWeight.bold)),
                     ),
                     // list of previous days
-                    Expanded(
-                      flex: 3,
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
                       child: ScrollConfiguration(
                         behavior: MyCustomScrollBehavior(),
                         child: Scrollbar(
@@ -213,35 +214,6 @@ class Screen1 extends StatelessWidget {
                   ],
                 ),
               ),
-              // second half of page
-              Expanded(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 400,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ),
-                    // list of stuff
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey[200],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
@@ -262,7 +234,7 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
 Widget buildCourseItem(
     BuildContext context, String title, String subtitle, String imageUrl) {
   return Container(
-    width: 200, // Đặt chiều rộng cho các item
+    width: 200,
     margin: EdgeInsets.all(10),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
@@ -281,7 +253,9 @@ Widget buildCourseItem(
         ClipRRect(
           borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
           child: Image.network(imageUrl,
-              height: 120, width: double.infinity, fit: BoxFit.cover),
+              height: MediaQuery.of(context).size.height * 0.09,
+              width: double.infinity,
+              fit: BoxFit.cover),
         ),
         Padding(
           padding: EdgeInsets.all(10),
@@ -295,12 +269,10 @@ Widget buildCourseItem(
               SizedBox(height: 5),
               Text(
                 subtitle,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
-              SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                style: TextStyle(
+                    fontSize: 14,
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.grey[600]),
               ),
             ],
           ),
