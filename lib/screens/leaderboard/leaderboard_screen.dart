@@ -12,7 +12,7 @@ class LeaderBoardScreen extends GetView<LeaderBoardController> {
     SchedulerBinding.instance.addPostFrameCallback((d) {
       final paper = Get.arguments as QuizPaperModel;
       controller.getAll(paper.id);
-      controller.getMyScores(paper.id);
+      //controller.getMyScores(paper.id);
     });
   }
 
@@ -80,7 +80,7 @@ class LeaderBoardCard extends StatelessWidget {
             data.user.image == null ? null : NetworkImage(data.user.image!),
       ),
       title: Text(
-        data.user.name,
+        data.user.userName,
         style: tsStyle,
       ),
       subtitle: EasySeparatedRow(

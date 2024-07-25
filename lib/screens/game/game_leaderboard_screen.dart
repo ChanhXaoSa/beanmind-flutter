@@ -8,11 +8,10 @@ import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
 
 class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
-  GameLeaderboardScreen({Key? key}) : super(key: key) {
+  GameLeaderboardScreen({super.key}) {
     SchedulerBinding.instance.addPostFrameCallback((d) {
       final paper = Get.arguments as GameModel;
       controller.getAllGame(paper.id);
-      controller.getMyGameScores(paper.id);
     });
   }
 
@@ -21,16 +20,12 @@ class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
   @override
   Widget build(BuildContext context) {
     final paper = Get.arguments as GameModel;
-    String nameGame = paper.title ??'';
+    String nameGame = paper.title ?? '';
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: CustomAppBar(title: 'Bảng xếp hạng trò chơi $nameGame',),
-      bottomNavigationBar: Obx(() => controller.myGameScores.value == null
-          ? const SizedBox()
-          : GameLeaderBoardCard(
-              data: controller.myGameScores.value!,
-              index: -1,
-            )),
+      appBar: CustomAppBar(
+        title: 'Bảng xếp hạng trò chơi $nameGame',
+      ),
       body: Center(
         child: BackgroundDecoration(
           showGradient: true,
@@ -41,33 +36,35 @@ class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
                     child: LeaderBoardPlaceHolder(),
                   )
                 : Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_3.png?alt=media&token=4ef2ebe9-0629-4016-b813-3aae768bfc7e'),
-                            fit: BoxFit.fill,
-                            colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.5),
-                              BlendMode.darken,
-                            ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const NetworkImage(
+                              'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_3.png?alt=media&token=4ef2ebe9-0629-4016-b813-3aae768bfc7e'),
+                          fit: BoxFit.fill,
+                          colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
-                        ),             
-                        padding: const EdgeInsets.only(left: 400, right: 400, top: 50),
-                    child: ListView.separated(
-                      itemCount: controller.leaderBoardGame.length,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Divider();
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        final data = controller.leaderBoardGame[index];
-                        return GameLeaderBoardCard(
-                          data: data,
-                          index: index,
-                        );
-                      },
+                        ),
+                      ),
+                      padding: const EdgeInsets.only(
+                          left: 400, right: 400, top: 50),
+                      child: ListView.separated(
+                        itemCount: controller.gamesLeaderBoard.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider();
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          final data = controller.gamesLeaderBoard[index];
+                          return GameLeaderBoardCard(
+                            data: data,
+                            index: index,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
           ),
         ),
       ),
@@ -77,10 +74,10 @@ class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
 
 class GameLeaderBoardCard extends StatelessWidget {
   const GameLeaderBoardCard({
-    Key? key,
+    super.key,
     required this.data,
     required this.index,
-  }) : super(key: key);
+  });
 
   final LeaderBoardGameData data;
   final int index;
@@ -88,14 +85,14 @@ class GameLeaderBoardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var whiteTextStyle = const TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
+        fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
     return ListTile(
-      leading: CircleAvatar(
-        foregroundImage:
-            data.user.image == null ? null : NetworkImage(data.user.image!),
-      ),
+      // leading: CircleAvatar(
+      //   foregroundImage:
+      //       data.user.image == null ? null : NetworkImage(data.user.image!),
+      // ),
       title: Text(
-        data.user.name,
+        data.student.userName!,
         style: whiteTextStyle,
       ),
       subtitle: EasySeparatedRow(
@@ -108,23 +105,12 @@ class GameLeaderBoardCard extends StatelessWidget {
         children: [
           IconWithText(
             icon: Icon(
-              Icons.done_all,
-              color: Theme.of(context).primaryColor,
-              size: 30,
-            ),
-            text: Text(
-              data.correctCount!,
-              style: whiteTextStyle,
-            ),
-          ),
-          IconWithText(
-            icon: Icon(
               Icons.timer,
               color: Theme.of(context).primaryColor,
               size: 30,
             ),
             text: Text(
-              '${data.time!}',
+              '${data.duration!}',
               style: whiteTextStyle,
             ),
           ),
@@ -135,14 +121,14 @@ class GameLeaderBoardCard extends StatelessWidget {
               size: 30,
             ),
             text: Text(
-              '${data.points!}',
+              '${data.score!}',
               style: whiteTextStyle,
             ),
           ),
         ],
       ),
       trailing: Text(
-        '#' + '${index + 1}'.padLeft(2, "0"),
+        '#${'${index + 1}'.padLeft(2, "0")}',
         style: whiteTextStyle,
       ),
     );

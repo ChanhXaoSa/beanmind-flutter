@@ -39,50 +39,98 @@ class LeaderBoardData {
   };
 }
 
-class UserData{
-  final String name;
-  final String? image;
-
-  UserData({required this.name, this.image});
-
-  UserData.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot, ) : name = snapshot['name'] as String, image = snapshot['profilepic'] as String;
-}
-
 class LeaderBoardGameData {
-  final String? correctCount;
-  final String? userId;
-  final int? time;
-  final String? paperId;
-  final int? points;
-  late UserData user;
+  final String gameId;
+  final String studentId;
+  final int score;
+  final int duration;
+  final GameData game;
+  final UserData student;
+  final String id;
+  final bool isDeleted;
 
   LeaderBoardGameData({
-    this.correctCount,
-    this.userId,
-    this.time,
-    this.paperId,
-    this.points,
+    required this.gameId,
+    required this.studentId,
+    required this.score,
+    required this.duration,
+    required this.game,
+    required this.student,
+    required this.id,
+    required this.isDeleted,
   });
 
-  LeaderBoardGameData.fromJson(Map<String, dynamic> json)
-    : correctCount = json['correct_count'] as String?,
-      userId = json['user_id'] as String?,
-      time = json['time'] as int?,
-      paperId = json['paper_id'] as String?,
-      points = json['points'] as int?;
+  factory LeaderBoardGameData.fromJson(Map<String, dynamic> json) {
+    return LeaderBoardGameData(
+      gameId: json['gameId'],
+      studentId: json['studentId'],
+      score: json['score'],
+      duration: json['duration'],
+      game: GameData.fromJson(json['game']),
+      student: UserData.fromJson(json['student']),
+      id: json['id'],
+      isDeleted: json['isDeleted'],
+    );
+  }
+}
 
-  LeaderBoardGameData.fromSnapShot(DocumentSnapshot<Map<String, dynamic>> snapshot)
-    : correctCount = snapshot['correct_count'] as String?,
-      userId = snapshot['user_id'] as String?,
-      time = snapshot['time'] as int,
-      paperId = snapshot['paper_id'] as String?,
-      points = snapshot['points'] as int?;    
+class GameData {
+  final String title;
+  final String imageUrl;
+  final String description;
+  final String courseId;
+  final String id;
+  final bool isDeleted;
 
-  Map<String, dynamic> toJson() => {
-    'correct_count' : correctCount,
-    'user_id' : userId,
-    'time' : time,
-    'paper_id' : paperId,
-    'points' : points
-  };
+  GameData({
+    required this.title,
+    required this.imageUrl,
+    required this.description,
+    required this.courseId,
+    required this.id,
+    required this.isDeleted,
+  });
+
+  factory GameData.fromJson(Map<String, dynamic> json) {
+    return GameData(
+      title: json['title'],
+      imageUrl: json['imageUrl'],
+      description: json['description'],
+      courseId: json['courseId'],
+      id: json['id'],
+      isDeleted: json['isDeleted'],
+    );
+  }
+}
+
+class UserData {
+  final String id;
+  final String userName;
+  final String email;
+  final String? image;
+
+  UserData({
+    required this.id,
+    required this.userName,
+    required this.email,
+    this.image,
+  });
+
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
+      id: json['id'],
+      userName: json['userName'],
+      email: json['email'],
+      image: json['imageUrl'], // Assuming `imageUrl` is the correct field for image
+    );
+  }
+
+  factory UserData.fromSnapShot(DocumentSnapshot snap) {
+    return UserData(
+      id: snap.id,
+      userName: snap['userName'],
+      email: snap['email'],
+      image: snap['imageUrl'],
+    );
+  }
 }
