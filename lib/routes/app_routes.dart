@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
+import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -18,8 +19,7 @@ class AppRoutes {
             page: () => const HomeScreen(),
             name: HomeScreen.routeName,
             binding: BindingsBuilder(() {
-              Get.put(QuizPaperController());
-              Get.put(MyDrawerController());
+              Get.put(HomeController());
               Get.put(CourseController());
               Get.put(GameController());
               Get.put(AppBarController());

@@ -18,3 +18,5 @@ export 'course/course_controller.dart';
 export 'course_detail/course_detail_controller.dart';
 
 export 'game/game_controller.dart';
+
+export 'home/home_controller.dart';
