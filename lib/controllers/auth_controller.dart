@@ -26,8 +26,8 @@ class AuthController extends GetxController {
 
   // final FirebaseAuth _auth = FirebaseAuth.instance;
   // late FirebaseAuth _auth;
-  final _user = Rxn<User>();
-  late Stream<User?> _authStateChanges;
+  // final _user = Rxn<User>();
+  // late Stream<User?> _authStateChanges;
 
   Future<void> login(String email, String password) async {
     try {
@@ -168,7 +168,7 @@ class AuthController extends GetxController {
 
   User? getUser() {
     // _user.value = _auth.currentUser;
-    return _user.value;
+    // return _user.value;
   }
 
   Future<UserModel?> getUserLocal() async {
