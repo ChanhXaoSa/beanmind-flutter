@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class Screen3 extends StatelessWidget {
@@ -44,30 +45,54 @@ class CourseListScreen extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final itemWidth = (constraints.maxWidth - 32) /
-                4; // Adjust the total padding and spacing
-            final itemHeight =
-                constraints.maxHeight / 4; // Adjust the height as needed
-
-            return GridView.builder(
-              padding: EdgeInsets.zero,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4, // 4 items per row
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: itemWidth / itemHeight,
-              ),
-              itemCount: courses.length,
-              itemBuilder: (context, index) {
-                return CourseItem(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AutoSizeText(
+                  "DANH SÁCH KHOÁ HỌC",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                //search bar
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Tìm kiếm khóa học",
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: GridView.builder(
+                padding: EdgeInsets.all(8.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1.5,
+                ),
+                itemCount: courses.length,
+                itemBuilder: (context, index) {
+                  return CourseItem(
                     course: courses[index],
-                    width: itemWidth,
-                    height: itemHeight);
-              },
-            );
-          },
+                    width: 200,
+                    height: 200,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
