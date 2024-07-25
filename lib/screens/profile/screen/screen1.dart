@@ -22,8 +22,9 @@ class Screen1 extends StatelessWidget {
                 child: Column(
                   children: [
                     // first 4 boxes in grid
-                    AspectRatio(
-                      aspectRatio: 6,
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.28,
+                      width: double.infinity,
                       child: SizedBox(
                         width: double.infinity,
                         child: Container(
@@ -90,7 +91,8 @@ class Screen1 extends StatelessWidget {
                     // text
                     Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(
+                          left: 10, right: 10, top: 5, bottom: 5),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
@@ -100,8 +102,8 @@ class Screen1 extends StatelessWidget {
                         ),
                       ),
                       child: AutoSizeText('Tiến độ các khóa học bạn chưa hoàn thành',
-                          maxFontSize: 25,
-                          minFontSize: 25,
+                          maxFontSize: 24,
+                          minFontSize: 24,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
@@ -134,7 +136,8 @@ class Screen1 extends StatelessWidget {
                     // text
                     Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(
+                          left: 10, right: 10, top: 5, bottom: 5),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
@@ -144,8 +147,8 @@ class Screen1 extends StatelessWidget {
                         ),
                       ),
                       child: AutoSizeText('Khóa học bạn đã đăng kí gần đây',
-                          maxFontSize: 25,
-                          minFontSize: 25,
+                          maxFontSize: 24,
+                          minFontSize: 24,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),

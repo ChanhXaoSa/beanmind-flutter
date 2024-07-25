@@ -13,13 +13,29 @@ class Screen3 extends StatelessWidget {
 class CourseListScreen extends StatelessWidget {
   final List<Course> courses = [
     Course(name: "Course 1", registrationDate: "2023-07-01", isCompleted: true),
-    Course(name: "Course 2", registrationDate: "2023-07-05", isCompleted: false),
+    Course(
+        name: "Course 2", registrationDate: "2023-07-05", isCompleted: false),
     Course(name: "Course 3", registrationDate: "2023-07-10", isCompleted: true),
-    Course(name: "Course 4", registrationDate: "2023-07-15", isCompleted: false),
+    Course(
+        name: "Course 4", registrationDate: "2023-07-15", isCompleted: false),
     Course(name: "Course 5", registrationDate: "2023-07-20", isCompleted: true),
-    Course(name: "Course 6", registrationDate: "2023-07-25", isCompleted: false),
+    Course(
+        name: "Course 6", registrationDate: "2023-07-25", isCompleted: false),
     Course(name: "Course 7", registrationDate: "2023-07-30", isCompleted: true),
-    Course(name: "Course 8", registrationDate: "2023-08-01", isCompleted: false),
+    Course(
+        name: "Course 8", registrationDate: "2023-08-01", isCompleted: false),
+    Course(name: "Course 1", registrationDate: "2023-07-01", isCompleted: true),
+    Course(
+        name: "Course 2", registrationDate: "2023-07-05", isCompleted: false),
+    Course(name: "Course 3", registrationDate: "2023-07-10", isCompleted: true),
+    Course(
+        name: "Course 4", registrationDate: "2023-07-15", isCompleted: false),
+    Course(name: "Course 5", registrationDate: "2023-07-20", isCompleted: true),
+    Course(
+        name: "Course 6", registrationDate: "2023-07-25", isCompleted: false),
+    Course(name: "Course 7", registrationDate: "2023-07-30", isCompleted: true),
+    Course(
+        name: "Course 8", registrationDate: "2023-08-01", isCompleted: false),
   ];
 
   @override
@@ -30,8 +46,10 @@ class CourseListScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final itemWidth = (constraints.maxWidth - 32) / 4; // Adjust the total padding and spacing
-            final itemHeight = constraints.maxHeight / 4; // Adjust the height as needed
+            final itemWidth = (constraints.maxWidth - 32) /
+                4; // Adjust the total padding and spacing
+            final itemHeight =
+                constraints.maxHeight / 4; // Adjust the height as needed
 
             return GridView.builder(
               padding: EdgeInsets.zero,
@@ -43,7 +61,10 @@ class CourseListScreen extends StatelessWidget {
               ),
               itemCount: courses.length,
               itemBuilder: (context, index) {
-                return CourseItem(course: courses[index], width: itemWidth, height: itemHeight);
+                return CourseItem(
+                    course: courses[index],
+                    width: itemWidth,
+                    height: itemHeight);
               },
             );
           },
@@ -69,7 +90,8 @@ class CourseItem extends StatelessWidget {
   final double width;
   final double height;
 
-  const CourseItem({required this.course, required this.width, required this.height});
+  const CourseItem(
+      {required this.course, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
