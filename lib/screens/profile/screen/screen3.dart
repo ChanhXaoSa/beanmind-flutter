@@ -81,7 +81,9 @@ class CourseListScreen extends StatelessWidget {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 1.5,
-                ),
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),  
                 itemCount: courses.length,
                 itemBuilder: (context, index) {
                   return CourseItem(
