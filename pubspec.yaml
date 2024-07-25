@@ -67,6 +67,7 @@ dependencies:
   easy_sidemenu: ^0.6.0
   colour: ^1.0.5
   auto_size_text: ^3.0.0
+  accordion: ^2.6.0
 
 dev_dependencies:
   flutter_test:
