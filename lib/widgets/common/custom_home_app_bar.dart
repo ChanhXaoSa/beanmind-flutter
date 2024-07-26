@@ -54,15 +54,38 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
               const SizedBox(width: 10.0),
               TextButton(onPressed: () => controller.navigateToGameList(), child: const Text('Danh sách game')),
               const SizedBox(width: 20.0),
-              ElevatedButton(
-                onPressed: () => controller.signIn(),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.blue,
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                ),
-                child: const Text('Đăng nhập'),
-              ),
+              Obx(() {
+                return controller.isLoggedIn.value
+                    ? PopupMenuButton<String>(
+                  onSelected: (String value) {
+                    if (value == 'Profile') {
+                      // controller.navigateToProfile();
+                    }
+                    // Handle other menu selections
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return {'Profile', 'Settings', 'Logout'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('images/avatar.png'), // Replace with user's avatar
+                    radius: 20.0,
+                  ),
+                )
+                    : ElevatedButton(
+                  onPressed: () => controller.signIn(),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.blue,
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  ),
+                  child: const Text('Đăng nhập'),
+                );
+              }),
             ],
           ),
         ),
