@@ -3,6 +3,7 @@ import 'package:beanmind_flutter/widgets/common/custom_home_app_bar.dart';
 import 'package:beanmind_flutter/widgets/course/course_card.dart';
 import 'package:beanmind_flutter/widgets/home/custom_banner.dart';
 import 'package:beanmind_flutter/widgets/home/document_paper_card.dart';
+import 'package:beanmind_flutter/widgets/home/homepage_course_card.dart';
 import 'package:beanmind_flutter/widgets/home/video_learning_paper_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -24,25 +25,33 @@ class HomeScreen extends GetView<HomeController> {
     return Scaffold(
       appBar: CustomHomeAppBar(),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              CustomBanner(),
-              Container(
-                height: 1000, // Example of more content
-                color: Colors.blue[100],
-                child: Center(child: Text('More content here')),
+          child: Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                children: [
+                  CustomBanner(),
+                  FeaturedCourses(),
+                  LastestCourses(),
+                  BestRatedCourses(),
+                  Container(
+                    height: 1000, // Example of more content
+                    color: Colors.blue[100],
+                    child: Center(child: Text('More content here')),
+                  ),
+                  Container(
+                    height: 1000, // Example of more content
+                    color: Colors.red[100],
+                    child: Center(child: Text('More content here')),
+                  ),
+                  Container(
+                    height: 1000, // Example of more content
+                    color: Colors.yellow[100],
+                    child: Center(child: Text('More content here')),
+                  ),
+                ],
               ),
-              Container(
-                height: 1000, // Example of more content
-                color: Colors.red[100],
-                child: Center(child: Text('More content here')),
-              ),
-              Container(
-                height: 1000, // Example of more content
-                color: Colors.yellow[100],
-                child: Center(child: Text('More content here')),
-              ),
-            ],
+            ),
           ),
         )
     );

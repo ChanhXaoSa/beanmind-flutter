@@ -20,7 +20,7 @@ class AuthController extends GetxController {
 
   @override
   void onReady() {
-    initAuth();
+    // initAuth();
     super.onReady();
   }
 
@@ -95,7 +95,7 @@ class AuthController extends GetxController {
     return null;
   }
 
-  void initAuth() async {
+  Future<void> initAuth() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // bool? hasSeenIntroduction = prefs.getBool('hasSeenIntroduction');
 
@@ -113,10 +113,20 @@ class AuthController extends GetxController {
     UserModel? sessionUser = await _getUserSession();
     if (sessionUser != null) {
       user.value = [sessionUser];
-      navigateToHome();
+      if (Get.currentRoute == '/') {
+        navigateToHome();
+      }
     } else {
-      navigateToLogin();
+      if (Get.currentRoute != LoginScreen.routeName) {
+        navigateToLogin();
+      }
     }
+    // if (sessionUser != null) {
+    //   user.value = [sessionUser];
+    //   navigateToHome();
+    // } else {
+    //   navigateToLogin();
+    // }
     // navigateToIntroduction();
     // if (hasSeenIntroduction == null || !hasSeenIntroduction) {
     //   navigateToIntroduction();
