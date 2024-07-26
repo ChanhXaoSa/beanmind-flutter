@@ -1,7 +1,9 @@
 import 'package:beanmind_flutter/bindings/initial_binding.dart';
+import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/controllers/common/theme_controller.dart';
 import 'package:beanmind_flutter/firebase_options.dart';
 import 'package:beanmind_flutter/routes/app_routes.dart';
+import 'package:beanmind_flutter/screens/not_found/not_found_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +16,16 @@ void main() async {
   await initFireBase();
   InitialBinding().dependencies();
   setPathUrlStrategy();
+  initApp();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(const MyApp());
   });
+}
+
+Future<void> initApp() async {
+  final AuthController authController = Get.put(AuthController());
+  await authController.initAuth();
 }
 
 // void main(List<String> args) async{
@@ -47,6 +55,8 @@ class MyApp extends StatelessWidget {
       darkTheme: Get.find<ThemeController>().getDarkTheme(),
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.pages(),
+      unknownRoute: GetPage(name: '/notfound', page: () => NotFoundScreen()),
+      initialRoute: '/',
       // home: BeanMindLayout(),
     );
   }
