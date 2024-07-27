@@ -25,6 +25,7 @@ class GameController extends GetxController {
     super.onInit();
     await fetchGameList();
     await fetchDataGameAnimal();
+    await fetchDataItem();  
     ever(selectedGame, (_) {
       if (selectedGame.value == null) {}
     });
@@ -84,6 +85,28 @@ class GameController extends GetxController {
       });
 
       animalslist = List<GameAnimalModel>.from(items);
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
+  Future<void> fetchDataItem() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('itemstore').get();
+
+      List<ItemModel> items =
+          snapshot.docs.map((doc) => ItemModel.fromSnapshot(doc)).toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print(
+            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
+      });
+      startLowerItemModel = items;
+      lowerItemModel = List<ItemModel>.from(startLowerItemModel);
+      // Update startLower and lower with the fetched items
     } catch (e) {
       print('Error fetching data: $e');
     }

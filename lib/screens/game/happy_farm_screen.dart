@@ -85,7 +85,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   void initState() {
     super.initState();
     resetAnimalFarm();
-    fetchData();
+    _happyFarm = HappyFarm();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
@@ -703,34 +703,5 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _timeRecord.startTimer();
       });
     });
-  }
-
-  Future<void> fetchData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await firestore.collection('animal').get();
-      // print json data
-      snapshot.docs.forEach((doc) {
-        print(doc.data());
-      });
-      List<GameAnimalModel> items = snapshot.docs
-          .map((doc) => GameAnimalModel.fromSnapshot(doc))
-          .toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
-      });
-
-      setState(() {
-        animalslist = List<GameAnimalModel>.from(items);
-        _happyFarm = HappyFarm();
-      });
-    } catch (e) {
-      print('Error fetching data: $e');
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 }

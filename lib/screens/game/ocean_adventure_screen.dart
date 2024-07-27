@@ -88,13 +88,9 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userAnswer = '';
     userPoint = 0;
     userProgress = 0;
-    fetchData();
+    _gameOceanAdventure = GameOceanAdventure();
     generateQuestion();
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _timeRecord.startTimer();
-      });
-    });
+    delay3Seconds();
   }
 
   @override
@@ -552,7 +548,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+      _gameOceanAdventure = GameOceanAdventure();
       resetAnimalOcean();
       generateQuestion();
     });
@@ -660,7 +656,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       Navigator.of(context).pop();
       setState(() {
         userAnswer = '';
-        _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+        _gameOceanAdventure = GameOceanAdventure();
         resetAnimalOcean();
         generateQuestion();
       });
@@ -670,29 +666,12 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     }
   }
 
-  Future<void> fetchData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimalOcean();
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await firestore.collection('animal').get();
-
-      List<GameAnimalModel> items = snapshot.docs
-          .map((doc) => GameAnimalModel.fromSnapshot(doc))
-          .toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
-      });
-
-      // Update startLower and lower with the fetched items
+  Future<void> delay3Seconds() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
       setState(() {
-        resetAnimalOcean();
-        animalslist = List<GameAnimalModel>.from(items);
-        _gameOceanAdventure = GameOceanAdventure(animalslist: animalslist);
+        _timeRecord.startTimer();
       });
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
+    });
   }
 }

@@ -9,8 +9,6 @@ import 'package:flame_network_assets/flame_network_assets.dart';
 
 class GameOceanAdventure extends FlameGame {
   late SpriteComponent background;
-  final List<GameAnimalModel> animalslist;
-  GameOceanAdventure({required this.animalslist});
   final networkImages = FlameNetworkImages();
 
   late SpriteAnimation blueFishAnimation;
@@ -58,8 +56,8 @@ class GameOceanAdventure extends FlameGame {
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: blueFishAnimation,
-          xRange: Range(0.05, 0.95),
-          yRange: Range(0.05, 0.95),
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );
@@ -81,8 +79,8 @@ class GameOceanAdventure extends FlameGame {
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: moonFishAnimation,
-          xRange: Range(0.05, 0.95),
-          yRange: Range(0.05, 0.95),
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );
@@ -104,8 +102,8 @@ class GameOceanAdventure extends FlameGame {
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: octopusAnimation,
-          xRange: Range(0.05, 0.95),
-          yRange: Range(0.05, 0.95),
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );
@@ -127,8 +125,8 @@ class GameOceanAdventure extends FlameGame {
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: redFishAnimation,
-          xRange: Range(0.05, 0.95),
-          yRange: Range(0.05, 0.95),
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );
@@ -150,8 +148,8 @@ class GameOceanAdventure extends FlameGame {
           count: randomNum(),
           scaleFactor: animal.scaleFactor,
           animation: violetFishAnimation,
-          xRange: Range(0.05, 0.95),
-          yRange: Range(0.05, 0.95),
+          xRange: Range(0.1, 0.95),
+          yRange: Range(0.1, 0.95),
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );

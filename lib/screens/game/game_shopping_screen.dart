@@ -62,13 +62,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
     _shopingSplitPanels = ShopingSplitPanels();
-    _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
-    // delay 3s to show the dialog
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _timeRecord.startTimer();
-      });
-    });
+    _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();    
+    delay3Seconds();  
   }
 
   @override
@@ -619,5 +614,13 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void delay3Seconds() {
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _timeRecord.startTimer();
+      });
+    });
   }
 }

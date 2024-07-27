@@ -55,12 +55,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
-    fetchData();
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _timeRecord.startTimer();
-      });
-    });
+    _gameOddAndEven = GameOddAndEven();
+    delay3Seconds();
   }
 
   @override
@@ -448,7 +444,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+      _gameOddAndEven = GameOddAndEven();
       resetAnimalSky();
     });
   }
@@ -540,7 +536,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       setState(() {
         resetAnimalSky();
         userAnswer = '';
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        _gameOddAndEven = GameOddAndEven();
         resetAnimalSky();
       });
       setState(() {
@@ -549,29 +545,12 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     }
   }
 
-  Future<void> fetchData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    resetAnimalSky();
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await firestore.collection('animal').get();
-
-      List<GameAnimalModel> items = snapshot.docs
-          .map((doc) => GameAnimalModel.fromSnapshot(doc))
-          .toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
-      });
-
-      // Update startLower and lower with the fetched items
+  Future<void> delay3Seconds() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
       setState(() {
-        resetAnimalSky();
-        animalslist = List<GameAnimalModel>.from(items);
-        _gameOddAndEven = GameOddAndEven(animalslist: animalslist);
+        _timeRecord.startTimer();
       });
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
+    });
   }
 }

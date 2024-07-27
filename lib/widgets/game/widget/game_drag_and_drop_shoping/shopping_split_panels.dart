@@ -26,33 +26,7 @@ class _ShopingSplitPanelsState extends State<ShopingSplitPanels> {
     lastbalance = 20;
     upperItemModel.clear();
     lowerItemModel.clear();
-    startLowerItemModel = [];
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await firestore.collection('itemstore').get();
-
-      List<ItemModel> items =
-          snapshot.docs.map((doc) => ItemModel.fromSnapshot(doc)).toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print(
-            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
-      });
-
-      // Update startLower and lower with the fetched items
-      setState(() {
-        startLowerItemModel = items;
-        lowerItemModel = List<ItemModel>.from(startLowerItemModel);
-      });
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
+    lowerItemModel.addAll(startLowerItemModel);
   }
 
   PanelLocation? dragStart;

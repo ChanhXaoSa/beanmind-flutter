@@ -7,10 +7,7 @@ import 'package:flame_network_assets/flame_network_assets.dart';
 
 class GameOddAndEven extends FlameGame {
   late SpriteComponent background;
-  final List<GameAnimalModel> animalslist;
-  GameOddAndEven({required this.animalslist});
   final networkImages = FlameNetworkImages();
-
   late SpriteAnimation blueBirdAnimation;
   late SpriteAnimation redBirdAnimation;
 

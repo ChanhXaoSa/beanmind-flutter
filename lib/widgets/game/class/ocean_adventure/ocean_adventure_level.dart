@@ -15,7 +15,7 @@ List<String> animals = [
   'octopus'
 ];
 
-void generateQuestion() {
+void generateQuestion() async {
   randomIndex = Random().nextInt(5);
   if (currentLevel == 1) {
     switch (randomIndex) {
