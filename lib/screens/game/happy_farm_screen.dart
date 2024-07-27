@@ -567,7 +567,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _happyFarm = HappyFarm(animalslist: animalslist);
+      _happyFarm = HappyFarm();
     });
   }
 
@@ -690,7 +690,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       Navigator.of(context).pop();
       setState(() {
         userAnswer = '';
-        _happyFarm = HappyFarm(animalslist: animalslist);
+        _happyFarm = HappyFarm();
         showResultDialog = false;
       });
     }
@@ -724,7 +724,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
       setState(() {
         animalslist = List<GameAnimalModel>.from(items);
-        _happyFarm = HappyFarm(animalslist: animalslist);
+        _happyFarm = HappyFarm();
       });
     } catch (e) {
       print('Error fetching data: $e');

@@ -8,6 +8,7 @@ import 'package:beanmind_flutter/screens/game/game_drag_and_drop_screen.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -20,9 +21,10 @@ class GameController extends GetxController {
   List<dynamic> games = [];
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    fetchGameList();
+    await fetchGameList();
+    await fetchDataGameAnimal();
     ever(selectedGame, (_) {
       if (selectedGame.value == null) {}
     });
@@ -61,6 +63,29 @@ class GameController extends GetxController {
     } catch (e) {
       loadingStatus.value = LoadingStatus.error;
       AppLogger.e(e);
+    }
+  }
+
+  Future<void> fetchDataGameAnimal() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await firestore.collection('animal').get();
+      // print json data
+      snapshot.docs.forEach((doc) {
+        print(doc.data());
+      });
+      List<GameAnimalModel> items = snapshot.docs
+          .map((doc) => GameAnimalModel.fromSnapshot(doc))
+          .toList();
+      print('Number of items fetched: ${items.length}');
+      items.forEach((item) {
+        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
+      });
+
+      animalslist = List<GameAnimalModel>.from(items);
+    } catch (e) {
+      print('Error fetching data: $e');
     }
   }
 

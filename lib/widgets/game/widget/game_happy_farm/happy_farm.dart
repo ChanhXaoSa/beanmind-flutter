@@ -9,10 +9,7 @@ import 'package:flame_network_assets/flame_network_assets.dart';
 
 class HappyFarm extends FlameGame {
   late SpriteComponent background;
-  final List<GameAnimalModel> animalslist;
-  HappyFarm({required this.animalslist});
   final networkImages = FlameNetworkImages();
-
   late SpriteAnimation chickenIdleAnimation;
   late SpriteAnimation duckIdleAnimation;
 
@@ -30,7 +27,7 @@ class HappyFarm extends FlameGame {
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_farm.png')
       ..size = size;
-    add(background);
+    await add(background);
   }
 
   Future<void> loadAnimals() async {
