@@ -6,6 +6,7 @@ import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -97,9 +98,12 @@ class GameListScreen extends GetView<GameController> {
               borderRadius: BorderRadius.circular(5.0),
               child: Stack(
                 children: [
-                  Image.network(
-                    game['imageUrl'] ?? '',
+                  CachedNetworkImage(
+                    imageUrl: game['imageUrl'] ?? '',
                     fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                   Positioned(
                     top: 10,

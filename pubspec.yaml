@@ -69,6 +69,7 @@ dependencies:
   colour: ^1.0.5
   auto_size_text: ^3.0.0
   accordion: ^2.6.0
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:
