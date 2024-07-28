@@ -14,23 +14,19 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   Future<void> fetchCourses() async {
     try {
       final courseResponse = await http.get(
         Uri.parse('${newBaseApiUrl}/courses'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8',
+          'ngrok-skip-browser-warning': 'true',
         }
       );
       if (courseResponse.statusCode == 200) {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
         courseModel.value = courseModelBase;
-        print(courseModel.value);
+        print(courseModel.value.toString());
       } else {
         throw Exception('Failed to fetch course');
       }
