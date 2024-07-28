@@ -72,7 +72,7 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                     }).toList();
                   },
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('images/avatar.png'), // Replace with user's avatar
+                    backgroundImage: AssetImage('images/logo_beanmind.png'),
                     radius: 20.0,
                   ),
                 )
