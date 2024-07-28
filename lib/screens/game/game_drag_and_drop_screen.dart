@@ -89,101 +89,136 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         _isLoading = false;
       });
     });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
-    } else {
-      return Scaffold(
-        body: AnimatedSwitcher(
-          duration: const Duration(seconds: 1),
-          child: Container(
-            key: ValueKey<String>(background),
-            alignment: Alignment.topCenter,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                    background), // Thay 'url' bằng đường dẫn URL thực tế của hình ảnh
-                fit: BoxFit.fill,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.5),
-                  BlendMode.darken,
+    return Stack(
+      children: [
+        Scaffold(
+          body: AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            child: Container(
+              key: ValueKey<String>(background),
+              alignment: Alignment.topCenter,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                      background), // Thay 'url' bằng đường dẫn URL thực tế của hình ảnh
+                  fit: BoxFit.fill,
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5),
+                    BlendMode.darken,
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 20,
-                    right: 25,
-                  ),
-                  height: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Số điểm của bạn : ' + userPoint.toString(),
-                          style: whiteTextStyle,
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Hướng dẫn'),
-                                content: Text(
-                                  'Nội dung hướng dẫn người chơi...',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding:
-                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                        ),
-                        child: Icon(
-                          Icons.help,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60,
-                  child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 25,
+                    ),
+                    height: 60,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          question,
-                          style: whiteTextStyle,
+                        Center(
+                          child: Text(
+                            'Số điểm của bạn : ' + userPoint.toString(),
+                            style: whiteTextStyle,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Hướng dẫn'),
+                                  content: Text(
+                                    'Nội dung hướng dẫn người chơi...',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding:
+                                EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                          ),
+                          child: Icon(
+                            Icons.help,
+                            size: 30,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                Expanded(
-                  child: isWideScreen
-                      ? Container(
-                          padding: EdgeInsets.all(30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                  Container(
+                    height: 60,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            question,
+                            style: whiteTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: isWideScreen
+                        ? Container(
+                            padding: EdgeInsets.all(30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 15),
+                                    alignment: Alignment.topCenter,
+                                    child: _splitPanelsMobie,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: GridView.builder(
+                                      itemCount: numberPad.length,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 1, // Số cột
+                                        childAspectRatio: 4, // Tỷ lệ khung hình
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        return MyButton(
+                                          child: numberPad[index],
+                                          onTap: () =>
+                                              buttonTapped(numberPad[index]),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Column(
                             children: [
                               Expanded(
-                                flex: 4,
+                                flex: 3,
                                 child: Container(
-                                  margin: EdgeInsets.only(left: 15),
                                   alignment: Alignment.topCenter,
                                   child: _splitPanelsMobie,
                                 ),
@@ -213,55 +248,30 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                               ),
                             ],
                           ),
-                        )
-                      : Column(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                child: _splitPanelsMobie,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: GridView.builder(
-                                  itemCount: numberPad.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1, // Số cột
-                                    childAspectRatio: 4, // Tỷ lệ khung hình
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return MyButton(
-                                      child: numberPad[index],
-                                      onTap: () =>
-                                          buttonTapped(numberPad[index]),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-                Focus(
-                  focusNode: _resultFocusNode,
-                  child: Container(
-                    height: 0,
-                    width: 0,
                   ),
-                )
-              ],
+                  Focus(
+                    focusNode: _resultFocusNode,
+                    child: Container(
+                      height: 0,
+                      width: 0,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      );
-    }
+        Visibility(
+          visible: _isLoading,
+          child: Container(
+            color: Colors.black.withOpacity(0.7),
+            child: Center(
+              child: ProgressWidgets(),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   void _showDialogError(

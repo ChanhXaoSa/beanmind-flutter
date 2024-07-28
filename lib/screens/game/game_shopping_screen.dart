@@ -62,8 +62,8 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
     _shopingSplitPanels = ShopingSplitPanels();
-    _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();    
-    delay3Seconds();  
+    _shopingSplitPanelsMobie = ShopingSplitPanelsMobie();
+    delay3Seconds();
   }
 
   @override
@@ -77,207 +77,217 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
         _isLoading = false;
       });
     });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
-    } else {
-      return Container(
-        child: KeyboardListener(
-          focusNode: FocusNode(),
-          onKeyEvent: (KeyEvent event) {
-            if (event is KeyDownEvent) {
-              final logicalKey = event.logicalKey;
-              if (logicalKey == LogicalKeyboardKey.enter) {
-                if (showResultDialog) {
-                  goToNextQuestion();
-                } else {
-                  checkResult();
+    return Stack(
+      children: [
+        Container(
+          child: KeyboardListener(
+            focusNode: FocusNode(),
+            onKeyEvent: (KeyEvent event) {
+              if (event is KeyDownEvent) {
+                final logicalKey = event.logicalKey;
+                if (logicalKey == LogicalKeyboardKey.enter) {
+                  if (showResultDialog) {
+                    goToNextQuestion();
+                  } else {
+                    checkResult();
+                  }
                 }
               }
-            }
-          },
-          child: Scaffold(
-            body: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 25,
-                  ),
-                  height: 60,
-                  decoration: BoxDecoration(gradient: mainGradient(context)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Số điểm của bạn : ' + userPoint.toString(),
-                          style: whiteTextStyle,
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Hướng dẫn'),
-                                content: Text(
-                                  'Nội dung hướng dẫn người chơi...',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          padding:
-                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                        ),
-                        child: Icon(
-                          Icons.help,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60,
-                  decoration: BoxDecoration(gradient: mainGradient(context)),
-                  child: Center(
+            },
+            child: Scaffold(
+              body: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 25,
+                    ),
+                    height: 60,
+                    decoration: BoxDecoration(gradient: mainGradient(context)),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
-                          style: whiteTextStyle,
+                        Center(
+                          child: Text(
+                            'Số điểm của bạn : ' + userPoint.toString(),
+                            style: whiteTextStyle,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Hướng dẫn'),
+                                  content: Text(
+                                    'Nội dung hướng dẫn người chơi...',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding:
+                                EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                          ),
+                          child: Icon(
+                            Icons.help,
+                            size: 30,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                Expanded(
-                  child: isWideScreen
-                      ? Container(
-                          padding: EdgeInsets.only(left: 20, right: 20),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: const NetworkImage(
-                                  'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_shopping_game.png?alt=media&token=31e87e92-f432-4c3f-a661-b29f6d4cdf33'),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.7),
-                                BlendMode.darken,
-                              ),
-                            ),
+                  Container(
+                    height: 60,
+                    decoration: BoxDecoration(gradient: mainGradient(context)),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Kéo thả sản phẩm cho đến khi số tiền bạn có bằng với số tiền cần giữ lại theo yêu cầu',
+                            style: whiteTextStyle,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  alignment: Alignment.topCenter,
-                                  child: _shopingSplitPanelsMobie,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: GridView.builder(
-                                    itemCount: numberPad.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1, // Số cột
-                                      childAspectRatio: 4, // Tỷ lệ khung hình
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return MyButton(
-                                        child: numberPad[index],
-                                        onTap: () =>
-                                            buttonTapped(numberPad[index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: const NetworkImage(
-                                  'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_shopping_game.png?alt=media&token=31e87e92-f432-4c3f-a661-b29f6d4cdf33'),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.5),
-                                BlendMode.darken,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  alignment: Alignment.topCenter,
-                                  child: _shopingSplitPanelsMobie,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: GridView.builder(
-                                    itemCount: numberPad.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1, // Số cột
-                                      childAspectRatio: 4, // Tỷ lệ khung hình
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return MyButton(
-                                        child: numberPad[index],
-                                        onTap: () =>
-                                            buttonTapped(numberPad[index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                ),
-                Focus(
-                  focusNode: _resultFocusNode,
-                  child: const SizedBox(
-                    height: 0,
-                    width: 0,
+                        ],
+                      ),
+                    ),
                   ),
-                )
-              ],
+                  Expanded(
+                    child: isWideScreen
+                        ? Container(
+                            padding: EdgeInsets.only(left: 20, right: 20),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: const NetworkImage(
+                                    'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_shopping_game.png?alt=media&token=31e87e92-f432-4c3f-a661-b29f6d4cdf33'),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.7),
+                                  BlendMode.darken,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    alignment: Alignment.topCenter,
+                                    child: _shopingSplitPanelsMobie,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: GridView.builder(
+                                      itemCount: numberPad.length,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 1, // Số cột
+                                        childAspectRatio: 4, // Tỷ lệ khung hình
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        return MyButton(
+                                          child: numberPad[index],
+                                          onTap: () =>
+                                              buttonTapped(numberPad[index]),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: const NetworkImage(
+                                    'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_shopping_game.png?alt=media&token=31e87e92-f432-4c3f-a661-b29f6d4cdf33'),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.5),
+                                  BlendMode.darken,
+                                ),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    alignment: Alignment.topCenter,
+                                    child: _shopingSplitPanelsMobie,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: GridView.builder(
+                                      itemCount: numberPad.length,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 1, // Số cột
+                                        childAspectRatio: 4, // Tỷ lệ khung hình
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        return MyButton(
+                                          child: numberPad[index],
+                                          onTap: () =>
+                                              buttonTapped(numberPad[index]),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
+                  Focus(
+                    focusNode: _resultFocusNode,
+                    child: const SizedBox(
+                      height: 0,
+                      width: 0,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      );
-    }
+        Visibility(
+          visible: _isLoading,
+          child: Container(
+            color: Colors.black.withOpacity(0.7),
+            child: Center(
+              child: ProgressWidgets(),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  
   void _showDialogError(
     String message,
   ) {

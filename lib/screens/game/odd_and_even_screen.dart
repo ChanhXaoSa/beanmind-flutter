@@ -28,7 +28,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   late VideoPlayerController _videoPlayerController;
   late GameOddAndEven _gameOddAndEven;
   late TimeRecord _timeRecord = TimeRecord();
-  var whiteTextStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
+  var whiteTextStyle = const TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
@@ -64,9 +65,12 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     final bool isWideScreen = screenSize.width / screenSize.height > 16 / 9;
     double fontSize;
-    if (MediaQuery.of(context).size.width < 1200 || MediaQuery.of(context).size.height < 850) {
-      fontSize = 40; // Assuming you want a smaller font size for smaller screens
-    } else if (MediaQuery.of(context).size.width < 1400 || MediaQuery.of(context).size.height < 1100) {
+    if (MediaQuery.of(context).size.width < 1200 ||
+        MediaQuery.of(context).size.height < 850) {
+      fontSize =
+          40; // Assuming you want a smaller font size for smaller screens
+    } else if (MediaQuery.of(context).size.width < 1400 ||
+        MediaQuery.of(context).size.height < 1100) {
       fontSize = 48;
     } else {
       fontSize = 56;
@@ -77,167 +81,182 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         _isLoading = false;
       });
     });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
-    } else {
-      return KeyboardListener(
-        focusNode: FocusNode(),
-        onKeyEvent: (KeyEvent event) {
-          if (event is KeyDownEvent) {
-            final logicalKey = event.logicalKey;
-            if (logicalKey == LogicalKeyboardKey.enter) {
-              if (showResultDialog) {
-                goToNextQuestion();
-              } else {
-                checkResult();
+    return Stack(
+      children: [
+        KeyboardListener(
+          focusNode: FocusNode(),
+          onKeyEvent: (KeyEvent event) {
+            if (event is KeyDownEvent) {
+              final logicalKey = event.logicalKey;
+              if (logicalKey == LogicalKeyboardKey.enter) {
+                if (showResultDialog) {
+                  goToNextQuestion();
+                } else {
+                  checkResult();
+                }
+              } else if (logicalKey == LogicalKeyboardKey.backspace) {
+                buttonTapped('DEL');
               }
-            } else if (logicalKey == LogicalKeyboardKey.backspace) {
-              buttonTapped('DEL');
+              final input = logicalKey.keyLabel;
+              if (RegExp(r'^[0-9]$').hasMatch(input)) {
+                handleNumberButtonPress(input);
+              }
             }
-            final input = logicalKey.keyLabel;
-            if (RegExp(r'^[0-9]$').hasMatch(input)) {
-              handleNumberButtonPress(input);
-            }
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.deepPurple[300],
-          body: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                height: 60,
-                color: Colors.deepPurple,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Số điểm của bạn : ' + userPoint.toString(),
-                        style: whiteTextStyle,
+          },
+          child: Scaffold(
+            backgroundColor: Colors.deepPurple[300],
+            body: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  height: 60,
+                  color: Colors.deepPurple,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Số điểm của bạn : ' + userPoint.toString(),
+                          style: whiteTextStyle,
+                        ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Hướng dẫn'),
+                                content: Text(
+                                  'Nội dung hướng dẫn người chơi...',
                                 ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding:
-                            EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding:
+                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                        ),
+                        child: Icon(
+                          Icons.help,
+                          size: 30,
+                        ),
                       ),
-                      child: Icon(
-                        Icons.help,
-                        size: 30,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 4,
-                child: isWideScreen
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: GameWidget(game: _gameOddAndEven),
+                Expanded(
+                  flex: 4,
+                  child: isWideScreen
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                child: GameWidget(game: _gameOddAndEven),
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: GameWidget(game: _gameOddAndEven),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                child: GameWidget(game: _gameOddAndEven),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[600],
                       ),
-              ),
-              Expanded(
-                  flex: 1,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Số lượng chim là',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize,
+                                  color: Colors.white),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                buttonTapped('1');
+                              },
+                              child: Text(
+                                'số lẻ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: fontSize,
+                                    color: Colors.green),
+                              ),
+                            ),
+                            Text(
+                              'hay',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize,
+                                  color: Colors.white),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                buttonTapped('2');
+                              },
+                              child: Text(
+                                'số chẵn',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: fontSize,
+                                    color: Colors.red),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
+                Focus(
+                  focusNode: _resultFocusNode,
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple[600],
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Số lượng chim là',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize, color: Colors.white),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              buttonTapped('1');
-                            },
-                            child: Text(
-                              'số lẻ',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: fontSize,
-                                  color: Colors.green),
-                            ),
-                          ),
-                          Text(
-                            'hay',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize, color: Colors.white),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              buttonTapped('2');
-                            },
-                            child: Text(
-                              'số chẵn',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: fontSize,
-                                  color: Colors.red),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-              Focus(
-                focusNode: _resultFocusNode,
-                child: Container(
-                  height: 0,
-                  width: 0,
-                ),
-              )
-            ],
+                    height: 0,
+                    width: 0,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      );
-    }
+        Visibility(
+          visible: _isLoading,
+          child: Container(
+            color: Colors.black.withOpacity(0.7),
+            child: Center(
+              child: ProgressWidgets(),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   void _showDialogCompleted(

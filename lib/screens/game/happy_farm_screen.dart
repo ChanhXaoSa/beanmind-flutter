@@ -102,229 +102,239 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _isLoading = false;
       });
     });
-    if (_isLoading) {
-      return Center(child: ProgressWidgets());
-    } else {
-      return KeyboardListener(
-        focusNode: FocusNode(),
-        onKeyEvent: (KeyEvent event) {
-          if (event is KeyDownEvent) {
-            final logicalKey = event.logicalKey;
-            if (logicalKey == LogicalKeyboardKey.enter) {
-              if (showResultDialog) {
-                goToNextQuestion();
-              } else {
-                checkResult();
+      return Stack(
+        children: [
+          KeyboardListener(
+            focusNode: FocusNode(),
+            onKeyEvent: (KeyEvent event) {
+              if (event is KeyDownEvent) {
+                final logicalKey = event.logicalKey;
+                if (logicalKey == LogicalKeyboardKey.enter) {
+                  if (showResultDialog) {
+                    goToNextQuestion();
+                  } else {
+                    checkResult();
+                  }
+                } else if (logicalKey == LogicalKeyboardKey.backspace) {
+                  buttonTapped('\u2190');
+                }
+                final input = logicalKey.keyLabel;
+                if (RegExp(r'^[0-9]$').hasMatch(input)) {
+                  handleNumberButtonPress(input);
+                }
               }
-            } else if (logicalKey == LogicalKeyboardKey.backspace) {
-              buttonTapped('\u2190');
-            }
-            final input = logicalKey.keyLabel;
-            if (RegExp(r'^[0-9]$').hasMatch(input)) {
-              handleNumberButtonPress(input);
-            }
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.blue[100],
-          body: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 25,
-                ),
-                height: 60,
-                color: Colors.deepPurple,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Số điểm của bạn : ' + userPoint.toString(),
-                        style: whiteTextStyle,
-                      ),
+            },
+            child: Scaffold(
+              backgroundColor: Colors.blue[100],
+              body: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 25,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Hướng dẫn'),
-                              content: Text(
-                                'Nội dung hướng dẫn người chơi...',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
-                                ),
-                              ],
+                    height: 60,
+                    color: Colors.deepPurple,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Số điểm của bạn : ' + userPoint.toString(),
+                            style: whiteTextStyle,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Hướng dẫn'),
+                                  content: Text(
+                                    'Nội dung hướng dẫn người chơi...',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding:
-                            EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                      ),
-                      child: Icon(
-                        Icons.help,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                  height: 60,
-                  color: Colors.deepPurple,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          question,
-                          style: whiteTextStyle,
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                          color: Colors.blue[100],
-                          child: Text(
-                            '$userAnswer',
-                            style:
-                                whiteTextStyle.copyWith(color: Colors.orange),
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding:
+                                EdgeInsets.all(10), // Điều chỉnh kích thước nút
+                          ),
+                          child: Icon(
+                            Icons.help,
+                            size: 30,
                           ),
                         ),
                       ],
                     ),
-                  )),
-              Expanded(
-                child: isWideScreen
-                    ? Row(
-                        // desktop view
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              margin: EdgeInsets.only(
-                                  top: 15, left: 15, bottom: 15),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                    width: 5,
-                                    color: Theme.of(context)
-                                        .cardColor
-                                        .withAlpha(100)),
+                  ),
+                  Container(
+                      height: 60,
+                      color: Colors.deepPurple,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              question,
+                              style: whiteTextStyle,
+                            ),
+                            SizedBox(width: 10),
+                            Container(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                              color: Colors.blue[100],
+                              child: Text(
+                                '$userAnswer',
+                                style:
+                                    whiteTextStyle.copyWith(color: Colors.orange),
                               ),
-                              child: Stack(
-                                children: [
-                                  GameWidget(game: _happyFarm),
-                                  Visibility(
-                                    visible: _isLoading,
-                                    child: Center(
-                                      child: ProgressWidgets(),
-                                    ),
+                            ),
+                          ],
+                        ),
+                      )),
+                  Expanded(
+                    child: isWideScreen
+                        ? Row(
+                            // desktop view
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  margin: EdgeInsets.only(
+                                      top: 15, left: 15, bottom: 15),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                        width: 5,
+                                        color: Theme.of(context)
+                                            .cardColor
+                                            .withAlpha(100)),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: GridView.builder(
-                                itemCount: numberPad.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(10, 12, 10, 0),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,
-                                        childAspectRatio: 0.9),
-                                itemBuilder: (context, index) {
-                                  return MyButton(
-                                    child: numberPad[index],
-                                    onTap: () => buttonTapped(numberPad[index]),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        // mobile view
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                    width: 5,
-                                    color: Theme.of(context)
-                                        .cardColor
-                                        .withAlpha(100)),
-                              ),
-                              child: Stack(
-                                children: [
-                                  GameWidget(game: _happyFarm),
-                                  Visibility(
-                                    visible: _isLoading,
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
+                                  child: Stack(
+                                    children: [
+                                      GameWidget(game: _happyFarm),
+                                      Visibility(
+                                        visible: _isLoading,
+                                        child: Center(
+                                          child: ProgressWidgets(),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: GridView.builder(
-                                itemCount: numberPadMobie.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 7,
-                                        childAspectRatio: 2.2),
-                                itemBuilder: (context, index) {
-                                  return MyButton(
-                                    child: numberPadMobie[index],
-                                    onTap: () =>
-                                        buttonTapped(numberPadMobie[index]),
-                                  );
-                                },
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPad.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(10, 12, 10, 0),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 4,
+                                            childAspectRatio: 0.9),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPad[index],
+                                        onTap: () => buttonTapped(numberPad[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
+                          )
+                        : Column(
+                            // mobile view
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  margin: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                        width: 5,
+                                        color: Theme.of(context)
+                                            .cardColor
+                                            .withAlpha(100)),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      GameWidget(game: _happyFarm),
+                                      Visibility(
+                                        visible: _isLoading,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: GridView.builder(
+                                    itemCount: numberPadMobie.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 7,
+                                            childAspectRatio: 2.2),
+                                    itemBuilder: (context, index) {
+                                      return MyButton(
+                                        child: numberPadMobie[index],
+                                        onTap: () =>
+                                            buttonTapped(numberPadMobie[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                  ),
+                  Focus(
+                    focusNode: _resultFocusNode,
+                    child: Container(
+                      height: 0,
+                      width: 0,
+                    ),
+                  )
+                ],
               ),
-              Focus(
-                focusNode: _resultFocusNode,
-                child: Container(
-                  height: 0,
-                  width: 0,
-                ),
-              )
-            ],
+            ),
+          ),
+          Visibility(
+          visible: _isLoading,
+          child: Container(
+            color: Colors.black.withOpacity(0.7),
+            child: Center(
+              child: ProgressWidgets(),
+            ),
           ),
         ),
+        ],
       );
-    }
+    
   }
 
   // show dialog error
