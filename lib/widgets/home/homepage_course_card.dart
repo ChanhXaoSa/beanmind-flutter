@@ -13,14 +13,14 @@ class FeaturedCourses extends GetView<HomeController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Featured Courses',
+              'Các khóa học nổi bật',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             TextButton(
               onPressed: () {
                 // Handle "See All" button press
               },
-              child: Text('See All'),
+              child: Text('Xem tất cả'),
             ),
           ],
         ),
@@ -69,7 +69,7 @@ class HomepageCourseCard extends StatelessWidget {
                     color: Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: Text(
-                      'New',
+                      'Mới',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -109,7 +109,7 @@ class HomepageCourseCard extends StatelessWidget {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {},
-              child: Text('Enroll'),
+              child: Text('Xem thêm'),
             ),
           ],
         ),
