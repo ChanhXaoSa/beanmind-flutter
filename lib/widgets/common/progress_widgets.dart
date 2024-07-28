@@ -17,11 +17,11 @@ class _ProgressWidgetsState extends State<ProgressWidgets> {
             child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Lottie.asset("assets/lotties/loading_animation_01.json", height: 300),
+        Lottie.asset("assets/lotties/loading_animation_01.json", height: MediaQuery.of(context).size.height * 0.5),
         Padding(
           padding: EdgeInsets.all(15.0),
           child: new LinearPercentIndicator(
-            width: MediaQuery.of(context).size.width - 100,
+            width: MediaQuery.of(context).size.width *0.9,
             animation: true,
             lineHeight: 30.0,
             animationDuration: 2500,

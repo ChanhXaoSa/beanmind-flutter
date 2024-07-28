@@ -468,7 +468,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
 
     if (userAnswer.isEmpty) {
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
 
     if (userAnswer == 'số lẻ' &&
@@ -484,7 +484,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi!', 'assets/lotties/success.json', false, true, false);
     } else if (userAnswer == 'số chẵn' &&
         (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
       userPoint += 1;
@@ -500,7 +500,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         return;
       }
       _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', true, true, false);
+          'Đúng rồi!', 'assets/lotties/success.json', false, true, false);
     } else {
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
@@ -513,7 +513,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         return;
       }
       _audio.playWrongSound();
-      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', true, true, true);
+      _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
     }
   }
 
