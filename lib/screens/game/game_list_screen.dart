@@ -90,7 +90,7 @@ class GameListScreen extends GetView<GameController> {
             footer: GridTileBar(
               backgroundColor: Colors.black54,
               title: Text(
-                game['title'] ?? '',
+                game['name'] ?? '',
                 style: const TextStyle(fontSize: 20),
               ),
             ),
@@ -99,7 +99,7 @@ class GameListScreen extends GetView<GameController> {
               child: Stack(
                 children: [
                   CachedNetworkImage(
-                    imageUrl: game['imageUrl'] ?? '',
+                    imageUrl: game['image'] ?? '',
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         Center(child: CircularProgressIndicator()),
@@ -122,8 +122,8 @@ class GameListScreen extends GetView<GameController> {
                         Get.toNamed(GameLeaderboardScreen.routeName,
                             arguments: GameModel(
                                 id: game['id']!,
-                                title: game['title']!,
-                                imageUrl: game['imageUrl'] ?? '',
+                                title: game['name']!,
+                                imageUrl: game['image'] ?? '',
                                 description: game['description'] ?? ''));
                       },
                       child: const Icon(AppIcons.trophyoutline,

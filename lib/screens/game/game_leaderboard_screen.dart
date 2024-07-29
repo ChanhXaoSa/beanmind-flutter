@@ -92,7 +92,7 @@ class GameLeaderBoardCard extends StatelessWidget {
       //       data.user.image == null ? null : NetworkImage(data.user.image!),
       // ),
       title: Text(
-        data.student.userName!,
+        data.userName,
         style: whiteTextStyle,
       ),
       subtitle: EasySeparatedRow(
@@ -121,7 +121,7 @@ class GameLeaderBoardCard extends StatelessWidget {
               size: 30,
             ),
             text: Text(
-              '${data.score!}',
+              '${data.point}',
               style: whiteTextStyle,
             ),
           ),

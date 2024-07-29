@@ -33,7 +33,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
 
   bool showResultDialog = false;
   bool _isLoading = true;
-  String gameId = 'game004';
+  String gameId = 'c296495f-342e-4fd6-5d09-08dcafad932c';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);

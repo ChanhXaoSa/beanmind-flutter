@@ -13,31 +13,36 @@ import 'package:http/http.dart' as http;
 class GameLeaderBoardController extends GetxController {
   // game
   final gameloadingStatus = LoadingStatus.completed.obs;
-  List<dynamic> gamesLeaderBoard = [];
+  var gamesLeaderBoard = <LeaderBoardGameData>[];
 
   // leader board for game
   Future<void> getAllGame(String gameId) async {
     gameloadingStatus.value = LoadingStatus.loading;
     try {
       final String apiUrl =
-          "http://bmapitest.somee.com/api/v1/game-histories/leaderboard?GameId=$gameId";
-      final response = await http.get(Uri.parse(apiUrl));
+          "https://smart-platypus-hardly.ngrok-free.app/api/v1/game-histories/leader-board?GameId=$gameId&Top=10";
+      final response =
+          await http.get(Uri.parse(apiUrl), headers: <String, String>{
+        'Content-Type': 'application/json; charset=utf-8',
+        'ngrok-skip-browser-warning': 'true',
+      });
 
       if (response.statusCode == 200) {
         final body = response.body;
         final decoded = jsonDecode(body);
 
-        // Kiểm tra định dạng JSON và truy cập dữ liệu
-        if (decoded is Map<String, dynamic> && decoded['data'] is Map<String, dynamic>) {
-          final data = decoded['data'];
-          final top10Leaderboard = data['top10Leaderboard'] as List<dynamic>;
+        // Check JSON format and access data
+        if (decoded is Map<String, dynamic> &&
+            decoded['data'] is List<dynamic>) {
+          final data = decoded['data'] as List<dynamic>;
 
-          final allData = top10Leaderboard
-              .map((item) => LeaderBoardGameData.fromJson(item))
-              .toList();
+          final allData =
+              data.map((item) => LeaderBoardGameData.fromJson(item)).toList();
 
+          // Assuming userFR and AppLogger are defined and used somewhere in your code
           for (var data in allData) {
-            final userSnapshot = await userFR.doc(data.studentId).get();
+            final userSnapshot = await userFR.doc(data.userName).get();
+            // Do something with userSnapshot if needed
           }
 
           gamesLeaderBoard = allData;

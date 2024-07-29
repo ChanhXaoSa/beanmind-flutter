@@ -41,35 +41,26 @@ class LeaderBoardData {
 
 class LeaderBoardGameData {
   final String gameId;
-  final String studentId;
-  final int score;
-  final int duration;
-  final GameData game;
-  final UserData student;
-  final String id;
-  final bool isDeleted;
+  final String gameName;
+  final String userName;
+  final int point;
+  final String duration;
 
   LeaderBoardGameData({
     required this.gameId,
-    required this.studentId,
-    required this.score,
+    required this.gameName,
+    required this.userName,
+    required this.point,
     required this.duration,
-    required this.game,
-    required this.student,
-    required this.id,
-    required this.isDeleted,
   });
 
   factory LeaderBoardGameData.fromJson(Map<String, dynamic> json) {
     return LeaderBoardGameData(
       gameId: json['gameId'],
-      studentId: json['studentId'],
-      score: json['score'],
+      gameName: json['game']['name'],
+      userName: json['applicationUser']['userName'],
+      point: json['point'],
       duration: json['duration'],
-      game: GameData.fromJson(json['game']),
-      student: UserData.fromJson(json['student']),
-      id: json['id'],
-      isDeleted: json['isDeleted'],
     );
   }
 }

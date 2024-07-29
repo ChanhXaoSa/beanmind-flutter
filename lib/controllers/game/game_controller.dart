@@ -7,6 +7,7 @@ import 'package:beanmind_flutter/screens/game/odd_and_even_screen.dart';
 import 'package:beanmind_flutter/screens/game/game_drag_and_drop_screen.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +40,11 @@ class GameController extends GetxController {
     loadingStatus.value = LoadingStatus.loading;
     try {
       final response = await http.get(
-        Uri.parse(
-            'http://bmapitest.somee.com/api/v1/games?PageIndex=1&PageSize=9999'),
-      );
+          Uri.parse('${newBaseApiUrl}/games?IsDeleted=1'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          });
 
       if (response.statusCode == 200) {
         final body = response.body;
@@ -114,15 +117,15 @@ class GameController extends GetxController {
 
   String getGameTitle(String gameId) {
     switch (gameId) {
-      case 'game001':
+      case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
         return 'Khám phá đại dương';
-      case 'game002':
+      case '49299e7c-fa16-45fd-84e4-1a725c118a9f':
         return 'Nông trại vui vẻ';
-      case 'game003':
+      case 'ead13199-827d-4c48-5d08-08dcafad932c':
         return 'Sắp xếp số';
-      case 'game004':
+      case 'c296495f-342e-4fd6-5d09-08dcafad932c':
         return 'Trò chơi mua sắm';
-      case 'game005':
+      case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
         return 'Số lẻ và số chẵn';
       default:
         return 'Game Gallery';
@@ -131,15 +134,15 @@ class GameController extends GetxController {
 
   Widget buildGameWidget(String gameId) {
     switch (gameId) {
-      case 'game001':
+      case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
         return OceanAdventureScreen();
-      case 'game002':
+      case '49299e7c-fa16-45fd-84e4-1a725c118a9f':
         return HappyFarmScreen();
-      case 'game003':
+      case 'ead13199-827d-4c48-5d08-08dcafad932c':
         return MathDragAndDropScreen();
-      case 'game004':
+      case 'c296495f-342e-4fd6-5d09-08dcafad932c':
         return GameShoppingScreen();
-      case 'game005':
+      case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
         return GameOddAndEvenScreen();
       default:
         return GameListScreen();

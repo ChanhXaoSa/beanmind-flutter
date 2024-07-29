@@ -19,8 +19,8 @@ class GameModel {
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
       id: json['id'],
-      title: json['title'],
-      imageUrl: json['imageUrl'],
+      title: json['name'],
+      imageUrl: json['image'],
       description: json['description'],
     );
   }

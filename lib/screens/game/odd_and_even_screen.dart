@@ -34,7 +34,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
   bool _isLoading = true;
-  String gameId = 'game005';
+  String gameId = '59141c9e-7dd3-4c76-5d0a-08dcafad932c';
 
   String userAnswer = '';
   int userPoint = 0;
