@@ -32,12 +32,13 @@ class AuthController extends GetxController {
   Future<void> login(String email, String password) async {
     try {
       final loginResponse = await http.post(
-        Uri.parse('${baseApiUrl}/auth/login'),
+        Uri.parse('${newBaseApiUrl}/auth/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'ngrok-skip-browser-warning': 'true',
         },
         body: jsonEncode(<String, String>{
-          'email': email,
+          'username': email,
           'password': password,
         }),
       );
@@ -48,8 +49,10 @@ class AuthController extends GetxController {
           String accessToken = loginModel.data!.accessToken;
 
           final userResponse = await http.get(
-            Uri.parse('${baseApiUrl}/users/info'),
+            Uri.parse('${newBaseApiUrl}/auth/info'),
             headers: <String, String>{
+              'Content-Type': 'application/json; charset=utf-8',
+              'ngrok-skip-browser-warning': 'true',
               'Authorization': 'Bearer $accessToken',
             },
           );
