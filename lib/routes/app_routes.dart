@@ -21,6 +21,7 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(HomeController());
               Get.put(AppBarController());
+              Get.put(CourseController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
