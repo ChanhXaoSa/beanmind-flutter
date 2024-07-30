@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class CourseDetailScreen extends GetView<CourseDetailController> {
   const CourseDetailScreen({super.key});
 
-  static const String routeName = '/course_detail';
+  static const String routeName = '/course_detail/:id';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
