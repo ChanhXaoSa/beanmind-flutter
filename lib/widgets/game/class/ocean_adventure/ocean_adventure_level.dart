@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_user.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 
-int currentLevel = 3;
 String currentQuestionType = ''; // To track the type of animal
 String currentQuestionOperator = '';
 int randomIndex = 0;
@@ -15,7 +14,7 @@ List<String> animals = [
   'octopus'
 ];
 
-void generateQuestion() async {
+void generateQuestion(int currentLevel) async {
   randomIndex = Random().nextInt(5);
   if (currentLevel == 1) {
     switch (randomIndex) {

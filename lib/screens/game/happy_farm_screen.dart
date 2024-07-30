@@ -20,7 +20,8 @@ import 'package:video_player/video_player.dart';
 import '../../widgets/game/widget/game_happy_farm/happy_farm.dart';
 
 class HappyFarmScreen extends StatefulWidget {
-  const HappyFarmScreen({Key? key}) : super(key: key);
+  final int level;
+  const HappyFarmScreen({Key? key, required this.level}) : super(key: key);
   static const String routeName = '/happy_farm';
   @override
   State<HappyFarmScreen> createState() => _HappyFarmScreenState();
@@ -85,7 +86,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   void initState() {
     super.initState();
     resetAnimalFarm();
-    _happyFarm = HappyFarm();
+    _happyFarm = HappyFarm(level: widget.level);
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
@@ -577,7 +578,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _happyFarm = HappyFarm();
+      _happyFarm = HappyFarm(level: widget.level);
     });
   }
 
@@ -600,14 +601,14 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       showResultDialog = true;
     });
 
-    if (currentLevel == 1) {
+    if (widget.level == 1) {
       // Level 1: Counting
       if (currentQuestionType == 'chicken') {
         isCorrect = globalChickenCount == int.parse(userAnswer);
       } else if (currentQuestionType == 'duck') {
         isCorrect = globalDuckCount == int.parse(userAnswer);
       }
-    } else if (currentLevel == 2) {
+    } else if (widget.level == 2) {
       // Level 2: Addition and Subtraction
       List<String> questionParts = currentQuestionType.split(' ');
       int num1 = getAnimalCountByType(questionParts[0]); // First animal
@@ -616,7 +617,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       String operator = questionParts[1];
       int correctAnswer = calculateAnswerLevel2(num1, num2, operator);
       isCorrect = correctAnswer == int.parse(userAnswer);
-    } else if (currentLevel == 3) {
+    } else if (widget.level == 3) {
       // Level 3: Addition, Subtraction, Multiplication, and Division
       List<String> questionParts = currentQuestionType.split(' ');
       int num1 = getAnimalCountByType(questionParts[0]); // First animal
@@ -659,7 +660,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
         saveGameResults(
-            gameId, userPoint, _timeRecord.seconds);
+            gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -671,7 +672,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, userPoint, _timeRecord.seconds);
+        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -699,7 +700,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
       Navigator.of(context).pop();
       setState(() {
         userAnswer = '';
-        _happyFarm = HappyFarm();
+        _happyFarm = HappyFarm(level: widget.level);
         showResultDialog = false;
       });
     }

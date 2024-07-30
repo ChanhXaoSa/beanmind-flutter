@@ -8,6 +8,9 @@ import 'package:flame/image_composition.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
 
 class HappyFarm extends FlameGame {
+  final int level;
+  HappyFarm({required this.level});
+
   late SpriteComponent background;
   final networkImages = FlameNetworkImages();
   late SpriteAnimation chickenIdleAnimation;
@@ -20,7 +23,7 @@ class HappyFarm extends FlameGame {
     resetAnimalFarm();
     await loadBackground();
     await loadAnimals();
-    await generateQuestion();
+    await generateQuestion(level);
   }
 
   Future<void> loadBackground() async {

@@ -562,7 +562,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           ();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(gameId, userPoint, _timeRecord.seconds);
+          saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
@@ -575,7 +575,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
           ();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(gameId, userPoint, _timeRecord.seconds);
+          saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
@@ -20,7 +21,7 @@ class GameLeaderBoardController extends GetxController {
     gameloadingStatus.value = LoadingStatus.loading;
     try {
       final String apiUrl =
-          "https://smart-platypus-hardly.ngrok-free.app/api/v1/game-histories/leader-board?GameId=$gameId&Top=10";
+          "${newBaseApiUrl}/game-histories/leader-board?GameId=$gameId&Top=10";
       final response =
           await http.get(Uri.parse(apiUrl), headers: <String, String>{
         'Content-Type': 'application/json; charset=utf-8',

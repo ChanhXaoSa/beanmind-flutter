@@ -542,7 +542,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(gameId, userPoint, _timeRecord.seconds);
+          saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           setState(() {
             resetGameSortNumber();
           });
@@ -560,7 +560,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(gameId, userPoint, _timeRecord.seconds);
+          saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           setState(() {
             resetGameSortNumber();
           });

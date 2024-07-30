@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:beanmind_flutter/widgets/game/class/happy_farm/happy_farm_user.dart';
 import 'package:beanmind_flutter/models/game_model.dart';
 
-int currentLevel = 2;
 String currentQuestionType = '';
 String currentQuestionOperator = '';
 int randomIndex = 0;
@@ -12,7 +11,7 @@ List<String> animals = [
   'duck',
 ];
 
-Future<void> generateQuestion() async {
+Future<void> generateQuestion(int currentLevel) async {
   randomIndex = Random().nextInt(2);
   if (currentLevel == 1) {
     // Level 1: Only counting questions

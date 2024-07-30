@@ -22,6 +22,8 @@ import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
 class OceanAdventureScreen extends StatefulWidget {
+  final int level;
+  OceanAdventureScreen({required this.level});
   @override
   _OceanAdventureScreenState createState() => _OceanAdventureScreenState();
 }
@@ -89,8 +91,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     userAnswer = '';
     userPoint = 0;
     userProgress = 0;
-    _gameOceanAdventure = GameOceanAdventure();
-    generateQuestion();
+    _gameOceanAdventure = GameOceanAdventure(level: widget.level);
+    generateQuestion(widget.level);
     delay3Seconds();
   }
 
@@ -590,9 +592,9 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _gameOceanAdventure = GameOceanAdventure();
+      _gameOceanAdventure = GameOceanAdventure(level: widget.level);
       resetAnimalOcean();
-      generateQuestion();
+      generateQuestion(widget.level);
     });
   }
 
@@ -616,11 +618,11 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       showResultDialog = true;
     });
 
-    if (currentLevel == 1) {
+    if (widget.level == 1) {
       // Level 1: Counting
       int correctCount = getAnimalCountByType(currentQuestionType);
       isCorrect = correctCount == int.parse(userAnswer);
-    } else if (currentLevel == 2 || currentLevel == 3) {
+    } else if (widget.level == 2 || widget.level == 3) {
       // Level 2 and Level 3
       List<String> questionParts = currentQuestionType.split(' ');
       int num1 = getAnimalCountByType(questionParts[0]); // First animal
@@ -642,7 +644,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         isCorrect = (quotient == correctAnswerQuotient &&
             remainder == correctAnswerRemainder);
       } else {
-        int correctAnswer = currentLevel == 2
+        int correctAnswer = widget.level == 2
             ? calculateAnswerLevel2(num1, num2, operator)
             : calculateAnswerLevel3(num1, num2, operator);
         isCorrect = correctAnswer == int.parse(userAnswer);
@@ -656,7 +658,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, userPoint, _timeRecord.seconds);
+        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -668,7 +670,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, userPoint, _timeRecord.seconds);
+        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -696,9 +698,9 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
       Navigator.of(context).pop();
       setState(() {
         userAnswer = '';
-        _gameOceanAdventure = GameOceanAdventure();
+        _gameOceanAdventure = GameOceanAdventure(level: widget.level);
         resetAnimalOcean();
-        generateQuestion();
+        generateQuestion(widget.level);
       });
       setState(() {
         showResultDialog = false;

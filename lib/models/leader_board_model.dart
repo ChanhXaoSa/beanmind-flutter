@@ -44,7 +44,7 @@ class LeaderBoardGameData {
   final String gameName;
   final String userName;
   final int point;
-  final String duration;
+  final int duration;
 
   LeaderBoardGameData({
     required this.gameId,

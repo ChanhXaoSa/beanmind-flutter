@@ -8,6 +8,9 @@ import 'package:flame/image_composition.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
 
 class GameOceanAdventure extends FlameGame {
+  final int level;
+  GameOceanAdventure({required this.level});
+
   late SpriteComponent background;
   final networkImages = FlameNetworkImages();
 
@@ -26,7 +29,7 @@ class GameOceanAdventure extends FlameGame {
     resetAnimalOcean();
     await loadBackground();
     await loadAnimals();
-    generateQuestion();
+    generateQuestion(level);
   }
 
   Future<void> loadBackground() async {

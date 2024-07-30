@@ -118,9 +118,9 @@ class GameController extends GetxController {
   String getGameTitle(String gameId) {
     switch (gameId) {
       case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
-        return 'Khám phá đại dương';
+        return 'Khám phá đại dương - Học đếm từ 0 đến 5';
       case '49299e7c-fa16-45fd-84e4-1a725c118a9f':
-        return 'Nông trại vui vẻ';
+        return 'Nông trại vui vẻ - Học đếm từ 0 đến 5';
       case 'ead13199-827d-4c48-5d08-08dcafad932c':
         return 'Sắp xếp số';
       case 'c296495f-342e-4fd6-5d09-08dcafad932c':
@@ -128,16 +128,28 @@ class GameController extends GetxController {
       case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
         return 'Số lẻ và số chẵn';
       default:
-        return 'Game Gallery';
+        return 'Thư viện trò chơi';
     }
   }
 
   Widget buildGameWidget(String gameId) {
     switch (gameId) {
-      case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
-        return OceanAdventureScreen();
+      // happy farm game
       case '49299e7c-fa16-45fd-84e4-1a725c118a9f':
-        return HappyFarmScreen();
+        return const HappyFarmScreen(level: 1);
+      case 'a65534d6-b34c-43d1-e2f6-08dcb0b903bd':
+        return const HappyFarmScreen(level: 2);
+      case '9400fa00-e27d-40a1-e2f7-08dcb0b903bd':
+        return const HappyFarmScreen(level: 3);
+      // ocean adventure game
+      case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
+        return OceanAdventureScreen(level: 1);
+      case 'd9db0faa-49e7-488e-e2f8-08dcb0b903bd':
+        return OceanAdventureScreen(level: 2);
+      case '6d69ec97-28c8-4c34-e2f9-08dcb0b903bd':
+        return OceanAdventureScreen(level: 3);
+
+
       case 'ead13199-827d-4c48-5d08-08dcafad932c':
         return MathDragAndDropScreen();
       case 'c296495f-342e-4fd6-5d09-08dcafad932c':
