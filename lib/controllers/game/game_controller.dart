@@ -26,7 +26,7 @@ class GameController extends GetxController {
     super.onInit();
     await fetchGameList();
     await fetchDataGameAnimal();
-    await fetchDataItem();  
+    await fetchDataItem();
     ever(selectedGame, (_) {
       if (selectedGame.value == null) {}
     });
@@ -155,10 +155,15 @@ class GameController extends GetxController {
         return const MathDragAndDropScreen(level: 2);
       case '6011f3e5-d1fd-439c-e2fb-08dcb0b903bd':
         return const MathDragAndDropScreen(level: 3);
+      // odd and even game
+      case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
+        return GameOddAndEvenScreen(level: 1);
+      case 'b2b05dc0-d4d4-4dfb-e2fc-08dcb0b903bd':
+        return GameOddAndEvenScreen(level: 2);
+      // shopping game
       case 'c296495f-342e-4fd6-5d09-08dcafad932c':
         return GameShoppingScreen();
-      case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
-        return GameOddAndEvenScreen();
+
       default:
         return GameListScreen();
     }

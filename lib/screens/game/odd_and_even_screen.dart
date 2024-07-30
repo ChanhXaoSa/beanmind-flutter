@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
+import 'package:beanmind_flutter/widgets/game/class/bird_fly/bird_fly_level.dart';
+import 'package:beanmind_flutter/widgets/game/class/bird_fly/bird_fly_user.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
@@ -18,6 +20,8 @@ import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
 class GameOddAndEvenScreen extends StatefulWidget {
+  final int level;
+  GameOddAndEvenScreen({required this.level});
   @override
   _GameOddAndEvenScreenState createState() => _GameOddAndEvenScreenState();
 }
@@ -58,6 +62,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       ..initialize().then((value) => {setState(() {})});
     _gameOddAndEven = GameOddAndEven();
     delay3Seconds();
+    generateQuestion(widget.level);
   }
 
   @override
@@ -157,7 +162,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 5,
                   child: isWideScreen
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -184,53 +189,141 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                         ),
                 ),
                 Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.deepPurple[600],
                       ),
                       child: Center(
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'Số lượng chim là',
-                              style: TextStyle(
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                question,
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: fontSize,
-                                  color: Colors.white),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                buttonTapped('1');
-                              },
-                              child: Text(
-                                'số lẻ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                    color: Colors.green),
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                            Text(
-                              'hay',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: fontSize,
-                                  color: Colors.white),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                buttonTapped('2');
-                              },
-                              child: Text(
-                                'số chẵn',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                    color: Colors.red),
+                            if (widget.level == 1) ...[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      buttonTapped('1');
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                    ),
+                                    child: Text(
+                                      'số lẻ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: fontSize,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'hay',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: fontSize,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      buttonTapped('2');
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                    ),
+                                    child: Text(
+                                      'số chẵn',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: fontSize,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            )
+                            ] else if (widget.level == 2) ...[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      buttonTapped('3');
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                    ),
+                                    child: Text(
+                                      'lớn hơn',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: fontSize,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      buttonTapped('4');
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                    ),
+                                    child: Text(
+                                      'bé hơn',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: fontSize,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      buttonTapped('5');
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                    ),
+                                    child: Text(
+                                      'bằng nhau',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: fontSize,
+                                        color: Colors.purple,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]
                           ],
                         ),
                       ),
@@ -443,6 +536,15 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       } else if (button == '2') {
         userAnswer = 'số chẵn';
         checkResult();
+      } else if (button == '3') {
+        userAnswer = 'lớn hơn';
+        checkResult();
+      } else if (button == '4') {
+        userAnswer = 'bé hơn';
+        checkResult();
+      } else if (button == '5') {
+        userAnswer = 'bằng nhau';
+        checkResult();
       }
     });
   }
@@ -488,31 +590,54 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     if (userAnswer.isEmpty) {
       _audio.playWrongSound();
       _showDialog('Sai rồi!', 'assets/lotties/wrong.json', false, true, true);
+      return;
     }
 
-    if (userAnswer == 'số lẻ' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 1) {
-      userPoint += 1;
-      _audio.playSuccessSound();
-      if (userProgress == totalQuestion) {
-        _audio.playCompleteSound();
-        String lottieAsset = _getLottieAsset(userPoint);
-        _timeRecord.stopTimer();
-        _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
-            lottieAsset, false, userPoint);
-        return;
+    bool isCorrect = false;
+
+    if (widget.level == 1) {
+      // Level 1: Check if the answer is even or odd
+      int count;
+      if (currentQuestionType == 'bluebird') {
+        count = globalBlueBirdCount;
+      } else if (currentQuestionType == 'redbird') {
+        count = globalRedBirdCount;
+      } else if (currentQuestionType == 'all') {
+        count = globalRedBirdCount + globalBlueBirdCount;
+      } else {
+        count = 0;
       }
-      _showDialog(
-          'Đúng rồi!', 'assets/lotties/success.json', false, true, false);
-    } else if (userAnswer == 'số chẵn' &&
-        (globalRedBirdCount + globalBlueBirdCount) % 2 == 0) {
+
+      if (userAnswer == 'số lẻ' && count % 2 == 1) {
+        isCorrect = true;
+      } else if (userAnswer == 'số chẵn' && count % 2 == 0) {
+        isCorrect = true;
+      }
+
+    } else if (widget.level == 2) {
+      // Level 2: Compare the number of blue birds and red birds
+      if (userAnswer == 'lớn hơn' && globalBlueBirdCount > globalRedBirdCount) {
+        isCorrect = true;
+      } else if (userAnswer == 'bé hơn' &&
+          globalBlueBirdCount < globalRedBirdCount) {
+        isCorrect = true;
+      } else if (userAnswer == 'bằng nhau' &&
+          globalBlueBirdCount == globalRedBirdCount) {
+        isCorrect = true;
+      }
+    }
+
+    if (isCorrect) {
       userPoint += 1;
       _audio.playSuccessSound();
       if (userProgress == totalQuestion) {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(
+            gameId,
+            calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
+            _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -524,7 +649,10 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(
+            gameId,
+            calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
+            _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -558,6 +686,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
       });
       setState(() {
         showResultDialog = false;
+        generateQuestion(widget.level);
       });
     }
   }

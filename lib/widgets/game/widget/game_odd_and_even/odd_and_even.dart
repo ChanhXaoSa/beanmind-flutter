@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'package:beanmind_flutter/models/game_model.dart';
+import 'package:beanmind_flutter/models/models.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
+import 'package:flutter/foundation.dart';
 
 class GameOddAndEven extends FlameGame {
   late SpriteComponent background;
