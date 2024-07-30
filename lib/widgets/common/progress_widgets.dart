@@ -39,3 +39,25 @@ class _ProgressWidgetsState extends State<ProgressWidgets> {
     )));
   }
 }
+
+class LoadingWidgets extends StatefulWidget {
+  const LoadingWidgets({super.key});
+
+  @override
+  State<LoadingWidgets> createState() => _LoadingWidgetsState();
+}
+
+class _LoadingWidgetsState extends State<LoadingWidgets> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+            child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Lottie.asset("assets/lotties/loading_animation_02.json",
+            height: MediaQuery.of(context).size.height * 0.3),
+      ],
+    )));
+  }
+}

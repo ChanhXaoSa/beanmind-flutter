@@ -8,10 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> saveGameResults(String gameId, int points, int userPoint,
-    int userProgress, int timeRecord) async {
-  final MyDrawerController controller = Get.find();
-  if (controller.user.value!.first.data.id == null) return;
+Future<void> saveGameResults(String gameId, int points, int timeRecord) async {
+  String user = Get.find<AuthController>().user.value!.first.data.id;
 
   // Calculate duration from timeRecord
   final durationInSeconds = timeRecord;
@@ -22,7 +20,7 @@ Future<void> saveGameResults(String gameId, int points, int userPoint,
       "https://smart-platypus-hardly.ngrok-free.app/api/v1/game-histories";
   final body = jsonEncode({
     "gameId": gameId,
-    "applicationUserId": controller.user.value!.first.data.id,
+    "applicationUserId": user,
     "point": points,
     "duration": {
       "hour": hours,

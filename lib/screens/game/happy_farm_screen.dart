@@ -659,7 +659,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
         saveGameResults(
-            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+            gameId, userPoint, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -671,8 +671,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(
-            gameId, userPoint, userPoint, userProgress, _timeRecord.seconds);
+        saveGameResults(gameId, userPoint, _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;

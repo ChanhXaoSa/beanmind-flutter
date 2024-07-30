@@ -102,7 +102,7 @@ class GameListScreen extends GetView<GameController> {
                     imageUrl: game['image'] ?? '',
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
-                        Center(child: CircularProgressIndicator()),
+                        Center(child: LoadingWidgets()),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                   Positioned(
