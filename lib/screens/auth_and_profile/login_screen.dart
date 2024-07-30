@@ -139,8 +139,8 @@ class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  final TextEditingController _emailController = TextEditingController(text: 'admin@localhost.com');
-  final TextEditingController _passwordController = TextEditingController(text: 'Administrator1!');
+  final TextEditingController _emailController = TextEditingController(text: 'user1');
+  final TextEditingController _passwordController = TextEditingController(text: 'User1!');
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -162,12 +162,12 @@ class __FormContentState extends State<_FormContent> {
                   return 'Ô này không được để trống';
                 }
 
-                bool emailValid = RegExp(
-                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(value);
-                if (!emailValid) {
-                  return 'Vui lòng nhập địa chỉ email hợp lệ';
-                }
+                // bool emailValid = RegExp(
+                //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                //     .hasMatch(value);
+                // if (!emailValid) {
+                //   return 'Vui lòng nhập địa chỉ email hợp lệ';
+                // }
 
                 return null;
               },

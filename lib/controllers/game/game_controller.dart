@@ -58,7 +58,7 @@ class GameController extends GetxController {
           throw Exception('Unexpected JSON format');
         }
 
-        print(games);
+        // print(games);
         loadingStatus.value = LoadingStatus.completed;
       } else {
         loadingStatus.value = LoadingStatus.error;
@@ -82,10 +82,10 @@ class GameController extends GetxController {
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
-      });
+      // print('Number of items fetched: ${items.length}');
+      // items.forEach((item) {
+      //   print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
+      // });
 
       animalslist = List<GameAnimalModel>.from(items);
     } catch (e) {
@@ -102,11 +102,11 @@ class GameController extends GetxController {
 
       List<ItemModel> items =
           snapshot.docs.map((doc) => ItemModel.fromSnapshot(doc)).toList();
-      print('Number of items fetched: ${items.length}');
-      items.forEach((item) {
-        print(
-            'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
-      });
+      // print('Number of items fetched: ${items.length}');
+      // items.forEach((item) {
+      //   print(
+      //       'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
+      // });
       startLowerItemModel = items;
       lowerItemModel = List<ItemModel>.from(startLowerItemModel);
       // Update startLower and lower with the fetched items
