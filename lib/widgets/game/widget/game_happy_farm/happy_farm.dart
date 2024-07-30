@@ -39,7 +39,7 @@ class HappyFarm extends FlameGame {
           scaleFactor: animal.scaleFactor,
           animation: chickenIdleAnimation,
           xRange: Range(0.05, 0.45),
-          yPosition: size.y * 0.7,
+          yPosition: size.y * 0.65,
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );
@@ -50,7 +50,7 @@ class HappyFarm extends FlameGame {
           scaleFactor: animal.scaleFactor,
           animation: duckIdleAnimation,
           xRange: Range(0.55, 0.95),
-          yPosition: size.y * 0.7,
+          yPosition: size.y * 0.65,
           textureSize: Vector2(animal.vectorX, animal.vectorY),
           type: animal.type,
         );
