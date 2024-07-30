@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:beanmind_flutter/models/course_model.dart';
+import 'package:beanmind_flutter/screens/course/course_detail_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -34,5 +35,9 @@ class HomeController extends GetxController {
       print('Error: $e');
       throw e;
     }
+  }
+
+  void navigateToCourseDetail() {
+    Get.toNamed(CourseDetailScreen.routeName);
   }
 }

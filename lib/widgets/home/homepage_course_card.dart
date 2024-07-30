@@ -43,7 +43,7 @@ class FeaturedCourses extends GetView<HomeController> {
   }
 }
 
-class HomepageCourseCard extends StatelessWidget {
+class HomepageCourseCard extends GetView<HomeController> {
   final Item course;
 
   HomepageCourseCard(this.course);
@@ -108,7 +108,9 @@ class HomepageCourseCard extends StatelessWidget {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.navigateToCourseDetail();
+              },
               child: Text('Xem thêm'),
             ),
           ],
