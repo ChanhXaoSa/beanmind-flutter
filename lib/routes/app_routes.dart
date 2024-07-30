@@ -20,9 +20,8 @@ class AppRoutes {
             name: HomeScreen.routeName,
             binding: BindingsBuilder(() {
               Get.put(HomeController());
-              Get.put(CourseController());
-              Get.put(GameController());
               Get.put(AppBarController());
+              Get.put(CourseController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
@@ -43,7 +42,7 @@ class AppRoutes {
             name: GameLeaderboardScreen.routeName,
             binding: BindingsBuilder(() {
               Get.put(GameLeaderBoardController());
-            })),    
+            })),
         GetPage(
             page: () => const QuizeScreen(),
             name: QuizeScreen.routeName,
@@ -58,7 +57,11 @@ class AppRoutes {
             name: QuizOverviewScreen.routeName),
         GetPage(page: () => const Resultcreen(), name: Resultcreen.routeName),
         GetPage(
-            name: GameListScreen.routeName, page: () => const GameListScreen()),
+            name: GameListScreen.routeName,
+            page: () => const GameListScreen(),
+            binding: BindingsBuilder(() {
+              Get.put(GameController());
+            })),
         GetPage(
             name: VideoLearningScreen.routeName,
             page: () => const VideoLearningScreen()),
@@ -69,10 +72,13 @@ class AppRoutes {
               Get.put(QuizPaperController());
               Get.put(MyDrawerController());
               Get.put(CourseController());
-              Get.put(GameController());
             })),
         GetPage(
-            name: CourseDetailScreen.routeName,
-            page: () => const CourseDetailScreen()),
+          name: CourseDetailScreen.routeName,
+          page: () => const CourseDetailScreen(),
+          binding: BindingsBuilder(() {
+            Get.put(CourseDetailController());
+          }),
+        ),
       ];
 }
