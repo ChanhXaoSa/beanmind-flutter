@@ -56,7 +56,7 @@ class _LoadingWidgetsState extends State<LoadingWidgets> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Lottie.asset("assets/lotties/loading_animation_02.json",
-            height: MediaQuery.of(context).size.height * 0.3),
+            height: MediaQuery.of(context).size.height * 0.1),
       ],
     )));
   }
