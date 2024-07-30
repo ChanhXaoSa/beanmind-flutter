@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:beanmind_flutter/models/course_model.dart';
 import 'package:beanmind_flutter/screens/course/course_detail_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,7 +19,7 @@ class HomeController extends GetxController {
   Future<void> fetchCourses() async {
     try {
       final courseResponse = await http.get(
-        Uri.parse('${newBaseApiUrl}/courses'),
+        Uri.parse('$newBaseApiUrl/courses'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8',
           'ngrok-skip-browser-warning': 'true',
@@ -27,17 +28,21 @@ class HomeController extends GetxController {
       if (courseResponse.statusCode == 200) {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
         courseModel.value = courseModelBase;
-        print(courseModel.value.toString());
+        if (kDebugMode) {
+          print(courseModel.value.toString());
+        }
       } else {
         throw Exception('Failed to fetch course');
       }
     } catch (e) {
-      print('Error: $e');
-      throw e;
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
     }
   }
 
-  void navigateToCourseDetail() {
-    Get.toNamed(CourseDetailScreen.routeName);
+  void navigateToCourseDetail(String id) {
+    Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', id));
   }
 }

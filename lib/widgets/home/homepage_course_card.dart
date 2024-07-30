@@ -109,7 +109,7 @@ class HomepageCourseCard extends GetView<HomeController> {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                controller.navigateToCourseDetail();
+                controller.navigateToCourseDetail(course.id!);
               },
               child: Text('Xem thêm'),
             ),
