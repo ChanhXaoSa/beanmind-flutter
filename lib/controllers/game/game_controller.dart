@@ -73,9 +73,9 @@ class GameController extends GetxController {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
       // print json data
-      snapshot.docs.forEach((doc) {
-        print(doc.data());
-      });
+      // snapshot.docs.forEach((doc) {
+      //   print(doc.data());
+      // });
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
