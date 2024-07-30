@@ -21,7 +21,8 @@ import '../../widgets/game/widget/game_happy_farm/happy_farm.dart';
 
 class HappyFarmScreen extends StatefulWidget {
   final int level;
-  const HappyFarmScreen({Key? key, required this.level}) : super(key: key);
+  final String gameid;
+  const HappyFarmScreen({Key? key, required this.level, required this.gameid}) : super(key: key);
   static const String routeName = '/happy_farm';
   @override
   State<HappyFarmScreen> createState() => _HappyFarmScreenState();
@@ -36,7 +37,6 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   bool _isLoading = true;
   bool isCorrect = false;
-  String gameId = '49299e7c-fa16-45fd-84e4-1a725c118a9f';
 
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
@@ -660,7 +660,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
         saveGameResults(
-            gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+            widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -672,7 +672,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;

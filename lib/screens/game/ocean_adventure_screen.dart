@@ -23,7 +23,8 @@ import 'package:video_player/video_player.dart';
 
 class OceanAdventureScreen extends StatefulWidget {
   final int level;
-  OceanAdventureScreen({required this.level});
+  final String gameid;
+  OceanAdventureScreen({required this.level, required this.gameid});
   @override
   _OceanAdventureScreenState createState() => _OceanAdventureScreenState();
 }
@@ -38,7 +39,6 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
 
   bool _isLoading = true;
   bool isCorrect = false;
-  String gameId = '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0';
 
   List<String> numberPad = [
     '7',
@@ -658,7 +658,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -670,7 +670,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;

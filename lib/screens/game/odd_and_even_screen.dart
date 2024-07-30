@@ -21,7 +21,8 @@ import 'package:video_player/video_player.dart';
 
 class GameOddAndEvenScreen extends StatefulWidget {
   final int level;
-  GameOddAndEvenScreen({required this.level});
+  final String gameid;
+  GameOddAndEvenScreen({required this.level, required this.gameid});
   @override
   _GameOddAndEvenScreenState createState() => _GameOddAndEvenScreenState();
 }
@@ -38,7 +39,6 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   bool isFirstKeyEvent = true;
   bool showResultDialog = false;
   bool _isLoading = true;
-  String gameId = '59141c9e-7dd3-4c76-5d0a-08dcafad932c';
 
   String userAnswer = '';
   int userPoint = 0;
@@ -635,7 +635,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
         saveGameResults(
-            gameId,
+            widget.gameid,
             calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
             _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
@@ -650,7 +650,7 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
         saveGameResults(
-            gameId,
+            widget.gameid,
             calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
             _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',

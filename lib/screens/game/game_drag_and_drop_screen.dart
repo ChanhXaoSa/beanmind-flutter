@@ -21,7 +21,8 @@ import 'package:video_player/video_player.dart';
 
 class MathDragAndDropScreen extends StatefulWidget {
   final int level;
-  const MathDragAndDropScreen({Key? key, required this.level}) : super(key: key);
+  final String gameid;
+  const MathDragAndDropScreen({Key? key, required this.level, required this.gameid}) : super(key: key);
   @override
   _MathDragAndDropScreenState createState() => _MathDragAndDropScreenState();
 }
@@ -41,7 +42,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   int userProgress = 0;
   int totalQuestion = 3;
   String userAnswer = '';
-  String gameId = 'ead13199-827d-4c48-5d08-08dcafad932c';
   String background =
       'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_1.png?alt=media&token=39e27f13-3fc8-42b8-9365-0b635c9ee860';
 
@@ -543,7 +543,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+          saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           setState(() {
             resetGameSortNumber(widget.level);
           });
@@ -561,7 +561,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+          saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           setState(() {
             resetGameSortNumber(widget.level);
           });

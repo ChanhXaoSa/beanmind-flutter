@@ -25,6 +25,13 @@ class GameLeaderboardScreen extends GetView<GameLeaderBoardController> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         title: 'Bảng xếp hạng trò chơi $nameGame',
+        // back to game_list
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
       body: Center(
         child: BackgroundDecoration(

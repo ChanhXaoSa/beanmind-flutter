@@ -23,7 +23,7 @@ Future<void> generateQuestion(int currentLevel) async {
         question = 'Số lượng chim đỏ là số chẵn hay số lẻ ?';
         break;
       case 2:
-        currentQuestionType = 'bluebird';
+        currentQuestionType = 'all';
         question = 'Số lượng chim trên màn hình là số chẵn hay số lẻ ?';
         break;
     }
