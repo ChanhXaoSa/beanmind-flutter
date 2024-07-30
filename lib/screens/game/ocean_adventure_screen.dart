@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/font_style.dart';
@@ -150,18 +151,50 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Hướng dẫn'),
-                                  content: Text(
-                                    'Nội dung hướng dẫn người chơi...',
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('OK'),
+                              return AlertDialog(
+                                title: const Text('Hướng dẫn'),
+                                content: SingleChildScrollView(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'images/game_tutorial/ocean_adventure/ocean_tutorial_1.png',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          'Tên của các loại động vật hiển thị trên màn hình',
+                                          style: TextStyle(fontSize: 40),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Image.asset(
+                                          'images/game_tutorial/ocean_adventure/ocean_tutorial_2.png',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                        ),
+                                        Text(
+                                          'Bạn sẽ đếm số lượng các động vật hiển thị trên màn hình, đọc câu hỏi đang hiển thị và nhập kết quả',
+                                          style: TextStyle(fontSize: 40),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                );
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
                               },
                             );
                           },

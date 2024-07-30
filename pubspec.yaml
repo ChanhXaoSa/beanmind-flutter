@@ -108,6 +108,8 @@ flutter:
     - assets/images/animal/octopus/
     - assets/images/animal/blue_bird/
     - assets/images/animal/red_bird/
+    - assets/images/game_tutorial/ocean_adventure/
+
 
     - assets/images/background/
     - assets/images/game_thumbnail/

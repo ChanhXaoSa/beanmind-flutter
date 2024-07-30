@@ -33,7 +33,7 @@ void generateQuestion() async {
         break;
       case 3:
         currentQuestionType = 'moonfish';
-        question = 'Có bao nhiêu con cá mặt trăng ?';
+        question = 'Có bao nhiêu con cá ngựa xanh lá ?';
         break;
       case 4:
         currentQuestionType = 'octopus';
@@ -162,11 +162,12 @@ String getDisplayAnimalName(String animal) {
     case 'bluefish':
       return 'cá màu xanh dương';
     case 'redfish':
+    
       return 'cá màu đỏ';
     case 'violetfish':
       return 'cá màu tím';
     case 'moonfish':
-      return 'cá mặt trăng';
+      return 'cá ngựa xanh lá';
     case 'octopus':
       return 'bạch tuộc';
     default:
