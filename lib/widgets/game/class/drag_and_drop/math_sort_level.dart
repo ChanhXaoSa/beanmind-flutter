@@ -10,20 +10,32 @@ final Set<int> uniqueNumbers = {};
 final Random random = Random();
 String sortingOrder = '';
 
-void randomNumber() {
-  while (uniqueNumbers.length < 10) {
-    uniqueNumbers.add(random.nextInt(99) + 1);
+void randomNumber(int currentLevel) {
+  if (currentLevel == 1){
+    while (uniqueNumbers.length < 10) {
+      uniqueNumbers.add(random.nextInt(10) + 1);
+    }
+  }
+  if (currentLevel == 2){
+    while (uniqueNumbers.length < 10) {
+      uniqueNumbers.add(random.nextInt(99) + 1);
+    }
+  }
+  if (currentLevel == 3){
+    while (uniqueNumbers.length < 10) {
+      uniqueNumbers.add(random.nextInt(999) + 1);
+    }
   }
   startLower.addAll(uniqueNumbers);
   lower = startLower;
 }
 
-void resetGameSortNumber() {
+void resetGameSortNumber(int currentLevel) {
   upper.clear();
   lower.clear();
   startLower.clear();
   uniqueNumbers.clear();
-  randomNumber();
+  randomNumber(currentLevel);
 }
 
 void generateSortingQuestion() {

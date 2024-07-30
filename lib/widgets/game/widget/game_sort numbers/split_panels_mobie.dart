@@ -5,8 +5,9 @@ import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_leve
 import 'package:flutter/material.dart';
 
 class SplitPanelsMobie extends StatefulWidget {
+  final int level;
   const SplitPanelsMobie(
-      {super.key, this.columns = 10, this.itemSpacing = 4.0});
+      {super.key, this.columns = 10, this.itemSpacing = 4.0, required this.level});
 
   final int columns;
   final double itemSpacing;
@@ -22,7 +23,7 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
     super.initState();
     upper.clear();
     lower.clear();
-    randomNumber();
+    randomNumber(widget.level);
   }
 
   var whiteTextStyle = const TextStyle(

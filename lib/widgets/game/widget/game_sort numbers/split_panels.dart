@@ -6,7 +6,8 @@ import 'package:beanmind_flutter/widgets/game/widget/game_sort%20numbers/types.d
 import 'package:flutter/material.dart';
 
 class SplitPanels extends StatefulWidget {
-  const SplitPanels({super.key, this.columns = 10, this.itemSpacing = 4.0});
+  final int level;
+  const SplitPanels({super.key, this.columns = 10, this.itemSpacing = 4.0, required this.level});
 
   final int columns;
   final double itemSpacing;
@@ -21,7 +22,7 @@ class _SplitPanelsState extends State<SplitPanels> {
     super.initState();
     upper.clear();
     lower.clear();
-    randomNumber();
+    randomNumber(widget.level);
   }
 
   PanelLocation? dragStart;

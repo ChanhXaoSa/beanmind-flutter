@@ -20,6 +20,8 @@ import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
 class MathDragAndDropScreen extends StatefulWidget {
+  final int level;
+  const MathDragAndDropScreen({Key? key, required this.level}) : super(key: key);
   @override
   _MathDragAndDropScreenState createState() => _MathDragAndDropScreenState();
 }
@@ -39,7 +41,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   int userProgress = 0;
   int totalQuestion = 3;
   String userAnswer = '';
-  var randomNumber = Random();
   String gameId = 'ead13199-827d-4c48-5d08-08dcafad932c';
   String background =
       'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_1.png?alt=media&token=39e27f13-3fc8-42b8-9365-0b635c9ee860';
@@ -63,12 +64,12 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   @override
   void initState() {
     super.initState();
-    resetGameSortNumber();
+    resetGameSortNumber(widget.level);
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
-    _splitPanels = SplitPanels();
-    _splitPanelsMobie = SplitPanelsMobie();
+    _splitPanels = SplitPanels(level: widget.level);
+    _splitPanelsMobie = SplitPanelsMobie(level: widget.level);
     generateSortingQuestion();
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
@@ -485,8 +486,8 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       } else if (button == 'KHÔI PHỤC') {
         upper.clear();
         lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        _splitPanelsMobie = SplitPanelsMobie();
+        _splitPanels = SplitPanels(level: widget.level);
+        _splitPanelsMobie = SplitPanelsMobie(level: widget.level);
       }
     });
   }
@@ -544,14 +545,14 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _timeRecord.stopTimer();
           saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           setState(() {
-            resetGameSortNumber();
+            resetGameSortNumber(widget.level);
           });
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
         }
         setState(() {
-          resetGameSortNumber();
+          resetGameSortNumber(widget.level);
         });
         _showDialog(
             'Đúng rồi !', 'assets/lotties/success.json', false, true, false);
@@ -562,14 +563,14 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _timeRecord.stopTimer();
           saveGameResults(gameId, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
           setState(() {
-            resetGameSortNumber();
+            resetGameSortNumber(widget.level);
           });
           _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
               lottieAsset, false, userPoint);
           return;
         }
         setState(() {
-          resetGameSortNumber();
+          resetGameSortNumber(widget.level);
         });
         _showDialog(
             'Sai rồi !', 'assets/lotties/wrong.json', false, true, true);
@@ -588,10 +589,10 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     if (showResultDialog) {
       Navigator.of(context).pop();
       setState(() {
-        resetGameSortNumber();
+        resetGameSortNumber(widget.level);
         lower = List.from(startLower);
-        _splitPanels = SplitPanels();
-        _splitPanelsMobie = SplitPanelsMobie();
+        _splitPanels = SplitPanels(level: widget.level,);
+        _splitPanelsMobie = SplitPanelsMobie(level: widget.level,);
         userAnswer = '';
         generateSortingQuestion();
       });
@@ -606,11 +607,11 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     setState(() {
       userPoint = 0;
       userProgress = 0;
-      resetGameSortNumber();
+      resetGameSortNumber(widget.level);
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _splitPanels = SplitPanels();
-      _splitPanelsMobie = SplitPanelsMobie();
+      _splitPanels = SplitPanels(level: widget.level,);
+      _splitPanelsMobie = SplitPanelsMobie(level: widget.level,);
       generateSortingQuestion();
       changeBackgroundColor();
     });

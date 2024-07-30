@@ -148,10 +148,13 @@ class GameController extends GetxController {
         return OceanAdventureScreen(level: 2);
       case '6d69ec97-28c8-4c34-e2f9-08dcb0b903bd':
         return OceanAdventureScreen(level: 3);
-
-
+      // sorting numbers game
       case 'ead13199-827d-4c48-5d08-08dcafad932c':
-        return MathDragAndDropScreen();
+        return const MathDragAndDropScreen(level: 1);
+      case '3e2e9eee-07bb-4548-e2fa-08dcb0b903bd':
+        return const MathDragAndDropScreen(level: 2);
+      case '6011f3e5-d1fd-439c-e2fb-08dcb0b903bd':
+        return const MathDragAndDropScreen(level: 3);
       case 'c296495f-342e-4fd6-5d09-08dcafad932c':
         return GameShoppingScreen();
       case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
