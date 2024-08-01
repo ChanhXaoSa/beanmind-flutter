@@ -7,8 +7,6 @@ import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
 import 'package:beanmind_flutter/widgets/game/class/timer.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
-import 'package:beanmind_flutter/widgets/game/widget/game_math/math_game.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -51,7 +49,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
   @override
   void initState() {
     super.initState();
-    restartGame();
+    restartGame(widget.level);
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
@@ -222,16 +220,13 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                         .white,
                                                                   ),
                                                                   child: Text(
-                                                                    "${firstValue} ${operator} ${secondValue}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          50,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                    ),
-                                                                  ),
+                                                                  formattedQuestion,
+  style: TextStyle(
+    fontSize: 50,
+    fontWeight: FontWeight.w700,
+  ),
+),
+
                                                                 ),
                                                               ),
                                                             ],
@@ -259,7 +254,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                   },
                                                                   child:
                                                                       Container(
-                                                                    width: 180,
+                                                                    width: 220,
                                                                     height: 100,
                                                                     padding:
                                                                         EdgeInsets
@@ -332,12 +327,12 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                       ),
                                                                 Text(
                                                                   isCorrect
-                                                                      ? "Correct"
-                                                                      : "Wrong",
+                                                                      ? "Chính xác"
+                                                                      : "Sai rồi",
                                                                   style:
                                                                       TextStyle(
                                                                     fontSize:
-                                                                        20,
+                                                                        25,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w900,
@@ -467,16 +462,13 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                         .white,
                                                                   ),
                                                                   child: Text(
-                                                                    "${firstValue} ${operator} ${secondValue}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          50,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                    ),
-                                                                  ),
+  formattedQuestion,
+  style: TextStyle(
+    fontSize: 50,
+    fontWeight: FontWeight.w700,
+  ),
+),
+
                                                                 ),
                                                               ),
                                                             ],
@@ -504,7 +496,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                   },
                                                                   child:
                                                                       Container(
-                                                                    width: 180,
+                                                                    width: 220,
                                                                     height: 100,
                                                                     padding:
                                                                         EdgeInsets
@@ -577,8 +569,8 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                       ),
                                                                 Text(
                                                                   isCorrect
-                                                                      ? "Correct"
-                                                                      : "Wrong",
+                                                                      ? "Chính xác"
+                                                                      : "Sai rồi",
                                                                   style:
                                                                       TextStyle(
                                                                     fontSize:
@@ -856,7 +848,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
       userProgress = 0;
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      nextQuestion();
+      nextQuestion(widget.level);
     });
   }
 
@@ -907,7 +899,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
       Navigator.of(context).pop();
       setState(() {
         userAnswer = '';
-        nextQuestion();
+        nextQuestion(widget.level);
         showResultDialog = false;
       });
     }
@@ -932,8 +924,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
           userPoint = userPoint + 1;
         } else {
           isCorrect = false;
-        }
-        nextQuestion();
+        }   
       });
 
       Future.delayed(Duration(seconds: 1), () {
@@ -958,5 +949,6 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
           lottieAsset, false, userPoint);
       return;
     }
+    nextQuestion(widget.level);
   }
 }

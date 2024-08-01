@@ -137,18 +137,36 @@ class GameController extends GetxController {
     switch (gameId) {
       // happy farm game
       case '49299e7c-fa16-45fd-84e4-1a725c118a9f':
-        return HappyFarmScreen(level: 1, gameid: gameId,);
+        return HappyFarmScreen(
+          level: 1,
+          gameid: gameId,
+        );
       case 'a65534d6-b34c-43d1-e2f6-08dcb0b903bd':
-        return HappyFarmScreen(level: 2, gameid: gameId,);
+        return HappyFarmScreen(
+          level: 2,
+          gameid: gameId,
+        );
       case '9400fa00-e27d-40a1-e2f7-08dcb0b903bd':
-        return HappyFarmScreen(level: 3, gameid: gameId,);
+        return HappyFarmScreen(
+          level: 3,
+          gameid: gameId,
+        );
       // ocean adventure game
       case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
-        return OceanAdventureScreen(level: 1, gameid: gameId,);
+        return OceanAdventureScreen(
+          level: 1,
+          gameid: gameId,
+        );
       case 'd9db0faa-49e7-488e-e2f8-08dcb0b903bd':
-        return OceanAdventureScreen(level: 2, gameid: gameId,);
+        return OceanAdventureScreen(
+          level: 2,
+          gameid: gameId,
+        );
       case '6d69ec97-28c8-4c34-e2f9-08dcb0b903bd':
-        return OceanAdventureScreen(level: 3, gameid: gameId,);
+        return OceanAdventureScreen(
+          level: 3,
+          gameid: gameId,
+        );
       // sorting numbers game
       case 'ead13199-827d-4c48-5d08-08dcafad932c':
         return MathDragAndDropScreen(level: 1, gameid: gameId);
@@ -158,14 +176,34 @@ class GameController extends GetxController {
         return MathDragAndDropScreen(level: 3, gameid: gameId);
       // odd and even game
       case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
-        return GameOddAndEvenScreen(level: 1, gameid: gameId,);
+        return GameOddAndEvenScreen(
+          level: 1,
+          gameid: gameId,
+        );
       case 'b2b05dc0-d4d4-4dfb-e2fc-08dcb0b903bd':
-        return GameOddAndEvenScreen(level: 2, gameid: gameId,);
+        return GameOddAndEvenScreen(
+          level: 2,
+          gameid: gameId,
+        );
       // shopping game
       case 'c296495f-342e-4fd6-5d09-08dcafad932c':
         return GameShoppingScreen();
+      // math game
       case '134a1896-37a0-481c-76b8-08dcb1f69dd7':
-        return MathGameScreeen(level: 1, gameid: gameId,);
+        return MathGameScreeen(
+          level: 1,
+          gameid: gameId,
+        );
+      case 'd9ebd726-6f2b-4609-76b9-08dcb1f69dd7':
+        return MathGameScreeen(
+          level: 2,
+          gameid: gameId,
+        );
+      case '2395575f-74e2-4809-76ba-08dcb1f69dd7':
+        return MathGameScreeen(
+          level: 3,
+          gameid: gameId,
+        );
       default:
         return GameListScreen();
     }
