@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:beanmind_flutter/firebase/loading_status.dart';
 import 'package:beanmind_flutter/screens/game/game_shopping_screen.dart';
 import 'package:beanmind_flutter/screens/game/happy_farm_screen.dart';
+import 'package:beanmind_flutter/screens/game/math_screen.dart';
 import 'package:beanmind_flutter/screens/game/ocean_adventure_screen.dart';
 import 'package:beanmind_flutter/screens/game/odd_and_even_screen.dart';
 import 'package:beanmind_flutter/screens/game/game_drag_and_drop_screen.dart';
@@ -163,7 +164,8 @@ class GameController extends GetxController {
       // shopping game
       case 'c296495f-342e-4fd6-5d09-08dcafad932c':
         return GameShoppingScreen();
-
+      case '134a1896-37a0-481c-76b8-08dcb1f69dd7':
+        return MathGameScreeen(level: 1, gameid: gameId,);
       default:
         return GameListScreen();
     }
