@@ -28,88 +28,6 @@ class CourseDetailAction extends GetView<CourseDetailController> {
           CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: SizedBox(
-                  width: 200,
-                  child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment
-                        .spaceBetween,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(
-                            0, 0, 15.5, 0),
-                        child: SizedBox(
-                          width: 123,
-                          child: Text(
-                            'US\$22.40',
-                            style:
-                            kDetailsTS.copyWith(
-                              fontWeight:
-                              FontWeight.w700,
-                              fontSize: 24,
-                              height: 1.3,
-                              color:
-                              const Color(0xFF000000),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(
-                            0, 3, 0, 4),
-                        child: Text(
-                          '\$30.13',
-                          style: kDetailsTS.copyWith(
-                            fontWeight:
-                            FontWeight.w400,
-                            fontSize: 16,
-                            decoration: TextDecoration
-                                .lineThrough,
-                            height: 1.5,
-                            color: const Color(0x991B1B1B),
-                            decorationColor:
-                            const Color(0x991B1B1B),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(
-                  0.5, 0, 0.5, 32),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA04AE3),
-                    borderRadius:
-                    BorderRadius.circular(2),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(
-                        4, 4, 4, 4),
-                    child: Text(
-                      '20% OFF',
-                      style: kDetailsTS.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        height: 1.3,
-                        color: const Color(0xFFFFFFFF),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
               margin:
               const EdgeInsets.fromLTRB(0, 0, 0, 16),
               child: Container(
@@ -136,49 +54,6 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                 ),
               ),
             ),
-            // Container(
-            //   margin:
-            //   const EdgeInsets.fromLTRB(0, 0, 0, 24),
-            //   width: 338,
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //         color: const Color(0x991B1B1B)),
-            //     borderRadius:
-            //     BorderRadius.circular(18),
-            //   ),
-            //   child: Container(
-            //     padding:
-            //     const EdgeInsets.fromLTRB(0, 11, 0, 11),
-            //     child: Row(
-            //       mainAxisAlignment:
-            //       MainAxisAlignment.center,
-            //       crossAxisAlignment:
-            //       CrossAxisAlignment.start,
-            //       children: [
-            //         Container(
-            //           margin: const EdgeInsets.fromLTRB(
-            //               0, 3.4, 10.2, 3.4),
-            //           width: 26,
-            //           height: 26,
-            //           child: const SizedBox(
-            //             width: 21.7,
-            //             height: 19.1,
-            //             child: Icon(Icons.error, color: Colors.black,),
-            //           ),
-            //         ),
-            //         Text(
-            //           'Wishlist',
-            //           style: kDetailsTS.copyWith(
-            //             fontWeight: FontWeight.w700,
-            //             fontSize: 20,
-            //             height: 1.3,
-            //             color: const Color(0x991B1B1B),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             Container(
               margin:
               const EdgeInsets.fromLTRB(3, 0, 3, 14),
