@@ -5,8 +5,6 @@ import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
-import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,7 +48,7 @@ class GameListScreen extends GetView<GameController> {
         decoration: const BoxDecoration(color: Colors.white),
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: ProgressWidgets());
+            return const Center(child: CircularProgressIndicator());
           }
           if (controller.selectedGame.value != null) {
             return controller.buildGameWidget(controller.selectedGame.value!);
