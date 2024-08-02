@@ -45,7 +45,7 @@ class TopicModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<TopicItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<TopicItem>.from(json["items"]!.map((x) => TopicItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -88,6 +88,38 @@ class Item {
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
+    title: json["title"],
+    description: json["description"],
+    chapterId: json["chapterId"],
+    id: json["id"],
+    isDeleted: json["isDeleted"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "description": description,
+    "chapterId": chapterId,
+    "id": id,
+    "isDeleted": isDeleted,
+  };
+}
+
+class TopicItem {
+  String? title;
+  String? description;
+  String? chapterId;
+  String? id;
+  bool? isDeleted;
+
+  TopicItem({
+    this.title,
+    this.description,
+    this.chapterId,
+    this.id,
+    this.isDeleted,
+  });
+
+  factory TopicItem.fromJson(Map<String, dynamic> json) => TopicItem(
     title: json["title"],
     description: json["description"],
     chapterId: json["chapterId"],

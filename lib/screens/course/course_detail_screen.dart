@@ -1,10 +1,8 @@
-import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_action.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_information.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CourseDetailScreen extends GetView<CourseDetailController> {
@@ -18,36 +16,34 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
         title: 'Chi tiết khóa học',
       ),
       body: SingleChildScrollView(
-          child: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFFFFF),
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: FractionallySizedBox(
-            widthFactor: 0.8,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFFFFFF),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x0F000000),
-                            offset: Offset(0, 2),
-                            blurRadius: 4,
-                          ),
-                        ],
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFFFFFFF),
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: FractionallySizedBox(
+              widthFactor: 0.8,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFFFFFF),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x0F000000),
+                              offset: Offset(0, 2),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      // margin: const EdgeInsets.fromLTRB(120, 0, 120, 0),
-                      child: Column(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -59,8 +55,7 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    margin:
-                                        const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                    margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                       image: const DecorationImage(
@@ -74,11 +69,11 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                                     height: 449,
                                   ),
                                 ),
-                                CourseDetailAction(),
+                                const CourseDetailAction(),
                               ],
                             ),
                           ),
-                          Column(
+                          const Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -87,14 +82,14 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 }
