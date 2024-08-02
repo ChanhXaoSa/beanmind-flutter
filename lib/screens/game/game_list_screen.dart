@@ -93,11 +93,9 @@ class GameListScreen extends GetView<GameController> {
               borderRadius: BorderRadius.circular(5.0),
               child: Stack(
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: game['image'] ?? '',
+                  Image.network(
+                    game['image'] ?? '',
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(child: LoadingWidgets()),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
                   Positioned(
                     top: 10,
