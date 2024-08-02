@@ -220,13 +220,16 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                         .white,
                                                                   ),
                                                                   child: Text(
-                                                                  formattedQuestion,
-  style: TextStyle(
-    fontSize: 50,
-    fontWeight: FontWeight.w700,
-  ),
-),
-
+                                                                    formattedQuestion,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          50,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],
@@ -462,13 +465,16 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                                                                         .white,
                                                                   ),
                                                                   child: Text(
-  formattedQuestion,
-  style: TextStyle(
-    fontSize: 50,
-    fontWeight: FontWeight.w700,
-  ),
-),
-
+                                                                    formattedQuestion,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          50,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],
@@ -924,7 +930,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
           userPoint = userPoint + 1;
         } else {
           isCorrect = false;
-        }   
+        }
       });
 
       Future.delayed(Duration(seconds: 1), () {

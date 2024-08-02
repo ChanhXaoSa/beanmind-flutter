@@ -43,11 +43,13 @@ class Fraction {
   }
 
   Fraction operator *(Fraction other) {
-    return Fraction(numerator * other.numerator, denominator * other.denominator);
+    return Fraction(
+        numerator * other.numerator, denominator * other.denominator);
   }
 
   Fraction operator /(Fraction other) {
-    return Fraction(numerator * other.denominator, denominator * other.numerator);
+    return Fraction(
+        numerator * other.denominator, denominator * other.numerator);
   }
 
   @override
@@ -64,14 +66,17 @@ void restartGame(int level) {
 
 void nextQuestion(int level) {
   bool validQuestion = false;
+  List<String> operators = [];
 
   while (!validQuestion) {
-    int numCount = level + 1; // Level 1: 2 numbers, Level 2: 3 numbers, Level 3: 4 numbers
+    int numCount =
+        level + 1; // Level 1: 2 numbers, Level 2: 3 numbers, Level 3: 4 numbers
     values = getRandomValues(numCount);
     List<String> operators = getRandomOperators(numCount - 1, level);
 
     if (operators.contains('-')) {
-      values.sort((a, b) => b.compareTo(a)); // Sort values in descending order if subtraction is involved
+      values.sort((a, b) => b.compareTo(
+          a)); // Sort values in descending order if subtraction is involved
     }
 
     correctAnswer = calculateAnswer(values, operators);
@@ -85,7 +90,11 @@ void nextQuestion(int level) {
   choice.clear();
   choice.add(correctAnswer!);
   for (int i = 0; i < 2; i++) {
-    choice.add(Fraction(Random().nextInt(50) + 1, Random().nextInt(50) + 1));
+    if (operators.contains('/')) {
+      choice.add(Fraction(Random().nextInt(50) + 1, Random().nextInt(50) + 1));
+    } else {
+      choice.add(Fraction(Random().nextInt(50) + 1, 1));
+    }
   }
   choice.shuffle();
 }
