@@ -1,6 +1,7 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_action.dart';
+import 'package:beanmind_flutter/widgets/course_detail/course_detail_chapter_and_topic.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -73,6 +74,7 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                               ],
                             ),
                           ),
+                          const CourseDetailChapterAndTopic(),
                           const Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
