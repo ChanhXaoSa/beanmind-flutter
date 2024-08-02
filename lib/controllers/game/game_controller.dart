@@ -23,11 +23,11 @@ class GameController extends GetxController {
   List<dynamic> games = [];
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await fetchGameList();
-    await fetchDataGameAnimal();
-    await fetchDataItem();
+    fetchGameList();
+    fetchDataGameAnimal();
+    fetchDataItem();
     ever(selectedGame, (_) {
       if (selectedGame.value == null) {}
     });
@@ -41,7 +41,7 @@ class GameController extends GetxController {
     loadingStatus.value = LoadingStatus.loading;
     try {
       final response = await http.get(
-          Uri.parse('${newBaseApiUrl}/games?IsDeleted=1'),
+          Uri.parse('${newBaseApiUrl}/games'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',

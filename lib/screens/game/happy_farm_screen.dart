@@ -9,6 +9,7 @@ import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -151,17 +152,63 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text('Hướng dẫn'),
-                                  content: Text(
-                                    'Nội dung hướng dẫn người chơi...',
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('OK'),
+                                title: const Text('Hướng dẫn'),
+                                content: SingleChildScrollView(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: Column(
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fhappy_farm%2Fhappy_farm_tutorial1.png?alt=media&token=cacc979b-d2bc-422d-bea9-bb0ae75cd7a3',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: const Text(
+                                            'Tên của các loại động vật hiển thị trên màn hình',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fhappy_farm%2Fhappy_farm_tutorial2.png?alt=media&token=191df3f0-a529-4bbc-b34c-221616bbcd9e',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: const Text(
+                                            'Bạn sẽ đếm số lượng các động vật hiển thị trên màn hình, đọc câu hỏi đang hiển thị và nhập kết quả',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                );
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
                               },
                             );
                           },
