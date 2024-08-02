@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
+import 'package:beanmind_flutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,7 +60,7 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                     ? PopupMenuButton<String>(
                   onSelected: (String value) {
                     if (value == 'Profile') {
-                      // controller.navigateToProfile();
+                      Get.toNamed(ProfileScreen.routeName);
                     }
                     // Handle other menu selections
                   },

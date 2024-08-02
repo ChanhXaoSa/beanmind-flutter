@@ -12,7 +12,7 @@ class CourseDetailModel {
   String? message;
   bool? success;
   int? code;
-  Data? data;
+  CourseDetailData? data;
   dynamic errors;
   dynamic fieldErrors;
 
@@ -29,7 +29,7 @@ class CourseDetailModel {
     message: json["message"],
     success: json["success"],
     code: json["code"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : CourseDetailData.fromJson(json["data"]),
     errors: json["errors"],
     fieldErrors: json["fieldErrors"],
   );
@@ -44,7 +44,7 @@ class CourseDetailModel {
   };
 }
 
-class Data {
+class CourseDetailData {
   String? title;
   String? description;
   int? totalSlot;
@@ -62,7 +62,7 @@ class Data {
   String? id;
   bool? isDeleted;
 
-  Data({
+  CourseDetailData({
     this.title,
     this.description,
     this.totalSlot,
@@ -81,7 +81,7 @@ class Data {
     this.isDeleted,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory CourseDetailData.fromJson(Map<String, dynamic> json) => CourseDetailData(
     title: json["title"],
     description: json["description"],
     totalSlot: json["totalSlot"],

@@ -45,7 +45,7 @@ class ChapterModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<ChapterItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<ChapterItem>.from(json["items"]!.map((x) => ChapterItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -72,14 +72,14 @@ class Data {
   };
 }
 
-class Item {
+class ChapterItem {
   String? title;
   String? description;
   String? courseId;
   String? id;
   bool? isDeleted;
 
-  Item({
+  ChapterItem({
     this.title,
     this.description,
     this.courseId,
@@ -87,7 +87,7 @@ class Item {
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory ChapterItem.fromJson(Map<String, dynamic> json) => ChapterItem(
     title: json["title"],
     description: json["description"],
     courseId: json["courseId"],

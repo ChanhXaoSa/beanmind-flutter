@@ -9,9 +9,12 @@ import 'package:http/http.dart' as http;
 
 class CourseDetailController extends GetxController {
   var courseDetailModel = Rxn<CourseDetailModel>();
+  var courseDetailData = Rxn<CourseDetailData>();
   var chapterModel = Rxn<ChapterModel>();
+  var chapterList = <ChapterItem>[].obs;
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
+  var expandedChapters = <String, bool>{}.obs;
   late String courseId;
 
   @override
@@ -62,11 +65,18 @@ class CourseDetailController extends GetxController {
         final chapterModelBase = ChapterModel.fromJson(json.decode(chapterResponse.body));
         chapterModel.value = chapterModelBase;
         if(chapterModelBase.data?.items != null)  {
-          for (var chapter in chapterModelBase.data!.items!) {
+          chapterList.assignAll(chapterModelBase.data!.items!);
+          for (var chapter in chapterList) {
             fetchTopic(chapter.id!);
+            expandedChapters[chapter.id!] = false;
           }
         }
-        print(chapterModel.value?.data?.items);
+        // if(chapterModelBase.data?.items != null)  {
+        //   for (var chapter in chapterModelBase.data!.items!) {
+        //     fetchTopic(chapter.id!);
+        //   }
+        // }
+        print('${chapterList.toString()}');
       } else {
         throw Exception('Failed to fetch chapter');
       }
@@ -88,6 +98,7 @@ class CourseDetailController extends GetxController {
       if (courseResponse.statusCode == 200) {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailModel.value = courseDetailModelBase;
+        courseDetailData.value = courseDetailModelBase.data;
         print(courseDetailModel.value.toString());
       } else {
         throw Exception('Failed to fetch course');
@@ -96,5 +107,10 @@ class CourseDetailController extends GetxController {
       print('Error: $e');
       throw e;
     }
+  }
+
+  void toggleChapterExpansion(String chapterId) {
+    expandedChapters[chapterId] = !(expandedChapters[chapterId] ?? false);
+    update();
   }
 }
