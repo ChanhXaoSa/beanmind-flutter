@@ -46,7 +46,6 @@ class GameController extends GetxController {
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
           });
-
       if (response.statusCode == 200) {
         final body = response.body;
         final decoded = jsonDecode(body);
@@ -58,7 +57,6 @@ class GameController extends GetxController {
         } else {
           throw Exception('Unexpected JSON format');
         }
-
         // print(games);
         loadingStatus.value = LoadingStatus.completed;
       } else {
@@ -76,18 +74,9 @@ class GameController extends GetxController {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('animal').get();
-      // print json data
-      // snapshot.docs.forEach((doc) {
-      //   print(doc.data());
-      // });
       List<GameAnimalModel> items = snapshot.docs
           .map((doc) => GameAnimalModel.fromSnapshot(doc))
           .toList();
-      // print('Number of items fetched: ${items.length}');
-      // items.forEach((item) {
-      //   print('Item: ${item.id}, ImageUrl: ${item.imageurl}');
-      // });
-
       animalslist = List<GameAnimalModel>.from(items);
     } catch (e) {
       print('Error fetching data: $e');
@@ -96,21 +85,13 @@ class GameController extends GetxController {
 
   Future<void> fetchDataItem() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await firestore.collection('itemstore').get();
-
       List<ItemModel> items =
           snapshot.docs.map((doc) => ItemModel.fromSnapshot(doc)).toList();
-      // print('Number of items fetched: ${items.length}');
-      // items.forEach((item) {
-      //   print(
-      //       'Item: ${item.id}, Price: ${item.price}, ImageUrl: ${item.imageurl}');
-      // });
       startLowerItemModel = items;
       lowerItemModel = List<ItemModel>.from(startLowerItemModel);
-      // Update startLower and lower with the fetched items
     } catch (e) {
       print('Error fetching data: $e');
     }

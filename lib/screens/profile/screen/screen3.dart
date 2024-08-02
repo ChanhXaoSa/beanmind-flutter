@@ -61,7 +61,7 @@ class CourseListScreen extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: "Tìm kiếm khóa học",

@@ -106,53 +106,53 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _isLoading = false;
       });
     });
-      return Stack(
-        children: [
-          KeyboardListener(
-            focusNode: FocusNode(),
-            onKeyEvent: (KeyEvent event) {
-              if (event is KeyDownEvent) {
-                final logicalKey = event.logicalKey;
-                if (logicalKey == LogicalKeyboardKey.enter) {
-                  if (showResultDialog) {
-                    goToNextQuestion();
-                  } else {
-                    checkResult();
-                  }
-                } else if (logicalKey == LogicalKeyboardKey.backspace) {
-                  buttonTapped('\u2190');
+    return Stack(
+      children: [
+        KeyboardListener(
+          focusNode: FocusNode(),
+          onKeyEvent: (KeyEvent event) {
+            if (event is KeyDownEvent) {
+              final logicalKey = event.logicalKey;
+              if (logicalKey == LogicalKeyboardKey.enter) {
+                if (showResultDialog) {
+                  goToNextQuestion();
+                } else {
+                  checkResult();
                 }
-                final input = logicalKey.keyLabel;
-                if (RegExp(r'^[0-9]$').hasMatch(input)) {
-                  handleNumberButtonPress(input);
-                }
+              } else if (logicalKey == LogicalKeyboardKey.backspace) {
+                buttonTapped('\u2190');
               }
-            },
-            child: Scaffold(
-              backgroundColor: Colors.deepPurple[300],
-              body: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 25,
-                    ),
-                    height: 60,
-                    color: Colors.deepPurple,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Số điểm của bạn : ' + userPoint.toString(),
-                            style: whiteTextStyle,
-                          ),
+              final input = logicalKey.keyLabel;
+              if (RegExp(r'^[0-9]$').hasMatch(input)) {
+                handleNumberButtonPress(input);
+              }
+            }
+          },
+          child: Scaffold(
+            backgroundColor: Colors.deepPurple[300],
+            body: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 25,
+                  ),
+                  height: 60,
+                  color: Colors.deepPurple,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Số điểm của bạn : ' + userPoint.toString(),
+                          style: whiteTextStyle,
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
                               return AlertDialog(
                                 title: const Text('Hướng dẫn'),
                                 content: SingleChildScrollView(
@@ -168,11 +168,17 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                                                   .width *
                                               0.5,
                                         ),
-                                        Text(
-                                          'Tên của các loại động vật hiển thị trên màn hình',
-                                          style: TextStyle(fontSize: 40),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: const Text(
+                                            'Tên của các loại động vật hiển thị trên màn hình',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 30,
                                         ),
                                         Image.asset(
@@ -182,9 +188,15 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                                                   .width *
                                               0.7,
                                         ),
-                                        Text(
-                                          'Bạn sẽ đếm số lượng các động vật hiển thị trên màn hình, đọc câu hỏi đang hiển thị và nhập kết quả',
-                                          style: TextStyle(fontSize: 40),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: const Text(
+                                            'Bạn sẽ đếm số lượng các động vật hiển thị trên màn hình, đọc câu hỏi đang hiển thị và nhập kết quả',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -197,149 +209,150 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                                   ),
                                 ],
                               );
-                              },
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding:
-                                EdgeInsets.all(10), // Điều chỉnh kích thước nút
-                          ),
-                          child: Icon(
-                            Icons.help,
-                            size: 30,
-                          ),
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding:
+                              EdgeInsets.all(10), // Điều chỉnh kích thước nút
                         ),
-                      ],
-                    ),
+                        child: Icon(
+                          Icons.help,
+                          size: 30,
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                      height: 60,
-                      color: Colors.deepPurple,
-                      child: Center(
-                        child: Row(
+                ),
+                Container(
+                    height: 60,
+                    color: Colors.deepPurple,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            question,
+                            style: whiteTextStyle,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 0),
+                            color: Colors.blue[100],
+                            child: Text(
+                              '$userAnswer',
+                              style:
+                                  whiteTextStyle.copyWith(color: Colors.orange),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                Expanded(
+                  child: isWideScreen
+                      ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              question,
-                              style: whiteTextStyle,
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                margin: EdgeInsets.only(
+                                    top: 15, left: 15, bottom: 15),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 5,
+                                      color: Theme.of(context)
+                                          .cardColor
+                                          .withAlpha(100)),
+                                ),
+                                child: GameWidget(game: _gameOceanAdventure),
+                              ),
                             ),
-                            SizedBox(
-                              width: 10,
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: GridView.builder(
+                                  itemCount: numberPad.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(10, 12, 10, 0),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 4,
+                                          childAspectRatio: 0.9),
+                                  itemBuilder: (context, index) {
+                                    return MyButton(
+                                      child: numberPad[index],
+                                      onTap: () =>
+                                          buttonTapped(numberPad[index]),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                            Container(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                              color: Colors.blue[100],
-                              child: Text(
-                                '$userAnswer',
-                                style:
-                                    whiteTextStyle.copyWith(color: Colors.orange),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                margin: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 5,
+                                      color: Theme.of(context)
+                                          .cardColor
+                                          .withAlpha(100)),
+                                ),
+                                child: GameWidget(game: _gameOceanAdventure),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: GridView.builder(
+                                  itemCount: numberPadMobie.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 7,
+                                          childAspectRatio: 2.2),
+                                  itemBuilder: (context, index) {
+                                    return MyButton(
+                                      child: numberPadMobie[index],
+                                      onTap: () =>
+                                          buttonTapped(numberPadMobie[index]),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      )),
-                  Expanded(
-                    child: isWideScreen
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  alignment: Alignment.topCenter,
-                                  margin: EdgeInsets.only(
-                                      top: 15, left: 15, bottom: 15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                        width: 5,
-                                        color: Theme.of(context)
-                                            .cardColor
-                                            .withAlpha(100)),
-                                  ),
-                                  child: GameWidget(game: _gameOceanAdventure),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: GridView.builder(
-                                    itemCount: numberPad.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.fromLTRB(10, 12, 10, 0),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 4,
-                                            childAspectRatio: 0.9),
-                                    itemBuilder: (context, index) {
-                                      return MyButton(
-                                        child: numberPad[index],
-                                        onTap: () => buttonTapped(numberPad[index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  alignment: Alignment.topCenter,
-                                  margin: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                        width: 5,
-                                        color: Theme.of(context)
-                                            .cardColor
-                                            .withAlpha(100)),
-                                  ),
-                                  child: GameWidget(game: _gameOceanAdventure),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: GridView.builder(
-                                    itemCount: numberPadMobie.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 7,
-                                            childAspectRatio: 2.2),
-                                    itemBuilder: (context, index) {
-                                      return MyButton(
-                                        child: numberPadMobie[index],
-                                        onTap: () =>
-                                            buttonTapped(numberPadMobie[index]),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                ),
+                Focus(
+                  focusNode: _resultFocusNode,
+                  child: Container(
+                    height: 0,
+                    width: 0,
                   ),
-                  Focus(
-                    focusNode: _resultFocusNode,
-                    child: Container(
-                      height: 0,
-                      width: 0,
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
-          Visibility(
+        ),
+        Visibility(
           visible: _isLoading,
           child: Container(
             color: Colors.black.withOpacity(0.7),
@@ -348,8 +361,8 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
             ),
           ),
         ),
-        ],
-      );
+      ],
+    );
   }
 
   // show dialog error
@@ -658,7 +671,10 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(
+            widget.gameid,
+            calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
+            _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;
@@ -670,7 +686,10 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
         _audio.playCompleteSound();
         String lottieAsset = _getLottieAsset(userPoint);
         _timeRecord.stopTimer();
-        saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+        saveGameResults(
+            widget.gameid,
+            calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
+            _timeRecord.seconds);
         _showDialogCompleted('Xin chúc mừng bạn đã hoàn thành trò chơi!',
             lottieAsset, false, userPoint);
         return;

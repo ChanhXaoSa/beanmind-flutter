@@ -30,7 +30,7 @@ class HappyFarm extends FlameGame {
     background = SpriteComponent()
       ..sprite = await loadSprite('background/background_farm.png')
       ..size = size;
-    await add(background);
+    add(background);
   }
 
   Future<void> loadAnimals() async {
