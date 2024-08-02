@@ -10,12 +10,10 @@ import 'package:beanmind_flutter/screens/game/game_list_screen.dart';
 import 'package:beanmind_flutter/utils/my_button.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 import '../../widgets/game/widget/game_happy_farm/happy_farm.dart';
@@ -23,10 +21,9 @@ import '../../widgets/game/widget/game_happy_farm/happy_farm.dart';
 class HappyFarmScreen extends StatefulWidget {
   final int level;
   final String gameid;
-  const HappyFarmScreen({Key? key, required this.level, required this.gameid}) : super(key: key);
-  static const String routeName = '/happy_farm';
+  HappyFarmScreen({required this.level, required this.gameid});
   @override
-  State<HappyFarmScreen> createState() => _HappyFarmScreenState();
+  _HappyFarmScreenState createState() => _HappyFarmScreenState();
 }
 
 class _HappyFarmScreenState extends State<HappyFarmScreen> {
@@ -86,11 +83,14 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
   @override
   void initState() {
     super.initState();
-    resetAnimalFarm();
-    _happyFarm = HappyFarm(level: widget.level);
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => setState(() {}));
+    userAnswer = '';
+    userPoint = 0;
+    userProgress = 0;
+    _happyFarm = HappyFarm(level: widget.level);
+    generateQuestion(widget.level);
     delay3Seconds();
   }
 
