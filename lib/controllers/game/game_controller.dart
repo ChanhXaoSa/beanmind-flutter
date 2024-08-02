@@ -24,13 +24,10 @@ class GameController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     fetchGameList();
     fetchDataGameAnimal();
     fetchDataItem();
-    ever(selectedGame, (_) {
-      if (selectedGame.value == null) {}
-    });
+    super.onInit();
   }
 
   void navigateToGameList() {
