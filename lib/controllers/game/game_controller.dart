@@ -94,23 +94,6 @@ class GameController extends GetxController {
     }
   }
 
-  String getGameTitle(String gameId) {
-    switch (gameId) {
-      case '3ae42c10-7dbe-4e71-a52c-c19c44e3c4a0':
-        return 'Khám phá đại dương - Học đếm từ 0 đến 5';
-      case '49299e7c-fa16-45fd-84e4-1a725c118a9f':
-        return 'Nông trại vui vẻ - Học đếm từ 0 đến 5';
-      case 'ead13199-827d-4c48-5d08-08dcafad932c':
-        return 'Sắp xếp số';
-      case 'c296495f-342e-4fd6-5d09-08dcafad932c':
-        return 'Trò chơi mua sắm';
-      case '59141c9e-7dd3-4c76-5d0a-08dcafad932c':
-        return 'Số lẻ và số chẵn';
-      default:
-        return 'Thư viện trò chơi';
-    }
-  }
-
   Widget buildGameWidget(String gameId) {
     switch (gameId) {
       // happy farm game

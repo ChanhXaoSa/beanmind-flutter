@@ -33,7 +33,7 @@ class GameListScreen extends GetView<GameController> {
           child: Obx(() {
             return CustomAppBar(
               title: controller.selectedGame.value != null
-                  ? controller.getGameTitle(controller.selectedGame.value!)
+                  ? controller.games.firstWhere((game) => game['id'] == controller.selectedGame.value)['name']
                   : 'Thư viện trò chơi',
               leading: controller.selectedGame.value != null
                   ? IconButton(

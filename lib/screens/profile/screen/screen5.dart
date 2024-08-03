@@ -190,7 +190,7 @@ class GameHistoryCard extends StatelessWidget {
                   SizedBox(height: 5),
                   Text('Điểm: ${gameHistoryItem.score}',
                       style: TextStyle(fontSize: 20)),
-                  Text('Thời gian: ${gameHistoryItem.playTime}',
+                  Text('Thời gian: ${gameHistoryItem.playTime} giây',
                       style: TextStyle(fontSize: 20)),
                 ],
               ),
