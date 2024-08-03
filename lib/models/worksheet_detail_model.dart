@@ -12,7 +12,7 @@ class WorksheetDetailModel {
   String? message;
   bool? success;
   int? code;
-  Data? data;
+  WorksheetDetailData? data;
   dynamic errors;
   dynamic fieldErrors;
 
@@ -29,7 +29,7 @@ class WorksheetDetailModel {
     message: json["message"],
     success: json["success"],
     code: json["code"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : WorksheetDetailData.fromJson(json["data"]),
     errors: json["errors"],
     fieldErrors: json["fieldErrors"],
   );
@@ -44,7 +44,7 @@ class WorksheetDetailModel {
   };
 }
 
-class Data {
+class WorksheetDetailData {
   String? title;
   String? description;
   String? worksheetTemplateId;
@@ -54,7 +54,7 @@ class Data {
   String? id;
   bool? isDeleted;
 
-  Data({
+  WorksheetDetailData({
     this.title,
     this.description,
     this.worksheetTemplateId,
@@ -65,7 +65,7 @@ class Data {
     this.isDeleted,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory WorksheetDetailData.fromJson(Map<String, dynamic> json) => WorksheetDetailData(
     title: json["title"],
     description: json["description"],
     worksheetTemplateId: json["worksheetTemplateId"],
