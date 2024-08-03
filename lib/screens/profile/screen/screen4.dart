@@ -42,14 +42,14 @@ class CourseListHistoryScreen extends StatelessWidget {
         name: "Course 8", registrationDate: "2023-08-01", isCompleted: false),
   ];
 
-  static const headerStyle = TextStyle(
-      color: Colors.grey, fontSize: 25, fontWeight: FontWeight.bold);
-  static const contentStyleHeader = TextStyle(
-      color: Colors.grey, fontSize: 25, fontWeight: FontWeight.w700);
+  static const headerStyle =
+      TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold);
+  static const contentStyleHeader =
+      TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w700);
   static const contentStyle = TextStyle(
-      color: Colors.grey, fontSize: 25, fontWeight: FontWeight.normal);
+      color: Colors.black, fontSize: 25, fontWeight: FontWeight.normal);
   static const loremIpsum =
-  '''Lorem ipsum is typically a corrupted version of 'De finibus bonorum et malorum', a 1st century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.''';
+      '''Lorem ipsum is typically a corrupted version of 'De finibus bonorum et malorum', a 1st century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.''';
   static const slogan =
       'Do not forget to play around with all sorts of colors, backgrounds, borders, etc.';
 
@@ -66,11 +66,14 @@ class CourseListHistoryScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AutoSizeText(
-                  "LỊCH SỬ HỌC TẬP",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    "LỊCH SỬ HỌC TẬP",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 //search bar
@@ -110,15 +113,64 @@ class CourseListHistoryScreen extends StatelessWidget {
                 scaleWhenAnimating: true,
                 openAndCloseAnimation: true,
                 headerPadding:
-                const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
                 sectionOpeningHapticFeedback: SectionHapticFeedback.light,
                 sectionClosingHapticFeedback: SectionHapticFeedback.light,
                 children: [
                   AccordionSection(
-                    isOpen: true,
-                    leftIcon:
-                    const Icon(Icons.book, color: Colors.black),
-                    header: const Text('Tên khoá học', style: TextStyle(color: Colors.black),),
+                    isOpen: false,
+                    leftIcon: const Icon(Icons.book, color: Colors.black),
+                    header: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tên khoá học 1',
+                          style: TextStyle(color: Colors.black, fontSize: 30),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        buildProgressItem(
+                            context, 'Tiến độ học tập', 0.6, '6/10', '12 giờ'),
+                      ],
+                    ),
+                    headerBackgroundColor: Colors.transparent,
+                    headerBackgroundColorOpened: Colors.white,
+                    headerBorderColor: Colors.black54,
+                    headerBorderColorOpened: Colors.black54,
+                    // headerBorderWidth: 1,
+                    contentBackgroundColor: Colors.white,
+                    contentBorderColor: Colors.white,
+                    contentBorderWidth: 1,
+                    contentVerticalPadding: 30,
+                    content: const MyNestedAccordion(),
+                  ),
+                  AccordionSection(
+                    isOpen: false,
+                    leftIcon: const Icon(Icons.book, color: Colors.black),
+                    header: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tên khoá học 2',
+                          style: TextStyle(color: Colors.black, fontSize: 30),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        buildProgressItem(
+                            context, 'Tiến độ học tập', 0.9, '9/10', '10 giờ'),
+                      ],
+                    ),
+                    headerBackgroundColor: Colors.transparent,
+                    headerBackgroundColorOpened: Colors.white,
+                    headerBorderColor: Colors.black54,
+                    headerBorderColorOpened: Colors.black54,
+                    // headerBorderWidth: 1,
+                    contentBackgroundColor: Colors.white,
+                    contentBorderColor: Colors.white,
+                    contentBorderWidth: 1,
+                    contentVerticalPadding: 30,
                     content: const MyNestedAccordion(),
                   ),
                 ],
@@ -132,7 +184,7 @@ class CourseListHistoryScreen extends StatelessWidget {
 }
 
 class MyNestedAccordion extends StatelessWidget //__
-    {
+{
   const MyNestedAccordion({super.key});
 
   @override
@@ -143,42 +195,370 @@ class MyNestedAccordion extends StatelessWidget //__
       paddingListBottom: 0,
       maxOpenSections: 1,
       headerBackgroundColorOpened: Colors.black54,
-      headerPadding: const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
       children: [
         AccordionSection(
-          isOpen: true,
+          isOpen: false,
           leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-          headerBackgroundColor: Colors.black38,
-          headerBackgroundColorOpened: Colors.black54,
-          header:
-          const Text('Nested Section #1', style: CourseListHistoryScreen.headerStyle),
-          content: const Text(CourseListHistoryScreen.loremIpsum,
-              style: CourseListHistoryScreen.contentStyle),
-          contentHorizontalPadding: 20,
-          contentBorderColor: Colors.black54,
-        ),
-        AccordionSection(
-          isOpen: true,
-          leftIcon: const Icon(Icons.compare_rounded, color: Colors.white),
-          header:
-          const Text('Nested Section #2', style: CourseListHistoryScreen.headerStyle),
-          headerBackgroundColor: Colors.black38,
-          headerBackgroundColorOpened: Colors.black54,
-          contentBorderColor: Colors.black54,
-          content: const Row(
+          headerBackgroundColor: Colors.white,
+          headerBackgroundColorOpened: Colors.white,
+          header: const Text('Chương 1',
+              style: CourseListHistoryScreen.headerStyle),
+          content: Accordion(
+            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+            headerBackgroundColor: Colors.white,
+            headerBackgroundColorOpened: Colors.white,
+            contentBackgroundColor: Colors.white,
+            contentBorderColor: Colors.white,
             children: [
-              Icon(Icons.compare_rounded,
-                  size: 120, color: Colors.orangeAccent),
-              Flexible(
-                  flex: 1,
-                  child: Text(CourseListHistoryScreen.loremIpsum,
-                      style: CourseListHistoryScreen.contentStyle)),
+              AccordionSection(
+                leftIcon:
+                    const Icon(Icons.insights_rounded, color: Colors.white),
+                headerBackgroundColor: Colors.white,
+                headerBackgroundColorOpened: Colors.white,
+                header: const Text('Chủ đề 1',
+                    style: CourseListHistoryScreen.headerStyle),
+                contentBackgroundColor: Colors.white,
+                contentBorderColor: Colors.white,
+                content: Accordion(
+                  leftIcon:
+                      const Icon(Icons.insights_rounded, color: Colors.white),
+                  headerBackgroundColor: Colors.black38,
+                  headerBackgroundColorOpened: Colors.black54,
+                  contentBackgroundColor: Colors.white,
+                  contentBorderColor: Colors.white,
+                  children: [
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #1',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #2',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #3',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
+          contentBackgroundColor: Colors.white,
+          contentBorderColor: Colors.white,
+        ),
+        AccordionSection(
+          isOpen: false,
+          leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+          headerBackgroundColor: Colors.white,
+          headerBackgroundColorOpened: Colors.white,
+          header: const Text('Chương 2',
+              style: CourseListHistoryScreen.headerStyle),
+          content: Accordion(
+            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+            headerBackgroundColor: Colors.white,
+            headerBackgroundColorOpened: Colors.white,
+            contentBackgroundColor: Colors.white,
+            contentBorderColor: Colors.white,
+            children: [
+              AccordionSection(
+                leftIcon:
+                    const Icon(Icons.insights_rounded, color: Colors.white),
+                headerBackgroundColor: Colors.white,
+                headerBackgroundColorOpened: Colors.white,
+                header: const Text('Chủ đề 1',
+                    style: CourseListHistoryScreen.headerStyle),
+                contentBackgroundColor: Colors.white,
+                contentBorderColor: Colors.white,
+                content: Accordion(
+                  leftIcon:
+                      const Icon(Icons.insights_rounded, color: Colors.white),
+                  headerBackgroundColor: Colors.black38,
+                  headerBackgroundColorOpened: Colors.black54,
+                  contentBackgroundColor: Colors.white,
+                  contentBorderColor: Colors.white,
+                  children: [
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #1',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #2',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #3',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          contentBackgroundColor: Colors.white,
+          contentBorderColor: Colors.white,
+        ),
+        AccordionSection(
+          isOpen: false,
+          leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+          headerBackgroundColor: Colors.white,
+          headerBackgroundColorOpened: Colors.white,
+          header: const Text('Chương 3',
+              style: CourseListHistoryScreen.headerStyle),
+          content: Accordion(
+            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+            headerBackgroundColor: Colors.white,
+            headerBackgroundColorOpened: Colors.white,
+            contentBackgroundColor: Colors.white,
+            contentBorderColor: Colors.white,
+            children: [
+              AccordionSection(
+                leftIcon:
+                    const Icon(Icons.insights_rounded, color: Colors.white),
+                headerBackgroundColor: Colors.white,
+                headerBackgroundColorOpened: Colors.white,
+                header: const Text('Chủ đề 1',
+                    style: CourseListHistoryScreen.headerStyle),
+                contentBackgroundColor: Colors.white,
+                contentBorderColor: Colors.white,
+                content: Accordion(
+                  leftIcon:
+                      const Icon(Icons.insights_rounded, color: Colors.white),
+                  headerBackgroundColor: Colors.black38,
+                  headerBackgroundColorOpened: Colors.black54,
+                  contentBackgroundColor: Colors.white,
+                  contentBorderColor: Colors.white,
+                  children: [
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #1',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #2',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    AccordionSection(
+                      leftIcon: const Icon(Icons.insights_rounded,
+                          color: Colors.white),
+                      headerBackgroundColor: Colors.black38,
+                      headerBackgroundColorOpened: Colors.black54,
+                      header: const Text('Nội dung bài học #3',
+                          style: CourseListHistoryScreen.headerStyle),
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      content: Column(
+                        children: [
+                          Text(
+                            CourseListHistoryScreen.loremIpsum,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            CourseListHistoryScreen.slogan,
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          contentBackgroundColor: Colors.white,
+          contentBorderColor: Colors.white,
         ),
       ],
     );
   }
+}
+
+Widget buildProgressItem(BuildContext context, String title, double progress,
+    String slots, String time) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 1,
+          blurRadius: 5,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 5),
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[300],
+          valueColor: AlwaysStoppedAnimation<Color>(
+              progress >= 1 ? Colors.green : Colors.blue),
+        ),
+        SizedBox(height: 5),
+        Text(
+          'Đã học: $slots slot',
+          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+        ),
+        Text(
+          'Thời gian đã học: $time',
+          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+        ),
+      ],
+    ),
+  );
 }
 
 class Course {
@@ -188,9 +568,9 @@ class Course {
 
   Course(
       {required this.name,
-        required this.registrationDate,
-        required this.isCompleted});
-  }
+      required this.registrationDate,
+      required this.isCompleted});
+}
 
 class CourseItem extends StatelessWidget {
   final Course course;
@@ -255,4 +635,3 @@ class CourseItem extends StatelessWidget {
     );
   }
 }
-
