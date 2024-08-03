@@ -1,86 +1,81 @@
+import 'dart:convert';
+
+import 'package:beanmind_flutter/controllers/auth_controller.dart';
+import 'package:beanmind_flutter/models/game_history_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart' as http;
 
 class Screen5 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: GameHistoryList(gameHistoryItems: gameHistoryItems),
+      body: GameHistoryListScreen(),
     );
   }
-
-  final gameHistoryItems = [
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fmath_game_level_1.png?alt=media&token=5ec9aabf-a503-426c-b7db-73b5f6641ed0',
-      gameName: 'Trò chơi 1',
-      score: 100,
-      playTime: '10:30',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 2',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 3',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 4',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 5',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 6',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 7',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 8',
-      score: 200,
-      playTime: '20:15',
-    ),
-    GameHistoryItem(
-      imageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/thumbnail_game_images%2Fnumber_sort.png?alt=media&token=6124bb15-ff34-47fc-a0ad-143463324dd1',
-      gameName: 'Trò chơi 9',
-      score: 200,
-      playTime: '20:15',
-    ),
-    // Add more items here
-  ];
 }
 
-class GameHistoryList extends StatelessWidget {
-  final List<GameHistoryItem> gameHistoryItems;
+enum LoadingStatus { loading, completed, error }
 
-  GameHistoryList({required this.gameHistoryItems});
+class GameHistoryListScreen extends StatefulWidget {
+  @override
+  _GameHistoryListScreenState createState() => _GameHistoryListScreenState();
+}
+
+class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
+  List<GameHistoryItem> gameHistoryItems = [];
+  LoadingStatus loadingStatus = LoadingStatus.loading;
+  String user = Get.find<AuthController>().user.value!.first.data.id;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchGameHistory();
+  }
+
+  Future<void> fetchGameHistory() async {
+    setState(() {
+      loadingStatus = LoadingStatus.loading;
+    });
+    try {
+      final response = await http.get(
+        Uri.parse('https://vinhtc3-001-site1.ftempurl.com/api/v1/game-histories?ApplicationUserId=${user}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=utf-8',
+          'ngrok-skip-browser-warning': 'true',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final body = response.body;
+        final decoded = jsonDecode(body);
+
+        if (decoded is Map<String, dynamic> && decoded['data'] is Map<String, dynamic>) {
+          final gameHistoryResponse = GameHistoryResponse.fromJson(decoded['data']);
+          setState(() {
+            gameHistoryItems = gameHistoryResponse.items
+                .map((gameHistory) => GameHistoryItem.fromGameHistory(gameHistory))
+                .toList();
+            loadingStatus = LoadingStatus.completed;
+          });
+        } else {
+          throw Exception('Unexpected JSON format');
+        }
+      } else {
+        setState(() {
+          loadingStatus = LoadingStatus.error;
+        });
+        throw Exception('Failed to load game history');
+      }
+    } catch (e) {
+      setState(() {
+        loadingStatus = LoadingStatus.error;
+      });
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +97,14 @@ class GameHistoryList extends StatelessWidget {
                     ),
                   ),
                 ),
-                //search bar
+                // Search bar
                 Container(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: "Tìm nội dung bạn đã học",
+                        hintText: "Tìm kiếm",
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -127,13 +122,15 @@ class GameHistoryList extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: gameHistoryItems.length,
-                itemBuilder: (context, index) {
-                  return GameHistoryCard(gameHistoryItem: gameHistoryItems[index]);
-                },
-              ),
+              child: loadingStatus == LoadingStatus.loading
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: gameHistoryItems.length,
+                      itemBuilder: (context, index) {
+                        return GameHistoryCard(gameHistoryItem: gameHistoryItems[index]);
+                      },
+                    ),
             ),
           ],
         ),
@@ -189,7 +186,7 @@ class GameHistoryItem {
   final String imageUrl;
   final String gameName;
   final int score;
-  final String playTime;
+  final int playTime;
 
   GameHistoryItem({
     required this.imageUrl,
@@ -197,4 +194,14 @@ class GameHistoryItem {
     required this.score,
     required this.playTime,
   });
+
+  factory GameHistoryItem.fromGameHistory(GameHistory gameHistory) {
+    return GameHistoryItem(
+      imageUrl: gameHistory.game.imageUrl,
+      gameName: gameHistory.game.title,
+      score: gameHistory.point,
+      playTime: gameHistory.duration,
+    );
+  }
 }
+

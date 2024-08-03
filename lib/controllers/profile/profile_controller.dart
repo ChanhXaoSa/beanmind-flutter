@@ -1,11 +1,17 @@
+import 'dart:convert';
+
+import 'package:beanmind_flutter/models/game_history_model.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/firebase/references.dart';
-import 'package:beanmind_flutter/models/models.dart' show QuizPaperModel, RecentTest;
+import 'package:beanmind_flutter/models/models.dart'
+    show QuizPaperModel, RecentTest;
 import 'package:beanmind_flutter/services/firebase/firebasestorage_service.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
   @override
@@ -15,6 +21,7 @@ class ProfileController extends GetxController {
   }
 
   final allRecentTest = <RecentTest>[].obs;
+  List<dynamic> gameHistories = [];
 
   getMyRecentTests() async {
     try {
@@ -30,7 +37,8 @@ class ProfileController extends GetxController {
             await quizePaperFR.doc(test.paperId).get();
         final quizPaper = QuizPaperModel.fromSnapshot(quizPaperSnaphot);
 
-        final url =  await Get.find<FireBaseStorageService>().getImage(quizPaper.title);
+        final url =
+            await Get.find<FireBaseStorageService>().getImage(quizPaper.title);
         test.papername = quizPaper.title;
         test.paperimage = url;
       }
