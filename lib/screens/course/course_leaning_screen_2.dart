@@ -62,7 +62,12 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
                     if(controller.courseDetailData.value?.worksheetTemplates != null) {
                       return Container(
                         child: Center(
-                          child: Text('Làm bài quiz cuối cùng'),
+                          child: ElevatedButton(
+                            onPressed: () {
+
+                            },
+                            child: Text('Làm bài quiz cuối cùng'),
+                          ),
                         ),
                       );
                     } else return Container();
