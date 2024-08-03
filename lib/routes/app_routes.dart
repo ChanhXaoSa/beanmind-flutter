@@ -1,5 +1,7 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
+import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
+import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -80,5 +82,12 @@ class AppRoutes {
             Get.put(CourseDetailController());
           }),
         ),
+    GetPage(
+      name: CourseLeaningScreen2.routeName,
+      page: () => const CourseLeaningScreen2(),
+      binding: BindingsBuilder(() {
+        Get.put(CourseLearningController());
+      }),
+    ),
       ];
 }

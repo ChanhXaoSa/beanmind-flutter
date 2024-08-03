@@ -1,12 +1,15 @@
 import 'dart:convert';
+
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
+import 'package:beanmind_flutter/models/topic_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class CourseDetailController extends GetxController {
+class CourseLearningController extends GetxController {
+  late String courseId;
   var courseDetailModel = Rxn<CourseDetailModel>();
   var courseDetailData = Rxn<CourseDetailData>();
   var chapterModel = Rxn<ChapterModel>();
@@ -14,7 +17,10 @@ class CourseDetailController extends GetxController {
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
   var expandedChapters = <String, bool>{}.obs;
-  late String courseId;
+  var topicDetailModel = Rxn<TopicDetailModel>();
+  var topicDetailData = Rxn<TopicDetailData>();
+
+  var selectedContent = 'Chọn nội dung học để hiển thị'.obs;
 
   @override
   void onInit() {
@@ -22,6 +28,30 @@ class CourseDetailController extends GetxController {
     fetchCourseDetail();
     fetchChapter();
     super.onInit();
+  }
+
+  Future<void> fetchTopicContent(String topicId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('${newBaseApiUrl}/topics/${topicId}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final topicDetailModelBase = TopicDetailModel.fromJson(json.decode(response.body));
+        topicDetailModel.value = topicDetailModelBase;
+        topicDetailData.value = topicDetailModelBase.data;
+        final content = json.decode(response.body)['message'];
+        selectedContent.value = content;
+      } else {
+        throw Exception('Failed to fetch topic content');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw e;
+    }
   }
 
   Future<void> fetchTopic(String chapterId) async {
@@ -111,5 +141,11 @@ class CourseDetailController extends GetxController {
   void toggleChapterExpansion(String chapterId) {
     expandedChapters[chapterId] = !(expandedChapters[chapterId] ?? false);
     update();
+  }
+
+  void selectContent(String topicId) {
+    topicDetailModel.value = null;
+    topicDetailData.value = null;
+    fetchTopicContent(topicId);
   }
 }
