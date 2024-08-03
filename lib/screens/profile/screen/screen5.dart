@@ -26,13 +26,16 @@ class GameHistoryListScreen extends StatefulWidget {
 
 class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
   List<GameHistoryItem> gameHistoryItems = [];
+  List<GameHistoryItem> filteredGameHistoryItems = [];
   LoadingStatus loadingStatus = LoadingStatus.loading;
   String user = Get.find<AuthController>().user.value!.first.data.id;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchGameHistory();
+    searchController.addListener(_filterGameHistory);
   }
 
   Future<void> fetchGameHistory() async {
@@ -41,7 +44,7 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
     });
     try {
       final response = await http.get(
-        Uri.parse('https://vinhtc3-001-site1.ftempurl.com/api/v1/game-histories?ApplicationUserId=${user}'),
+        Uri.parse('https://vinhtc3-001-site1.ftempurl.com/api/v1/game-histories?ApplicationUserId=$user'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8',
           'ngrok-skip-browser-warning': 'true',
@@ -58,6 +61,7 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
             gameHistoryItems = gameHistoryResponse.items
                 .map((gameHistory) => GameHistoryItem.fromGameHistory(gameHistory))
                 .toList();
+            filteredGameHistoryItems = gameHistoryItems;
             loadingStatus = LoadingStatus.completed;
           });
         } else {
@@ -75,6 +79,21 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
       });
       print(e);
     }
+  }
+
+  void _filterGameHistory() {
+    final query = searchController.text.toLowerCase();
+    setState(() {
+      filteredGameHistoryItems = gameHistoryItems.where((item) {
+        return item.gameName.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,6 +122,7 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: searchController,
                       decoration: InputDecoration(
                         hintText: "Tìm kiếm",
                         prefixIcon: Icon(Icons.search),
@@ -126,9 +146,9 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
                       padding: EdgeInsets.zero,
-                      itemCount: gameHistoryItems.length,
+                      itemCount: filteredGameHistoryItems.length,
                       itemBuilder: (context, index) {
-                        return GameHistoryCard(gameHistoryItem: gameHistoryItems[index]);
+                        return GameHistoryCard(gameHistoryItem: filteredGameHistoryItems[index]);
                       },
                     ),
             ),
