@@ -159,8 +159,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                                         MediaQuery.of(context).size.width * 0.8,
                                     child: Column(
                                       children: [
-                                        CachedNetworkImage(
-                                          imageUrl:
+                                        Image.network(
                                           'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fhappy_farm%2Fhappy_farm_tutorial1.png?alt=media&token=cacc979b-d2bc-422d-bea9-bb0ae75cd7a3',
                                           width: MediaQuery.of(context)
                                                   .size
@@ -180,8 +179,7 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
                                         const SizedBox(
                                           height: 30,
                                         ),
-                                        CachedNetworkImage(
-                                          imageUrl:
+                                        Image.network(                              
                                           'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fhappy_farm%2Fhappy_farm_tutorial2.png?alt=media&token=191df3f0-a529-4bbc-b34c-221616bbcd9e',
                                           width: MediaQuery.of(context)
                                                   .size

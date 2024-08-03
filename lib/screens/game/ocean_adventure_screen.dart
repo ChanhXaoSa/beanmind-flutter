@@ -161,8 +161,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                                         MediaQuery.of(context).size.width * 0.8,
                                     child: Column(
                                       children: [
-                                        CachedNetworkImage(
-                                          imageUrl:
+                                        Image.network(
                                           'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Focean_adventure%2Focean_tutorial_1.png?alt=media&token=558d17d3-c341-44b2-9b5e-b75938bc6e49',
                                           width: MediaQuery.of(context)
                                                   .size
@@ -182,8 +181,7 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                                         const SizedBox(
                                           height: 30,
                                         ),
-                                        CachedNetworkImage(
-                                          imageUrl: 
+                                        Image.network(
                                           'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Focean_adventure%2Focean_tutorial_2.png?alt=media&token=d8a4ca58-e536-4028-8cd6-ced9d933c67f',
                                           width: MediaQuery.of(context)
                                                   .size

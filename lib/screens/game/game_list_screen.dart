@@ -6,7 +6,6 @@ import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:beanmind_flutter/widgets/common/progress_widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +15,9 @@ class GameListScreen extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController searchController = TextEditingController();
+    final RxString searchQuery = ''.obs;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.shouldReset.value) {
         controller.selectedGame.value = null;
@@ -31,15 +33,15 @@ class GameListScreen extends GetView<GameController> {
           child: Obx(() {
             return CustomAppBar(
               title: controller.selectedGame.value != null
-                  ? controller.getGameTitle(controller.selectedGame.value!)
+                  ? controller.games.firstWhere((game) => game['id'] == controller.selectedGame.value)['name']
                   : 'Thư viện trò chơi',
               leading: controller.selectedGame.value != null
                   ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  controller.selectedGame.value = null;
-                },
-              )
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        controller.selectedGame.value = null;
+                      },
+                    )
                   : null,
               showAudioButton: true,
             );
@@ -50,18 +52,58 @@ class GameListScreen extends GetView<GameController> {
         decoration: const BoxDecoration(color: Colors.white),
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: ProgressWidgets());
+            return const Center(child: LoadingWidgets());
           }
           if (controller.selectedGame.value != null) {
             return controller.buildGameWidget(controller.selectedGame.value!);
           }
-          return _buildGameGrid();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 12),
+                width: MediaQuery.of(context).size.width*0.3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Tìm kiếm trò chơi',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      searchQuery.value = value;
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Obx(() {
+                  final filteredGames = controller.games.where((game) {
+                    final gameName = game['name']?.toLowerCase() ?? '';
+                    final query = searchQuery.value.toLowerCase();
+                    return gameName.contains(query);
+                  }).toList();
+                  return _buildGameGrid(filteredGames);
+                }),
+              ),
+            ],
+          );
         }),
       ),
     );
   }
 
-  Widget _buildGameGrid() {
+  Widget _buildGameGrid(List<dynamic> games) {
     return GridView.builder(
       padding: const EdgeInsets.all(20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -70,9 +112,9 @@ class GameListScreen extends GetView<GameController> {
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
-      itemCount: controller.games.length,
+      itemCount: games.length,
       itemBuilder: (context, index) {
-        final game = controller.games[index];
+        final game = games[index];
         return GestureDetector(
           onTap: () {
             controller.isLoading.value = true;
