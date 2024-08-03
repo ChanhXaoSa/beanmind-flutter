@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';

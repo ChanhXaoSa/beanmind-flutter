@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class CourseLeaningScreen2 extends GetView<CourseLearningController> {
   const CourseLeaningScreen2({Key? key}) : super(key: key);
 
-  static const String routeName = '/course_learning2';
+  static const String routeName = '/course_learning2/course_id=:id';
 
   @override
   Widget build(BuildContext context) {

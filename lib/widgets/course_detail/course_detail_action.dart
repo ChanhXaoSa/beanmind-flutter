@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,27 +34,26 @@ class CourseDetailAction extends GetView<CourseDetailController> {
             CrossAxisAlignment.start,
             children: [
               Container(
-                margin:
-                const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3DCBB1),
-                    borderRadius:
-                    BorderRadius.circular(18),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.toNamed(CourseLeaningScreen2.routeName.replaceFirst(':id', courseDetailData.id!));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF3DCBB1),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                   ),
-                  child: Container(
-                    width: 338,
-                    padding: const EdgeInsets.fromLTRB(
-                        0, 12, 5, 12),
-                    child: Center(
-                      child: Text(
-                        'Học ngay',
-                        style: kDetailsTS.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          height: 1.3,
-                          color: const Color(0xFFFFFFFF),
-                        ),
+                  child: Center(
+                    child: Text(
+                      'Học ngay',
+                      style: kDetailsTS.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        height: 1.3,
+                        color: const Color(0xFFFFFFFF),
                       ),
                     ),
                   ),
