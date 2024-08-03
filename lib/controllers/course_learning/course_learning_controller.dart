@@ -17,7 +17,7 @@ class CourseLearningController extends GetxController {
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
   var expandedChapters = <String, bool>{}.obs;
-  var topicDetailModel = Rxn<TopicDetailData>();
+  var topicDetailModel = Rxn<TopicDetailModel>();
   var topicDetailData = Rxn<TopicDetailData>();
 
   var selectedContent = 'Chọn nội dung học để hiển thị'.obs;
@@ -40,6 +40,9 @@ class CourseLearningController extends GetxController {
           }
       );
       if (response.statusCode == 200) {
+        final topicDetailModelBase = TopicDetailModel.fromJson(json.decode(response.body));
+        topicDetailModel.value = topicDetailModelBase;
+        topicDetailData.value = topicDetailModelBase.data;
         final content = json.decode(response.body)['message'];
         selectedContent.value = content;
       } else {
