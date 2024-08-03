@@ -1,4 +1,6 @@
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
+import 'package:beanmind_flutter/models/chapter_model.dart';
+import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
@@ -25,26 +27,31 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
                 children: [
                   Obx(() {
                     return ExpansionPanelList(
-                      expandedHeaderPadding: EdgeInsets.all(0),
                       expansionCallback: (int index, bool isExpanded) {
-                        controller.togglePanel(index);
+                        controller.toggleChapterExpansion(controller.chapterList[index].id!);
                       },
-                      children: controller.sections.map<ExpansionPanel>((Section section) {
+                      children: controller.chapterList.map<ExpansionPanel>((ChapterItem chapter) {
                         return ExpansionPanel(
                           headerBuilder: (BuildContext context, bool isExpanded) {
                             return ListTile(
-                              title: Text(section.title),
+                              title: Text(chapter.title!),
                             );
                           },
-                          body: Column(
-                            children: section.topics.map<ListTile>((String topic) {
-                              return ListTile(
-                                title: Text(topic),
-                                onTap: () => controller.selectContent('$topic Content'),
-                              );
-                            }).toList(),
+                          body: Obx(() {
+                            final topics = controller.topicListModel.where((topic) => topic.chapterId == chapter.id).toList();
+                            return Column(
+                              children: topics.map<Widget>((TopicItem topic) {
+                                return ListTile(
+                                  title: Text(topic.title!),
+                                  onTap: () =>
+                                      controller.selectContent(
+                                          topic.id!),
+                                );
+                              }).toList(),
+                            );
+                          }
                           ),
-                          isExpanded: section.isExpanded,
+                          isExpanded: controller.expandedChapters[chapter.id] ?? false,
                         );
                       }).toList(),
                     );
@@ -69,5 +76,4 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
       ),
     );
   }
-  
 }

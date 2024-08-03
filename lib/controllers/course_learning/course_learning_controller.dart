@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
+import 'package:beanmind_flutter/models/topic_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:get/get.dart';
@@ -16,23 +17,38 @@ class CourseLearningController extends GetxController {
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
   var expandedChapters = <String, bool>{}.obs;
+  var topicDetailModel = Rxn<TopicDetailData>();
+  var topicDetailData = Rxn<TopicDetailData>();
 
-  var selectedContent = 'Select a topic to see the content'.obs;
-  var sections = <Section>[
-    Section(
-      title: 'Section 1',
-      topics: ['Lesson 1', 'Quiz 1'],
-    ),
-    Section(
-      title: 'Section 2',
-      topics: ['Lesson 2', 'Quiz 2'],
-    ),
-  ].obs;
+  var selectedContent = 'Chọn nội dung học để hiển thị'.obs;
 
   @override
   void onInit() {
     courseId = Get.parameters['id']!;
+    fetchCourseDetail();
+    fetchChapter();
     super.onInit();
+  }
+
+  Future<void> fetchTopicContent(String topicId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('${newBaseApiUrl}/topics/${topicId}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final content = json.decode(response.body)['message'];
+        selectedContent.value = content;
+      } else {
+        throw Exception('Failed to fetch topic content');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw e;
+    }
   }
 
   Future<void> fetchTopic(String chapterId) async {
@@ -124,24 +140,7 @@ class CourseLearningController extends GetxController {
     update();
   }
 
-  void selectContent(String content) {
-    selectedContent.value = content;
+  void selectContent(String topicId) {
+    fetchTopicContent(topicId);
   }
-
-  void togglePanel(int index) {
-    sections[index].isExpanded = !sections[index].isExpanded;
-    sections.refresh();
-  }
-}
-
-class Section {
-  final String title;
-  final List<String> topics;
-  bool isExpanded;
-
-  Section({
-    required this.title,
-    required this.topics,
-    this.isExpanded = false,
-  });
 }
