@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:beanmind_flutter/models/worksheet_detail_model.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/firebase/firebase_configs.dart';
@@ -7,19 +11,25 @@ import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
 import 'package:beanmind_flutter/widgets/dialogs/dialogs.dart';
+import 'package:http/http.dart' as http;
 
 import 'quiz_papers_controller.dart';
 
 class QuizController extends GetxController {
   final loadingStatus = LoadingStatus.loading.obs;
+  final loadingStatusApi = LoadingStatus.loading.obs;
   final allQuestions = <Question>[];
+  final allQuestionsApi = <QuestionContent>[];
   late QuizPaperModel quizPaperModel;
+  var worksheetDetailModel = Rxn<WorksheetDetailModel>();
   Timer? _timer;
   int remainSeconds = 1;
   final time = '00:00'.obs;
 
   @override
   void onReady() {
+    // final _quizData = Get.arguments as WorksheetDetailModel;
+    // loadDataApi(_quizData);
     final _quizePaprer = Get.arguments as QuizPaperModel;
     loadData(_quizePaprer);
     super.onReady();
@@ -53,10 +63,55 @@ class QuizController extends GetxController {
         }
       },
     );
-    
   }
 
- 
+  Future<void> fetchWorksheetDetail() async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/worksheets/89b67173-669d-443f-ba87-79b8791c6238'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final worksheetDetailModelBase = WorksheetDetailModel.fromJson(json.decode(response.body));
+        worksheetDetailModel.value = worksheetDetailModelBase;
+        if (kDebugMode) {
+          print(worksheetDetailModel.value.toString());
+        }
+      } else {
+        throw Exception('Failed to fetch course');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> loadDataApi(WorksheetDetailModel quizData) async {
+    worksheetDetailModel.value = quizData;
+    loadingStatusApi.value = LoadingStatus.loading;
+    try {
+      // Assuming the API data is already in WorksheetDetailModel format
+      worksheetDetailModel.value = quizData;
+
+      if (worksheetDetailModel.value?.data?.worksheetQuestions != null) {
+        allQuestionsApi.assignAll(worksheetDetailModel.value!.data!.worksheetQuestions!.map((q) => q.question!).toList());
+        currentQuestion.value = allQuestions[0];
+        _startTimer(600);
+        loadingStatusApi.value = LoadingStatus.completed;
+      } else {
+        loadingStatusApi.value = LoadingStatus.noReult;
+      }
+    } on Exception catch (e) {
+      AppLogger.e(e);
+      loadingStatusApi.value = LoadingStatus.error;
+    }
+  }
+
   void loadData(QuizPaperModel quizPaper) async {
     quizPaperModel = quizPaper;
     loadingStatus.value = LoadingStatus.loading;

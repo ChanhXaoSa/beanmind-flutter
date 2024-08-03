@@ -90,7 +90,7 @@ class WorksheetDetailData {
 
 class WorksheetQuestion {
   String? questionId;
-  Question? question;
+  QuestionContent? question;
   String? worksheetId;
   Worksheet? worksheet;
   String? id;
@@ -107,7 +107,7 @@ class WorksheetQuestion {
 
   factory WorksheetQuestion.fromJson(Map<String, dynamic> json) => WorksheetQuestion(
     questionId: json["questionId"],
-    question: json["question"] == null ? null : Question.fromJson(json["question"]),
+    question: json["question"] == null ? null : QuestionContent.fromJson(json["question"]),
     worksheetId: json["worksheetId"],
     worksheet: json["worksheet"] == null ? null : Worksheet.fromJson(json["worksheet"]),
     id: json["id"],
@@ -124,7 +124,7 @@ class WorksheetQuestion {
   };
 }
 
-class Question {
+class QuestionContent {
   String? content;
   dynamic imageUrl;
   String? topicId;
@@ -135,7 +135,7 @@ class Question {
   String? id;
   bool? isDeleted;
 
-  Question({
+  QuestionContent({
     this.content,
     this.imageUrl,
     this.topicId,
@@ -147,7 +147,7 @@ class Question {
     this.isDeleted,
   });
 
-  factory Question.fromJson(Map<String, dynamic> json) => Question(
+  factory QuestionContent.fromJson(Map<String, dynamic> json) => QuestionContent(
     content: json["content"],
     imageUrl: json["imageUrl"],
     topicId: json["topicId"],
