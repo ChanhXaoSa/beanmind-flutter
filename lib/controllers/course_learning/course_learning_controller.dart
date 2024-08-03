@@ -144,6 +144,8 @@ class CourseLearningController extends GetxController {
   }
 
   void selectContent(String topicId) {
+    topicDetailModel.value = null;
+    topicDetailData.value = null;
     fetchTopicContent(topicId);
   }
 }
