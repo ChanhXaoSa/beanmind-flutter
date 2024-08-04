@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import '../../models/game_model.dart';
 
@@ -625,27 +626,35 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   }
 
   void delay3Seconds() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool showGuide = prefs.getBool('showGuideGameShopping') ?? true;
+
       setState(() {
-        Future.delayed(Duration.zero, () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Hướng dẫn'),
-                content: Text(
-                  'Nội dung hướng dẫn người chơi...',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
+        if (showGuide) {
+          Future.delayed(Duration.zero, () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Hướng dẫn'),
+                  content: const Text(
+                    'Nội dung hướng dẫn người chơi...',
                   ),
-                ],
-              );
-            },
-          );
-        });
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        prefs.setBool('showGuideGameShopping', false);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          });
+        }
         _timeRecord.startTimer();
       });
     });
