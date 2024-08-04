@@ -78,7 +78,7 @@ class HomepageCourseCard extends GetView<HomeController> {
           children: [
             Stack(
               children: [
-                Image.asset('assets/images/background/background.png',
+                Image.network(course.imageURL!,
                     fit: BoxFit.cover),
                 Positioned(
                   top: 8,
