@@ -26,6 +26,10 @@ class CourseDetailAction extends GetView<CourseDetailController> {
             ),
           ],
         ),
+        constraints: const BoxConstraints(
+          minHeight: 450,
+          minWidth: 400,
+        ),
         child: Container(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 46),
           child: Column(
@@ -41,9 +45,9 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF3DCBB1),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.all(20),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Center(
