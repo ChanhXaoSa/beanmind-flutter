@@ -3,6 +3,7 @@ import 'package:beanmind_flutter/controllers/course_learning/course_learning_con
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
+import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
@@ -82,12 +83,19 @@ class AppRoutes {
             Get.put(CourseDetailController());
           }),
         ),
-    GetPage(
-      name: CourseLeaningScreen2.routeName,
-      page: () => const CourseLeaningScreen2(),
-      binding: BindingsBuilder(() {
-        Get.put(CourseLearningController());
-      }),
-    ),
+        GetPage(
+          name: CourseLeaningScreen2.routeName,
+          page: () => const CourseLeaningScreen2(),
+          binding: BindingsBuilder(() {
+            Get.put(CourseLearningController());
+          }),
+        ),
+        GetPage(
+          name: QuizAttemptScreen.routeName,
+          page: () => const QuizAttemptScreen(),
+          binding: BindingsBuilder(() {
+            Get.put(QuizController());
+          }),
+        ),
       ];
 }
