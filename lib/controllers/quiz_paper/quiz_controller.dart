@@ -19,7 +19,7 @@ class QuizController extends GetxController {
   final loadingStatus = LoadingStatus.loading.obs;
   final loadingStatusApi = LoadingStatus.loading.obs;
   final allQuestions = <Question>[];
-  final allQuestionsApi = <QuestionContent>[];
+  final allQuestionsApi = <WorksheetQuestion>[];
   late QuizPaperModel quizPaperModel;
   var worksheetDetailModel = Rxn<WorksheetDetailModel>();
   Timer? _timer;
@@ -30,8 +30,9 @@ class QuizController extends GetxController {
   void onReady() {
     // final _quizData = Get.arguments as WorksheetDetailModel;
     // loadDataApi(_quizData);
-    final _quizePaprer = Get.arguments as QuizPaperModel;
-    loadData(_quizePaprer);
+    // final _quizePaprer = Get.arguments as QuizPaperModel;
+    // loadData(_quizePaprer);
+    fetchWorksheetDetail();
     super.onReady();
   }
 
@@ -77,6 +78,7 @@ class QuizController extends GetxController {
       if (response.statusCode == 200) {
         final worksheetDetailModelBase = WorksheetDetailModel.fromJson(json.decode(response.body));
         worksheetDetailModel.value = worksheetDetailModelBase;
+        loadDataApi(worksheetDetailModel.value!);
         if (kDebugMode) {
           print(worksheetDetailModel.value.toString());
         }
@@ -95,12 +97,13 @@ class QuizController extends GetxController {
     worksheetDetailModel.value = quizData;
     loadingStatusApi.value = LoadingStatus.loading;
     try {
-      // Assuming the API data is already in WorksheetDetailModel format
       worksheetDetailModel.value = quizData;
 
       if (worksheetDetailModel.value?.data?.worksheetQuestions != null) {
-        allQuestionsApi.assignAll(worksheetDetailModel.value!.data!.worksheetQuestions!.map((q) => q.question!).toList());
-        currentQuestion.value = allQuestions[0];
+        allQuestionsApi.assignAll(worksheetDetailModel.value!.data!.worksheetQuestions!);
+        currentQuestionApi.value = allQuestionsApi[0];
+        print('${currentQuestionApi.value!.question!.content}');
+        print('${allQuestionsApi.length}');
         _startTimer(600);
         loadingStatusApi.value = LoadingStatus.completed;
       } else {
@@ -160,11 +163,15 @@ class QuizController extends GetxController {
   }
 
   Rxn<Question> currentQuestion = Rxn<Question>();
+  Rxn<WorksheetQuestion> currentQuestionApi = Rxn<WorksheetQuestion>();
   final questionIndex = 0.obs; //_curruntQuestionIndex
+  final questionIndexApi = 0.obs; //_curruntQuestionIndex
 
   bool get isFirstQuestion => questionIndex.value > 0;
+  bool get isFirstQuestionApi => questionIndexApi.value > 0;
 
   bool get islastQuestion => questionIndex.value >= allQuestions.length - 1;
+  bool get islastQuestionApi => questionIndexApi.value >= allQuestionsApi.length - 1;
 
   void nextQuestion() {
     if (questionIndex.value >= allQuestions.length - 1) return;
@@ -172,12 +179,28 @@ class QuizController extends GetxController {
     currentQuestion.value = allQuestions[questionIndex.value];
   }
 
+  void nextQuestionApi() {
+    if (questionIndexApi.value >= allQuestionsApi.length - 1) return;
+    questionIndexApi.value++;
+    currentQuestionApi.value = allQuestionsApi[questionIndexApi.value];
+    update(['answers_list']);
+  }
+
+
   void prevQuestion() {
     if (questionIndex.value <= 0){
      return;
     } 
     questionIndex.value--;
     currentQuestion.value = allQuestions[questionIndex.value];
+  }
+
+  void prevQuestionApi() {
+    if (questionIndexApi.value <= 0){
+      return;
+    }
+    questionIndexApi.value--;
+    currentQuestionApi.value = allQuestionsApi[questionIndexApi.value];
   }
   
 
@@ -189,8 +212,21 @@ class QuizController extends GetxController {
     }
   }
 
+  void jumpToQuestionApi(int index, {bool isGoBack = true}){
+    questionIndexApi.value = index;
+    currentQuestionApi.value = allQuestionsApi[index];
+    if(isGoBack) {
+      Get.back();
+    }
+  }
+
   void selectAnswer(String? answer) {
     currentQuestion.value!.selectedAnswer = answer;
+    update(['answers_list', 'answers_review_list']);
+  }
+
+  void selectAnswerApi(QuestionAnswer? answer) {
+    currentQuestionApi.value!.question!.selectedAnswer = answer;
     update(['answers_list', 'answers_review_list']);
   }
 
@@ -199,13 +235,27 @@ class QuizController extends GetxController {
     return '$answeredQuestionCount out of ${allQuestions.length} answered';
   }
 
+  String get completedQuizApi{
+    final answeredQuestionCount = allQuestionsApi.where((question) => question.question!.selectedAnswer != null).toList().length;
+    return '$answeredQuestionCount out of ${allQuestionsApi.length} answered';
+  }
+
   void complete(){
      _timer!.cancel();
      Get.offAndToNamed(Resultcreen.routeName);
   }
 
+  void completeApi(){
+    _timer!.cancel();
+    Get.offAndToNamed(Resultcreen.routeName);
+  }
+
   void tryAgain(){
      Get.find<QuizPaperController>().navigatoQuestions(paper: quizPaperModel, isTryAgain: true);
+  }
+
+  void tryAgainApi(){
+    Get.find<QuizPaperController>().navigatoQuestions(paper: quizPaperModel, isTryAgain: true);
   }
 
   void navigateToHome(){

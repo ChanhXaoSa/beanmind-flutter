@@ -134,6 +134,7 @@ class QuestionContent {
   List<QuestionAnswer>? questionAnswers;
   String? id;
   bool? isDeleted;
+  QuestionAnswer? selectedAnswer;
 
   QuestionContent({
     this.content,
@@ -145,6 +146,7 @@ class QuestionContent {
     this.questionAnswers,
     this.id,
     this.isDeleted,
+    this.selectedAnswer,
   });
 
   factory QuestionContent.fromJson(Map<String, dynamic> json) => QuestionContent(
