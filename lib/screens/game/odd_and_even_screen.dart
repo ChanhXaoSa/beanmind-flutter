@@ -61,8 +61,8 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
       ..initialize().then((value) => {setState(() {})});
     _gameOddAndEven = GameOddAndEven();
-    delay3Seconds();
     generateQuestion(widget.level);
+    delay3Seconds();
   }
 
   @override
@@ -694,9 +694,26 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
   Future<void> delay3Seconds() async {
     await Future.delayed(Duration(seconds: 3));
     setState(() {
-      setState(() {
-        _timeRecord.startTimer();
+      Future.delayed(Duration.zero, () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Hướng dẫn'),
+              content: Text(
+                'Nội dung hướng dẫn người chơi...',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       });
+      _timeRecord.startTimer();
     });
   }
 }

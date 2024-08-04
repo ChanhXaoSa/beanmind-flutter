@@ -730,9 +730,70 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
   Future<void> delay3Seconds() async {
     await Future.delayed(Duration(seconds: 3));
     setState(() {
-      setState(() {
-        _timeRecord.startTimer();
+      Future.delayed(Duration.zero, () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Hướng dẫn'),
+              content: SingleChildScrollView(
+                child: Container(
+                  width:
+                  MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    children: [
+                      Image.network(
+                        'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Focean_adventure%2Focean_tutorial_1.png?alt=media&token=558d17d3-c341-44b2-9b5e-b75938bc6e49',
+                        width: MediaQuery.of(context)
+                            .size
+                            .width *
+                            0.5,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context)
+                            .size
+                            .width *
+                            0.7,
+                        child: const Text(
+                          'Tên của các loại động vật hiển thị trên màn hình',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Image.network(
+                        'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Focean_adventure%2Focean_tutorial_2.png?alt=media&token=d8a4ca58-e536-4028-8cd6-ced9d933c67f',
+                        width: MediaQuery.of(context)
+                            .size
+                            .width *
+                            0.7,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context)
+                            .size
+                            .width *
+                            0.7,
+                        child: const Text(
+                          'Bạn sẽ đếm số lượng các động vật hiển thị trên màn hình, đọc câu hỏi đang hiển thị và nhập kết quả',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       });
+    _timeRecord.startTimer();
     });
   }
 }

@@ -627,6 +627,25 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
   void delay3Seconds() {
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
+        Future.delayed(Duration.zero, () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Hướng dẫn'),
+                content: Text(
+                  'Nội dung hướng dẫn người chơi...',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        });
         _timeRecord.startTimer();
       });
     });
