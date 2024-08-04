@@ -88,6 +88,7 @@ class AppRoutes {
           page: () => const CourseLeaningScreen2(),
           binding: BindingsBuilder(() {
             Get.put(CourseLearningController());
+            Get.put(AppBarController());
           }),
         ),
         GetPage(
