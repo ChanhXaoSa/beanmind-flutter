@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import '../../widgets/game/widget/game_happy_farm/happy_farm.dart';
 
@@ -753,10 +754,66 @@ class _HappyFarmScreenState extends State<HappyFarmScreen> {
 
   Future<void> delay3Seconds() async {
     await Future.delayed(Duration(seconds: 3));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool showGuide = prefs.getBool('showGuideGameHappyFarm') ?? true;
+
     setState(() {
-      setState(() {
-        _timeRecord.startTimer();
-      });
+      if (showGuide) {
+        Future.delayed(Duration.zero, () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Hướng dẫn'),
+                content: SingleChildScrollView(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Column(
+                      children: [
+                        Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fhappy_farm%2Fhappy_farm_tutorial1.png?alt=media&token=cacc979b-d2bc-422d-bea9-bb0ae75cd7a3',
+                          width: MediaQuery.of(context).size.width * 0.5,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: const Text(
+                            'Tên của các loại động vật hiển thị trên màn hình',
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fhappy_farm%2Fhappy_farm_tutorial2.png?alt=media&token=191df3f0-a529-4bbc-b34c-221616bbcd9e',
+                          width: MediaQuery.of(context).size.width * 0.7,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: const Text(
+                            'Bạn sẽ đếm số lượng các động vật hiển thị trên màn hình, đọc câu hỏi đang hiển thị và nhập kết quả',
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      prefs.setBool('showGuideGameHappyFarm', false);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        });
+      }
+      _timeRecord.startTimer();
     });
   }
 }

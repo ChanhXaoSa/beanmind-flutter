@@ -74,6 +74,7 @@ class Data {
 
 class Item {
   String? title;
+  String? imageURL;
   String? description;
   int? totalSlot;
   String? subjectId;
@@ -84,6 +85,7 @@ class Item {
 
   Item({
     this.title,
+    this.imageURL,
     this.description,
     this.totalSlot,
     this.subjectId,
@@ -95,6 +97,7 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     title: json["title"],
+    imageURL: json["imageURL"],
     description: json["description"],
     totalSlot: json["totalSlot"],
     subjectId: json["subjectId"],
@@ -106,6 +109,7 @@ class Item {
 
   Map<String, dynamic> toJson() => {
     "title": title,
+    "imageURL": imageURL,
     "description": description,
     "totalSlot": totalSlot,
     "subjectId": subjectId,

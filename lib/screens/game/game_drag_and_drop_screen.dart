@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 class MathDragAndDropScreen extends StatefulWidget {
@@ -71,11 +72,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     _splitPanels = SplitPanels(level: widget.level);
     _splitPanelsMobie = SplitPanelsMobie(level: widget.level);
     generateSortingQuestion();
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _timeRecord.startTimer();
-      });
-    });
+    delay3Seconds();
   }
 
   @override
@@ -654,6 +651,41 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
         background =
             'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/background_images%2Fbackground_math_sort_1.png?alt=media&token=39e27f13-3fc8-42b8-9365-0b635c9ee860';
       }
+    });
+  }
+
+  void delay3Seconds() {
+    Future.delayed(const Duration(seconds: 3), () async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool showGuide = prefs.getBool('showGuideGameDragAndDrop') ?? true;
+
+      setState(() {
+        if (showGuide) {
+          Future.delayed(Duration.zero, () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Hướng dẫn'),
+                  content: const Text(
+                    'Nội dung hướng dẫn người chơi...',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        prefs.setBool('showGuideGameDragAndDrop', false);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          });
+        }
+        _timeRecord.startTimer();
+      });
     });
   }
 }
