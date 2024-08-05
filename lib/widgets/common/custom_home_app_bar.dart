@@ -20,7 +20,7 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
           child: Row(
             children: [
               Image.asset(
-                'images/logo_beanmind.png', // Replace with your logo URL
+                'images/logo_beanmind.png',
                 height: 40.0,
               ),
               const SizedBox(width: 10.0),

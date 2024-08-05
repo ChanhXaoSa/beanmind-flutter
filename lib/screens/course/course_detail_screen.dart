@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
+import 'package:beanmind_flutter/widgets/common/custom_home_app_bar.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_action.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_chapter_and_topic.dart';
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_information.dart';
@@ -13,9 +13,7 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Chi tiết khóa học',
-      ),
+      appBar: const CustomHomeAppBar(),
       body: SingleChildScrollView(
         child: Container(
           decoration: const BoxDecoration(
