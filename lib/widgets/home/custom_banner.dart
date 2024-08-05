@@ -1,4 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart' as carousel;
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 
 class CustomBanner extends StatefulWidget {
@@ -10,16 +11,16 @@ class CustomBanner extends StatefulWidget {
 
 class _CustomBannerState extends State<CustomBanner> {
   int _current = 0;
-  final carousel.CarouselController _controller = carousel.CarouselController();
+  final CarouselController _controller = CarouselController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        carousel.CarouselSlider(
+        CarouselSlider(
           items: imageSliders,
           carouselController: _controller,
-          options: carousel.CarouselOptions(
+          options: CarouselOptions(
               autoPlay: true,
               enlargeCenterPage: true,
               aspectRatio: 2.0,
