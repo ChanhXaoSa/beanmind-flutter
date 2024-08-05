@@ -16,7 +16,7 @@ class FeaturedCourses extends GetView<HomeController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Các khóa học nổi bật',
+              'Nổi bật',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             TextButton(

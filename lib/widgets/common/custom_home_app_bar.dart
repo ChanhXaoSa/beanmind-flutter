@@ -23,17 +23,23 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
               if(UIParameters.isMobile(context)) {
                 return Row(
                   children: [
-                    Image.asset(
-                      'images/logo_beanmind.png',
-                      height: 40.0,
+                    GestureDetector(
+                      onTap: () => controller.navigateToHome(),
+                      child: Image.asset(
+                        'images/logo_beanmind.png',
+                        height: 40.0,
+                      ),
                     ),
                     const SizedBox(width: 10.0),
-                    const Text(
-                      'Beanmind',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () => controller.navigateToHome(),
+                      child: const Text(
+                        'Beanmind',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -81,17 +87,29 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
               } else if(UIParameters.isDesktop(context)) {
                 return Row(
                   children: [
-                    Image.asset(
-                      'images/logo_beanmind.png',
-                      height: 40.0,
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => controller.navigateToHome(),
+                        child: Image.asset(
+                          'images/logo_beanmind.png',
+                          height: 40.0,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 10.0),
-                    const Text(
-                      'Beanmind',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => controller.navigateToHome(),
+                        child: const Text(
+                          'Beanmind',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -111,8 +129,6 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                       ),
                     ),
                     const Spacer(),
-                    TextButton(onPressed: () => controller.navigateToHome(), child: const Text('Trang chủ')),
-                    const SizedBox(width: 10.0),
                     TextButton(onPressed: () => controller.navigateToCourseLeaning(), child: const Text('Danh sách khóa học')),
                     const SizedBox(width: 10.0),
                     TextButton(onPressed: () => controller.navigateToGameList(), child: const Text('Danh sách game')),
@@ -154,17 +170,23 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
               } else {
                 return Row(
                   children: [
-                    Image.asset(
-                      'images/logo_beanmind.png',
-                      height: 40.0,
+                    GestureDetector(
+                      onTap: () => controller.navigateToHome(),
+                      child: Image.asset(
+                        'images/logo_beanmind.png',
+                        height: 40.0,
+                      ),
                     ),
                     const SizedBox(width: 10.0),
-                    const Text(
-                      'Beanmind',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () => controller.navigateToHome(),
+                      child: const Text(
+                        'Beanmind',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const Spacer(),
