@@ -48,38 +48,34 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                         children: [
                           Container(
                             margin: const EdgeInsets.fromLTRB(0, 0, 1, 24),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      image: const DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage(
-                                          'images/background/background.png',
-                                        ),
-                                      ),
-                                    ),
-                                    width: 793,
-                                    height: 449,
+                            child: Container(
+                              margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    '${controller.courseDetailData.value?.imageUrl}',
                                   ),
                                 ),
-                                const CourseDetailAction(),
-                              ],
+                              ),
+                              width: double.infinity,
+                              height: 449,
                             ),
                           ),
-                          const CourseDetailChapterAndTopic(),
-                          const Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          const Row(
                             children: [
-                              CourseDetailInformation(),
+                              Expanded(
+                                flex: 8,
+                                child: CourseDetailInformation(),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: CourseDetailAction(),
+                              ),
                             ],
                           ),
+                          const CourseDetailChapterAndTopic(),
                         ],
                       ),
                     ],
