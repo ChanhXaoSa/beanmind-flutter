@@ -112,6 +112,7 @@ flutter:
     - assets/images/game_tutorial/happy_farm/
 
     - assets/images/background/
+    - assets/images/banner/
     - assets/images/game_thumbnail/
     - assets/images/item_store/food/
     

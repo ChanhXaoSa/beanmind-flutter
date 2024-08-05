@@ -79,7 +79,7 @@ class HomepageCourseCard extends GetView<HomeController> {
             Stack(
               children: [
                 Image.network(course.imageURL!,
-                    fit: BoxFit.cover),
+                    fit: BoxFit.cover, height: 200,),
                 Positioned(
                   top: 8,
                   left: 8,
