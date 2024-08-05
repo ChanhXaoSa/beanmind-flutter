@@ -46,28 +46,44 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 0, 1, 24),
-                            child: Container(
-                              margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    '${controller.courseDetailData.value?.imageUrl}',
+                          Obx(() {
+                            if (controller.courseDetailData.value == null) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              return Container(
+                                margin: const EdgeInsets.fromLTRB(0, 0, 1, 24),
+                                child: Container(
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  width: double.infinity,
+                                  height: 449,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: FadeInImage.assetNetwork(
+                                      placeholder: 'assets/images/background/background.png',
+                                      image: '${controller.courseDetailData.value?.imageUrl}',
+                                      fit: BoxFit.cover,
+                                      imageErrorBuilder: (context, error, stackTrace) {
+                                        return Image.asset(
+                                          'assets/images/background/background.png',
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                              width: double.infinity,
-                              height: 449,
-                            ),
-                          ),
+                              );
+                            }
+                          }),
                           const Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                flex: 8,
+                                flex: 7,
                                 child: Column(
                                   children: [
                                     CourseDetailInformation(),
@@ -76,7 +92,7 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                                 ),
                               ),
                               Expanded(
-                                flex: 2,
+                                flex: 3,
                                 child: CourseDetailAction(),
                               ),
                             ],
