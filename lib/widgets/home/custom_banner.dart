@@ -1,34 +1,34 @@
-import 'package:beanmind_flutter/widgets/common/circle_button.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class CustomBanner extends StatefulWidget {
+  const CustomBanner({super.key});
+
   @override
   _CustomBannerState createState() => _CustomBannerState();
 }
 
 class _CustomBannerState extends State<CustomBanner> {
   int _current = 0;
-  CarouselController _controller = CarouselController();
+  final CarouselController _controller = CarouselController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: CarouselSlider(
-            items: imageSliders,
-            carouselController: _controller,
-            options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                }),
-          ),
+        CarouselSlider(
+          items: imageSliders,
+          carouselController: _controller,
+          options: CarouselOptions(
+              autoPlay: true,
+              enlargeCenterPage: true,
+              aspectRatio: 2.0,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current = index;
+                });
+              }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +38,7 @@ class _CustomBannerState extends State<CustomBanner> {
               child: Container(
                 width: 12.0,
                 height: 12.0,
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: (Theme.of(context).brightness == Brightness.dark
@@ -63,41 +63,39 @@ final List<String> imgList = [
 
 final List<Widget> imageSliders = imgList
     .map((item) => Container(
-  child: Container(
-    margin: EdgeInsets.all(5.0),
-    child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        child: Stack(
-          children: <Widget>[
-            Image.asset(item, fit: BoxFit.cover, width: 1000.0),
-            // Positioned(
-            //   bottom: 0.0,
-            //   left: 0.0,
-            //   right: 0.0,
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       gradient: LinearGradient(
-            //         colors: [
-            //           Color.fromARGB(200, 0, 0, 0),
-            //           Color.fromARGB(0, 0, 0, 0)
-            //         ],
-            //         begin: Alignment.bottomCenter,
-            //         end: Alignment.topCenter,
-            //       ),
-            //     ),
-            //     padding: EdgeInsets.symmetric(
-            //         vertical: 10.0, horizontal: 20.0),
-            //     child: Text(
-            //       'No. ${imgList.indexOf(item)} image',
-            //       style: TextStyle(
-            //         color: Colors.white,
-            //         fontSize: 20.0,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-          ],
-        )),
-  ),
-)).toList();
+      margin: const EdgeInsets.all(5.0),
+      child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          child: Stack(
+            children: <Widget>[
+              Image.asset(item, fit: BoxFit.cover, width: 1000.0),
+              // Positioned(
+              //   bottom: 0.0,
+              //   left: 0.0,
+              //   right: 0.0,
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       gradient: LinearGradient(
+              //         colors: [
+              //           Color.fromARGB(200, 0, 0, 0),
+              //           Color.fromARGB(0, 0, 0, 0)
+              //         ],
+              //         begin: Alignment.bottomCenter,
+              //         end: Alignment.topCenter,
+              //       ),
+              //     ),
+              //     padding: EdgeInsets.symmetric(
+              //         vertical: 10.0, horizontal: 20.0),
+              //     child: Text(
+              //       'No. ${imgList.indexOf(item)} image',
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //         fontSize: 20.0,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          )),
+    )).toList();
