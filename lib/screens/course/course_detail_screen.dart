@@ -64,10 +64,16 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                             ),
                           ),
                           const Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 flex: 8,
-                                child: CourseDetailInformation(),
+                                child: Column(
+                                  children: [
+                                    CourseDetailInformation(),
+                                    const CourseDetailChapterAndTopic(),
+                                  ],
+                                ),
                               ),
                               Expanded(
                                 flex: 2,
@@ -75,7 +81,6 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                               ),
                             ],
                           ),
-                          const CourseDetailChapterAndTopic(),
                         ],
                       ),
                     ],
