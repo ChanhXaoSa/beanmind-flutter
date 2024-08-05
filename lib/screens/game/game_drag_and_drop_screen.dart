@@ -422,37 +422,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                     SizedBox(height: 16),
                     Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
-                    if (showVideo)
-                      Center(
-                        child: _videoPlayerController.value.isInitialized
-                            ? AspectRatio(
-                                aspectRatio:
-                                    _videoPlayerController.value.aspectRatio,
-                                child: VideoPlayer(_videoPlayerController),
-                              )
-                            : Container(),
-                      )
-                    else
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                    if (showVideo) SizedBox(height: 16),
-                    if (showVideo)
-                      FloatingActionButton(
-                        onPressed: () {
-                          setState(() {
-                            _videoPlayerController.value.isPlaying
-                                ? _videoPlayerController.pause()
-                                : _videoPlayerController.play();
-                          });
-                        },
-                        child: Icon(_videoPlayerController.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow),
-                      ),
                     if (showNextQuestion) SizedBox(height: 16),
                     if (showNextQuestion)
                       GestureDetector(
