@@ -20,6 +20,7 @@ class QuizAttemptScreen extends GetView<QuizController> {
       child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: CustomAppBar(
+            quizAppBar: true,
             leading: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Obx(
@@ -35,7 +36,7 @@ class QuizAttemptScreen extends GetView<QuizController> {
             ),
             showActionIcon: true,
             titleWidget: Obx(() => Text(
-              'Q. ${(controller.questionIndexApi.value + 1).toString().padLeft(2, '0')}',
+              'Câu hỏi thứ ${(controller.questionIndexApi.value + 1).toString().padLeft(2, '0')}',
               style: kAppBarTS,
             )),
           ),
@@ -159,8 +160,8 @@ class QuizAttemptScreen extends GetView<QuizController> {
                                             : controller.nextQuestionApi();
                                       },
                                       title: controller.islastQuestionApi
-                                          ? 'Complete'
-                                          : 'Next',
+                                          ? 'Nộp bài'
+                                          : 'Câu tiếp theo',
                                     ),
                                   ),
                                 ),

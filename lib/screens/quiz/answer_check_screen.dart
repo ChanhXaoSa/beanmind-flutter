@@ -15,8 +15,9 @@ class AnswersCheckScreen extends GetView<QuizController> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
+        quizAppBar: true,
         titleWidget: Obx(() => Text(
-            'Q. ${(controller.questionIndexApi.value + 1).toString().padLeft(2, '0')}', style: kAppBarTS,)),
+            'Câu hỏi thứ ${(controller.questionIndexApi.value + 1).toString().padLeft(2, '0')}', style: kAppBarTS,)),
         showActionIcon: true,
         onMenuActionTap: () {
           Get.toNamed(Resultcreen.routeName);
@@ -53,22 +54,24 @@ class AnswersCheckScreen extends GetView<QuizController> {
                                 },
                                 itemBuilder: (BuildContext context, int index) {
                                   final answer = controller
-                                      .currentQuestionApi.value!.question;
+                                      .currentQuestionApi.value!.question!.questionAnswers![index];
                                   final selectedAnswer = controller
                                       .currentQuestionApi.value!.question!.selectedAnswer;
                                   final correctAnswer = controller
                                       .currentQuestionApi.value!.question!.questionAnswers!.where((element) => element.isCorrect == true,).first;
 
                                   final String answerText =
-                                      '${answer!.content}';
+                                      '${answer.content}';
 
-                                  if (correctAnswer == selectedAnswer) {
+                                  if (answer == correctAnswer && selectedAnswer == answer) {
                                     return CorrectAnswerCard(
                                         answer: answerText);
                                   } else if (selectedAnswer == null) {
                                     return NotAnswerCard(answer: answerText);
-                                  } else if (correctAnswer != selectedAnswer) {
+                                  } else if (correctAnswer != selectedAnswer && answer == selectedAnswer) {
                                     return WrongAnswerCard(answer: answerText);
+                                  } else if (correctAnswer == answer) {
+                                    return CorrectAnswerCard(answer: answerText);
                                   }
 
                                   return AnswerCard(
@@ -108,7 +111,7 @@ class AnswersCheckScreen extends GetView<QuizController> {
                           onTap: () {
                             controller.nextQuestionApi();
                           },
-                          title: 'Next',
+                          title: 'Câu tiếp theo',
                         ),
                       )
                     ],

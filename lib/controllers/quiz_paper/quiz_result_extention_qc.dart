@@ -13,7 +13,7 @@ extension QuizeResult on QuizController {
       .length;
 
   String get correctAnsweredQuestions {
-    return '$correctQuestionCount out of ${allQuestionsApi.length} are correct';
+    return '$correctQuestionCount trên ${allQuestionsApi.length} câu trả lời đúng';
   }
 
   String get points {

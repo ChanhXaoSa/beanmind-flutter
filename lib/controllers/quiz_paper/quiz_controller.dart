@@ -149,7 +149,7 @@ class QuizController extends GetxController {
 
   String get completedQuizApi{
     final answeredQuestionCount = allQuestionsApi.where((question) => question.question!.selectedAnswer != null).toList().length;
-    return '$answeredQuestionCount out of ${allQuestionsApi.length} answered';
+    return '$answeredQuestionCount trên ${allQuestionsApi.length} câu đã trả lời';
   }
 
   void completeApi(){
