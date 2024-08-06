@@ -85,7 +85,7 @@ class QuizAttemptScreen extends GetView<QuizController> {
                                             .question!
                                             .questionAnswers![index];
                                         return AnswerCard(
-                                          isSelected: answer.id ==
+                                          isSelected: answer ==
                                               controller.currentQuestionApi.value!.question!
                                                   .selectedAnswer,
                                           onTap: () {

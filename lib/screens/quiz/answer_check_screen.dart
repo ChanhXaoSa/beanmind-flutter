@@ -16,7 +16,7 @@ class AnswersCheckScreen extends GetView<QuizController> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         titleWidget: Obx(() => Text(
-            'Q. ${(controller.questionIndex.value + 1).toString().padLeft(2, '0')}', style: kAppBarTS,)),
+            'Q. ${(controller.questionIndexApi.value + 1).toString().padLeft(2, '0')}', style: kAppBarTS,)),
         showActionIcon: true,
         onMenuActionTap: () {
           Get.toNamed(Resultcreen.routeName);
@@ -33,7 +33,7 @@ class AnswersCheckScreen extends GetView<QuizController> {
                     child: Column(
                       children: [
                         Text(
-                          controller.currentQuestion.value!.question,
+                          controller.currentQuestionApi.value!.question!.content!,
                           style: kQuizeTS,
                         ),
                         GetBuilder<QuizController>(
@@ -41,7 +41,7 @@ class AnswersCheckScreen extends GetView<QuizController> {
                             builder: (context) {
                               return ListView.separated(
                                 itemCount: controller
-                                    .currentQuestion.value!.answers.length,
+                                    .currentQuestionApi.value!.question!.questionAnswers!.length,
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.only(top: 25),
                                 physics: const NeverScrollableScrollPhysics(),
@@ -53,28 +53,22 @@ class AnswersCheckScreen extends GetView<QuizController> {
                                 },
                                 itemBuilder: (BuildContext context, int index) {
                                   final answer = controller
-                                      .currentQuestion.value!.answers[index];
+                                      .currentQuestionApi.value!.question;
                                   final selectedAnswer = controller
-                                      .currentQuestion.value!.selectedAnswer;
+                                      .currentQuestionApi.value!.question!.selectedAnswer;
                                   final correctAnswer = controller
-                                      .currentQuestion.value!.correctAnswer;
+                                      .currentQuestionApi.value!.question!.questionAnswers!.where((element) => element.isCorrect == true,).first;
 
                                   final String answerText =
-                                      '${answer.identifier}. ${answer.answer}';
+                                      '${answer!.content}';
 
-                                  if (correctAnswer == selectedAnswer &&
-                                      answer.identifier == selectedAnswer) {
+                                  if (correctAnswer == selectedAnswer) {
                                     return CorrectAnswerCard(
                                         answer: answerText);
                                   } else if (selectedAnswer == null) {
                                     return NotAnswerCard(answer: answerText);
-                                  } else if (correctAnswer != selectedAnswer &&
-                                      answer.identifier == selectedAnswer) {
+                                  } else if (correctAnswer != selectedAnswer) {
                                     return WrongAnswerCard(answer: answerText);
-                                  } else if (correctAnswer ==
-                                      answer.identifier) {
-                                    return CorrectAnswerCard(
-                                        answer: answerText);
                                   }
 
                                   return AnswerCard(
@@ -101,7 +95,7 @@ class AnswersCheckScreen extends GetView<QuizController> {
                         width: 55,
                         child: MainButton(
                           onTap: () {
-                            controller.prevQuestion();
+                            controller.prevQuestionApi();
                           },
                           child: const Icon(Icons.arrow_back_ios_new),
                         ),
@@ -112,7 +106,7 @@ class AnswersCheckScreen extends GetView<QuizController> {
                       Expanded(
                         child: MainButton(
                           onTap: () {
-                            controller.nextQuestion();
+                            controller.nextQuestionApi();
                           },
                           title: 'Next',
                         ),
