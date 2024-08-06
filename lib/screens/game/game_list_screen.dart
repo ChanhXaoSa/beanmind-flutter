@@ -126,6 +126,15 @@ class GameListScreen extends GetView<GameController> {
           },
           child: Card(
             margin: const EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              side: BorderSide(
+                color: Colors.grey.shade400,
+                width: 1.3,
+              ),
+            ),
+            elevation: 5,
+            shadowColor: Colors.grey.withOpacity(0.5),
             child: Container(
               width: 285,
               padding: const EdgeInsets.all(10),
@@ -139,21 +148,6 @@ class GameListScreen extends GetView<GameController> {
                         width: double.infinity,
                         height: 150,
                         fit: BoxFit.cover,
-                        color: Colors.grey,
-                        colorBlendMode: BlendMode.color,
-                      ),
-                      Positioned(
-                        top: 8,
-                        left: 8,
-                        child: Container(
-                          color: Colors.grey,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          child: const Text(
-                            'Mới',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -180,15 +174,15 @@ class GameListScreen extends GetView<GameController> {
                   Row(
                     children: [
                       Text(
-                        'Score: ${game['score']}',
+                        'Điểm của bạn : ${game['score'] ?? 'chưa có dữ liệu'}',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 10),
                       Text(
-                        'Level: ${game['level']}',
+                        'Cấp độ trò chơi: ${game['level'] ?? 'chưa cập nhật'}',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -223,7 +217,7 @@ class GameListScreen extends GetView<GameController> {
                           children: const [
                             Icon(AppIcons.trophyoutline),
                             SizedBox(width: 5),
-                            Text('Leaderboard'),
+                            Text('Bảng xếp hạng'),
                           ],
                         ),
                       ),
