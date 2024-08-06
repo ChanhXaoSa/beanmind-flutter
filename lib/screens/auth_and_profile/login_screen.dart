@@ -82,13 +82,27 @@ class LoginScreen extends GetView<AuthController> {
           ),
       child: Center(
           child: isSmallScreen
-              ? const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _Logo(),
-                    _FormContent(),
-                  ],
-                )
+              ? Container(
+                padding: EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                child: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _Logo(),
+                      _FormContent(),
+                    ],
+                  ),
+              )
               : Container(
                 height: MediaQuery.of(context).size.height*0.4,
                   decoration: BoxDecoration(
