@@ -33,7 +33,8 @@ class GameListScreen extends GetView<GameController> {
           child: Obx(() {
             return CustomAppBar(
               title: controller.selectedGame.value != null
-                  ? controller.games.firstWhere((game) => game['id'] == controller.selectedGame.value)['name']
+                  ? controller.games.firstWhere((game) =>
+                      game['id'] == controller.selectedGame.value)['name']
                   : 'Thư viện trò chơi',
               leading: controller.selectedGame.value != null
                   ? IconButton(
@@ -62,7 +63,7 @@ class GameListScreen extends GetView<GameController> {
             children: [
               Container(
                 margin: EdgeInsets.only(right: 12),
-                width: MediaQuery.of(context).size.width*0.3,
+                width: MediaQuery.of(context).size.width * 0.3,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
@@ -123,46 +124,110 @@ class GameListScreen extends GetView<GameController> {
               controller.isLoading.value = false;
             });
           },
-          child: GridTile(
-            footer: GridTileBar(
-              backgroundColor: Colors.black54,
-              title: Text(
-                game['name'] ?? '',
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: Stack(
+          child: Card(
+            margin: const EdgeInsets.all(10),
+            child: Container(
+              width: 285,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network(
-                    game['image'] ?? '',
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.deepPurple,
-                        backgroundColor: Colors.white,
-                        shape: const CircleBorder(),
-                        elevation: 5,
-                        padding: const EdgeInsets.all(20),
+                  Stack(
+                    children: [
+                      Image.network(
+                        game['image'] ?? '',
+                        width: double.infinity,
+                        height: 150,
+                        fit: BoxFit.cover,
+                        color: Colors.grey,
+                        colorBlendMode: BlendMode.color,
                       ),
-                      onPressed: () {
-                        Get.toNamed(
-                          GameLeaderboardScreen.routeName,
-                          arguments: GameModel(
-                            id: game['id']!,
-                            title: game['name']!,
-                            imageUrl: game['image'] ?? '',
-                            description: game['description'] ?? '',
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: Container(
+                          color: Colors.grey,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: const Text(
+                            'Mới',
+                            style: TextStyle(color: Colors.white),
                           ),
-                        );
-                      },
-                      child: const Icon(AppIcons.trophyoutline, color: Colors.deepPurple),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    game['name'] ?? '',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    game['description'] ?? '',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        'Score: ${game['score']}',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Level: ${game['level']}',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.deepPurple,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          elevation: 5,
+                        ),
+                        onPressed: () {
+                          Get.toNamed(
+                            GameLeaderboardScreen.routeName,
+                            arguments: GameModel(
+                              id: game['id']!,
+                              title: game['name']!,
+                              imageUrl: game['image'] ?? '',
+                              description: game['description'] ?? '',
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: const [
+                            Icon(AppIcons.trophyoutline),
+                            SizedBox(width: 5),
+                            Text('Leaderboard'),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
