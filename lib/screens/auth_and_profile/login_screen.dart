@@ -72,27 +72,48 @@ class LoginScreen extends GetView<AuthController> {
     final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return Scaffold(
-        body: Center(
-            child: isSmallScreen
-                ? const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _Logo(),
-                _FormContent(),
-              ],
-            )
-                : Container(
-              padding: const EdgeInsets.all(32.0),
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: const Row(
-                children: [
-                  Expanded(child: _Logo()),
-                  Expanded(
-                    child: Center(child: _FormContent()),
+        body: Container(
+          decoration: BoxDecoration(
+            //background image
+            image: DecorationImage(
+              image: NetworkImage("https://as1.ftcdn.net/v2/jpg/01/78/63/34/1000_F_178633426_U5MZNWHx2Y35XmuNonNxnJKqJAqUmEy7.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+      child: Center(
+          child: isSmallScreen
+              ? const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _Logo(),
+                    _FormContent(),
+                  ],
+                )
+              : Container(
+                height: MediaQuery.of(context).size.height*0.4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )));
+                  padding: const EdgeInsets.all(32.0),
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: const Row(
+                    children: [
+                      Expanded(child: _Logo()),
+                      Expanded(
+                        child: Center(child: _FormContent()),
+                      ),
+                    ],
+                  ),
+                )),
+    ));
   }
 }
 
@@ -118,9 +139,9 @@ class _Logo extends StatelessWidget {
             style: isSmallScreen
                 ? Theme.of(context).textTheme.bodyMedium
                 : Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: Colors.black),
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Colors.black),
           ),
         )
       ],
@@ -139,8 +160,10 @@ class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  final TextEditingController _emailController = TextEditingController(text: 'user1');
-  final TextEditingController _passwordController = TextEditingController(text: 'User1!');
+  final TextEditingController _emailController =
+      TextEditingController(text: 'user1');
+  final TextEditingController _passwordController =
+      TextEditingController(text: 'User1!');
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
