@@ -14,7 +14,7 @@ class QuizOverviewScreen extends GetView<QuizController> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar:  CustomAppBar(
-        title: controller.completedQuiz,
+        title: controller.completedQuizApi,
       ),
       body: BackgroundDecoration(
         child: Column(
@@ -41,7 +41,7 @@ class QuizOverviewScreen extends GetView<QuizController> {
                   const SizedBox(height: 20,),
                   Expanded(
                       child: GridView.builder(
-                          itemCount: controller.allQuestions.length,
+                          itemCount: controller.allQuestionsApi.length,
                           shrinkWrap: true,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
@@ -53,12 +53,12 @@ class QuizOverviewScreen extends GetView<QuizController> {
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (_, index) {
                            AnswerStatus? _answerStatus;
-                            if(controller.allQuestions[index].selectedAnswer != null){
+                            if(controller.allQuestionsApi[index].question!.selectedAnswer != null){
                               _answerStatus = AnswerStatus.answered;
                             }
                             return QuizNumberCard(
                               index: index+1, status: _answerStatus, onTap: () {
-                                controller.jumpToQuestion(index);
+                                controller.jumpToQuestionApi(index);
                                 },
                             );
                           }))
@@ -71,7 +71,7 @@ class QuizOverviewScreen extends GetView<QuizController> {
                 padding: UIParameters.screenPadding,
                 child: MainButton(
                   onTap: () {
-                    controller.complete();
+                    controller.completeApi();
                   },
                   title: 'Complete',
                 ),

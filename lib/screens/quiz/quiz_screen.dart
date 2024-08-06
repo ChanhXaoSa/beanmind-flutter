@@ -35,7 +35,7 @@ class QuizeScreen extends GetView<QuizController> {
             ),
             showActionIcon: true,
             titleWidget: Obx(() => Text(
-                  'Q. ${(controller.questionIndex.value + 1).toString().padLeft(2, '0')}',
+                  'Q. ${(controller.questionIndexApi.value + 1).toString().padLeft(2, '0')}',
                   style: kAppBarTS,
                 )),
           ),
@@ -43,10 +43,10 @@ class QuizeScreen extends GetView<QuizController> {
             child: Obx(
               () => Column(
                 children: [
-                  if (controller.loadingStatus.value == LoadingStatus.loading)
+                  if (controller.loadingStatusApi.value == LoadingStatus.loading)
                     const Expanded(
                         child: ContentArea(child: QuizScreenPlaceHolder())),
-                  if (controller.loadingStatus.value == LoadingStatus.completed)
+                  if (controller.loadingStatusApi.value == LoadingStatus.completed)
                     Expanded(
                       child: ContentArea(
                         child: SingleChildScrollView(
@@ -54,15 +54,15 @@ class QuizeScreen extends GetView<QuizController> {
                           child: Column(
                             children: [
                               Text(
-                                controller.currentQuestion.value!.question,
+                                controller.currentQuestionApi.value!.question!.content!,
                                 style: kQuizeTS,
                               ),
                               GetBuilder<QuizController>(
                                   id: 'answers_list',
                                   builder: (context) {
                                     return GridView.builder(
-                                      itemCount: controller.currentQuestion
-                                          .value!.answers.length,
+                                      itemCount: controller.currentQuestionApi
+                                          .value!.question!.questionAnswers!.length,
                                       shrinkWrap: true,
                                       padding: const EdgeInsets.only(top: 25),
                                       physics:
@@ -80,19 +80,19 @@ class QuizeScreen extends GetView<QuizController> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         final answer = controller
-                                            .currentQuestion
-                                            .value!
-                                            .answers[index];
+                                            .currentQuestionApi
+                                            .value!.question!
+                                            .questionAnswers![index];
                                         return AnswerCard(
-                                          isSelected: answer.identifier ==
-                                              controller.currentQuestion.value!
-                                                  .selectedAnswer,
+                                          isSelected: answer.id ==
+                                              controller.currentQuestionApi.value!
+                                                  .question!.selectedAnswer,
                                           onTap: () {
-                                            controller.selectAnswer(
-                                                answer.identifier);
+                                            controller.selectAnswerApi(
+                                                answer);
                                           },
                                           answer:
-                                              '${answer.identifier}. ${answer.answer}',
+                                              '${answer.content}',
                                         );
                                       },
                                     );
@@ -139,7 +139,7 @@ class QuizeScreen extends GetView<QuizController> {
                           Row(
                             children: [
                               Visibility(
-                                visible: controller.isFirstQuestion,
+                                visible: controller.isFirstQuestionApi,
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 5.0),
                                   child: SizedBox(
@@ -147,7 +147,7 @@ class QuizeScreen extends GetView<QuizController> {
                                     width: 55,
                                     child: MainButton(
                                       onTap: () {
-                                        controller.prevQuestion();
+                                        controller.prevQuestionApi();
                                       },
                                       child:
                                           const Icon(Icons.arrow_back_ios_new),
@@ -158,16 +158,16 @@ class QuizeScreen extends GetView<QuizController> {
                               Expanded(
                                 child: Obx(
                                   () => Visibility(
-                                    visible: controller.loadingStatus.value ==
+                                    visible: controller.loadingStatusApi.value ==
                                         LoadingStatus.completed,
                                     child: MainButton(
                                       onTap: () {
-                                        controller.islastQuestion
+                                        controller.islastQuestionApi
                                             ? Get.toNamed(
                                                 QuizOverviewScreen.routeName)
-                                            : controller.nextQuestion();
+                                            : controller.nextQuestionApi();
                                       },
-                                      title: controller.islastQuestion
+                                      title: controller.islastQuestionApi
                                           ? 'Complete'
                                           : 'Next',
                                     ),
