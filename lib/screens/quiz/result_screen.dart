@@ -60,7 +60,7 @@ class Resultcreen extends GetView<QuizController> {
                     ),
                     Expanded(
                         child: GridView.builder(
-                            itemCount: controller.allQuestions.length,
+                            itemCount: controller.allQuestionsApi.length,
                             shrinkWrap: true,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -71,16 +71,16 @@ class Resultcreen extends GetView<QuizController> {
                                     mainAxisSpacing: 8),
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (_, index) {
-                              final _question = controller.allQuestions[index];
+                              final _question = controller.allQuestionsApi[index];
 
                               AnswerStatus _status = AnswerStatus.notanswered;
 
-                              final _selectedAnswer = _question.selectedAnswer;
-                              final _correctAnswer = _question.correctAnswer;
+                              final _selectedAnswer = _question.question!.selectedAnswer;
+                              final _correctAnswer = _question.question!.questionAnswers!.where((element) => element.isCorrect == true,).first;
 
                               if (_selectedAnswer == _correctAnswer) {
                                 _status = AnswerStatus.correct;
-                              } else if (_question.selectedAnswer == null) {
+                              } else if (_question.question!.selectedAnswer == null) {
                                 _status = AnswerStatus.wrong;
                               } else {
                                 _status = AnswerStatus.wrong;
@@ -90,7 +90,7 @@ class Resultcreen extends GetView<QuizController> {
                                 index: index + 1,
                                 status: _status,
                                 onTap: () {
-                                  controller.jumpToQuestion(index,
+                                  controller.jumpToQuestionApi(index,
                                       isGoBack: false);
                                   Get.toNamed(AnswersCheckScreen.routeName);
                                 },
@@ -109,7 +109,7 @@ class Resultcreen extends GetView<QuizController> {
                             child: MainButton(
                               color: Colors.blueGrey,
                           onTap: () {
-                           controller.tryAgain();
+                           controller.tryAgainApi();
                           },
                           title: 'Try Again',
                         )),

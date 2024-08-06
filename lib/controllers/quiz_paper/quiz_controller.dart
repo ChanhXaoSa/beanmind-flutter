@@ -16,9 +16,7 @@ import 'package:http/http.dart' as http;
 import 'quiz_papers_controller.dart';
 
 class QuizController extends GetxController {
-  final loadingStatus = LoadingStatus.loading.obs;
   final loadingStatusApi = LoadingStatus.loading.obs;
-  final allQuestions = <Question>[];
   final allQuestionsApi = <WorksheetQuestion>[];
   late QuizPaperModel quizPaperModel;
   var worksheetDetailModel = Rxn<WorksheetDetailModel>();
@@ -115,69 +113,10 @@ class QuizController extends GetxController {
     }
   }
 
-  void loadData(QuizPaperModel quizPaper) async {
-    quizPaperModel = quizPaper;
-    loadingStatus.value = LoadingStatus.loading;
-    try {
-      final QuerySnapshot<Map<String, dynamic>> questionsQuery =
-          await quizePaperFR.doc(quizPaper.id).collection('questions').get();
-      final questions = questionsQuery.docs
-          .map((question) => Question.fromSnapshot(question))
-          .toList();
-      quizPaper.questions = questions;
-      for (Question _question in quizPaper.questions!) {
-        final QuerySnapshot<Map<String, dynamic>> answersQuery =
-            await quizePaperFR
-                .doc(quizPaper.id)
-                .collection('questions')
-                .doc(_question.id)
-                .collection('answers')
-                .get();
-        final answers = answersQuery.docs
-            .map((answer) => Answer.fromSnapshot(answer))
-            .toList();
-        _question.answers = answers;
-      }
-    } on Exception catch (e) {
-      RegExp exp =  RegExp(r'permission-denied', caseSensitive: false, ); 
-      if(e.toString().contains(exp)){
-         AuthController _authController = Get.find();
-         Get.back();
-        _authController.showLoginAlertDialog();
-      }
-      AppLogger.e(e);
-      loadingStatus.value = LoadingStatus.error;
-    } catch (e) {
-      loadingStatus.value = LoadingStatus.error;
-      AppLogger.e(e);
-    }
-
-    if (quizPaper.questions != null && quizPaper.questions!.isNotEmpty) {
-      allQuestions.assignAll(quizPaper.questions!);
-      currentQuestion.value = quizPaper.questions![0];
-      _startTimer(quizPaper.timeSeconds);
-      loadingStatus.value = LoadingStatus.completed;
-    } else {
-      loadingStatus.value = LoadingStatus.noReult;
-    }
-  }
-
-  Rxn<Question> currentQuestion = Rxn<Question>();
   Rxn<WorksheetQuestion> currentQuestionApi = Rxn<WorksheetQuestion>();
-  final questionIndex = 0.obs; //_curruntQuestionIndex
-  final questionIndexApi = 0.obs; //_curruntQuestionIndex
-
-  bool get isFirstQuestion => questionIndex.value > 0;
+  final questionIndexApi = 0.obs;
   bool get isFirstQuestionApi => questionIndexApi.value > 0;
-
-  bool get islastQuestion => questionIndex.value >= allQuestions.length - 1;
   bool get islastQuestionApi => questionIndexApi.value >= allQuestionsApi.length - 1;
-
-  void nextQuestion() {
-    if (questionIndex.value >= allQuestions.length - 1) return;
-    questionIndex.value++;
-    currentQuestion.value = allQuestions[questionIndex.value];
-  }
 
   void nextQuestionApi() {
     if (questionIndexApi.value >= allQuestionsApi.length - 1) return;
@@ -186,30 +125,12 @@ class QuizController extends GetxController {
     update(['answers_list']);
   }
 
-
-  void prevQuestion() {
-    if (questionIndex.value <= 0){
-     return;
-    } 
-    questionIndex.value--;
-    currentQuestion.value = allQuestions[questionIndex.value];
-  }
-
   void prevQuestionApi() {
     if (questionIndexApi.value <= 0){
       return;
     }
     questionIndexApi.value--;
     currentQuestionApi.value = allQuestionsApi[questionIndexApi.value];
-  }
-  
-
-  void jumpToQuestion(int index, {bool isGoBack = true}){
-    questionIndex.value = index;
-    currentQuestion.value = allQuestions[index];
-    if(isGoBack) {
-      Get.back();
-    }
   }
 
   void jumpToQuestionApi(int index, {bool isGoBack = true}){
@@ -220,19 +141,9 @@ class QuizController extends GetxController {
     }
   }
 
-  void selectAnswer(String? answer) {
-    currentQuestion.value!.selectedAnswer = answer;
-    update(['answers_list', 'answers_review_list']);
-  }
-
   void selectAnswerApi(QuestionAnswer? answer) {
     currentQuestionApi.value!.question!.selectedAnswer = answer;
     update(['answers_list', 'answers_review_list']);
-  }
-
-  String get completedQuiz{
-    final answeredQuestionCount = allQuestions.where((question) => question.selectedAnswer != null).toList().length;
-    return '$answeredQuestionCount out of ${allQuestions.length} answered';
   }
 
   String get completedQuizApi{
@@ -240,18 +151,9 @@ class QuizController extends GetxController {
     return '$answeredQuestionCount out of ${allQuestionsApi.length} answered';
   }
 
-  void complete(){
-     _timer!.cancel();
-     Get.offAndToNamed(Resultcreen.routeName);
-  }
-
   void completeApi(){
     _timer!.cancel();
     Get.offAndToNamed(Resultcreen.routeName);
-  }
-
-  void tryAgain(){
-     Get.find<QuizPaperController>().navigatoQuestions(paper: quizPaperModel, isTryAgain: true);
   }
 
   void tryAgainApi(){

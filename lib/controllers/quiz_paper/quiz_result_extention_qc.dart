@@ -7,17 +7,17 @@ import 'package:beanmind_flutter/firebase/references.dart';
 import 'package:beanmind_flutter/services/notification/notification_service.dart';
 
 extension QuizeResult on QuizController {
-  int get correctQuestionCount => allQuestions
-      .where((question) => question.selectedAnswer == question.correctAnswer)
+  int get correctQuestionCount => allQuestionsApi
+      .where((question) => question.question!.selectedAnswer == question.question!.questionAnswers!.where((element) => element.isCorrect == true,).first)
       .toList()
       .length;
 
   String get correctAnsweredQuestions {
-    return '$correctQuestionCount out of ${allQuestions.length} are correct';
+    return '$correctQuestionCount out of ${allQuestionsApi.length} are correct';
   }
 
   String get points {
-    var points = (correctQuestionCount / allQuestions.length) *
+    var points = (correctQuestionCount / allQuestionsApi.length) *
         100 *
         (quizPaperModel.timeSeconds - remainSeconds) /
         quizPaperModel.timeSeconds *
@@ -36,7 +36,7 @@ extension QuizeResult on QuizController {
             .doc(quizPaperModel.id),
         {
           "points": points,
-          "correct_count": '$correctQuestionCount/${allQuestions.length}',
+          "correct_count": '$correctQuestionCount/${allQuestionsApi.length}',
           "paper_id": quizPaperModel.id,
           "time": quizPaperModel.timeSeconds - remainSeconds
         });
@@ -47,7 +47,7 @@ extension QuizeResult on QuizController {
             .doc(_user.email),
         {
           "points": double.parse(points),
-          "correct_count": '$correctQuestionCount/${allQuestions.length}',
+          "correct_count": '$correctQuestionCount/${allQuestionsApi.length}',
           "paper_id": quizPaperModel.id,
           "user_id": _user.email,
           "time": quizPaperModel.timeSeconds - remainSeconds
