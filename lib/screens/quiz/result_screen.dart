@@ -117,7 +117,7 @@ class Resultcreen extends GetView<QuizController> {
                         Expanded(
                             child: MainButton(
                           onTap: () {
-                            controller.saveQuizResults();
+                            // controller.saveQuizResults();
                           },
                           title: 'Go to home',
                         ))
