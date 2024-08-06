@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 const kDesktopChangePoint = 1100.0;
-const kTabletChangePoint = 500.0; //768.0;
+// const kTabletChangePoint = 500.0; //768.0;
+const kTabletChangePoint = 768.0; //768.0;
 const kMobileChangePoint = 420.0;
 const kSmallMobileChangePoint = 250.0;
 const kMobileScreenPadding = 25.0;

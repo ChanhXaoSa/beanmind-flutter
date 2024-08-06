@@ -166,6 +166,7 @@ class AuthController extends GetxController {
       // await _auth.signOut();
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('user_model');
+      user.value = [];
       navigateToLogin();
     } on FirebaseAuthException catch (e) {
       AppLogger.e(e);

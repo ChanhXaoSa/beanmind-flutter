@@ -4,7 +4,8 @@ import 'package:beanmind_flutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSizeWidget {
+class CustomHomeAppBar extends GetView<AppBarController>
+    implements PreferredSizeWidget {
   const CustomHomeAppBar({super.key});
 
   @override
@@ -20,7 +21,7 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
           width: MediaQuery.of(context).size.width * 0.8,
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              if(UIParameters.isMobile(context)) {
+              if (UIParameters.isMobile(context)) {
                 return Row(
                   children: [
                     GestureDetector(
@@ -43,48 +44,99 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        // Hành động khi bấm nút tìm kiếm
-                      },
-                    ),
-                    const Spacer(),
                     Obx(() {
                       return controller.isLoggedIn.value
                           ? PopupMenuButton<String>(
+                        tooltip: '',
+                        offset: const Offset(0, kToolbarHeight),
                         onSelected: (String value) {
                           if (value == 'Profile') {
                             Get.toNamed(ProfileScreen.routeName);
+                          } else if (value == 'Logout') {
+                            controller.signOut();
                           }
-                          // Handle other menu selections
                         },
                         itemBuilder: (BuildContext context) {
-                          return {'Profile', 'Settings', 'Logout'}.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
+                          return [
+                            PopupMenuItem<String>(
+                              enabled: false,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'images/logo_beanmind.png'),
+                                        radius: 20.0,
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        controller.user.value!.data.userName,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Tìm khoá học...',
+                                      prefixIcon: const Icon(Icons.search),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.grey[200],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuDivider(),
+                            const PopupMenuItem<String>(
+                              value: 'Profile',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.person, color: Colors.black54),
+                                  SizedBox(width: 8.0),
+                                  Text('Tài khoản của tôi'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Logout',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.logout, color: Colors.black54),
+                                  SizedBox(width: 8.0),
+                                  Text('Đăng xuất'),
+                                ],
+                              ),
+                            ),
+                          ];
                         },
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('images/logo_beanmind.png'),
+                        child: const CircleAvatar(
+                          backgroundImage:
+                          AssetImage('images/logo_beanmind.png'),
                           radius: 20.0,
                         ),
                       )
                           : ElevatedButton(
-                        onPressed: () => controller.signIn(),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.blue,
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        ),
-                        child: const Text('Đăng nhập'),
-                      );
+                              onPressed: () => controller.signIn(),
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.blue,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                              ),
+                              child: const Text('Đăng nhập'),
+                            );
                     }),
                   ],
                 );
-              } else if(UIParameters.isDesktop(context)) {
+              } else if (UIParameters.isDesktop(context)) {
                 return Row(
                   children: [
                     MouseRegion(
@@ -129,43 +181,136 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                       ),
                     ),
                     const Spacer(),
-                    TextButton(onPressed: () => controller.navigateToCourseLeaning(), child: const Text('Danh sách khóa học')),
+                    TextButton(
+                      onPressed: () => controller.navigateToCourseLeaning(),
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ).copyWith(
+                        foregroundColor:
+                            WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return Colors.blue[900];
+                          }
+                          return null;
+                        }),
+                        overlayColor:
+                            WidgetStateProperty.all(Colors.transparent),
+                      ),
+                      child: const Text('Danh sách khóa học'),
+                    ),
                     const SizedBox(width: 10.0),
-                    TextButton(onPressed: () => controller.navigateToGameList(), child: const Text('Danh sách game')),
+                    TextButton(
+                        onPressed: () => controller.navigateToGameList(),
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ).copyWith(
+                          foregroundColor:
+                              WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.hovered)) {
+                              return Colors.blue[900];
+                            }
+                            return null;
+                          }),
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                        ),
+                        child: const Text('Danh sách game')),
                     const SizedBox(width: 20.0),
                     Obx(() {
                       return controller.isLoggedIn.value
                           ? PopupMenuButton<String>(
+                        tooltip: '',
+                        offset: const Offset(0, kToolbarHeight),
                         onSelected: (String value) {
                           if (value == 'Profile') {
                             Get.toNamed(ProfileScreen.routeName);
                           } else if (value == 'Logout') {
                             controller.signOut();
                           }
-                          // Handle other menu selections
                         },
                         itemBuilder: (BuildContext context) {
-                          return {'Profile', 'Logout'}.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
+                          return [
+                            PopupMenuItem<String>(
+                              enabled: false,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'images/logo_beanmind.png'),
+                                        radius: 20.0,
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        controller.user.value!.data.userName,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Tìm khoá học...',
+                                      prefixIcon: const Icon(Icons.search),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.grey[200],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuDivider(),
+                            const PopupMenuItem<String>(
+                              value: 'Profile',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.person, color: Colors.black54),
+                                  SizedBox(width: 8.0),
+                                  Text('Tài khoản của tôi'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Logout',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.logout, color: Colors.black54),
+                                  SizedBox(width: 8.0),
+                                  Text('Đăng xuất'),
+                                ],
+                              ),
+                            ),
+                          ];
                         },
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('images/logo_beanmind.png'),
+                        child: const CircleAvatar(
+                          backgroundImage:
+                          AssetImage('images/logo_beanmind.png'),
                           radius: 20.0,
                         ),
                       )
                           : ElevatedButton(
-                        onPressed: () => controller.signIn(),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.blue,
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        ),
-                        child: const Text('Đăng nhập'),
-                      );
+                              onPressed: () => controller.signIn(),
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.blue,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                              ),
+                              child: const Text('Đăng nhập'),
+                            );
                     }),
                   ],
                 );
@@ -192,44 +337,136 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        // Hành động khi bấm nút tìm kiếm
-                      },
+                    TextButton(
+                      onPressed: () => controller.navigateToCourseLeaning(),
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ).copyWith(
+                        foregroundColor:
+                            WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return Colors.blue[900];
+                          }
+                          return null;
+                        }),
+                        overlayColor:
+                            WidgetStateProperty.all(Colors.transparent),
+                      ),
+                      child: const Text('Danh sách khóa học'),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 10.0),
+                    TextButton(
+                        onPressed: () => controller.navigateToGameList(),
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ).copyWith(
+                          foregroundColor:
+                              WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.hovered)) {
+                              return Colors.blue[900];
+                            }
+                            return null;
+                          }),
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                        ),
+                        child: const Text('Danh sách game')),
+                    const SizedBox(width: 20.0),
                     Obx(() {
                       return controller.isLoggedIn.value
                           ? PopupMenuButton<String>(
+                        tooltip: '',
+                        offset: const Offset(0, kToolbarHeight),
                         onSelected: (String value) {
                           if (value == 'Profile') {
                             Get.toNamed(ProfileScreen.routeName);
+                          } else if (value == 'Logout') {
+                            controller.signOut();
                           }
-                          // Handle other menu selections
                         },
                         itemBuilder: (BuildContext context) {
-                          return {'Profile', 'Settings', 'Logout'}.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
+                          return [
+                            PopupMenuItem<String>(
+                              enabled: false,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'images/logo_beanmind.png'),
+                                        radius: 20.0,
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        controller.user.value!.data.userName,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Tìm khoá học...',
+                                      prefixIcon: const Icon(Icons.search),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.grey[200],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuDivider(),
+                            const PopupMenuItem<String>(
+                              value: 'Profile',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.person, color: Colors.black54),
+                                  SizedBox(width: 8.0),
+                                  Text('Tài khoản của tôi'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Logout',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.logout, color: Colors.black54),
+                                  SizedBox(width: 8.0),
+                                  Text('Đăng xuất'),
+                                ],
+                              ),
+                            ),
+                          ];
                         },
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('images/logo_beanmind.png'),
+                        child: const CircleAvatar(
+                          backgroundImage:
+                          AssetImage('images/logo_beanmind.png'),
                           radius: 20.0,
                         ),
                       )
                           : ElevatedButton(
-                        onPressed: () => controller.signIn(),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.blue,
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        ),
-                        child: const Text('Đăng nhập'),
-                      );
+                              onPressed: () => controller.signIn(),
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.blue,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                              ),
+                              child: const Text('Đăng nhập'),
+                            );
                     }),
                   ],
                 );
