@@ -139,8 +139,8 @@ class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  final TextEditingController _emailController = TextEditingController(text: 'user1');
-  final TextEditingController _passwordController = TextEditingController(text: 'User1!');
+  final TextEditingController _emailController = TextEditingController(text: 'StudentTesting1@localhost.com');
+  final TextEditingController _passwordController = TextEditingController(text: 'Abc@123!');
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
