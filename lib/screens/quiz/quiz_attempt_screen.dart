@@ -11,7 +11,7 @@ import 'package:beanmind_flutter/widgets/widgets.dart';
 class QuizAttemptScreen extends GetView<QuizController> {
   const QuizAttemptScreen({Key? key}) : super(key: key);
 
-  static const String routeName = '/quiz_attempt_screen';
+  static const String routeName = '/quiz_attempt';
 
   @override
   Widget build(BuildContext context) {

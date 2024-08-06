@@ -474,37 +474,6 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                     SizedBox(height: 16),
                     Lottie.asset(lottieAsset, height: 100),
                     SizedBox(height: 16),
-                    if (showVideo)
-                      Center(
-                        child: _videoPlayerController.value.isInitialized
-                            ? AspectRatio(
-                                aspectRatio:
-                                    _videoPlayerController.value.aspectRatio,
-                                child: VideoPlayer(_videoPlayerController),
-                              )
-                            : Container(),
-                      )
-                    else
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                    if (showVideo) SizedBox(height: 16),
-                    if (showVideo)
-                      FloatingActionButton(
-                        onPressed: () {
-                          setState(() {
-                            _videoPlayerController.value.isPlaying
-                                ? _videoPlayerController.pause()
-                                : _videoPlayerController.play();
-                          });
-                        },
-                        child: Icon(_videoPlayerController.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow),
-                      ),
                     if (showNextQuestion) SizedBox(height: 16),
                     if (showNextQuestion)
                       GestureDetector(
@@ -705,8 +674,25 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
               builder: (context) {
                 return AlertDialog(
                   title: const Text('Hướng dẫn'),
-                  content: const Text(
-                    'Nội dung hướng dẫn người chơi...',
+                  content: SingleChildScrollView(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Column(
+                        children: [
+                          Image.network(
+                            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fodd_and_even%2Fodd_and_even.png?alt=media&token=2abb288a-259f-4b13-8b84-8cd6fd770cc5',
+                            width: MediaQuery.of(context).size.width * 0.7,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: const Text(
+                              'Xem đề bài, số động vật hiển thị, sau đó chọn đáp án đúng theo yêu cầu của câu hỏi.',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   actions: [
                     TextButton(

@@ -16,7 +16,7 @@ class FeaturedCourses extends GetView<HomeController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Các khóa học nổi bật',
+              'Nổi bật',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             TextButton(
@@ -78,8 +78,24 @@ class HomepageCourseCard extends GetView<HomeController> {
           children: [
             Stack(
               children: [
-                Image.network(course.imageURL!,
-                    fit: BoxFit.cover),
+                // Image.network(course.imageURL!,
+                //     fit: BoxFit.cover, height: 200,),
+                ClipRRect(
+                  // borderRadius: BorderRadius.circular(30),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/images/background/background.png',
+                    image: '${course.imageURL!}',
+                    fit: BoxFit.cover,
+                    height: 200,
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/background/background.png',
+                        fit: BoxFit.cover,
+                        height: 200,
+                      );
+                    },
+                  ),
+                ),
                 Positioned(
                   top: 8,
                   left: 8,
