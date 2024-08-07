@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
+import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -14,14 +16,23 @@ class CourseDetailController extends GetxController {
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
   var expandedChapters = <String, bool>{}.obs;
+  var user = Rx<UserModel?>(null);
   late String courseId;
 
   @override
   void onInit() {
+    checkLoginStatus();
     courseId = Get.parameters['id']!;
     fetchCourseDetail();
     fetchChapter();
     super.onInit();
+  }
+
+  Future<void> checkLoginStatus() async {
+    UserModel? sessionUser = await Get.find<AuthController>().getUserLocal();
+    if (sessionUser != null) {
+      user.value = sessionUser;
+    }
   }
 
   Future<void> fetchTopic(String chapterId) async {
@@ -106,6 +117,16 @@ class CourseDetailController extends GetxController {
       print('Error: $e');
       throw e;
     }
+  }
+
+  bool isCourseEnrolled(String courseId) {
+    if (user.value?.data?.enrollments == null) return false;
+    for (var enrollment in user.value!.data!.enrollments!) {
+      if (enrollment.courseId == courseId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void toggleChapterExpansion(String chapterId) {

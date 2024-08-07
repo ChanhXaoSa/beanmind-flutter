@@ -32,18 +32,8 @@ class HomeScreen extends GetView<HomeController> {
                 children: [
                   CustomBanner(),
                   FeaturedCourses(),
-                  // LastestCourses(),
-                  // BestRatedCourses(),
-                  Container(
-                    height: 1000, // Example of more content
-                    color: Colors.blue[100],
-                    child: Center(child: Text('More content here')),
-                  ),
-                  Container(
-                    height: 1000, // Example of more content
-                    color: Colors.red[100],
-                    child: Center(child: Text('More content here')),
-                  ),
+                  LastestCourses(),
+                  BestRatedCourses(),
                   Container(
                     height: 1000, // Example of more content
                     color: Colors.yellow[100],

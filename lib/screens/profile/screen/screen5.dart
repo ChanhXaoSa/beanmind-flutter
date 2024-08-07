@@ -28,7 +28,7 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
   List<GameHistoryItem> gameHistoryItems = [];
   List<GameHistoryItem> filteredGameHistoryItems = [];
   LoadingStatus loadingStatus = LoadingStatus.loading;
-  String user = Get.find<AuthController>().user.value!.first.data.id;
+  String user = Get.find<AuthController>().user.value!.first.data!.id!;
   TextEditingController searchController = TextEditingController();
 
   @override

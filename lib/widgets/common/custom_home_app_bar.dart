@@ -71,7 +71,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
-                                        controller.user.value!.data.userName,
+                                        controller.user.value!.data!.userName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -249,7 +249,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
-                                        controller.user.value!.data.userName,
+                                        controller.user.value!.data!.userName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -405,7 +405,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
-                                        controller.user.value!.data.userName,
+                                        controller.user.value!.data!.userName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),

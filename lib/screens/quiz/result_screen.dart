@@ -29,7 +29,9 @@ class Resultcreen extends GetView<QuizController> {
             children: [
               CustomAppBar(
                 quizAppBar: true,
-                leading: const SizedBox(height: kToolbarHeight,),
+                leading: const SizedBox(
+                  height: kToolbarHeight,
+                ),
                 title: controller.correctAnsweredQuestions,
               ),
               Expanded(
@@ -72,16 +74,24 @@ class Resultcreen extends GetView<QuizController> {
                                     mainAxisSpacing: 8),
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (_, index) {
-                              final _question = controller.allQuestionsApi[index];
+                              final _question =
+                                  controller.allQuestionsApi[index];
 
                               AnswerStatus _status = AnswerStatus.notanswered;
 
-                              final _selectedAnswer = _question.question!.selectedAnswer;
-                              final _correctAnswer = _question.question!.questionAnswers!.where((element) => element.isCorrect == true,).first;
+                              final _selectedAnswer =
+                                  _question.question!.selectedAnswer;
+                              final _correctAnswer =
+                                  _question.question!.questionAnswers!
+                                      .where(
+                                        (element) => element.isCorrect == true,
+                                      )
+                                      .first;
 
                               if (_selectedAnswer == _correctAnswer) {
                                 _status = AnswerStatus.correct;
-                              } else if (_question.question!.selectedAnswer == null) {
+                              } else if (_question.question!.selectedAnswer ==
+                                  null) {
                                 _status = AnswerStatus.wrong;
                               } else {
                                 _status = AnswerStatus.wrong;
@@ -108,19 +118,22 @@ class Resultcreen extends GetView<QuizController> {
                       children: [
                         Expanded(
                             child: MainButton(
-                              color: Colors.blueGrey,
+                          color: Colors.blueGrey,
                           onTap: () {
-                           controller.tryAgainApi();
+                            controller.saveQuizResults();
+                            controller.tryAgainApi();
                           },
                           title: 'Thử lại',
                         )),
-                        const SizedBox(width: 5,),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Expanded(
                             child: MainButton(
                           onTap: () {
-                            // controller.saveQuizResults();
+                            controller.saveQuizResults();
                           },
-                          title: 'Về trang chủ',
+                          title: 'Hoàn tất',
                         ))
                       ],
                     )),
