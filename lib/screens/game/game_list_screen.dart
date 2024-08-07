@@ -33,7 +33,8 @@ class GameListScreen extends GetView<GameController> {
           child: Obx(() {
             return CustomAppBar(
               title: controller.selectedGame.value != null
-                  ? controller.games.firstWhere((game) => game['id'] == controller.selectedGame.value)['name']
+                  ? controller.games.firstWhere((game) =>
+                      game['id'] == controller.selectedGame.value)['name']
                   : 'Thư viện trò chơi',
               leading: controller.selectedGame.value != null
                   ? IconButton(
@@ -62,7 +63,7 @@ class GameListScreen extends GetView<GameController> {
             children: [
               Container(
                 margin: EdgeInsets.only(right: 12),
-                width: MediaQuery.of(context).size.width*0.3,
+                width: MediaQuery.of(context).size.width * 0.3,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
@@ -108,7 +109,7 @@ class GameListScreen extends GetView<GameController> {
       padding: const EdgeInsets.all(20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 16 / 9,
+        childAspectRatio: 1.4,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
@@ -123,53 +124,100 @@ class GameListScreen extends GetView<GameController> {
               controller.isLoading.value = false;
             });
           },
-          child: GridTile(
-            footer: GridTileBar(
-              backgroundColor: Colors.black54,
-              title: Text(
-                game['name'] ?? '',
-                style: const TextStyle(fontSize: 20),
+          child: Card(
+            margin: const EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              side: BorderSide(
+                color: Colors.grey.shade400,
+                width: 1.3,
               ),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: Stack(
-                children: [
-                  Image.network(
-                    game['image'] ?? '',
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.deepPurple,
-                        backgroundColor: Colors.white,
-                        shape: const CircleBorder(),
-                        elevation: 5,
-                        padding: const EdgeInsets.all(20),
-                      ),
-                      onPressed: () {
-                        Get.toNamed(
-                          GameLeaderboardScreen.routeName,
-                          arguments: GameModel(
-                            id: game['id']!,
-                            title: game['name']!,
-                            imageUrl: game['image'] ?? '',
-                            description: game['description'] ?? '',
+            elevation: 5,
+            shadowColor: Colors.grey.withOpacity(0.5),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double imageHeight = constraints.maxHeight *
+                    0.5; // 50% of the card height for the image
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Image.network(
+                            game['image'] ?? '',
+                            width: double.infinity,
+                            height: imageHeight,
+                            fit: BoxFit.cover,
                           ),
-                        );
-                      },
-                      child: const Icon(AppIcons.trophyoutline, color: Colors.deepPurple),
-                    ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        game['name'] ?? '',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        game['description'] ?? '',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.deepPurple,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              elevation: 5,
+                            ),
+                            onPressed: () {
+                              Get.toNamed(
+                                GameLeaderboardScreen.routeName,
+                                arguments: GameModel(
+                                  id: game['id']!,
+                                  title: game['name']!,
+                                  imageUrl: game['image'] ?? '',
+                                  description: game['description'] ?? '',
+                                ),
+                              );
+                            },
+                            child: Row(
+                              children: const [
+                                Icon(AppIcons.trophyoutline),
+                                SizedBox(width: 5),
+                                Text('Bảng xếp hạng'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         );
       },
     );
   }
+
+
 }
