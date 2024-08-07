@@ -61,7 +61,7 @@ class Data {
   dynamic parent;
   List<dynamic>? sessions;
   List<dynamic>? teachables;
-  List<DataEnrollment>? enrollments;
+  List<UserDataEnrollment>? enrollments;
   List<String>? roles;
 
   Data({
@@ -102,7 +102,7 @@ class Data {
     parent: json["parent"],
     sessions: json["sessions"] == null ? [] : List<dynamic>.from(json["sessions"]!.map((x) => x)),
     teachables: json["teachables"] == null ? [] : List<dynamic>.from(json["teachables"]!.map((x) => x)),
-    enrollments: json["enrollments"] == null ? [] : List<DataEnrollment>.from(json["enrollments"]!.map((x) => DataEnrollment.fromJson(x))),
+    enrollments: json["enrollments"] == null ? [] : List<UserDataEnrollment>.from(json["enrollments"]!.map((x) => UserDataEnrollment.fromJson(x))),
     roles: json["roles"] == null ? [] : List<String>.from(json["roles"]!.map((x) => x)),
   );
 
@@ -130,7 +130,7 @@ class Data {
 
 class ParticipantElement {
   String? enrollmentId;
-  DataEnrollment? enrollment;
+  UserDataEnrollment? enrollment;
   String? sessionId;
   dynamic session;
   bool? isPresent;
@@ -151,7 +151,7 @@ class ParticipantElement {
 
   factory ParticipantElement.fromJson(Map<String, dynamic> json) => ParticipantElement(
     enrollmentId: json["enrollmentId"],
-    enrollment: json["enrollment"] == null ? null : DataEnrollment.fromJson(json["enrollment"]),
+    enrollment: json["enrollment"] == null ? null : UserDataEnrollment.fromJson(json["enrollment"]),
     sessionId: json["sessionId"],
     session: json["session"],
     isPresent: json["isPresent"],
@@ -410,7 +410,7 @@ class Course {
   dynamic courseLevel;
   List<dynamic>? teachables;
   List<Chapter>? chapters;
-  List<DataEnrollment>? enrollments;
+  List<UserDataEnrollment>? enrollments;
   String? id;
   bool? isDeleted;
 
@@ -447,7 +447,7 @@ class Course {
     courseLevel: json["courseLevel"],
     teachables: json["teachables"] == null ? [] : List<dynamic>.from(json["teachables"]!.map((x) => x)),
     chapters: json["chapters"] == null ? [] : List<Chapter>.from(json["chapters"]!.map((x) => Chapter.fromJson(x))),
-    enrollments: json["enrollments"] == null ? [] : List<DataEnrollment>.from(json["enrollments"]!.map((x) => DataEnrollment.fromJson(x))),
+    enrollments: json["enrollments"] == null ? [] : List<UserDataEnrollment>.from(json["enrollments"]!.map((x) => UserDataEnrollment.fromJson(x))),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -525,7 +525,7 @@ class PurpleApplicationUser {
   dynamic teacher;
   dynamic parentId;
   dynamic parent;
-  List<DataEnrollment>? enrollments;
+  List<UserDataEnrollment>? enrollments;
 
   PurpleApplicationUser({
     this.id,
@@ -556,7 +556,7 @@ class PurpleApplicationUser {
     teacher: json["teacher"],
     parentId: json["parentId"],
     parent: json["parent"],
-    enrollments: json["enrollments"] == null ? [] : List<DataEnrollment>.from(json["enrollments"]!.map((x) => DataEnrollment.fromJson(x))),
+    enrollments: json["enrollments"] == null ? [] : List<UserDataEnrollment>.from(json["enrollments"]!.map((x) => UserDataEnrollment.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -696,7 +696,7 @@ class StudentApplicationUser {
   };
 }
 
-class DataEnrollment {
+class UserDataEnrollment {
   String? applicationUserId;
   StudentApplicationUser? applicationUser;
   String? courseId;
@@ -709,7 +709,7 @@ class DataEnrollment {
   List<dynamic>? participants;
   List<dynamic>? worksheetAttempts;
 
-  DataEnrollment({
+  UserDataEnrollment({
     this.applicationUserId,
     this.applicationUser,
     this.courseId,
@@ -723,7 +723,7 @@ class DataEnrollment {
     this.worksheetAttempts,
   });
 
-  factory DataEnrollment.fromJson(Map<String, dynamic> json) => DataEnrollment(
+  factory UserDataEnrollment.fromJson(Map<String, dynamic> json) => UserDataEnrollment(
     applicationUserId: json["applicationUserId"],
     applicationUser: json["applicationUser"] == null ? null : StudentApplicationUser.fromJson(json["applicationUser"]),
     courseId: json["courseId"],
