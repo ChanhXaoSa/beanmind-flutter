@@ -2,6 +2,7 @@ import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../configs/themes/custom_text_styles.dart';
 
@@ -14,7 +15,70 @@ class CourseDetailAction extends GetView<CourseDetailController> {
 
     return Obx(() {
       if (controller.courseDetailData.value == null) {
-        return const Center(child: CircularProgressIndicator());
+        return Center(
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 60,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 60,
+                      height: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 60,
+                      height: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 60,
+                      height: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
       }
       final courseDetailData = controller.courseDetailData.value!;
       return Container(

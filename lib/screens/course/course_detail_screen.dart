@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/widgets/course_detail/course_detail_chapter_and
 import 'package:beanmind_flutter/widgets/course_detail/course_detail_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CourseDetailScreen extends GetView<CourseDetailController> {
   const CourseDetailScreen({super.key});
@@ -49,7 +50,51 @@ class CourseDetailScreen extends GetView<CourseDetailController> {
                           Obx(() {
                             if (controller.courseDetailData.value == null) {
                               return Center(
-                                child: CircularProgressIndicator(),
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.fromLTRB(0, 0, 1, 24),
+                                        width: double.infinity,
+                                        height: 449,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            flex: 7,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: 200,
+                                                  color: Colors.white,
+                                                ),
+                                                const SizedBox(height: 24),
+                                                Container(
+                                                  height: 100,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              height: 300,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               );
                             } else {
                               return Container(
