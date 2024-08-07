@@ -50,9 +50,9 @@ class CourseDetailController extends GetxController {
         if(topicModelBase.data?.items != null) {
           topicListModel.addAll(topicModelBase.data!.items!);
         }
-        for (var topic in topicListModel) {
-          print('Topic: ${topic.title}, ChapterId: ${topic.chapterId}');
-        }
+        // for (var topic in topicListModel) {
+        //   print('Topic: ${topic.title}, ChapterId: ${topic.chapterId}');
+        // }
       } else {
         throw Exception('Failed to fetch topic');
       }
@@ -86,7 +86,7 @@ class CourseDetailController extends GetxController {
         //     fetchTopic(chapter.id!);
         //   }
         // }
-        print('${chapterList.toString()}');
+        // print('${chapterList.toString()}');
       } else {
         throw Exception('Failed to fetch chapter');
       }
@@ -109,7 +109,7 @@ class CourseDetailController extends GetxController {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailModel.value = courseDetailModelBase;
         courseDetailData.value = courseDetailModelBase.data;
-        print(courseDetailModel.value.toString());
+        // print(courseDetailModel.value.toString());
       } else {
         throw Exception('Failed to fetch course');
       }
@@ -120,14 +120,19 @@ class CourseDetailController extends GetxController {
   }
 
   bool isCourseEnrolled(String courseId) {
-    if (user.value?.data?.enrollments == null) return false;
+    if (user.value?.data?.enrollments == null) {
+      // print("No enrollments found for user");
+      return false;
+    }
     for (var enrollment in user.value!.data!.enrollments!) {
+      // print("Checking enrollment for courseId: ${enrollment.courseId}");
       if (enrollment.courseId == courseId) {
         return true;
       }
     }
     return false;
   }
+
 
   void toggleChapterExpansion(String chapterId) {
     expandedChapters[chapterId] = !(expandedChapters[chapterId] ?? false);
