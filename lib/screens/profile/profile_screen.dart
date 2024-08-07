@@ -18,7 +18,7 @@ class ProfileScreen extends GetView<ProfileController> {
       body: ResponsiveLayout(
         //mobileBody: const MobileScaffold(),
         //tabletBody: const TabletScaffold(),
-        desktopBody: const DesktopScaffold(),
+        desktopBody: DesktopScaffold(),
       ),
     );
   }
