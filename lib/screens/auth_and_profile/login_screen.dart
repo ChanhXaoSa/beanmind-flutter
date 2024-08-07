@@ -104,7 +104,7 @@ class LoginScreen extends GetView<AuthController> {
                   ),
               )
               : Container(
-                height: MediaQuery.of(context).size.height*0.4,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),

@@ -109,7 +109,7 @@ class GameListScreen extends GetView<GameController> {
       padding: const EdgeInsets.all(20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 16 / 9,
+        childAspectRatio: 1.4,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
@@ -135,100 +135,89 @@ class GameListScreen extends GetView<GameController> {
             ),
             elevation: 5,
             shadowColor: Colors.grey.withOpacity(0.5),
-            child: Container(
-              width: 285,
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double imageHeight = constraints.maxHeight *
+                    0.5; // 50% of the card height for the image
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                        game['image'] ?? '',
-                        width: double.infinity,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    game['name'] ?? '',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    game['description'] ?? '',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        'Điểm của bạn : ${game['score'] ?? 'chưa có dữ liệu'}',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Cấp độ trò chơi: ${game['level'] ?? 'chưa cập nhật'}',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.deepPurple,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                      Stack(
+                        children: [
+                          Image.network(
+                            game['image'] ?? '',
+                            width: double.infinity,
+                            height: imageHeight,
+                            fit: BoxFit.cover,
                           ),
-                          elevation: 5,
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        game['name'] ?? '',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        onPressed: () {
-                          Get.toNamed(
-                            GameLeaderboardScreen.routeName,
-                            arguments: GameModel(
-                              id: game['id']!,
-                              title: game['name']!,
-                              imageUrl: game['image'] ?? '',
-                              description: game['description'] ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        game['description'] ?? '',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.deepPurple,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              elevation: 5,
                             ),
-                          );
-                        },
-                        child: Row(
-                          children: const [
-                            Icon(AppIcons.trophyoutline),
-                            SizedBox(width: 5),
-                            Text('Bảng xếp hạng'),
-                          ],
-                        ),
+                            onPressed: () {
+                              Get.toNamed(
+                                GameLeaderboardScreen.routeName,
+                                arguments: GameModel(
+                                  id: game['id']!,
+                                  title: game['name']!,
+                                  imageUrl: game['image'] ?? '',
+                                  description: game['description'] ?? '',
+                                ),
+                              );
+                            },
+                            child: Row(
+                              children: const [
+                                Icon(AppIcons.trophyoutline),
+                                SizedBox(width: 5),
+                                Text('Bảng xếp hạng'),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         );
       },
     );
   }
+
+
 }
