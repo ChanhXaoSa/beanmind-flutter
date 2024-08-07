@@ -12,7 +12,7 @@ class UserModel {
   String? message;
   bool? success;
   int? code;
-  Data? data;
+  UserData? data;
   dynamic errors;
   dynamic fieldErrors;
 
@@ -29,7 +29,7 @@ class UserModel {
     message: json["message"],
     success: json["success"],
     code: json["code"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : UserData.fromJson(json["data"]),
     errors: json["errors"],
     fieldErrors: json["fieldErrors"],
   );
@@ -44,7 +44,7 @@ class UserModel {
   };
 }
 
-class Data {
+class UserData {
   String? id;
   String? userName;
   dynamic lastName;
@@ -64,7 +64,7 @@ class Data {
   List<UserDataEnrollment>? enrollments;
   List<String>? roles;
 
-  Data({
+  UserData({
     this.id,
     this.userName,
     this.lastName,
@@ -85,7 +85,7 @@ class Data {
     this.roles,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
     id: json["id"],
     userName: json["userName"],
     lastName: json["lastName"],
