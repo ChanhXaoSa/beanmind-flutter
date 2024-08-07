@@ -108,8 +108,8 @@ class GameListScreen extends GetView<GameController> {
     return GridView.builder(
       padding: const EdgeInsets.all(20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 1.4,
+        crossAxisCount: 4,
+        childAspectRatio: 1.1,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
