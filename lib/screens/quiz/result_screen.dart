@@ -28,6 +28,7 @@ class Resultcreen extends GetView<QuizController> {
           child: Column(
             children: [
               CustomAppBar(
+                quizAppBar: true,
                 leading: const SizedBox(height: kToolbarHeight,),
                 title: controller.correctAnsweredQuestions,
               ),
@@ -40,19 +41,19 @@ class Resultcreen extends GetView<QuizController> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 5),
                       child: Text(
-                        'Congratulations',
+                        'Chúc mừng',
                         style: kHeaderTS.copyWith(color: _textColor),
                       ),
                     ),
                     Text(
-                      'You have got ${controller.points} Points',
+                      'Bạn đã đạt được ${controller.points} điểm',
                       style: TextStyle(color: _textColor),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
                     const Text(
-                      'Tap below question numbers to view correct answers',
+                      'Nhấn vào từng câu hỏi để xem đáp án đúng',
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -111,7 +112,7 @@ class Resultcreen extends GetView<QuizController> {
                           onTap: () {
                            controller.tryAgainApi();
                           },
-                          title: 'Try Again',
+                          title: 'Thử lại',
                         )),
                         const SizedBox(width: 5,),
                         Expanded(
@@ -119,7 +120,7 @@ class Resultcreen extends GetView<QuizController> {
                           onTap: () {
                             // controller.saveQuizResults();
                           },
-                          title: 'Go to home',
+                          title: 'Về trang chủ',
                         ))
                       ],
                     )),

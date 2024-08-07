@@ -13,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showActionIcon = false,
     this.showAudioButton = false,
     this.leading,
+    this.quizAppBar = false,
     this.titleWidget, this.onMenuActionTap,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String backPageRoute;
   final Widget? titleWidget;
   final bool showActionIcon;
+  final bool quizAppBar;
   final Widget? leading;
   final VoidCallback? onMenuActionTap;
   final bool showAudioButton;
@@ -41,18 +43,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  if(quizAppBar)
                   leading ??
                       Transform.translate(
                           offset: const Offset(-14, 0),
-                          // child:
-                          //     const BackButton()), // transform to allign icons with body content
+                          child:
+                              const BackButton()), // transform to allign icons with body content
+                  if(!quizAppBar)
+                    leading ??
+                        Transform.translate(
+                          offset: const Offset(-14, 0),
                           child: IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
                               Get.offAllNamed('/$backPageRoute');
                             },
                           ),
-                      ),
+                        ),
                   if (showActionIcon)
                     Transform.translate(
                       offset: const Offset(10,

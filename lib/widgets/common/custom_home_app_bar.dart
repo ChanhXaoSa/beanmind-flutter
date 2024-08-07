@@ -139,11 +139,13 @@ class CustomHomeAppBar extends GetView<AppBarController> implements PreferredSiz
                         onSelected: (String value) {
                           if (value == 'Profile') {
                             Get.toNamed(ProfileScreen.routeName);
+                          } else if (value == 'Logout') {
+                            controller.signOut();
                           }
                           // Handle other menu selections
                         },
                         itemBuilder: (BuildContext context) {
-                          return {'Profile', 'Settings', 'Logout'}.map((String choice) {
+                          return {'Profile', 'Logout'}.map((String choice) {
                             return PopupMenuItem<String>(
                               value: choice,
                               child: Text(choice),

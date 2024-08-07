@@ -14,6 +14,7 @@ class QuizOverviewScreen extends GetView<QuizController> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar:  CustomAppBar(
+        quizAppBar: true,
         title: controller.completedQuizApi,
       ),
       body: BackgroundDecoration(
@@ -32,7 +33,7 @@ class QuizOverviewScreen extends GetView<QuizController> {
                       ),
                       Obx(
                         () => Text(
-                          '${controller.time} Remining',
+                          'Thời gian còn lại: ${controller.time}',
                           style: countDownTimerTs(context),
                         ),
                       )
@@ -73,7 +74,7 @@ class QuizOverviewScreen extends GetView<QuizController> {
                   onTap: () {
                     controller.completeApi();
                   },
-                  title: 'Complete',
+                  title: 'Nộp bài',
                 ),
               ),
             )
