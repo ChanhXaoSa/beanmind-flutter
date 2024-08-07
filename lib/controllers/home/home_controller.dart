@@ -33,7 +33,7 @@ class HomeController extends GetxController {
   Future<void> fetchEnrollments() async {
     try {
       final response = await http.get(
-          Uri.parse('$newBaseApiUrl/enrollments?ApplicationUserId=${user.value!.data.id}'),
+          Uri.parse('$newBaseApiUrl/enrollments?ApplicationUserId=${user.value!.data!.id}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',

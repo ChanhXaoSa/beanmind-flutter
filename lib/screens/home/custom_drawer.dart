@@ -74,7 +74,7 @@ class CustomDrawer extends GetView<MyDrawerController> {
                     () => controller.user.value == null
                         ? const SizedBox()
                         // : Text(controller.user.value!.displayName ?? '',
-                        : Text(controller.user.value!.first.data.userName ?? '',
+                        : Text(controller.user.value!.first.data!.userName ?? '',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 18,
