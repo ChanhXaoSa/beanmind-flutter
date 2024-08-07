@@ -7,6 +7,7 @@ import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_learning_course_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart'; // Import package shimmer
 
 class CourseLeaningScreen2 extends GetView<CourseLearningController> {
   const CourseLeaningScreen2({super.key});
@@ -47,6 +48,21 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
                     child: Column(
                       children: [
                         Obx(() {
+                          if (controller.chapterList.isEmpty) {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Column(
+                                children: List.generate(3, (index) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 8),
+                                    height: 50,
+                                    color: Colors.white,
+                                  );
+                                }),
+                              ),
+                            );
+                          }
                           return Accordion(
                             maxOpenSections: 1,
                             headerBackgroundColor: const Color.fromARGB(90, 227, 227, 227),
@@ -122,7 +138,20 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
                               }).toList(),
                             );
                           } else {
-                            return Container();
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Column(
+                                children: List.generate(2, (index) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 8),
+                                    height: 50,
+                                    width: double.infinity,
+                                    color: Colors.white,
+                                  );
+                                }),
+                              ),
+                            );
                           }
                         })
                       ],
@@ -167,20 +196,39 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
                               ),
                               // Add more custom widgets here using topicDetail data
                               const SizedBox(height: 16),
-                              // const Text(
-                              //   'Additional Custom Data:',
-                              //   style: TextStyle(
-                              //       fontSize: 18, fontWeight: FontWeight.bold),
-                              // ),
-                              // if (topicDetail.questions != null &&
-                              //     topicDetail.questions!.isNotEmpty)
-                              //   ...topicDetail.questions!.map((question) =>
-                              //       Text('Question: ${question.content}')),
                             ],
                           ),
                         );
                       } else {
-                        return Center(child: Text(controller.selectedContent.value));
+                        if(controller.selectedContent.value == 'Chọn nội dung bạn muốn học hôm nay') {
+                          return Center(child: Text(controller.selectedContent.value));
+                        }
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 24,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                width: double.infinity,
+                                height: 16,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                width: double.infinity,
+                                height: 200,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        );
                       }
                     }),
                   ),
@@ -193,4 +241,3 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
     );
   }
 }
-
