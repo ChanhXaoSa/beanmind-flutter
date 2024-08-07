@@ -82,6 +82,16 @@ class HomeController extends GetxController {
     }
   }
 
+  bool isCourseEnrolled(String courseId) {
+    if (user.value?.data?.enrollments == null) return false;
+    for (var enrollment in user.value!.data!.enrollments!) {
+      if (enrollment.courseId == courseId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void navigateToCourseDetail(String id) {
     Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', id));
   }

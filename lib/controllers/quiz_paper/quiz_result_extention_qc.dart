@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/firebase/references.dart';
 import 'package:beanmind_flutter/services/notification/notification_service.dart';
+import 'package:http/http.dart' as http;
 
 extension QuizeResult on QuizController {
   int get correctQuestionCount => allQuestionsApi
@@ -17,48 +20,63 @@ extension QuizeResult on QuizController {
   }
 
   String get points {
-    var points = (correctQuestionCount / allQuestionsApi.length) *
+    var points = ((correctQuestionCount / allQuestionsApi.length) *
         100 *
         (600 - remainSeconds) /
         600 *
-        100;
-    return points.toStringAsFixed(2);
+        100).round();
+    return points.toString();
   }
 
-  // Future<void> saveQuizResults() async {
-  //   var batch = fi.batch();
-  //   User? _user = Get.find<AuthController>().getUser();
-  //   if (_user == null) return;
-  //   batch.set(
-  //       userFR
-  //           .doc(_user.email)
-  //           .collection('myrecent_quizes')
-  //           .doc(quizPaperModel.id),
-  //       {
-  //         "points": points,
-  //         "correct_count": '$correctQuestionCount/${allQuestionsApi.length}',
-  //         "paper_id": quizPaperModel.id,
-  //         "time": quizPaperModel.timeSeconds - remainSeconds
-  //       });
-  //   batch.set(
-  //       leaderBoardFR
-  //           .doc(quizPaperModel.id)
-  //           .collection('scores')
-  //           .doc(_user.email),
-  //       {
-  //         "points": double.parse(points),
-  //         "correct_count": '$correctQuestionCount/${allQuestionsApi.length}',
-  //         "paper_id": quizPaperModel.id,
-  //         "user_id": _user.email,
-  //         "time": quizPaperModel.timeSeconds - remainSeconds
-  //       });
-  //   await batch.commit();
-  //   Get.find<NotificationService>().showQuizCompletedNotification(
-  //       id: 1,
-  //       title: quizPaperModel.title,
-  //       body:  'You have just got $points points for ${quizPaperModel.title} -  Tap here to view leaderboard' ,
-  //       imageUrl: quizPaperModel.imageUrl,
-  //       payload: json.encode(quizPaperModel.toJson()));
-  //   navigateToHome();
-  // }
+  Future<void> saveQuizResults() async {
+    UserModel? user = await Get.find<AuthController>().getUserLocal();
+    if (user == null) Get.find<AuthController>().signOut();
+    String enrollId = Get.find<AuthController>().getEnrollmentId(courseId);
+    String worksheetId = this.worksheetId;
+    String completionDate = DateTime.now().toUtc().toIso8601String();
+
+    List<Map<String, String>> workSheetAttemptAnswers = allQuestionsApi
+        .where((question) => question.question!.selectedAnswer != null)
+        .map((question) {
+      return {
+        "questionAnswerId": question.question!.selectedAnswer!.id!,
+      };
+    }).toList();
+
+    var body = jsonEncode({
+      "enrollmentId": enrollId,
+      "worksheetId": worksheetId,
+      "completionDate": completionDate,
+      "status": 1,
+      "score": points,
+      "workSheetAttemptAnswers": workSheetAttemptAnswers
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('$newBaseApiUrl/worksheet-attempts'),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'ngrok-skip-browser-warning': 'true',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('Quiz results saved successfully');
+        navigateToCourseLearning();
+      } else {
+        print('Failed to save quiz results: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    // Get.find<NotificationService>().showQuizCompletedNotification(
+    //     id: 1,
+    //     title: worksheetDetailModel.value!.data!.title,
+    //     body:  'Bạn đạt được $points điểm cho bài kiểm tra ${worksheetDetailModel.value!.data!.title} -  Nhấn vào đây để xem bảng xếp hạng' ,
+    //     // imageUrl: quizPaperModel.imageUrl,
+    //     payload: json.encode(worksheetDetailModel.toJson()));
+  }
 }

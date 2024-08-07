@@ -196,6 +196,15 @@ class AuthController extends GetxController {
     }
   }
 
+  String getEnrollmentId(String courseId) {
+    if (user.value?.first.data?.enrollments == null) return '';
+    for (var enrollment in user.value!.first.data!.enrollments!) {
+      if (enrollment.courseId == courseId) {
+        return enrollment.id!;
+      }
+    }
+    return '';
+  }
   bool isLogedIn() {
     // return _auth.currentUser != null;
     return false;

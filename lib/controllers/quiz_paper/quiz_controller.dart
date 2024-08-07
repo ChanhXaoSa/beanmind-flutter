@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:beanmind_flutter/models/worksheet_detail_model.dart';
+import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,9 +18,10 @@ import 'package:http/http.dart' as http;
 import 'quiz_papers_controller.dart';
 
 class QuizController extends GetxController {
+  late String courseId;
+  late String worksheetId;
   final loadingStatusApi = LoadingStatus.loading.obs;
   final allQuestionsApi = <WorksheetQuestion>[];
-  late QuizPaperModel quizPaperModel;
   var worksheetDetailModel = Rxn<WorksheetDetailModel>();
   Timer? _timer;
   int remainSeconds = 1;
@@ -27,6 +29,8 @@ class QuizController extends GetxController {
 
   @override
   void onReady() {
+    courseId = Get.parameters['course_id']!;
+    worksheetId = Get.parameters['worksheet_id']!;
     // final _quizData = Get.arguments as WorksheetDetailModel;
     // loadDataApi(_quizData);
     // final _quizePaprer = Get.arguments as QuizPaperModel;
@@ -68,7 +72,7 @@ class QuizController extends GetxController {
   Future<void> fetchWorksheetDetail() async {
     try {
       final response = await http.get(
-          Uri.parse('$newBaseApiUrl/worksheets/89b67173-669d-443f-ba87-79b8791c6238'),
+          Uri.parse('$newBaseApiUrl/worksheets/$worksheetId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
@@ -165,5 +169,10 @@ class QuizController extends GetxController {
   void navigateToHome(){
      _timer!.cancel();
      Get.offNamedUntil(HomeScreen.routeName, (route) => false);
+  }
+
+  void navigateToCourseLearning(){
+    _timer!.cancel();
+    Get.offNamedUntil(CourseLeaningScreen2.routeName.replaceFirst(':id', courseId), (route) => false,);
   }
 }

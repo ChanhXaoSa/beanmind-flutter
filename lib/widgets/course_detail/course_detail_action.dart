@@ -10,6 +10,8 @@ class CourseDetailAction extends GetView<CourseDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isEnrolled = controller.isCourseEnrolled(controller.courseId);
+
     return Obx(() {
       if (controller.courseDetailData.value == null) {
         return const Center(child: CircularProgressIndicator());
@@ -26,6 +28,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            isEnrolled ?
             ElevatedButton(
               onPressed: () {
                 Get.toNamed(CourseLeaningScreen2.routeName.replaceFirst(':id', courseDetailData.id!));
@@ -40,6 +43,27 @@ class CourseDetailAction extends GetView<CourseDetailController> {
               child: Center(
                 child: Text(
                   'Học ngay',
+                  style: kDetailsTS.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    height: 1.3,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+            ) :
+            ElevatedButton(
+              onPressed: null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF3DCBB1),
+                padding: const EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Chưa đăng ký',
                   style: kDetailsTS.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
