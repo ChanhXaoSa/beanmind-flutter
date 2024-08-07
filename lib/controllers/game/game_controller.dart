@@ -35,7 +35,7 @@ class GameController extends GetxController {
   }
 
   Future<void> fetchGameList() async {
-    loadingStatus.value = LoadingStatus.loading;
+    isLoading.value = true; // Đặt trạng thái tải
     try {
       final response = await http.get(
           Uri.parse('${newBaseApiUrl}/games'),
@@ -43,26 +43,25 @@ class GameController extends GetxController {
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
           });
+
       if (response.statusCode == 200) {
         final body = response.body;
         final decoded = jsonDecode(body);
 
-        // Access the 'items' list inside the 'data' object
         if (decoded is Map<String, dynamic> &&
             decoded['data'] is Map<String, dynamic>) {
           games = decoded['data']['items'];
         } else {
           throw Exception('Unexpected JSON format');
         }
-        // print(games);
-        loadingStatus.value = LoadingStatus.completed;
       } else {
-        loadingStatus.value = LoadingStatus.error;
         throw Exception('Failed to load game list');
       }
     } catch (e) {
-      loadingStatus.value = LoadingStatus.error;
-      AppLogger.e(e);
+      Get.snackbar('Error', 'Failed to load games');
+    } finally {
+      isLoading.value =
+          false; // Đặt trạng thái tải thành false sau khi hoàn tất
     }
   }
 
