@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:beanmind_flutter/models/game_history_model.dart';
+import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,10 +15,26 @@ import 'package:beanmind_flutter/utils/logger.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
+  var user = Rx<UserModel?>(null);
+
   @override
   void onReady() {
     getMyRecentTests();
+    checkLoginStatus();
     super.onReady();
+  }
+
+  var selectedIndex = 0.obs;
+
+  void onItemTapped(int index) {
+    selectedIndex.value = index;
+  }
+
+  Future<void> checkLoginStatus() async {
+    UserModel? sessionUser = await Get.find<AuthController>().getUserLocal();
+    if (sessionUser != null) {
+      user.value = sessionUser;
+    }
   }
 
   final allRecentTest = <RecentTest>[].obs;

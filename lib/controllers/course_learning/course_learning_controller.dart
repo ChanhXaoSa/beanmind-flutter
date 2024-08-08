@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
+import 'package:beanmind_flutter/models/worksheet_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -16,11 +17,13 @@ class CourseLearningController extends GetxController {
   var chapterList = <ChapterItem>[].obs;
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
+  var worksheetModel = Rxn<WorksheetModel>();
+  var worksheetListModel = <WorksheetItem>[].obs;
   var expandedChapters = <String, bool>{}.obs;
   var topicDetailModel = Rxn<TopicDetailModel>();
   var topicDetailData = Rxn<TopicDetailData>();
 
-  var selectedContent = 'Chọn nội dung học để hiển thị'.obs;
+  var selectedContent = 'Chọn nội dung bạn muốn học hôm nay'.obs;
 
   @override
   void onInit() {
@@ -43,7 +46,8 @@ class CourseLearningController extends GetxController {
         final topicDetailModelBase = TopicDetailModel.fromJson(json.decode(response.body));
         topicDetailModel.value = topicDetailModelBase;
         topicDetailData.value = topicDetailModelBase.data;
-        final content = json.decode(response.body)['message'];
+        // final content = json.decode(response.body)['message'];
+        final content = 'Đang tải';
         selectedContent.value = content;
       } else {
         throw Exception('Failed to fetch topic content');
@@ -128,7 +132,34 @@ class CourseLearningController extends GetxController {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailModel.value = courseDetailModelBase;
         courseDetailData.value = courseDetailModelBase.data;
+        if(courseDetailData.value?.worksheetTemplates !=
+            null) {
+          fetchWorksheet(courseDetailData.value!.worksheetTemplates!.first.id!);
+        }
         print(courseDetailModel.value.toString());
+      } else {
+        throw Exception('Failed to fetch course');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw e;
+    }
+  }
+
+  Future<void> fetchWorksheet(String worksheetTemplateId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('${newBaseApiUrl}/worksheets?WorksheetTemplateId=${worksheetTemplateId}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final worksheetDetailModelBase = WorksheetModel.fromJson(json.decode(response.body));
+        worksheetModel.value = worksheetDetailModelBase;
+        worksheetListModel.assignAll(worksheetDetailModelBase.data!.items!);
+        print(worksheetListModel.value.toString());
       } else {
         throw Exception('Failed to fetch course');
       }
@@ -143,7 +174,10 @@ class CourseLearningController extends GetxController {
     update();
   }
 
+  var selectedTopicId = ''.obs;
+
   void selectContent(String topicId) {
+    selectedTopicId.value = topicId;  // Cập nhật biến này
     topicDetailModel.value = null;
     topicDetailData.value = null;
     fetchTopicContent(topicId);

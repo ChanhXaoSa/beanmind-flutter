@@ -96,7 +96,7 @@ class AppRoutes {
           name: QuizAttemptScreen.routeName,
           page: () => const QuizAttemptScreen(),
           binding: BindingsBuilder(() {
-            Get.put(QuizController());
+            Get.put<QuizController>(QuizController());
           }),
         ),
       ];

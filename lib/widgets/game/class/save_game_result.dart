@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> saveGameResults(String gameId, int points, int timeRecord) async {
-  String user = Get.find<AuthController>().user.value!.first.data.id;
+  String user = Get.find<AuthController>().user.value!.first.data!.id!;
 
   final apiUrl = "${newBaseApiUrl}/game-histories";
   final body = jsonEncode({

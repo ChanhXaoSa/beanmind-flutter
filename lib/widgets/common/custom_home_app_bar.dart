@@ -71,7 +71,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
-                                        controller.user.value!.data.userName,
+                                        controller.user.value!.data!.userName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -181,26 +181,26 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       ),
                     ),
                     const Spacer(),
-                    TextButton(
-                      onPressed: () => controller.navigateToCourseLeaning(),
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ).copyWith(
-                        foregroundColor:
-                            WidgetStateProperty.resolveWith((states) {
-                          if (states.contains(WidgetState.hovered)) {
-                            return Colors.blue[900];
-                          }
-                          return null;
-                        }),
-                        overlayColor:
-                            WidgetStateProperty.all(Colors.transparent),
-                      ),
-                      child: const Text('Danh sách khóa học'),
-                    ),
+                    // TextButton(
+                    //   onPressed: () => controller.navigateToCourseLeaning(),
+                    //   style: TextButton.styleFrom(
+                    //     textStyle: const TextStyle(
+                    //       fontWeight: FontWeight.w500,
+                    //       fontSize: 16,
+                    //     ),
+                    //   ).copyWith(
+                    //     foregroundColor:
+                    //         WidgetStateProperty.resolveWith((states) {
+                    //       if (states.contains(WidgetState.hovered)) {
+                    //         return Colors.blue[900];
+                    //       }
+                    //       return null;
+                    //     }),
+                    //     overlayColor:
+                    //         WidgetStateProperty.all(Colors.transparent),
+                    //   ),
+                    //   child: const Text('Danh sách khóa học'),
+                    // ),
                     const SizedBox(width: 10.0),
                     TextButton(
                         onPressed: () => controller.navigateToGameList(),
@@ -249,7 +249,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
-                                        controller.user.value!.data.userName,
+                                        controller.user.value!.data!.userName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -337,26 +337,26 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       ),
                     ),
                     const Spacer(),
-                    TextButton(
-                      onPressed: () => controller.navigateToCourseLeaning(),
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ).copyWith(
-                        foregroundColor:
-                            WidgetStateProperty.resolveWith((states) {
-                          if (states.contains(WidgetState.hovered)) {
-                            return Colors.blue[900];
-                          }
-                          return null;
-                        }),
-                        overlayColor:
-                            WidgetStateProperty.all(Colors.transparent),
-                      ),
-                      child: const Text('Danh sách khóa học'),
-                    ),
+                    // TextButton(
+                    //   onPressed: () => controller.navigateToCourseLeaning(),
+                    //   style: TextButton.styleFrom(
+                    //     textStyle: const TextStyle(
+                    //       fontWeight: FontWeight.w500,
+                    //       fontSize: 16,
+                    //     ),
+                    //   ).copyWith(
+                    //     foregroundColor:
+                    //         WidgetStateProperty.resolveWith((states) {
+                    //       if (states.contains(WidgetState.hovered)) {
+                    //         return Colors.blue[900];
+                    //       }
+                    //       return null;
+                    //     }),
+                    //     overlayColor:
+                    //         WidgetStateProperty.all(Colors.transparent),
+                    //   ),
+                    //   child: const Text('Danh sách khóa học'),
+                    // ),
                     const SizedBox(width: 10.0),
                     TextButton(
                         onPressed: () => controller.navigateToGameList(),
@@ -405,7 +405,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
-                                        controller.user.value!.data.userName,
+                                        controller.user.value!.data!.userName!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),

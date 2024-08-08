@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/controllers/profile/profile_controller.dart';
 import 'package:beanmind_flutter/screens/profile/screen/screen1.dart';
 import 'package:beanmind_flutter/screens/profile/screen/screen2.dart';
 import 'package:beanmind_flutter/screens/profile/screen/screen3.dart';
@@ -5,22 +6,10 @@ import 'package:beanmind_flutter/screens/profile/screen/screen4.dart';
 import 'package:beanmind_flutter/screens/profile/screen/screen5.dart';
 import 'package:beanmind_flutter/screens/profile/style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class DesktopScaffold extends StatefulWidget {
-  const DesktopScaffold({Key? key}) : super(key: key);
-
-  @override
-  State<DesktopScaffold> createState() => _DesktopScaffoldState();
-}
-
-class _DesktopScaffoldState extends State<DesktopScaffold> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+class DesktopScaffold extends GetView<ProfileController> {
+  const DesktopScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +19,11 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // open drawer
-          myDrawer(_onItemTapped),
+          myDrawer(controller.onItemTapped),
           // main content area
           Expanded(
-            child: IndexedStack(
-              index: _selectedIndex,
+            child: Obx(() => IndexedStack(
+              index: controller.selectedIndex.value,
               children: [
                 // Define your different screens here
                 Screen1(),
@@ -43,7 +32,7 @@ class _DesktopScaffoldState extends State<DesktopScaffold> {
                 Screen4(),
                 Screen5(),
               ],
-            ),
+            )),
           ),
         ],
       ),
@@ -60,8 +49,8 @@ Drawer myDrawer(void Function(int) onItemTapped) {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            padding: EdgeInsets.only(top: 20, bottom: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.only(top: 20, bottom: 20),
+            decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: Colors.grey)),
             ),
             child: Center(
@@ -71,7 +60,7 @@ Drawer myDrawer(void Function(int) onItemTapped) {
                       'https://i0.wp.com/thegameofnerds.com/wp-content/uploads/2022/07/TGON-GAMER-Icon.png?resize=440%2C440&ssl=1',
                       width: 100,
                       height: 100),
-                  Text(
+                  const Text(
                     'Lê Tuấn kiệt',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),

@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
+import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -14,14 +16,23 @@ class CourseDetailController extends GetxController {
   var topicModel = Rxn<TopicModel>();
   var topicListModel = <TopicItem>[].obs;
   var expandedChapters = <String, bool>{}.obs;
+  var user = Rx<UserModel?>(null);
   late String courseId;
 
   @override
   void onInit() {
+    checkLoginStatus();
     courseId = Get.parameters['id']!;
     fetchCourseDetail();
     fetchChapter();
     super.onInit();
+  }
+
+  Future<void> checkLoginStatus() async {
+    UserModel? sessionUser = await Get.find<AuthController>().getUserLocal();
+    if (sessionUser != null) {
+      user.value = sessionUser;
+    }
   }
 
   Future<void> fetchTopic(String chapterId) async {
@@ -39,9 +50,9 @@ class CourseDetailController extends GetxController {
         if(topicModelBase.data?.items != null) {
           topicListModel.addAll(topicModelBase.data!.items!);
         }
-        for (var topic in topicListModel) {
-          print('Topic: ${topic.title}, ChapterId: ${topic.chapterId}');
-        }
+        // for (var topic in topicListModel) {
+        //   print('Topic: ${topic.title}, ChapterId: ${topic.chapterId}');
+        // }
       } else {
         throw Exception('Failed to fetch topic');
       }
@@ -75,7 +86,7 @@ class CourseDetailController extends GetxController {
         //     fetchTopic(chapter.id!);
         //   }
         // }
-        print('${chapterList.toString()}');
+        // print('${chapterList.toString()}');
       } else {
         throw Exception('Failed to fetch chapter');
       }
@@ -98,7 +109,7 @@ class CourseDetailController extends GetxController {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailModel.value = courseDetailModelBase;
         courseDetailData.value = courseDetailModelBase.data;
-        print(courseDetailModel.value.toString());
+        // print(courseDetailModel.value.toString());
       } else {
         throw Exception('Failed to fetch course');
       }
@@ -107,6 +118,21 @@ class CourseDetailController extends GetxController {
       throw e;
     }
   }
+
+  bool isCourseEnrolled(String courseId) {
+    if (user.value?.data?.enrollments == null) {
+      // print("No enrollments found for user");
+      return false;
+    }
+    for (var enrollment in user.value!.data!.enrollments!) {
+      // print("Checking enrollment for courseId: ${enrollment.courseId}");
+      if (enrollment.courseId == courseId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   void toggleChapterExpansion(String chapterId) {
     expandedChapters[chapterId] = !(expandedChapters[chapterId] ?? false);

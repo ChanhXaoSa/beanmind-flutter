@@ -2,6 +2,7 @@ import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../configs/themes/custom_text_styles.dart';
 
@@ -10,9 +11,74 @@ class CourseDetailAction extends GetView<CourseDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isEnrolled = controller.isCourseEnrolled(controller.courseId);
+
     return Obx(() {
       if (controller.courseDetailData.value == null) {
-        return const Center(child: CircularProgressIndicator());
+        return Center(
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 60,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 60,
+                      height: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 60,
+                      height: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 60,
+                      height: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
       }
       final courseDetailData = controller.courseDetailData.value!;
       return Container(
@@ -26,6 +92,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            isEnrolled ?
             ElevatedButton(
               onPressed: () {
                 Get.toNamed(CourseLeaningScreen2.routeName.replaceFirst(':id', courseDetailData.id!));
@@ -40,6 +107,27 @@ class CourseDetailAction extends GetView<CourseDetailController> {
               child: Center(
                 child: Text(
                   'Học ngay',
+                  style: kDetailsTS.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    height: 1.3,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+            ) :
+            ElevatedButton(
+              onPressed: null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF3DCBB1),
+                padding: const EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Chưa đăng ký',
                   style: kDetailsTS.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
