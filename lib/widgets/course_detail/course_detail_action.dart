@@ -11,10 +11,8 @@ class CourseDetailAction extends GetView<CourseDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEnrolled = controller.isCourseEnrolled(controller.courseId);
-
     return Obx(() {
-      if (controller.courseDetailData.value == null) {
+      if (controller.courseDetailData.value == null || controller.user.value == null) {
         return Center(
           child: Shimmer.fromColors(
             baseColor: Colors.grey[300]!,
@@ -80,6 +78,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
           ),
         );
       }
+      bool isEnrolled = controller.isCourseEnrolled(controller.courseId);
       final courseDetailData = controller.courseDetailData.value!;
       return Container(
         // width: MediaQuery.of(context).size.width * 0.2,
