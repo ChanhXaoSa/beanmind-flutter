@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:beanmind_flutter/models/worksheet_detail_model.dart';
-import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -173,6 +173,6 @@ class QuizController extends GetxController {
 
   void navigateToCourseLearning(){
     _timer!.cancel();
-    Get.offNamedUntil(CourseLeaningScreen2.routeName.replaceFirst(':id', courseId), (route) => false,);
+    Get.offNamedUntil(CourseLearningScreen.routeName.replaceFirst(':id', courseId), (route) => false,);
   }
 }

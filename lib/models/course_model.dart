@@ -45,7 +45,7 @@ class CourseModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<CourseModelItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<CourseModelItem>.from(json["items"]!.map((x) => CourseModelItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -77,7 +77,7 @@ class CourseLevel {
   String? description;
   String? id;
   bool? isDeleted;
-  List<Item?>? courses;
+  List<CourseModelItem?>? courses;
 
   CourseLevel({
     this.title,
@@ -92,7 +92,7 @@ class CourseLevel {
     description: json["description"],
     id: json["id"],
     isDeleted: json["isDeleted"],
-    courses: json["courses"] == null ? [] : List<Item?>.from(json["courses"]!.map((x) => x == null ? null : Item.fromJson(x))),
+    courses: json["courses"] == null ? [] : List<CourseModelItem?>.from(json["courses"]!.map((x) => x == null ? null : CourseModelItem.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -104,7 +104,7 @@ class CourseLevel {
   };
 }
 
-class Item {
+class CourseModelItem {
   String? title;
   String? imageUrl;
   String? description;
@@ -122,7 +122,7 @@ class Item {
   String? id;
   bool? isDeleted;
 
-  Item({
+  CourseModelItem({
     this.title,
     this.imageUrl,
     this.description,
@@ -141,7 +141,7 @@ class Item {
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory CourseModelItem.fromJson(Map<String, dynamic> json) => CourseModelItem(
     title: json["title"],
     imageUrl: json["imageURL"],
     description: json["description"],

@@ -1,6 +1,6 @@
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
-import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/utils/number_format.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +175,7 @@ class BestRatedCourses extends GetView<HomeController> {
 }
 
 class HomepageCourseCard extends GetView<HomeController> {
-  final Item course;
+  final CourseModelItem course;
 
   const HomepageCourseCard(this.course, {super.key});
 
@@ -270,7 +270,7 @@ class HomepageCourseCard extends GetView<HomeController> {
               isEnrolled
                   ? ElevatedButton(
                       onPressed: () {
-                        Get.toNamed(CourseLeaningScreen2.routeName
+                        Get.toNamed(CourseLearningScreen.routeName
                             .replaceFirst(':id', course.id!));
                       },
                       child: const Text('Học Ngay'),

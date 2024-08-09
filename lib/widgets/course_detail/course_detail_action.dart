@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -94,7 +94,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
             isEnrolled ?
             ElevatedButton(
               onPressed: () {
-                Get.toNamed(CourseLeaningScreen2.routeName.replaceFirst(':id', courseDetailData.id!));
+                Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', courseDetailData.id!));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF3DCBB1),

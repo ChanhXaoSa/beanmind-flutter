@@ -1,6 +1,5 @@
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/widgets/common/custom_home_app_bar.dart';
-import 'package:beanmind_flutter/widgets/course/course_card.dart';
 import 'package:beanmind_flutter/widgets/home/custom_banner.dart';
 import 'package:beanmind_flutter/widgets/home/document_paper_card.dart';
 import 'package:beanmind_flutter/widgets/home/homepage_course_card.dart';
@@ -12,8 +11,6 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/widgets/widgets.dart';
-
-import 'custom_drawer.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({Key? key}) : super(key: key);

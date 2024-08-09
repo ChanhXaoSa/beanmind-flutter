@@ -2,6 +2,7 @@ import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/controllers/course/course_controller.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/screens/course/course_list_screen.dart';
 import 'package:get/get.dart';
 
 class AppBarController extends GetxController {
@@ -26,12 +27,12 @@ class AppBarController extends GetxController {
     Get.find<GameController>().navigateToGameList();
   }
 
-  void navigateToCourseLeaning() {
-    Get.find<CourseController>().navigateToCourseLeaning();
-  }
-
   void navigateToHome() {
     Get.find<AuthController>().navigateToHome();
+  }
+
+  void navigateToCourseList() {
+    Get.toNamed(CourseListScreen.routeName);
   }
 
   void signOut() {
