@@ -132,39 +132,83 @@ class Teachable {
   String? applicationUserId;
   ApplicationUser? applicationUser;
   String? courseId;
-  bool? status;
+  CourseLevelCourse? course;
   String? id;
   bool? isDeleted;
-  CourseLevelCourse? course;
 
   Teachable({
     this.applicationUserId,
     this.applicationUser,
     this.courseId,
-    this.status,
+    this.course,
     this.id,
     this.isDeleted,
-    this.course,
   });
 
   factory Teachable.fromJson(Map<String, dynamic> json) => Teachable(
     applicationUserId: json["applicationUserId"],
     applicationUser: json["applicationUser"] == null ? null : ApplicationUser.fromJson(json["applicationUser"]),
     courseId: json["courseId"],
-    status: json["status"],
+    course: json["course"] == null ? null : CourseLevelCourse.fromJson(json["course"]),
     id: json["id"],
     isDeleted: json["isDeleted"],
-    course: json["course"] == null ? null : CourseLevelCourse.fromJson(json["course"]),
   );
 
   Map<String, dynamic> toJson() => {
     "applicationUserId": applicationUserId,
     "applicationUser": applicationUser?.toJson(),
     "courseId": courseId,
-    "status": status,
+    "course": course?.toJson(),
     "id": id,
     "isDeleted": isDeleted,
+  };
+}
+
+class Enrollment {
+  String? applicationUserId;
+  dynamic applicationUser;
+  String? courseId;
+  CourseLevelCourse? course;
+  int? status;
+  int? percentTopicCompletion;
+  int? percentWorksheetCompletion;
+  String? id;
+  bool? isDeleted;
+
+  Enrollment({
+    this.applicationUserId,
+    this.applicationUser,
+    this.courseId,
+    this.course,
+    this.status,
+    this.percentTopicCompletion,
+    this.percentWorksheetCompletion,
+    this.id,
+    this.isDeleted,
+  });
+
+  factory Enrollment.fromJson(Map<String, dynamic> json) => Enrollment(
+    applicationUserId: json["applicationUserId"],
+    applicationUser: json["applicationUser"],
+    courseId: json["courseId"],
+    course: json["course"] == null ? null : CourseLevelCourse.fromJson(json["course"]),
+    status: json["status"],
+    percentTopicCompletion: json["percentTopicCompletion"],
+    percentWorksheetCompletion: json["percentWorksheetCompletion"],
+    id: json["id"],
+    isDeleted: json["isDeleted"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "applicationUserId": applicationUserId,
+    "applicationUser": applicationUser,
+    "courseId": courseId,
     "course": course?.toJson(),
+    "status": status,
+    "percentTopicCompletion": percentTopicCompletion,
+    "percentWorksheetCompletion": percentWorksheetCompletion,
+    "id": id,
+    "isDeleted": isDeleted,
   };
 }
 
@@ -182,6 +226,7 @@ class CourseLevelCourse {
   CourseLevel? courseLevel;
   List<Teachable>? teachables;
   List<Chapter>? chapters;
+  List<Enrollment>? enrollments;
   String? id;
   bool? isDeleted;
 
@@ -199,6 +244,7 @@ class CourseLevelCourse {
     this.courseLevel,
     this.teachables,
     this.chapters,
+    this.enrollments,
     this.id,
     this.isDeleted,
   });
@@ -217,6 +263,7 @@ class CourseLevelCourse {
     courseLevel: json["courseLevel"] == null ? null : CourseLevel.fromJson(json["courseLevel"]),
     teachables: json["teachables"] == null ? [] : List<Teachable>.from(json["teachables"]!.map((x) => Teachable.fromJson(x))),
     chapters: json["chapters"] == null ? [] : List<Chapter>.from(json["chapters"]!.map((x) => Chapter.fromJson(x))),
+    enrollments: json["enrollments"] == null ? [] : List<Enrollment>.from(json["enrollments"]!.map((x) => Enrollment.fromJson(x))),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -235,6 +282,7 @@ class CourseLevelCourse {
     "courseLevel": courseLevel?.toJson(),
     "teachables": teachables == null ? [] : List<dynamic>.from(teachables!.map((x) => x.toJson())),
     "chapters": chapters == null ? [] : List<dynamic>.from(chapters!.map((x) => x.toJson())),
+    "enrollments": enrollments == null ? [] : List<dynamic>.from(enrollments!.map((x) => x.toJson())),
     "id": id,
     "isDeleted": isDeleted,
   };
@@ -286,6 +334,7 @@ class ChapterCourse {
   CourseLevel? courseLevel;
   List<Teachable>? teachables;
   List<Chapter?>? chapters;
+  List<Enrollment>? enrollments;
   String? id;
   bool? isDeleted;
 
@@ -303,6 +352,7 @@ class ChapterCourse {
     this.courseLevel,
     this.teachables,
     this.chapters,
+    this.enrollments,
     this.id,
     this.isDeleted,
   });
@@ -321,6 +371,7 @@ class ChapterCourse {
     courseLevel: json["courseLevel"] == null ? null : CourseLevel.fromJson(json["courseLevel"]),
     teachables: json["teachables"] == null ? [] : List<Teachable>.from(json["teachables"]!.map((x) => Teachable.fromJson(x))),
     chapters: json["chapters"] == null ? [] : List<Chapter?>.from(json["chapters"]!.map((x) => x == null ? null : Chapter.fromJson(x))),
+    enrollments: json["enrollments"] == null ? [] : List<Enrollment>.from(json["enrollments"]!.map((x) => Enrollment.fromJson(x))),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -339,6 +390,7 @@ class ChapterCourse {
     "courseLevel": courseLevel?.toJson(),
     "teachables": teachables == null ? [] : List<dynamic>.from(teachables!.map((x) => x.toJson())),
     "chapters": chapters == null ? [] : List<dynamic>.from(chapters!.map((x) => x?.toJson())),
+    "enrollments": enrollments == null ? [] : List<dynamic>.from(enrollments!.map((x) => x.toJson())),
     "id": id,
     "isDeleted": isDeleted,
   };
@@ -350,7 +402,7 @@ class Chapter {
   int? order;
   String? courseId;
   ChapterCourse? course;
-  List<dynamic>? topics;
+  List<Topic>? topics;
   String? id;
   bool? isDeleted;
 
@@ -371,7 +423,7 @@ class Chapter {
     order: json["order"],
     courseId: json["courseId"],
     course: json["course"] == null ? null : ChapterCourse.fromJson(json["course"]),
-    topics: json["topics"] == null ? [] : List<dynamic>.from(json["topics"]!.map((x) => x)),
+    topics: json["topics"] == null ? [] : List<Topic>.from(json["topics"]!.map((x) => Topic.fromJson(x))),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -382,7 +434,7 @@ class Chapter {
     "order": order,
     "courseId": courseId,
     "course": course?.toJson(),
-    "topics": topics == null ? [] : List<dynamic>.from(topics!.map((x) => x)),
+    "topics": topics == null ? [] : List<dynamic>.from(topics!.map((x) => x.toJson())),
     "id": id,
     "isDeleted": isDeleted,
   };
@@ -391,16 +443,17 @@ class Chapter {
 class ApplicationUser {
   String? id;
   String? userName;
-  dynamic lastName;
-  dynamic firstName;
+  String? lastName;
+  String? firstName;
   String? email;
+  bool? isDeleted;
   dynamic studentId;
   dynamic student;
   String? teacherId;
   dynamic teacher;
   dynamic parentId;
   dynamic parent;
-  bool? isDeleted;
+  List<dynamic>? enrollments;
 
   ApplicationUser({
     this.id,
@@ -408,13 +461,14 @@ class ApplicationUser {
     this.lastName,
     this.firstName,
     this.email,
+    this.isDeleted,
     this.studentId,
     this.student,
     this.teacherId,
     this.teacher,
     this.parentId,
     this.parent,
-    this.isDeleted,
+    this.enrollments,
   });
 
   factory ApplicationUser.fromJson(Map<String, dynamic> json) => ApplicationUser(
@@ -423,13 +477,14 @@ class ApplicationUser {
     lastName: json["lastName"],
     firstName: json["firstName"],
     email: json["email"],
+    isDeleted: json["isDeleted"],
     studentId: json["studentId"],
     student: json["student"],
     teacherId: json["teacherId"],
     teacher: json["teacher"],
     parentId: json["parentId"],
     parent: json["parent"],
-    isDeleted: json["isDeleted"],
+    enrollments: json["enrollments"] == null ? [] : List<dynamic>.from(json["enrollments"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -438,69 +493,84 @@ class ApplicationUser {
     "lastName": lastName,
     "firstName": firstName,
     "email": email,
+    "isDeleted": isDeleted,
     "studentId": studentId,
     "student": student,
     "teacherId": teacherId,
     "teacher": teacher,
     "parentId": parentId,
     "parent": parent,
-    "isDeleted": isDeleted,
+    "enrollments": enrollments == null ? [] : List<dynamic>.from(enrollments!.map((x) => x)),
   };
 }
 
-class Enrollment {
-  String? applicationUserId;
-  dynamic applicationUser;
-  String? courseId;
-  CourseLevelCourse? course;
-  int? status;
+class Topic {
+  String? title;
+  String? description;
+  int? order;
+  String? chapterId;
+  dynamic chapter;
+  List<dynamic>? questions;
+  List<dynamic>? worksheetTemplates;
+  List<dynamic>? processions;
   String? id;
   bool? isDeleted;
 
-  Enrollment({
-    this.applicationUserId,
-    this.applicationUser,
-    this.courseId,
-    this.course,
-    this.status,
+  Topic({
+    this.title,
+    this.description,
+    this.order,
+    this.chapterId,
+    this.chapter,
+    this.questions,
+    this.worksheetTemplates,
+    this.processions,
     this.id,
     this.isDeleted,
   });
 
-  factory Enrollment.fromJson(Map<String, dynamic> json) => Enrollment(
-    applicationUserId: json["applicationUserId"],
-    applicationUser: json["applicationUser"],
-    courseId: json["courseId"],
-    course: json["course"] == null ? null : CourseLevelCourse.fromJson(json["course"]),
-    status: json["status"],
+  factory Topic.fromJson(Map<String, dynamic> json) => Topic(
+    title: json["title"],
+    description: json["description"],
+    order: json["order"],
+    chapterId: json["chapterId"],
+    chapter: json["chapter"],
+    questions: json["questions"] == null ? [] : List<dynamic>.from(json["questions"]!.map((x) => x)),
+    worksheetTemplates: json["worksheetTemplates"] == null ? [] : List<dynamic>.from(json["worksheetTemplates"]!.map((x) => x)),
+    processions: json["processions"] == null ? [] : List<dynamic>.from(json["processions"]!.map((x) => x)),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
 
   Map<String, dynamic> toJson() => {
-    "applicationUserId": applicationUserId,
-    "applicationUser": applicationUser,
-    "courseId": courseId,
-    "course": course?.toJson(),
-    "status": status,
+    "title": title,
+    "description": description,
+    "order": order,
+    "chapterId": chapterId,
+    "chapter": chapter,
+    "questions": questions == null ? [] : List<dynamic>.from(questions!.map((x) => x)),
+    "worksheetTemplates": worksheetTemplates == null ? [] : List<dynamic>.from(worksheetTemplates!.map((x) => x)),
+    "processions": processions == null ? [] : List<dynamic>.from(processions!.map((x) => x)),
     "id": id,
     "isDeleted": isDeleted,
   };
 }
 
 class TeachingSlot {
-  String? title;
   int? dayInWeek;
-  int? slot;
+  int? dayIndex;
+  String? startTime;
+  String? endTime;
   String? courseId;
   CourseLevelCourse? course;
   String? id;
   bool? isDeleted;
 
   TeachingSlot({
-    this.title,
     this.dayInWeek,
-    this.slot,
+    this.dayIndex,
+    this.startTime,
+    this.endTime,
     this.courseId,
     this.course,
     this.id,
@@ -508,9 +578,10 @@ class TeachingSlot {
   });
 
   factory TeachingSlot.fromJson(Map<String, dynamic> json) => TeachingSlot(
-    title: json["title"],
     dayInWeek: json["dayInWeek"],
-    slot: json["slot"],
+    dayIndex: json["dayIndex"],
+    startTime: json["startTime"],
+    endTime: json["endTime"],
     courseId: json["courseId"],
     course: json["course"] == null ? null : CourseLevelCourse.fromJson(json["course"]),
     id: json["id"],
@@ -518,9 +589,10 @@ class TeachingSlot {
   );
 
   Map<String, dynamic> toJson() => {
-    "title": title,
     "dayInWeek": dayInWeek,
-    "slot": slot,
+    "dayIndex": dayIndex,
+    "startTime": startTime,
+    "endTime": endTime,
     "courseId": courseId,
     "course": course?.toJson(),
     "id": id,
@@ -530,39 +602,59 @@ class TeachingSlot {
 
 class WorksheetTemplate {
   String? title;
+  String? description;
   int? classification;
   String? courseId;
+  CourseLevelCourse? course;
   dynamic chapterId;
+  dynamic chapter;
   dynamic topicId;
+  dynamic topic;
+  List<dynamic>? levelTemplateRelations;
   String? id;
   bool? isDeleted;
 
   WorksheetTemplate({
     this.title,
+    this.description,
     this.classification,
     this.courseId,
+    this.course,
     this.chapterId,
+    this.chapter,
     this.topicId,
+    this.topic,
+    this.levelTemplateRelations,
     this.id,
     this.isDeleted,
   });
 
   factory WorksheetTemplate.fromJson(Map<String, dynamic> json) => WorksheetTemplate(
     title: json["title"],
+    description: json["description"],
     classification: json["classification"],
     courseId: json["courseId"],
+    course: json["course"] == null ? null : CourseLevelCourse.fromJson(json["course"]),
     chapterId: json["chapterId"],
+    chapter: json["chapter"],
     topicId: json["topicId"],
+    topic: json["topic"],
+    levelTemplateRelations: json["levelTemplateRelations"] == null ? [] : List<dynamic>.from(json["levelTemplateRelations"]!.map((x) => x)),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
 
   Map<String, dynamic> toJson() => {
     "title": title,
+    "description": description,
     "classification": classification,
     "courseId": courseId,
+    "course": course?.toJson(),
     "chapterId": chapterId,
+    "chapter": chapter,
     "topicId": topicId,
+    "topic": topic,
+    "levelTemplateRelations": levelTemplateRelations == null ? [] : List<dynamic>.from(levelTemplateRelations!.map((x) => x)),
     "id": id,
     "isDeleted": isDeleted,
   };

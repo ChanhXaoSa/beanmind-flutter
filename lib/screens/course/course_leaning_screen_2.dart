@@ -138,20 +138,21 @@ class CourseLeaningScreen2 extends GetView<CourseLearningController> {
                               }).toList(),
                             );
                           } else {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Column(
-                                children: List.generate(2, (index) {
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 8),
-                                    height: 50,
-                                    width: double.infinity,
-                                    color: Colors.white,
-                                  );
-                                }),
-                              ),
-                            );
+                            // return Shimmer.fromColors(
+                            //   baseColor: Colors.grey[300]!,
+                            //   highlightColor: Colors.grey[100]!,
+                            //   child: Column(
+                            //     children: List.generate(2, (index) {
+                            //       return Container(
+                            //         margin: const EdgeInsets.symmetric(vertical: 8),
+                            //         height: 50,
+                            //         width: double.infinity,
+                            //         color: Colors.white,
+                            //       );
+                            //     }),
+                            //   ),
+                            // );
+                            return Container();
                           }
                         })
                       ],

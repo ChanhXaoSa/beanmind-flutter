@@ -134,7 +134,10 @@ class CourseLearningController extends GetxController {
         courseDetailData.value = courseDetailModelBase.data;
         if(courseDetailData.value?.worksheetTemplates !=
             null) {
-          fetchWorksheet(courseDetailData.value!.worksheetTemplates!.first.id!);
+          for(var worksheet in courseDetailData.value!.worksheetTemplates!) {
+            fetchWorksheet(worksheet.id!);
+          }
+          // fetchWorksheet(courseDetailData.value!.worksheetTemplates!.first.id!);
         }
         print(courseDetailModel.value.toString());
       } else {
@@ -148,6 +151,7 @@ class CourseLearningController extends GetxController {
 
   Future<void> fetchWorksheet(String worksheetTemplateId) async {
     try {
+      print(worksheetTemplateId);
       final response = await http.get(
           Uri.parse('${newBaseApiUrl}/worksheets?WorksheetTemplateId=${worksheetTemplateId}'),
           headers: <String, String>{
