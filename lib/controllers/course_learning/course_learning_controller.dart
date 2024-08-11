@@ -4,6 +4,8 @@ import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
+import 'package:beanmind_flutter/models/participant_model.dart';
+import 'package:beanmind_flutter/models/procession_model.dart';
 import 'package:beanmind_flutter/models/topic_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
@@ -28,6 +30,8 @@ class CourseLearningController extends GetxController {
   var topicDetailData = Rxn<TopicDetailData>();
   var user = Rx<UserModel?>(null);
   var enrollmentModelItem = Rxn<EnrollmentModelItem>();
+  var participantModelItemList = <ParticipantModelItem>[].obs;
+  var processionModelItemList = <ProcessionModelItem>[].obs;
 
   var selectedContent = 'Chọn nội dung bạn muốn học hôm nay'.obs;
 
@@ -48,6 +52,67 @@ class CourseLearningController extends GetxController {
     }
   }
 
+  Future<void> fetchProcessions(String participantId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/processions?ParticipantId=$participantId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final processionModelBase = ProcessionModel.fromJson(json.decode(response.body));
+        if(processionModelBase.data?.items != null) {
+          processionModelItemList.addAll(processionModelBase.data!.items!);
+        }
+        if (kDebugMode) {
+          print('${processionModelItemList.value}fetch procession thanh cong');
+        }
+      } else {
+        throw Exception('Failed to fetch enrollment');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchParticipants(String enrollmentId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/participants?EnrollmentId=$enrollmentId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final participantModelBase = ParticipantModel.fromJson(json.decode(response.body));
+        if(participantModelBase.data?.items != null) {
+          participantModelItemList.addAll(participantModelBase.data!.items!);
+        }
+        if(participantModelItemList != []) {
+          for(var item in participantModelItemList) {
+            fetchProcessions(item.id!);
+          }
+        }
+        if (kDebugMode) {
+          print('${participantModelItemList.value}fetch participant thanh cong');
+        }
+      } else {
+        throw Exception('Failed to fetch enrollment');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
   Future<void> fetchEnrollments() async {
     try {
       final response = await http.get(
@@ -60,6 +125,9 @@ class CourseLearningController extends GetxController {
       if (response.statusCode == 200) {
         final enrollmentModelBase = EnrollmentModel.fromJson(json.decode(response.body));
         enrollmentModelItem.value = enrollmentModelBase.data!.items!.firstWhere((element) => element.courseId == courseId,);
+        if(enrollmentModelItem.value != null) {
+          fetchParticipants(enrollmentModelItem.value!.id!);
+        }
         if (kDebugMode) {
           print('${enrollmentModelItem.value}fetch enrollment thanh cong');
         }

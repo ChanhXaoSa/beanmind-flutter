@@ -12,7 +12,7 @@ class ParticipantModel {
   String? message;
   bool? success;
   int? code;
-  Data? data;
+  ParticipantModelData? data;
   dynamic errors;
   dynamic fieldErrors;
 
@@ -29,7 +29,7 @@ class ParticipantModel {
     message: json["message"],
     success: json["success"],
     code: json["code"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : ParticipantModelData.fromJson(json["data"]),
     errors: json["errors"],
     fieldErrors: json["fieldErrors"],
   );
@@ -44,21 +44,21 @@ class ParticipantModel {
   };
 }
 
-class Data {
-  List<Item>? items;
+class ParticipantModelData {
+  List<ParticipantModelItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
 
-  Data({
+  ParticipantModelData({
     this.items,
     this.pageIndex,
     this.pageSize,
     this.totalPage,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+  factory ParticipantModelData.fromJson(Map<String, dynamic> json) => ParticipantModelData(
+    items: json["items"] == null ? [] : List<ParticipantModelItem>.from(json["items"]!.map((x) => ParticipantModelItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -241,7 +241,7 @@ class ApplicationUserEnrollment {
   dynamic applicationUser;
   String? courseId;
   Course? course;
-  List<Item?>? participants;
+  List<ParticipantModelItem?>? participants;
   List<dynamic>? worksheetAttempts;
   int? status;
   int? percentTopicCompletion;
@@ -268,7 +268,7 @@ class ApplicationUserEnrollment {
     applicationUser: json["applicationUser"],
     courseId: json["courseId"],
     course: json["course"] == null ? null : Course.fromJson(json["course"]),
-    participants: json["participants"] == null ? [] : List<Item?>.from(json["participants"]!.map((x) => x == null ? null : Item.fromJson(x))),
+    participants: json["participants"] == null ? [] : List<ParticipantModelItem?>.from(json["participants"]!.map((x) => x == null ? null : ParticipantModelItem.fromJson(x))),
     worksheetAttempts: json["worksheetAttempts"] == null ? [] : List<dynamic>.from(json["worksheetAttempts"]!.map((x) => x)),
     status: json["status"],
     percentTopicCompletion: json["percentTopicCompletion"],
@@ -404,7 +404,7 @@ class ItemEnrollment {
   };
 }
 
-class Item {
+class ParticipantModelItem {
   String? enrollmentId;
   ItemEnrollment? enrollment;
   String? sessionId;
@@ -414,7 +414,7 @@ class Item {
   String? id;
   bool? isDeleted;
 
-  Item({
+  ParticipantModelItem({
     this.enrollmentId,
     this.enrollment,
     this.sessionId,
@@ -425,7 +425,7 @@ class Item {
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory ParticipantModelItem.fromJson(Map<String, dynamic> json) => ParticipantModelItem(
     enrollmentId: json["enrollmentId"],
     enrollment: json["enrollment"] == null ? null : ItemEnrollment.fromJson(json["enrollment"]),
     sessionId: json["sessionId"],

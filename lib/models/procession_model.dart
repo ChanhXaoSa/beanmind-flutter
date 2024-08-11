@@ -45,7 +45,7 @@ class ProcessionModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<ProcessionModelItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<ProcessionModelItem>.from(json["items"]!.map((x) => ProcessionModelItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -72,7 +72,7 @@ class Data {
   };
 }
 
-class Item {
+class ProcessionModelItem {
   String? participantId;
   Participant? participant;
   String? topicId;
@@ -80,7 +80,7 @@ class Item {
   String? id;
   bool? isDeleted;
 
-  Item({
+  ProcessionModelItem({
     this.participantId,
     this.participant,
     this.topicId,
@@ -89,7 +89,7 @@ class Item {
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory ProcessionModelItem.fromJson(Map<String, dynamic> json) => ProcessionModelItem(
     participantId: json["participantId"],
     participant: json["participant"] == null ? null : Participant.fromJson(json["participant"]),
     topicId: json["topicId"],
