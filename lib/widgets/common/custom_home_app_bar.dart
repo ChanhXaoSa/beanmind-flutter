@@ -256,19 +256,19 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                     ],
                                   ),
                                   const SizedBox(height: 10.0),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      hintText: 'Tìm khoá học...',
-                                      prefixIcon: const Icon(Icons.search),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.grey[200],
-                                    ),
-                                  ),
+                                  // TextField(
+                                  //   decoration: InputDecoration(
+                                  //     hintText: 'Tìm khoá học...',
+                                  //     prefixIcon: const Icon(Icons.search),
+                                  //     border: OutlineInputBorder(
+                                  //       borderRadius:
+                                  //       BorderRadius.circular(10.0),
+                                  //       borderSide: BorderSide.none,
+                                  //     ),
+                                  //     filled: true,
+                                  //     fillColor: Colors.grey[200],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

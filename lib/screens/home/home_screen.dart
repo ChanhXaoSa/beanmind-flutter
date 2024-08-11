@@ -20,13 +20,13 @@ class HomeScreen extends GetView<HomeController> {
           child: Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
+              child: const Column(
                 children: [
-                  const CustomBanner(),
-                  const FeaturedCourses(),
-                  const LastestCourses(),
-                  const BestRatedCourses(),
-                  const GameListWidget(),
+                  CustomBanner(),
+                  FeaturedCourses(),
+                  LastestCourses(),
+                  BestRatedCourses(),
+                  GameListWidget(),
                 ],
               ),
             ),

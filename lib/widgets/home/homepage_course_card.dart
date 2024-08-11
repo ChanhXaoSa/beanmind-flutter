@@ -242,6 +242,14 @@ class HomepageCourseCard extends GetView<HomeController> {
             ),
             const SizedBox(height: 10),
             SizedBox(
+              child: Text(
+                '${course.programType!.title!} - ${course.courseLevel!.title!}',
+                maxLines: 6,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
               height: 120,
               child: Text(
                 course.description!,
