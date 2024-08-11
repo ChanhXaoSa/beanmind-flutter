@@ -99,8 +99,15 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                     children: topics.map<Widget>((TopicItem topic) {
                                       final isSelected = controller.selectedTopicId.value == topic.id;
                                       return ListTile(
-                                        leading: const Icon(Icons.check_box,
-                                            color: Colors.green),
+                                        leading: Obx(() {
+                                          final isChecked = controller.processionModelItemList.any(
+                                                (processionItem) => processionItem.topicId == topic.id,
+                                          );
+                                          return Icon(
+                                            isChecked ? Icons.check_box : Icons.check_box_outline_blank,
+                                            color: isChecked ? Colors.green : Colors.grey,
+                                          );
+                                        }),
                                         title: Text(topic.title!,
                                             style: TextStyle(
                                               fontSize: 14,
