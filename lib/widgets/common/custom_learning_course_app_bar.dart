@@ -1,4 +1,6 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
+import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
+import 'package:beanmind_flutter/screens/course/course_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +12,8 @@ class CustomLearningCourseAppBar extends GetView<AppBarController> implements Pr
 
   @override
   Widget build(BuildContext context) {
+    final courseLearningController = Get.find<CourseLearningController>();
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -45,18 +49,28 @@ class CustomLearningCourseAppBar extends GetView<AppBarController> implements Pr
             ),
             Row(
               children: [
-                TextButton.icon(
-                  onPressed: () {
+                Obx(() {
+                  final totalTopics = courseLearningController.topicListModel.length;
+                  final completedTopics = courseLearningController.processionModelItemList
+                      .where((processionItem) => courseLearningController.topicListModel
+                      .any((topic) => topic.id == processionItem.topicId))
+                      .length;
 
-                  },
-                  icon: const Icon(Icons.emoji_events, color: Colors.blue),
-                  label: const Text('90%', style: TextStyle(color: Colors.black)),
-                ),
+                  final percentage = totalTopics > 0 ? (completedTopics / totalTopics * 100).toStringAsFixed(0) : '0';
+
+                  return TextButton.icon(
+                    onPressed: () {
+
+                    },
+                    icon: const Icon(Icons.emoji_events, color: Colors.blue),
+                    label: Text('$percentage%', style: const TextStyle(color: Colors.black)),
+                  );
+                }),
                 TextButton(
                   onPressed: () {
-
+                    Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', courseLearningController.courseId));
                   },
-                  child: const Text('Review', style: TextStyle(color: Colors.black)),
+                  child: const Text('Thông tin khoá học', style: TextStyle(color: Colors.black)),
                 ),
               ],
             ),
