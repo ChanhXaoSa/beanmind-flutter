@@ -1,5 +1,6 @@
 import 'package:beanmind_flutter/screens/profile/desktop_profile_component.dart';
 import 'package:beanmind_flutter/screens/profile/responsive_layout.dart';
+import 'package:beanmind_flutter/widgets/common/custom_home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -14,7 +15,7 @@ class ProfileScreen extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const CustomAppBar(),
+      appBar: const CustomHomeAppBar(),
       body: ResponsiveLayout(
         //mobileBody: const MobileScaffold(),
         //tabletBody: const TabletScaffold(),

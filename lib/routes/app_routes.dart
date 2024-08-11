@@ -35,6 +35,7 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(QuizPaperController());
               Get.put(ProfileController());
+              Get.put(AppBarController());
             })),
         GetPage(
             page: () => LeaderBoardScreen(),
