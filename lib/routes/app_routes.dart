@@ -26,6 +26,7 @@ class AppRoutes {
               Get.put(HomeController());
               Get.put(AppBarController());
               Get.put(CourseController());
+              Get.put(GameController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
