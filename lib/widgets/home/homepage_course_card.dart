@@ -223,7 +223,7 @@ class HomepageCourseCard extends GetView<HomeController> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       child: Text(
-                        course.programType!.title!,
+                        course.subject!.title!,
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
