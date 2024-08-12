@@ -10,60 +10,72 @@ class GameListHomepage extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Danh sách trò chơi',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            TextButton(
-              onPressed: () {
-              },
-              child: const Text('Xem tất cả'),
-            ),
-          ],
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.shouldReset.value) {
+        controller.selectedGame.value = null;
+        controller.shouldReset.value = false;
+      }
+    });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Danh sách trò chơi',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.navigateToGameList();
+                },
+                child: const Text('Xem tất cả'),
+              ),
+            ],
+          ),
         ),
-      ),
-      Obx(() {
-        if (controller.games == []) {
-          // return Center(child: CircularProgressIndicator());
-          return Shimmer.fromColors(
-            baseColor: Colors.white.withOpacity(0.4),
-            highlightColor: Colors.blueGrey.withOpacity(0.1),
-            child: const SingleChildScrollView(
+        Obx(() {
+          if (controller.isLoading.value) {
+            return Shimmer.fromColors(
+              baseColor: Colors.white.withOpacity(0.4),
+              highlightColor: Colors.blueGrey.withOpacity(0.1),
+              child: const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     ShimmerHomepageCourseCard(),
-                    const ShimmerHomepageCourseCard(),
+                    ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                   ],
-                )),
-          );
-        } else {
-          final games = controller.games;
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children:
-              games.map((game) => GameCardWidget(game)).toList(),
-            ),
-          );
-        }
-      }),
-    ]);
+                ),
+              ),
+            );
+          } else if (controller.games.isEmpty) {
+            return const Center(child: Text("Không có trò chơi nào."));
+          } else {
+            final games = controller.games;
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: games.map((game) => GameCardWidget(game, controller: controller,)).toList(),
+              ),
+            );
+          }
+        }),
+      ],
+    );
   }
 }
 
-class GameCardWidget extends GetView<GameController> {
+class GameCardWidget extends StatelessWidget {
   final dynamic game;
+  final GameController controller;
 
-  const GameCardWidget(this.game, {super.key});
+  GameCardWidget(this.game, {required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +114,7 @@ class GameCardWidget extends GetView<GameController> {
                     left: 8,
                     child: Container(
                       color: Colors.blue,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Text(
                         game['name'] ?? '',
                         style: const TextStyle(color: Colors.white),
@@ -139,4 +150,5 @@ class GameCardWidget extends GetView<GameController> {
     );
   }
 }
+
 
