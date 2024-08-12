@@ -32,16 +32,16 @@ class Dialogs {
      return (await showDialog(
       context: Get.overlayContext!,
       builder: (context) =>  AlertDialog(
-        title:  const Text('Are you sure?'),
-        content:  const Text('Do you want to exit the quiz without completing it ?'),
+        title:  const Text('Bạn chắc chứ?'),
+        content:  const Text('Bạn muốn thoát khỏi mà không hoàn thành bài kiểm tra ?'),
         actions: <Widget>[
           TextButton(
             onPressed: () =>  Get.back(result: false),
-            child:  const Text('No'),
+            child:  const Text('Không'),
           ),
           TextButton(
             onPressed: () => Get.back(result: true),
-            child:  const Text('Yes'),
+            child:  const Text('Có'),
           ),
         ],
       ),

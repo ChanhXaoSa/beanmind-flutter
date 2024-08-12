@@ -1,6 +1,4 @@
 import 'package:beanmind_flutter/configs/configs.dart';
-import 'package:beanmind_flutter/configs/themes/app_colors.dart';
-import 'package:beanmind_flutter/configs/themes/app_icons_icons.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
@@ -10,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GameListScreen extends GetView<GameController> {
-  const GameListScreen({Key? key}) : super(key: key);
+  const GameListScreen({super.key});
   static const String routeName = '/game_list';
 
   @override
@@ -62,7 +60,7 @@ class GameListScreen extends GetView<GameController> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                margin: EdgeInsets.only(right: 12),
+                margin: const EdgeInsets.only(right: 12),
                 width: MediaQuery.of(context).size.width * 0.3,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -70,7 +68,7 @@ class GameListScreen extends GetView<GameController> {
                     controller: searchController,
                     decoration: InputDecoration(
                       hintText: 'Tìm kiếm trò chơi',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -157,7 +155,7 @@ class GameListScreen extends GetView<GameController> {
                       const SizedBox(height: 10),
                       Text(
                         game['name'] ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -170,7 +168,7 @@ class GameListScreen extends GetView<GameController> {
                         game['description'] ?? '',
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
                         ),
@@ -198,8 +196,8 @@ class GameListScreen extends GetView<GameController> {
                                 ),
                               );
                             },
-                            child: Row(
-                              children: const [
+                            child: const Row(
+                              children: [
                                 Icon(AppIcons.trophyoutline),
                                 SizedBox(width: 5),
                                 Text('Bảng xếp hạng'),

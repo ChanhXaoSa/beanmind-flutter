@@ -5,8 +5,8 @@ import 'package:shimmer/shimmer.dart';
 
 import '../home/homepage_course_card.dart';
 
-class GameListWidget extends GetView<GameController> {
-  const GameListWidget({super.key});
+class GameListHomepage extends GetView<GameController> {
+  const GameListHomepage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +29,17 @@ class GameListWidget extends GetView<GameController> {
         ),
       ),
       Obx(() {
-        if (controller.games == null) {
+        if (controller.games == []) {
           // return Center(child: CircularProgressIndicator());
           return Shimmer.fromColors(
             baseColor: Colors.white.withOpacity(0.4),
             highlightColor: Colors.blueGrey.withOpacity(0.1),
-            child: SingleChildScrollView(
+            child: const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     ShimmerHomepageCourseCard(),
-                    ShimmerHomepageCourseCard(),
+                    const ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                   ],
@@ -60,7 +60,7 @@ class GameListWidget extends GetView<GameController> {
   }
 }
 
-class GameCardWidget extends StatelessWidget {
+class GameCardWidget extends GetView<GameController> {
   final dynamic game;
 
   const GameCardWidget(this.game, {super.key});
@@ -77,7 +77,8 @@ class GameCardWidget extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                // Handle game selection
+                controller.selectedGame.value = game['id'];
+                Get.to(() => controller.buildGameWidget(game['id']));
               },
               child: Stack(
                 children: [
@@ -115,7 +116,8 @@ class GameCardWidget extends StatelessWidget {
             const SizedBox(height: 10),
             InkWell(
               onTap: () {
-                // Handle game selection
+                controller.selectedGame.value = game['id'];
+                Get.to(() => controller.buildGameWidget(game['id']));
               },
               child: Text(
                 game['name'] ?? '',
@@ -137,3 +139,4 @@ class GameCardWidget extends StatelessWidget {
     );
   }
 }
+

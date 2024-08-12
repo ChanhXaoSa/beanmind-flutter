@@ -7,10 +7,10 @@ enum AnswerStatus{
 
 class AnswerCard extends StatelessWidget {
   const AnswerCard({
-    Key? key,
+    super.key,
     required this.answer,
     this.isSelected = false, required this.onTap,
-  }) : super(key: key);
+  });
 
   final String answer;
   final bool isSelected;
@@ -22,10 +22,6 @@ class AnswerCard extends StatelessWidget {
       borderRadius: UIParameters.cardBorderRadius,
       onTap: onTap,
       child: Ink(
-        child: Text(
-          answer,
-          style: TextStyle(color: isSelected ? kOnSurfaceTextColor : null),
-        ),
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
             borderRadius: UIParameters.cardBorderRadius,
@@ -36,31 +32,48 @@ class AnswerCard extends StatelessWidget {
                 color: isSelected
                     ? answerSelectedColor(context)
                     : answerBorderColor(context))),
+        child: Center(
+          child: Text(
+            answer,
+            style: TextStyle(
+              color: isSelected ? kOnSurfaceTextColor : null,
+              fontSize: 18, // Tăng kích thước chữ
+            ),
+            textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+          ),
+        ),
       ),
     );
   }
 }
 
+
 class CorrectAnswerCard extends StatelessWidget {
   const CorrectAnswerCard({
-    Key? key,
+    super.key,
     required this.answer,
-  }) : super(key: key);
+  });
 
   final String answer;
 
   @override
   Widget build(BuildContext context) {
     return Ink(
-      child: Text(
-        answer,
-        style: const TextStyle(
-            color: kCorrectAnswerColor, fontWeight: FontWeight.bold),
-      ),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: UIParameters.cardBorderRadius,
         color: kCorrectAnswerColor.withOpacity(0.1),
+      ),
+      child: Center(
+        child: Text(
+          answer,
+          style: const TextStyle(
+            color: kCorrectAnswerColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 18, // Tăng kích thước chữ
+          ),
+          textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+        ),
       ),
     );
   }
@@ -68,24 +81,30 @@ class CorrectAnswerCard extends StatelessWidget {
 
 class WrongAnswerCard extends StatelessWidget {
   const WrongAnswerCard({
-    Key? key,
+    super.key,
     required this.answer,
-  }) : super(key: key);
+  });
 
   final String answer;
 
   @override
   Widget build(BuildContext context) {
     return Ink(
-      child: Text(
-        answer,
-        style: const TextStyle(
-            color: kWrongAnswerColor, fontWeight: FontWeight.bold),
-      ),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: UIParameters.cardBorderRadius,
         color: kWrongAnswerColor.withOpacity(0.1),
+      ),
+      child: Center(
+        child: Text(
+          answer,
+          style: const TextStyle(
+            color: kWrongAnswerColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 18, // Tăng kích thước chữ
+          ),
+          textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+        ),
       ),
     );
   }
@@ -93,26 +112,33 @@ class WrongAnswerCard extends StatelessWidget {
 
 class NotAnswerCard extends StatelessWidget {
   const NotAnswerCard({
-    Key? key,
+    super.key,
     required this.answer,
-  }) : super(key: key);
+  });
 
   final String answer;
 
   @override
   Widget build(BuildContext context) {
     return Ink(
-      child: Text(
-        answer,
-        style: const TextStyle(
-            color: kNotAnswerColor, fontWeight: FontWeight.bold),
-      ),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: UIParameters.cardBorderRadius,
         color: kNotAnswerColor.withOpacity(0.1),
       ),
+      child: Center(
+        child: Text(
+          answer,
+          style: const TextStyle(
+            color: kNotAnswerColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 18, // Tăng kích thước chữ
+          ),
+          textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+        ),
+      ),
     );
   }
 }
+
 

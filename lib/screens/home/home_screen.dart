@@ -26,7 +26,7 @@ class HomeScreen extends GetView<HomeController> {
                   FeaturedCourses(),
                   LastestCourses(),
                   BestRatedCourses(),
-                  GameListWidget(),
+                  GameListHomepage(),
                 ],
               ),
             ),

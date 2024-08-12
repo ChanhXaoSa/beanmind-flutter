@@ -4,18 +4,14 @@ import 'package:beanmind_flutter/models/worksheet_detail_model.dart';
 import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/firebase/firebase_configs.dart';
-import 'package:beanmind_flutter/models/models.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
 import 'package:beanmind_flutter/utils/logger.dart';
 import 'package:beanmind_flutter/widgets/dialogs/dialogs.dart';
 import 'package:http/http.dart' as http;
 
-import 'quiz_papers_controller.dart';
 
 class QuizController extends GetxController {
   late String courseId;
@@ -62,7 +58,7 @@ class QuizController extends GetxController {
         } else {
           int minutes = remainSeconds~/60;
           int seconds = (remainSeconds%60);
-          time.value = minutes.toString().padLeft(2,"0")+":"+seconds.toString().padLeft(2,"0");
+          time.value = "${minutes.toString().padLeft(2,"0")}:${seconds.toString().padLeft(2,"0")}";
          remainSeconds--;
         }
       },
@@ -105,8 +101,12 @@ class QuizController extends GetxController {
       if (worksheetDetailModel.value?.data?.worksheetQuestions != null) {
         allQuestionsApi.assignAll(worksheetDetailModel.value!.data!.worksheetQuestions!);
         currentQuestionApi.value = allQuestionsApi[0];
-        print('${currentQuestionApi.value!.question!.content}');
-        print('${allQuestionsApi.length}');
+        if (kDebugMode) {
+          print('${currentQuestionApi.value!.question!.content}');
+        }
+        if (kDebugMode) {
+          print('${allQuestionsApi.length}');
+        }
         _startTimer(600);
         loadingStatusApi.value = LoadingStatus.completed;
       } else {
