@@ -37,9 +37,9 @@ class AnswerCard extends StatelessWidget {
             answer,
             style: TextStyle(
               color: isSelected ? kOnSurfaceTextColor : null,
-              fontSize: 18, // Tăng kích thước chữ
+              fontSize: 18,
             ),
-            textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+            textAlign: TextAlign.center,
           ),
         ),
       ),
@@ -70,9 +70,9 @@ class CorrectAnswerCard extends StatelessWidget {
           style: const TextStyle(
             color: kCorrectAnswerColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18, // Tăng kích thước chữ
+            fontSize: 18,
           ),
-          textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+          textAlign: TextAlign.center,
         ),
       ),
     );
@@ -101,9 +101,9 @@ class WrongAnswerCard extends StatelessWidget {
           style: const TextStyle(
             color: kWrongAnswerColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18, // Tăng kích thước chữ
+            fontSize: 18,
           ),
-          textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+          textAlign: TextAlign.center,
         ),
       ),
     );
@@ -132,9 +132,9 @@ class NotAnswerCard extends StatelessWidget {
           style: const TextStyle(
             color: kNotAnswerColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18, // Tăng kích thước chữ
+            fontSize: 18,
           ),
-          textAlign: TextAlign.center, // Đảm bảo chữ nằm giữa theo chiều ngang
+          textAlign: TextAlign.center,
         ),
       ),
     );
