@@ -12,8 +12,8 @@ class Screen1 extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Container(
-          color: Colors.white,
+        child: SingleChildScrollView(
+
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -22,7 +22,7 @@ class Screen1 extends StatelessWidget {
                 child: Column(
                   children: [
                     // first 4 boxes in grid
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height * 0.28,
                       width: double.infinity,
                       child: SizedBox(
