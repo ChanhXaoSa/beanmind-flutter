@@ -181,26 +181,26 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       ),
                     ),
                     const Spacer(),
-                    // TextButton(
-                    //   onPressed: () => controller.navigateToCourseLeaning(),
-                    //   style: TextButton.styleFrom(
-                    //     textStyle: const TextStyle(
-                    //       fontWeight: FontWeight.w500,
-                    //       fontSize: 16,
-                    //     ),
-                    //   ).copyWith(
-                    //     foregroundColor:
-                    //         WidgetStateProperty.resolveWith((states) {
-                    //       if (states.contains(WidgetState.hovered)) {
-                    //         return Colors.blue[900];
-                    //       }
-                    //       return null;
-                    //     }),
-                    //     overlayColor:
-                    //         WidgetStateProperty.all(Colors.transparent),
-                    //   ),
-                    //   child: const Text('Danh sách khóa học'),
-                    // ),
+                    TextButton(
+                      onPressed: () => controller.navigateToCourseList(),
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ).copyWith(
+                        foregroundColor:
+                        WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return Colors.blue[900];
+                          }
+                          return null;
+                        }),
+                        overlayColor:
+                        WidgetStateProperty.all(Colors.transparent),
+                      ),
+                      child: const Text('Danh sách khóa học'),
+                    ),
                     const SizedBox(width: 10.0),
                     TextButton(
                         onPressed: () => controller.navigateToGameList(),
@@ -256,19 +256,19 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                     ],
                                   ),
                                   const SizedBox(height: 10.0),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      hintText: 'Tìm khoá học...',
-                                      prefixIcon: const Icon(Icons.search),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.grey[200],
-                                    ),
-                                  ),
+                                  // TextField(
+                                  //   decoration: InputDecoration(
+                                  //     hintText: 'Tìm khoá học...',
+                                  //     prefixIcon: const Icon(Icons.search),
+                                  //     border: OutlineInputBorder(
+                                  //       borderRadius:
+                                  //       BorderRadius.circular(10.0),
+                                  //       borderSide: BorderSide.none,
+                                  //     ),
+                                  //     filled: true,
+                                  //     fillColor: Colors.grey[200],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -337,26 +337,26 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       ),
                     ),
                     const Spacer(),
-                    // TextButton(
-                    //   onPressed: () => controller.navigateToCourseLeaning(),
-                    //   style: TextButton.styleFrom(
-                    //     textStyle: const TextStyle(
-                    //       fontWeight: FontWeight.w500,
-                    //       fontSize: 16,
-                    //     ),
-                    //   ).copyWith(
-                    //     foregroundColor:
-                    //         WidgetStateProperty.resolveWith((states) {
-                    //       if (states.contains(WidgetState.hovered)) {
-                    //         return Colors.blue[900];
-                    //       }
-                    //       return null;
-                    //     }),
-                    //     overlayColor:
-                    //         WidgetStateProperty.all(Colors.transparent),
-                    //   ),
-                    //   child: const Text('Danh sách khóa học'),
-                    // ),
+                    TextButton(
+                      onPressed: () => controller.navigateToCourseList(),
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ).copyWith(
+                        foregroundColor:
+                            WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return Colors.blue[900];
+                          }
+                          return null;
+                        }),
+                        overlayColor:
+                            WidgetStateProperty.all(Colors.transparent),
+                      ),
+                      child: const Text('Danh sách khóa học'),
+                    ),
                     const SizedBox(width: 10.0),
                     TextButton(
                         onPressed: () => controller.navigateToGameList(),

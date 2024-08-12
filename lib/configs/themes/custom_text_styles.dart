@@ -13,7 +13,7 @@ TextStyle cardTitleTs(context) => TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold);
 
-const kQuizeTS = TextStyle(fontSize: 16, fontWeight: FontWeight.w800);
+const kQuizeTS = TextStyle(fontSize: 30, fontWeight: FontWeight.w800);
 
 const kAppBarTS = TextStyle(
     fontWeight: FontWeight.bold, fontSize: 30, color: kOnSurfaceTextColor);

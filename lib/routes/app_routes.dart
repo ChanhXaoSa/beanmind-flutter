@@ -1,7 +1,8 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
-import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
+import 'package:beanmind_flutter/screens/course/course_list_screen.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class AppRoutes {
               Get.put(HomeController());
               Get.put(AppBarController());
               Get.put(CourseController());
+              Get.put(GameController());
             })),
         GetPage(page: () => const LoginScreen(), name: LoginScreen.routeName),
         GetPage(
@@ -33,6 +35,7 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(QuizPaperController());
               Get.put(ProfileController());
+              Get.put(AppBarController());
             })),
         GetPage(
             page: () => LeaderBoardScreen(),
@@ -45,12 +48,6 @@ class AppRoutes {
             name: GameLeaderboardScreen.routeName,
             binding: BindingsBuilder(() {
               Get.put(GameLeaderBoardController());
-            })),
-        GetPage(
-            page: () => const QuizeScreen(),
-            name: QuizeScreen.routeName,
-            binding: BindingsBuilder(() {
-              Get.put<QuizController>(QuizController());
             })),
         GetPage(
             page: () => const AnswersCheckScreen(),
@@ -69,14 +66,6 @@ class AppRoutes {
             name: VideoLearningScreen.routeName,
             page: () => const VideoLearningScreen()),
         GetPage(
-            page: () => const CourseLearningScreen(),
-            name: CourseLearningScreen.routeName,
-            binding: BindingsBuilder(() {
-              Get.put(QuizPaperController());
-              Get.put(MyDrawerController());
-              Get.put(CourseController());
-            })),
-        GetPage(
           name: CourseDetailScreen.routeName,
           page: () => const CourseDetailScreen(),
           binding: BindingsBuilder(() {
@@ -85,8 +74,8 @@ class AppRoutes {
           }),
         ),
         GetPage(
-          name: CourseLeaningScreen2.routeName,
-          page: () => const CourseLeaningScreen2(),
+          name: CourseLearningScreen.routeName,
+          page: () => const CourseLearningScreen(),
           binding: BindingsBuilder(() {
             Get.put(CourseLearningController());
             Get.put(AppBarController());
@@ -99,5 +88,14 @@ class AppRoutes {
             Get.put<QuizController>(QuizController());
           }),
         ),
+    GetPage(
+      name: CourseListScreen.routeName,
+      page: () => const CourseListScreen(),
+      binding: BindingsBuilder(() {
+        Get.put(CourseController());
+        Get.put(HomeController());
+        Get.put(AppBarController());
+      }),
+    ),
       ];
 }

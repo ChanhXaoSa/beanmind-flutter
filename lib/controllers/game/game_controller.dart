@@ -20,7 +20,7 @@ class GameController extends GetxController {
   var isLoading = false.obs;
   var selectedGame = RxnString();
   var shouldReset = false.obs;
-  List<dynamic> games = [];
+  List<dynamic> games = [].obs;
 
   @override
   void onInit() {

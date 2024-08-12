@@ -37,22 +37,22 @@ class QuizPaperController extends GetxController {
     }
   }
 
-  void navigatoQuestions(
-      {required QuizPaperModel paper, bool isTryAgain = false}) {
-    AuthController _authController = Get.find();
-
-    if (_authController.isLogedIn()) {
-      if (isTryAgain) {
-        Get.back();
-        Get.offNamed(QuizeScreen.routeName,
-            arguments: paper, preventDuplicates: false);
-      } else {
-        Get.toNamed(QuizeScreen.routeName, arguments: paper);
-      }
-    } else {
-      _authController.showLoginAlertDialog();
-    }
-  }
+  // void navigatoQuestions(
+  //     {required QuizPaperModel paper, bool isTryAgain = false}) {
+  //   AuthController _authController = Get.find();
+  //
+  //   if (_authController.isLogedIn()) {
+  //     if (isTryAgain) {
+  //       Get.back();
+  //       Get.offNamed(QuizeScreen.routeName,
+  //           arguments: paper, preventDuplicates: false);
+  //     } else {
+  //       Get.toNamed(QuizeScreen.routeName, arguments: paper);
+  //     }
+  //   } else {
+  //     _authController.showLoginAlertDialog();
+  //   }
+  // }
 
   void navigateToVideo() {
     Get.toNamed(VideoLearningScreen.routeName);

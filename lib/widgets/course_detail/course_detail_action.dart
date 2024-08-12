@@ -1,5 +1,5 @@
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -11,10 +11,8 @@ class CourseDetailAction extends GetView<CourseDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEnrolled = controller.isCourseEnrolled(controller.courseId);
-
     return Obx(() {
-      if (controller.courseDetailData.value == null) {
+      if (controller.courseDetailData.value == null || controller.user.value == null) {
         return Center(
           child: Shimmer.fromColors(
             baseColor: Colors.grey[300]!,
@@ -80,6 +78,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
           ),
         );
       }
+      bool isEnrolled = controller.isCourseEnrolled(controller.courseId);
       final courseDetailData = controller.courseDetailData.value!;
       return Container(
         // width: MediaQuery.of(context).size.width * 0.2,
@@ -95,7 +94,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
             isEnrolled ?
             ElevatedButton(
               onPressed: () {
-                Get.toNamed(CourseLeaningScreen2.routeName.replaceFirst(':id', courseDetailData.id!));
+                Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', courseDetailData.id!));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF3DCBB1),

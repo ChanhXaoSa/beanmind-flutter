@@ -45,7 +45,7 @@ class EnrollmentModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<EnrollmentModelItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<EnrollmentModelItem>.from(json["items"]!.map((x) => EnrollmentModelItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -118,7 +118,7 @@ class Course {
   CourseLevel? courseLevel;
   List<dynamic>? teachables;
   List<dynamic>? chapters;
-  List<Item>? enrollments;
+  List<EnrollmentModelItem>? enrollments;
   String? id;
   bool? isDeleted;
 
@@ -155,7 +155,7 @@ class Course {
     courseLevel: json["courseLevel"] == null ? null : CourseLevel.fromJson(json["courseLevel"]),
     teachables: json["teachables"] == null ? [] : List<dynamic>.from(json["teachables"]!.map((x) => x)),
     chapters: json["chapters"] == null ? [] : List<dynamic>.from(json["chapters"]!.map((x) => x)),
-    enrollments: json["enrollments"] == null ? [] : List<Item>.from(json["enrollments"]!.map((x) => Item.fromJson(x))),
+    enrollments: json["enrollments"] == null ? [] : List<EnrollmentModelItem>.from(json["enrollments"]!.map((x) => EnrollmentModelItem.fromJson(x))),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -180,7 +180,7 @@ class Course {
   };
 }
 
-class Item {
+class EnrollmentModelItem {
   String? applicationUserId;
   ApplicationUser? applicationUser;
   String? courseId;
@@ -189,7 +189,7 @@ class Item {
   String? id;
   bool? isDeleted;
 
-  Item({
+  EnrollmentModelItem({
     this.applicationUserId,
     this.applicationUser,
     this.courseId,
@@ -199,7 +199,7 @@ class Item {
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory EnrollmentModelItem.fromJson(Map<String, dynamic> json) => EnrollmentModelItem(
     applicationUserId: json["applicationUserId"],
     applicationUser: json["applicationUser"] == null ? null : ApplicationUser.fromJson(json["applicationUser"]),
     courseId: json["courseId"],

@@ -1,6 +1,7 @@
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
-import 'package:beanmind_flutter/screens/course/course_leaning_screen_2.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
+import 'package:beanmind_flutter/utils/number_format.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -36,7 +37,7 @@ class FeaturedCourses extends GetView<HomeController> {
             baseColor: Colors.white.withOpacity(0.4),
             highlightColor: Colors.blueGrey.withOpacity(0.1),
             child: const SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     ShimmerHomepageCourseCard(),
@@ -44,8 +45,7 @@ class FeaturedCourses extends GetView<HomeController> {
                     ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                   ],
-                )
-            ),
+                )),
           );
         } else {
           final courses = controller.courseModel.value!.data?.items ?? [];
@@ -101,8 +101,7 @@ class LastestCourses extends GetView<HomeController> {
                     ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                   ],
-                )
-            ),
+                )),
           );
         } else {
           final courses = controller.courseModel.value!.data?.items ?? [];
@@ -110,7 +109,7 @@ class LastestCourses extends GetView<HomeController> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children:
-              courses.map((course) => HomepageCourseCard(course)).toList(),
+                  courses.map((course) => HomepageCourseCard(course)).toList(),
             ),
           );
         }
@@ -158,8 +157,7 @@ class BestRatedCourses extends GetView<HomeController> {
                     ShimmerHomepageCourseCard(),
                     ShimmerHomepageCourseCard(),
                   ],
-                )
-            ),
+                )),
           );
         } else {
           final courses = controller.courseModel.value!.data?.items ?? [];
@@ -167,7 +165,7 @@ class BestRatedCourses extends GetView<HomeController> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children:
-              courses.map((course) => HomepageCourseCard(course)).toList(),
+                  courses.map((course) => HomepageCourseCard(course)).toList(),
             ),
           );
         }
@@ -177,7 +175,7 @@ class BestRatedCourses extends GetView<HomeController> {
 }
 
 class HomepageCourseCard extends GetView<HomeController> {
-  final Item course;
+  final CourseModelItem course;
 
   const HomepageCourseCard(this.course, {super.key});
 
@@ -205,7 +203,7 @@ class HomepageCourseCard extends GetView<HomeController> {
                     // borderRadius: BorderRadius.circular(30),
                     child: FadeInImage.assetNetwork(
                       placeholder: 'assets/images/background/background.png',
-                      image: course.imageURL!,
+                      image: course.imageUrl!,
                       fit: BoxFit.cover,
                       height: 200,
                       imageErrorBuilder: (context, error, stackTrace) {
@@ -222,10 +220,11 @@ class HomepageCourseCard extends GetView<HomeController> {
                     left: 8,
                     child: Container(
                       color: Colors.blue,
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: const Text(
-                        'Mới',
-                        style: TextStyle(color: Colors.white),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      child: Text(
+                        course.subject!.title!,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -237,7 +236,16 @@ class HomepageCourseCard extends GetView<HomeController> {
               onTap: () => controller.navigateToCourseDetail(course.id!),
               child: Text(
                 course.title!,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              child: Text(
+                '${course.programType!.title!} - ${course.courseLevel!.title!}',
+                maxLines: 6,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(height: 10),
@@ -250,35 +258,36 @@ class HomepageCourseCard extends GetView<HomeController> {
               ),
             ),
             const SizedBox(height: 10),
-            const Row(
-              children: [
-                Icon(Icons.star, color: Colors.orange, size: 20),
-                SizedBox(width: 5),
-                Text('5.0'),
-              ],
-            ),
+            // const Row(
+            //   children: [
+            //     Icon(Icons.star, color: Colors.orange, size: 20),
+            //     SizedBox(width: 5),
+            //     Text('5.0'),
+            //   ],
+            // ),
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     Text('${course.totalSlot} tiết học'),
+            //   ],
+            // ),
             const SizedBox(height: 10),
-            Row(
-              children: [
-                Text('${course.totalSlot} tiết học'),
-                const SizedBox(width: 20),
-                const Text('4h 20p'),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: isEnrolled ?
-              ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(CourseLeaningScreen2.routeName.replaceFirst(':id', course.id!));
-                },
-                child: const Text('Học Ngay'),
-              ) :
-              const ElevatedButton(
-                onPressed: null,
-                child: Text('Chưa đăng ký'),
-              ),
-            )
+            Row(children: [
+              Text(formatPrice(course.price!)),
+              const Spacer(),
+              isEnrolled
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed(CourseLearningScreen.routeName
+                            .replaceFirst(':id', course.id!));
+                      },
+                      child: const Text('Học Ngay'),
+                    )
+                  : const ElevatedButton(
+                      onPressed: null,
+                      child: Text('Chưa đăng ký'),
+                    ),
+            ])
           ],
         ),
       ),
@@ -318,7 +327,8 @@ class ShimmerHomepageCourseCard extends StatelessWidget {
                     highlightColor: Colors.grey[100]!,
                     child: Container(
                       color: Colors.grey,
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: const Text(
                         'Mới',
                         style: TextStyle(color: Colors.white),

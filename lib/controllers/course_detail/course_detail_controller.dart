@@ -20,11 +20,11 @@ class CourseDetailController extends GetxController {
   late String courseId;
 
   @override
-  void onInit() {
-    checkLoginStatus();
+  void onInit() async {
+    await checkLoginStatus();
     courseId = Get.parameters['id']!;
-    fetchCourseDetail();
-    fetchChapter();
+    await fetchCourseDetail();
+    await fetchChapter();
     super.onInit();
   }
 
@@ -38,7 +38,7 @@ class CourseDetailController extends GetxController {
   Future<void> fetchTopic(String chapterId) async {
     try {
       final topicResponse = await http.get(
-          Uri.parse('${newBaseApiUrl}/topics?ChapterId=${chapterId}'),
+          Uri.parse('$newBaseApiUrl/topics?ChapterId=$chapterId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
@@ -58,14 +58,14 @@ class CourseDetailController extends GetxController {
       }
     } catch (e) {
       print('Error: $e');
-      throw e;
+      rethrow;
     }
   }
 
   Future<void> fetchChapter() async {
     try {
       final chapterResponse = await http.get(
-          Uri.parse('${newBaseApiUrl}/chapters?CourseId=${courseId}'),
+          Uri.parse('$newBaseApiUrl/chapters?CourseId=$courseId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
@@ -92,14 +92,14 @@ class CourseDetailController extends GetxController {
       }
     } catch (e) {
       print('Error: $e');
-      throw e;
+      rethrow;
     }
   }
 
   Future<void> fetchCourseDetail() async {
     try {
       final courseResponse = await http.get(
-          Uri.parse('${newBaseApiUrl}/courses/${courseId}'),
+          Uri.parse('$newBaseApiUrl/courses/$courseId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
@@ -115,17 +115,17 @@ class CourseDetailController extends GetxController {
       }
     } catch (e) {
       print('Error: $e');
-      throw e;
+      rethrow;
     }
   }
 
   bool isCourseEnrolled(String courseId) {
     if (user.value?.data?.enrollments == null) {
-      // print("No enrollments found for user");
+      print("No enrollments found for user");
       return false;
     }
     for (var enrollment in user.value!.data!.enrollments!) {
-      // print("Checking enrollment for courseId: ${enrollment.courseId}");
+      print("Checking enrollment for courseId: ${enrollment.courseId}");
       if (enrollment.courseId == courseId) {
         return true;
       }
