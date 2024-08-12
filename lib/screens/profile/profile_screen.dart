@@ -14,7 +14,7 @@ class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      //extendBodyBehindAppBar: true,
       appBar: const CustomHomeAppBar(),
       body: ResponsiveLayout(
         //mobileBody: const MobileScaffold(),
