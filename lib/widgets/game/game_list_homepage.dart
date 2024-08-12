@@ -75,7 +75,7 @@ class GameCardWidget extends StatelessWidget {
   final dynamic game;
   final GameController controller;
 
-  GameCardWidget(this.game, {required this.controller, super.key});
+  const GameCardWidget(this.game, {required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
