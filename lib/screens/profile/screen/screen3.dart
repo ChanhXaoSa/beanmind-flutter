@@ -1,43 +1,23 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Screen3 extends StatelessWidget {
+  const Screen3({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: CourseListScreen(),
+      body: const CourseListScreen(),
     );
   }
 }
 
-class CourseListScreen extends StatelessWidget {
-  final List<Course> courses = [
-    Course(name: "Course 1", registrationDate: "2023-07-01", isCompleted: true),
-    Course(
-        name: "Course 2", registrationDate: "2023-07-05", isCompleted: false),
-    Course(name: "Course 3", registrationDate: "2023-07-10", isCompleted: true),
-    Course(
-        name: "Course 4", registrationDate: "2023-07-15", isCompleted: false),
-    Course(name: "Course 5", registrationDate: "2023-07-20", isCompleted: true),
-    Course(
-        name: "Course 6", registrationDate: "2023-07-25", isCompleted: false),
-    Course(name: "Course 7", registrationDate: "2023-07-30", isCompleted: true),
-    Course(
-        name: "Course 8", registrationDate: "2023-08-01", isCompleted: false),
-    Course(name: "Course 1", registrationDate: "2023-07-01", isCompleted: true),
-    Course(
-        name: "Course 2", registrationDate: "2023-07-05", isCompleted: false),
-    Course(name: "Course 3", registrationDate: "2023-07-10", isCompleted: true),
-    Course(
-        name: "Course 4", registrationDate: "2023-07-15", isCompleted: false),
-    Course(name: "Course 5", registrationDate: "2023-07-20", isCompleted: true),
-    Course(
-        name: "Course 6", registrationDate: "2023-07-25", isCompleted: false),
-    Course(name: "Course 7", registrationDate: "2023-07-30", isCompleted: true),
-    Course(
-        name: "Course 8", registrationDate: "2023-08-01", isCompleted: false),
-  ];
+class CourseListScreen extends GetView<ProfileController> {
+  const CourseListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +30,8 @@ class CourseListScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
+                const Padding(
+                  padding: EdgeInsets.only(left: 16),
                   child: AutoSizeText(
                     "DANH SÁCH KHOÁ HỌC",
                     style: TextStyle(
@@ -60,15 +40,15 @@ class CourseListScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                //search bar
-                Container(
+                // Search bar
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: "Tìm kiếm khóa học",
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -85,23 +65,37 @@ class CourseListScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.all(8.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.5,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),  
-                itemCount: courses.length,
-                itemBuilder: (context, index) {
-                  return CourseItem(
-                    course: courses[index],
-                    width: 200,
-                    height: 200,
-                  );
-                },
-              ),
+              child: Obx(() {
+                if (controller.enrollmentModel.value?.data?.items == null ||
+                    controller.enrollmentModel.value!.data!.items!.isEmpty) {
+                  return const Center(child: Text("Không có khóa học nào."));
+                }
+
+                return GridView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1.5,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                  ),
+                  itemCount: controller.enrollmentModel.value!.data!.items!.length,
+                  itemBuilder: (context, index) {
+                    final enrollmentItem = controller.enrollmentModel.value!.data!.items![index];
+                    final course = enrollmentItem;
+                    return InkWell(
+                      onTap: () {
+                        controller.navigateToCourseDetail(course.course!.id!);
+                      },
+                      child: CourseItem(
+                        course: course,
+                        width: 200,
+                        height: 200,
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -110,27 +104,17 @@ class CourseListScreen extends StatelessWidget {
   }
 }
 
-class Course {
-  final String name;
-  final String registrationDate;
-  final bool isCompleted;
-
-  Course(
-      {required this.name,
-      required this.registrationDate,
-      required this.isCompleted});
-}
-
 class CourseItem extends StatelessWidget {
-  final Course course;
+  final EnrollmentModelItem course;
   final double width;
   final double height;
 
-  const CourseItem(
-      {required this.course, required this.width, required this.height});
+  const CourseItem({super.key, required this.course, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
+    bool isCompleted = course.status == 2;
+
     return Container(
       width: width,
       height: height,
@@ -138,7 +122,7 @@ class CourseItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4.0,
@@ -147,36 +131,36 @@ class CourseItem extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align to the top left
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Image.network(
-            "https://th.bing.com/th/id/OIP.hdTZOd3f6FNd6N2ocUVH_AAAAA?rs=1&pid=ImgDetMain",
+            course.course!.imageUrl ?? "https://th.bing.com/th/id/OIP.hdTZOd3f6FNd6N2ocUVH_AAAAA?rs=1&pid=ImgDetMain",
             width: double.infinity,
-            height: height * 0.4, // Adjust image height relative to item height
+            height: height * 0.4,
             fit: BoxFit.cover,
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
-            course.name,
-            style: TextStyle(
+            course.course!.title ?? "Không có tên",
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
-            "Đăng kí: ${course.registrationDate}",
+            "Đăng kí: ${'N/A'}",
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
-            course.isCompleted ? "Hoàn thành" : "Chưa hoàn thành",
+            isCompleted ? "Hoàn thành" : "Chưa hoàn thành",
             style: TextStyle(
               fontSize: 14,
-              color: course.isCompleted ? Colors.green : Colors.red,
+              color: isCompleted ? Colors.green : Colors.red,
             ),
           ),
         ],

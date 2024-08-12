@@ -19,7 +19,7 @@ class DesktopScaffold extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // open drawer
-          myDrawer(controller.onItemTapped),
+          myDrawer(controller.onItemTapped, controller),
           // main content area
           Expanded(
             child: Obx(() => IndexedStack(
@@ -40,7 +40,7 @@ class DesktopScaffold extends GetView<ProfileController> {
   }
 }
 
-Drawer myDrawer(void Function(int) onItemTapped) {
+Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
   return Drawer(
     backgroundColor: Colors.white,
     child: Column(
@@ -60,10 +60,12 @@ Drawer myDrawer(void Function(int) onItemTapped) {
                       'https://i0.wp.com/thegameofnerds.com/wp-content/uploads/2022/07/TGON-GAMER-Icon.png?resize=440%2C440&ssl=1',
                       width: 100,
                       height: 100),
-                  const Text(
-                    'Lê Tuấn kiệt',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                  Obx(() {
+                    return Text(
+                      controller.user.value?.data?.userName ?? 'Tên người dùng',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -156,7 +158,7 @@ Drawer myDrawer(void Function(int) onItemTapped) {
               'ĐĂNG XUẤT',
               style: drawerTextColor,
             ),
-            onTap: () => onItemTapped(5),
+            onTap: () => controller.signOut(),
           ),
         ),
       ],

@@ -77,7 +77,7 @@ class CourseLevel {
   String? description;
   String? id;
   bool? isDeleted;
-  List<Course?>? courses;
+  List<EnrollmentModelCourse?>? courses;
 
   CourseLevel({
     this.title,
@@ -92,7 +92,7 @@ class CourseLevel {
     description: json["description"],
     id: json["id"],
     isDeleted: json["isDeleted"],
-    courses: json["courses"] == null ? [] : List<Course?>.from(json["courses"]!.map((x) => x == null ? null : Course.fromJson(x))),
+    courses: json["courses"] == null ? [] : List<EnrollmentModelCourse?>.from(json["courses"]!.map((x) => x == null ? null : EnrollmentModelCourse.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -104,7 +104,7 @@ class CourseLevel {
   };
 }
 
-class Course {
+class EnrollmentModelCourse {
   String? title;
   String? imageUrl;
   String? description;
@@ -122,7 +122,7 @@ class Course {
   String? id;
   bool? isDeleted;
 
-  Course({
+  EnrollmentModelCourse({
     this.title,
     this.imageUrl,
     this.description,
@@ -141,7 +141,7 @@ class Course {
     this.isDeleted,
   });
 
-  factory Course.fromJson(Map<String, dynamic> json) => Course(
+  factory EnrollmentModelCourse.fromJson(Map<String, dynamic> json) => EnrollmentModelCourse(
     title: json["title"],
     imageUrl: json["imageURL"],
     description: json["description"],
@@ -184,7 +184,7 @@ class EnrollmentModelItem {
   String? applicationUserId;
   ApplicationUser? applicationUser;
   String? courseId;
-  Course? course;
+  EnrollmentModelCourse? course;
   int? status;
   String? id;
   bool? isDeleted;
@@ -203,7 +203,7 @@ class EnrollmentModelItem {
     applicationUserId: json["applicationUserId"],
     applicationUser: json["applicationUser"] == null ? null : ApplicationUser.fromJson(json["applicationUser"]),
     courseId: json["courseId"],
-    course: json["course"] == null ? null : Course.fromJson(json["course"]),
+    course: json["course"] == null ? null : EnrollmentModelCourse.fromJson(json["course"]),
     status: json["status"],
     id: json["id"],
     isDeleted: json["isDeleted"],

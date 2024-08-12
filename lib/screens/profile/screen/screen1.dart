@@ -2,10 +2,13 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
+import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 
-class Screen1 extends StatelessWidget {
+class Screen1 extends GetView<ProfileController> {
+  const Screen1({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,52 +37,75 @@ class Screen1 extends StatelessWidget {
                             color: Colors.grey[400],
                             gradient: mainGradient(context),
                           ),
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              AutoSizeText('Chào mừng bạn quay lại, User',
+                              Obx(() {
+                                return AutoSizeText(
+                                  'Chào mừng bạn quay lại, ${controller.user.value?.data?.userName ?? 'User'}',
                                   maxFontSize: 45,
                                   minFontSize: 30,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }),
+                              Obx(() {
+                                final completedCourses = controller.enrollmentModel.value?.data?.items
+                                    ?.where((item) => item.status == 2)
+                                    .length ?? 0;
+                                if(completedCourses == 0) {
+                                  return const AutoSizeText(
+                                    'Bạn hiện tại chưa hoàn thành khoá học nào, bạn muốn khám phá những khóa học khác không?',
+                                    maxFontSize: 24,
+                                    minFontSize: 16,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
                                       color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
-                              AutoSizeText(
-                                  'Bạn đã hoàn thành ... khóa học, bạn muốn khám phá những khóa học khác không ?',
+                                    ),
+                                  );
+                                }
+                                return AutoSizeText(
+                                  'Bạn đã hoàn thành $completedCourses khóa học, bạn muốn khám phá những khóa học khác không?',
                                   maxFontSize: 24,
                                   minFontSize: 16,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
-                                  )),
-                              SizedBox(height: 20),
+                                  ),
+                                );
+                              }),
+                              const SizedBox(height: 20),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   ElevatedButton(
                                     onPressed: () {},
-                                    child: Text('Khám phá ngay',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 25)),
                                     style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all(
+                                          WidgetStateProperty.all(
                                               Colors.green),
                                     ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  ElevatedButton(
-                                    onPressed: () {},
-                                    child: Text('Xem lại khóa học',
+                                    child: const Text('Khám phá ngay',
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 25)),
+                                  ),
+                                  const SizedBox(width: 20),
+                                  ElevatedButton(
+                                    onPressed: () {},
                                     style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all(
+                                          WidgetStateProperty.all(
                                               Colors.blue),
                                     ),
+                                    child: const Text('Xem lại khóa học',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 25)),
                                   ),
                                 ],
                               )
@@ -91,9 +117,9 @@ class Screen1 extends StatelessWidget {
                     // text
                     Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           left: 10, right: 10, top: 5, bottom: 5),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             color: Colors.grey,
@@ -101,43 +127,57 @@ class Screen1 extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: AutoSizeText('Tiến độ các khóa học bạn chưa hoàn thành',
+                      child: const AutoSizeText('Tiến độ các khóa học bạn chưa hoàn thành',
                           maxFontSize: 24,
                           minFontSize: 24,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
                     ),
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height * 0.3,
-                      child: ScrollConfiguration(
-                        behavior: MyCustomScrollBehavior(),
-                        child: Scrollbar(
-                          child: ListView(
-                            padding: EdgeInsets.zero,
-                            scrollDirection: Axis.vertical,
-                            children: [
-                              buildProgressItem(
-                                  context, 'Khóa học 1', 0.6, '6/10', '12 giờ'),
-                              buildProgressItem(
-                                  context, 'Khóa học 2', 0.8, '8/10', '15 giờ'),
-                              buildProgressItem(
-                                  context, 'Khóa học 3', 0.3, '3/10', '5 giờ'),
-                              buildProgressItem(
-                                  context, 'Khóa học 4', 0.7, '7/10', '10 giờ'),
-                              buildProgressItem(
-                                  context, 'Khóa học 5', 1, '10/10', '10 giờ'),
-                            ],
+                      child: Obx(() {
+                        if (controller.enrollmentModel.value?.data?.items == null || controller.enrollmentModel.value!.data!.items!.isEmpty) {
+                          return const Center(child: Text('Không có khóa học nào.'));
+                        }
+                        return ScrollConfiguration(
+                          behavior: MyCustomScrollBehavior(),
+                          child: Scrollbar(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.vertical,
+                              itemCount: controller.enrollmentModel.value!.data!
+                                  .items!.length,
+                              itemBuilder: (context, index) {
+                                final enrollmentItem = controller
+                                    .enrollmentModel.value!.data!.items![index];
+                                final course = enrollmentItem.course!;
+                                return InkWell(
+                                  onTap: () {
+                                    controller.navigateToCourseDetail(course.id!);
+                                  },
+                                  child: buildProgressItem(
+                                      context,
+                                      course.title ?? '',
+                                      0,
+                                      '${course.totalSlot ?? 0}/${course
+                                          .totalSlot ?? 0}',
+                                      'N/A'
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
+                        );
+                      }
                       ),
                     ),
                     // text
                     Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           left: 10, right: 10, top: 5, bottom: 5),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             color: Colors.grey,
@@ -145,7 +185,7 @@ class Screen1 extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: AutoSizeText('Khóa học bạn đã đăng kí gần đây',
+                      child: const AutoSizeText('Khóa học bạn đã đăng kí gần đây',
                           maxFontSize: 24,
                           minFontSize: 24,
                           style: TextStyle(
@@ -153,67 +193,39 @@ class Screen1 extends StatelessWidget {
                               fontWeight: FontWeight.bold)),
                     ),
                     // list of previous days
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height * 0.25,
-                      child: ScrollConfiguration(
-                        behavior: MyCustomScrollBehavior(),
-                        child: Scrollbar(
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              buildCourseItem(
-                                context,
-                                'Khóa học 1',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 2',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 3',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 4',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 4',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 4',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 4',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              buildCourseItem(
-                                context,
-                                'Khóa học 4',
-                                'Ngày đăng kí: 01/01/2021',
-                                'https://th.bing.com/th/id/OIP.3EbFGW-Tb-VkOsIfRgOCcgHaE3?rs=1&pid=ImgDetMain',
-                              ),
-                              // Thêm nhiều item hơn nếu cần
-                            ],
+                      child: Obx(() {
+                        if (controller.enrollmentModel.value?.data?.items == null || controller.enrollmentModel.value!.data!.items!.isEmpty) {
+                          return const Center(child: Text('Không có khóa học nào.'));
+                        }
+
+                        return ScrollConfiguration(
+                          behavior: MyCustomScrollBehavior(),
+                          child: Scrollbar(
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: controller.enrollmentModel.value!.data!.items!.length,
+                              itemBuilder: (context, index) {
+                                final enrollmentItem = controller.enrollmentModel.value!.data!.items![index];
+                                final course = enrollmentItem.course!;
+                                // Giả sử `course` có thuộc tính `title`, `registrationDate`, và `imageUrl`.
+                                return InkWell(
+                                  onTap: () {
+                                    controller.navigateToCourseDetail(course.id!);
+                                  },
+                                  child: buildCourseItem(
+                                      context,
+                                      course.title ?? '',
+                                      'Ngày đăng kí: ${'N/A'}',
+                                      course.imageUrl ?? ''
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -239,7 +251,7 @@ Widget buildCourseItem(
     BuildContext context, String title, String subtitle, String imageUrl) {
   return Container(
     width: 200,
-    margin: EdgeInsets.all(10),
+    margin: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
       color: Colors.white,
@@ -248,29 +260,29 @@ Widget buildCourseItem(
           color: Colors.grey.withOpacity(0.5),
           spreadRadius: 1,
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     ),
     child: Column(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
           child: Image.network(imageUrl,
               height: MediaQuery.of(context).size.height * 0.09,
               width: double.infinity,
               fit: BoxFit.cover),
         ),
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
                 subtitle,
                 style: TextStyle(
@@ -289,8 +301,8 @@ Widget buildCourseItem(
 Widget buildProgressItem(BuildContext context, String title, double progress,
     String slots, String time) {
   return Container(
-    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-    padding: EdgeInsets.all(10),
+    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    padding: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(8),
@@ -299,7 +311,7 @@ Widget buildProgressItem(BuildContext context, String title, double progress,
           color: Colors.grey.withOpacity(0.5),
           spreadRadius: 1,
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     ),
@@ -308,15 +320,15 @@ Widget buildProgressItem(BuildContext context, String title, double progress,
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 5),     
+        const SizedBox(height: 5),
         LinearProgressIndicator(
           value: progress,
           backgroundColor: Colors.grey[300],
           valueColor: AlwaysStoppedAnimation<Color>(progress >= 1 ? Colors.green : Colors.blue),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           'Đã học: $slots slot',
           style: TextStyle(fontSize: 14, color: Colors.grey[600]),

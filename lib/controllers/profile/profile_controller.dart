@@ -1,25 +1,20 @@
 import 'dart:convert';
 
-import 'package:beanmind_flutter/models/game_history_model.dart';
+import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/screens/screens.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/firebase/references.dart';
-import 'package:beanmind_flutter/models/models.dart'
-    show QuizPaperModel, RecentTest;
-import 'package:beanmind_flutter/services/firebase/firebasestorage_service.dart';
-import 'package:beanmind_flutter/utils/logger.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
   var user = Rx<UserModel?>(null);
+  var enrollmentModel = Rxn<EnrollmentModel>();
 
   @override
   void onReady() {
-    getMyRecentTests();
     checkLoginStatus();
     super.onReady();
   }
@@ -34,35 +29,42 @@ class ProfileController extends GetxController {
     UserModel? sessionUser = await Get.find<AuthController>().getUserLocal();
     if (sessionUser != null) {
       user.value = sessionUser;
+      fetchEnrollments();
     }
   }
 
-  final allRecentTest = <RecentTest>[].obs;
+  Future<void> fetchEnrollments() async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/enrollments?ApplicationUserId=${user.value!.data!.id}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final enrollmentModelBase = EnrollmentModel.fromJson(json.decode(response.body));
+        enrollmentModel.value = enrollmentModelBase;
+        if (kDebugMode) {
+          print(enrollmentModel.value.toString());
+        }
+      } else {
+        throw Exception('Failed to fetch enrollment');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
   List<dynamic> gameHistories = [];
 
-  getMyRecentTests() async {
-    try {
-      User? user = Get.find<AuthController>().getUser();
-      if (user == null) return;
-      QuerySnapshot<Map<String, dynamic>> data =
-          await recentQuizes(userId: user.email!).get();
-      final tests =
-          data.docs.map((paper) => RecentTest.fromSnapshot(paper)).toList();
+  void navigateToCourseDetail(String id) {
+    Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', id));
+  }
 
-      for (RecentTest test in tests) {
-        DocumentSnapshot<Map<String, dynamic>> quizPaperSnaphot =
-            await quizePaperFR.doc(test.paperId).get();
-        final quizPaper = QuizPaperModel.fromSnapshot(quizPaperSnaphot);
-
-        final url =
-            await Get.find<FireBaseStorageService>().getImage(quizPaper.title);
-        test.papername = quizPaper.title;
-        test.paperimage = url;
-      }
-
-      allRecentTest.assignAll(tests);
-    } catch (e) {
-      AppLogger.e(e);
-    }
+  void signOut() {
+    Get.find<AuthController>().signOut();
   }
 }
