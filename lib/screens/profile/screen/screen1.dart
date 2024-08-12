@@ -127,7 +127,6 @@ class Screen1 extends StatelessWidget {
                                   context, 'Khóa học 4', 0.7, '7/10', '10 giờ'),
                               buildProgressItem(
                                   context, 'Khóa học 5', 1, '10/10', '10 giờ'),
-                              // Thêm nhiều item hơn nếu cần
                             ],
                           ),
                         ),
