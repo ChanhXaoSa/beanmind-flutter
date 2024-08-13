@@ -143,55 +143,98 @@ class MyNestedAccordion extends StatelessWidget {
   @override
   Widget build(context) {
     final chapters = course.chapters ?? [];
+    final worksheetAttempts = Get.find<ProfileController>().worksheetAttempt
+        .where((attempt) => attempt.enrollment?.courseId == course.id)
+        .toList();
+
     return Accordion(
       paddingListTop: 0,
       paddingListBottom: 0,
       maxOpenSections: 1,
       headerBackgroundColorOpened: Colors.black54,
-      children: chapters.map((chapter) {
-        final topics = chapter.topics ?? [];
-        return AccordionSection(
-          isOpen: false,
-          leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-          headerBackgroundColor: Colors.white,
-          headerBackgroundColorOpened: Colors.white,
-          header: Text(chapter.title ?? 'Không có tên chương',
-              style: CourseListHistoryScreen.headerStyle),
-          content: Accordion(
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
+      children: [
+        ...chapters.map((chapter) {
+          final topics = chapter.topics ?? [];
+          return AccordionSection(
+            isOpen: false,
+            leftIcon: const Icon(Icons.insights_rounded, color: Colors.black),
             headerBackgroundColor: Colors.white,
             headerBackgroundColorOpened: Colors.white,
+            header: Text(chapter.title ?? 'Không có tên chương',
+                style: CourseListHistoryScreen.headerStyle),
+            content: Accordion(
+              leftIcon: const Icon(Icons.insights_rounded, color: Colors.black),
+              headerBackgroundColor: Colors.white,
+              headerBackgroundColorOpened: Colors.white,
+              contentBackgroundColor: Colors.white,
+              contentBorderColor: Colors.white,
+              children: topics.map((topic) {
+                return AccordionSection(
+                  leftIcon: const Icon(Icons.insights_rounded, color: Colors.black),
+                  headerBackgroundColor: Colors.white,
+                  headerBackgroundColorOpened: Colors.white,
+                  header: Text(topic.title ?? 'Không có tên chủ đề',
+                      style: CourseListHistoryScreen.headerStyle),
+                  contentBackgroundColor: Colors.white,
+                  contentBorderColor: Colors.white,
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nội dung bài học:',
+                        style: CourseListHistoryScreen.headerStyle,
+                      ),
+                      Text(
+                        topic.description ?? 'Không có nội dung',
+                        style: CourseListHistoryScreen.contentStyle,
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
             contentBackgroundColor: Colors.white,
             contentBorderColor: Colors.white,
-            children: topics.map((topic) {
-              return AccordionSection(
-                leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-                headerBackgroundColor: Colors.white,
-                headerBackgroundColorOpened: Colors.white,
-                header: Text(topic.title ?? 'Không có tên chủ đề',
-                    style: CourseListHistoryScreen.headerStyle),
-                contentBackgroundColor: Colors.white,
-                contentBorderColor: Colors.white,
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Nội dung bài học:',
-                      style: CourseListHistoryScreen.headerStyle,
-                    ),
-                    Text(
-                      topic.description ?? 'Không có nội dung',
-                      style: CourseListHistoryScreen.contentStyle,
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+          );
+        }).toList(),
+        // Phần thêm cho Worksheet Attempts
+        if (worksheetAttempts.isNotEmpty)
+          AccordionSection(
+            isOpen: false,
+            leftIcon: const Icon(Icons.history, color: Colors.black),
+            headerBackgroundColor: Colors.white,
+            headerBackgroundColorOpened: Colors.white,
+            header: const Text('Lịch sử làm bài',
+                style: CourseListHistoryScreen.headerStyle),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: worksheetAttempts.map((attempt) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
+                        style: CourseListHistoryScreen.headerStyle,
+                      ),
+                      Text(
+                        'Ngày hoàn thành: ${attempt.completionDate != null ? attempt.completionDate!.toLocal().toString().split(' ')[0] : 'N/A'}',
+                        style: CourseListHistoryScreen.contentStyle,
+                      ),
+                      Text(
+                        'Điểm: ${attempt.score != null ? attempt.score.toString() : 'N/A'}',
+                        style: CourseListHistoryScreen.contentStyle,
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+            contentBackgroundColor: Colors.white,
+            contentBorderColor: Colors.white,
           ),
-          contentBackgroundColor: Colors.white,
-          contentBorderColor: Colors.white,
-        );
-      }).toList(),
+      ],
     );
   }
 }

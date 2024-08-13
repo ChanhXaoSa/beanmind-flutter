@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/models/worksheet_attempt_model.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,7 @@ class ProfileController extends GetxController {
   var courseDetailData = <CourseDetailData>[].obs;
   var chapterList = <ChapterItem>[].obs;
   var topicListModel = <TopicItem>[].obs;
+  var worksheetAttempt = <WorksheetAttemptItem>[].obs;
 
   @override
   void onReady() {
@@ -55,10 +57,11 @@ class ProfileController extends GetxController {
           for(var item in enrollmentModel.value!.data!.items!) {
             fetchCourseDetail(item.courseId!);
             fetchChapter(item.courseId!);
+            fetchWorksheetAttempt(item.id!);
           }
         }
         if (kDebugMode) {
-          print(enrollmentModel.value.toString());
+          print('enrollment id : ${enrollmentModel.value!.data!.items!.first.id}');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -67,6 +70,30 @@ class ProfileController extends GetxController {
       if (kDebugMode) {
         print('Error: $e');
       }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchWorksheetAttempt(String enrollmentId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/worksheet-attempts?EnrollmentId=$enrollmentId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final worksheetModelBase = WorksheetAttemptModel.fromJson(json.decode(response.body));
+        if(worksheetModelBase.data?.items != null) {
+          worksheetAttempt.addAll(worksheetModelBase.data!.items!);
+        }
+        print('worksheet attempt for enroll ${worksheetAttempt.first.enrollmentId} id ${worksheetAttempt.first.id}');
+      } else {
+        throw Exception('Failed to fetch topic');
+      }
+    } catch (e) {
+      print('Error: $e');
       rethrow;
     }
   }
