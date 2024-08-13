@@ -1,5 +1,6 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
+import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,8 +72,7 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
             ),
             Expanded(
               child: Obx(() {
-                if (controller.enrollmentModel.value?.data?.items == null ||
-                    controller.enrollmentModel.value!.data!.items!.isEmpty) {
+                if (controller.courseDetailData.isEmpty) {
                   return const Center(child: Text('Không có khóa học nào.'));
                 }
 
@@ -90,9 +90,8 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
                   const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
                   sectionOpeningHapticFeedback: SectionHapticFeedback.light,
                   sectionClosingHapticFeedback: SectionHapticFeedback.light,
-                  children: controller.enrollmentModel.value!.data!.items!
-                      .map((enrollmentItem) {
-                    final course = enrollmentItem;
+                  children: controller.courseDetailData
+                      .map((courseDetail) {
                     return AccordionSection(
                       isOpen: false,
                       leftIcon: const Icon(Icons.book, color: Colors.black),
@@ -100,7 +99,7 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            course.course!.title ?? 'Không có tên',
+                            courseDetail.title ?? 'Không có tên',
                             style: const TextStyle(color: Colors.black, fontSize: 30),
                           ),
                           const SizedBox(
@@ -108,9 +107,9 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
                           ),
                           buildProgressItem(
                             context,
-                            'Tiến độ học tập',
-                            enrollmentItem.status == 2 ? 1 : 0,
-                            '${course.course!.totalSlot ?? 0}/${course.course!.totalSlot ?? 0}',
+                            'Thông tin khóa học',
+                            0,
+                            '${courseDetail.totalSlot ?? 0} slot',
                             'N/A',
                           ),
                         ],
@@ -123,7 +122,7 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
                       contentBorderColor: Colors.white,
                       contentBorderWidth: 1,
                       contentVerticalPadding: 30,
-                      content: MyNestedAccordion(course: course),
+                      content: MyNestedAccordion(course: courseDetail),
                     );
                   }).toList(),
                 );
@@ -137,26 +136,26 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
 }
 
 class MyNestedAccordion extends StatelessWidget {
-  final EnrollmentModelItem course;
+  final CourseDetailData course;
 
   const MyNestedAccordion({required this.course, super.key});
 
   @override
   Widget build(context) {
-    // Giả sử course có một danh sách chương (chapters)
-    // Bạn cần cấu trúc này dựa trên mô hình thực tế của bạn.
+    final chapters = course.chapters ?? [];
     return Accordion(
       paddingListTop: 0,
       paddingListBottom: 0,
       maxOpenSections: 1,
       headerBackgroundColorOpened: Colors.black54,
-      children: [
-        AccordionSection(
+      children: chapters.map((chapter) {
+        final topics = chapter.topics ?? [];
+        return AccordionSection(
           isOpen: false,
           leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
           headerBackgroundColor: Colors.white,
           headerBackgroundColorOpened: Colors.white,
-          header: const Text('Chương 1',
+          header: Text(chapter.title ?? 'Không có tên chương',
               style: CourseListHistoryScreen.headerStyle),
           content: Accordion(
             leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
@@ -164,35 +163,35 @@ class MyNestedAccordion extends StatelessWidget {
             headerBackgroundColorOpened: Colors.white,
             contentBackgroundColor: Colors.white,
             contentBorderColor: Colors.white,
-            children: [
-              AccordionSection(
+            children: topics.map((topic) {
+              return AccordionSection(
                 leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
                 headerBackgroundColor: Colors.white,
                 headerBackgroundColorOpened: Colors.white,
-                header: const Text('Chủ đề 1',
+                header: Text(topic.title ?? 'Không có tên chủ đề',
                     style: CourseListHistoryScreen.headerStyle),
                 contentBackgroundColor: Colors.white,
                 contentBorderColor: Colors.white,
-                content: const Column(
+                content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Nội dung bài học #1',
+                      'Nội dung bài học:',
                       style: CourseListHistoryScreen.headerStyle,
                     ),
                     Text(
-                      'CourseListHistoryScreen.loremIpsum',
+                      topic.description ?? 'Không có nội dung',
                       style: CourseListHistoryScreen.contentStyle,
                     ),
                   ],
                 ),
-              ),
-            ],
+              );
+            }).toList(),
           ),
           contentBackgroundColor: Colors.white,
           contentBorderColor: Colors.white,
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 }
