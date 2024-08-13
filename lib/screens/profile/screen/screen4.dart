@@ -1,7 +1,6 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
-import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -197,7 +196,6 @@ class MyNestedAccordion extends StatelessWidget {
             contentBorderColor: Colors.white,
           );
         }).toList(),
-        // Phần thêm cho Worksheet Attempts
         if (worksheetAttempts.isNotEmpty)
           AccordionSection(
             isOpen: false,
