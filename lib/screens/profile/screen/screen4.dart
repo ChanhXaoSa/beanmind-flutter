@@ -141,13 +141,18 @@ class MyNestedAccordion extends GetView<ProfileController> {
   @override
   Widget build(context) {
     return Obx(() {
-      final chapters = Get.find<ProfileController>().getChaptersByCourseId(course.id!);
-      final worksheetAttempts = Get.find<ProfileController>().worksheetAttempt
+      final chapters = controller.getChaptersByCourseId(course.id!);
+      final worksheetAttempts = controller.worksheetAttempt
           .where((attempt) => attempt.enrollment?.courseId == course.id)
           .toList();
 
+      // Check if all necessary data has been loaded
+      if (controller.chapterList.isEmpty || controller.topicListModel.isEmpty) {
+        return Center(child: CircularProgressIndicator());
+      }
+
       if (chapters.isEmpty) {
-        return Center(child: Text('Chưa có chương nào được tải.'));
+        return const Center(child: Text('Chưa có chương nào được tải.'));
       }
 
       return Accordion(
@@ -165,10 +170,12 @@ class MyNestedAccordion extends GetView<ProfileController> {
               header: Text(chapter.title ?? 'Không có tên chương',
                   style: CourseListHistoryScreen.contentStyle),
               content: Obx(() {
-                final topics = Get.find<ProfileController>().getTopicsByChapterId(chapter.id!);
-                // final topics = controller.topicListModel
-                //     .where((topic) => topic.chapterId == chapter.id)
-                //     .toList();
+                final topics = controller.getTopicsByChapterId(chapter.id!);
+
+                if (topics.isEmpty) {
+                  return const Center(child: Text('Chưa có chủ đề nào được tải.'));
+                }
+
                 return Column(
                   children: topics.map<Widget>((TopicItem topic) {
                     return ListTile(
@@ -182,12 +189,12 @@ class MyNestedAccordion extends GetView<ProfileController> {
                         );
                       }),
                       title: Text(topic.title!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
                           )),
                       tileColor: Colors.white,
-                      onTap: () => {}
+                      onTap: () => {},
                     );
                   }).toList(),
                 );
@@ -209,7 +216,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                 children: worksheetAttempts.map((attempt) {
                   return InkWell(
                     onTap: () {
-
+                      // Handle onTap event
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
