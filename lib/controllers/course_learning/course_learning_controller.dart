@@ -9,6 +9,7 @@ import 'package:beanmind_flutter/models/procession_model.dart';
 import 'package:beanmind_flutter/models/topic_detail_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
+import 'package:beanmind_flutter/models/worksheet_attempt_model.dart';
 import 'package:beanmind_flutter/models/worksheet_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:flutter/foundation.dart';
@@ -32,6 +33,7 @@ class CourseLearningController extends GetxController {
   var enrollmentModelItem = Rxn<EnrollmentModelItem>();
   var participantModelItemList = <ParticipantModelItem>[].obs;
   var processionModelItemList = <ProcessionModelItem>[].obs;
+  var worksheetAttemptModelItem = <WorksheetAttemptItem>[].obs;
 
   var selectedContent = 'Chọn nội dung bạn muốn học hôm nay'.obs;
 
@@ -127,6 +129,7 @@ class CourseLearningController extends GetxController {
         enrollmentModelItem.value = enrollmentModelBase.data!.items!.firstWhere((element) => element.courseId == courseId,);
         if(enrollmentModelItem.value != null) {
           fetchParticipants(enrollmentModelItem.value!.id!);
+          fetchWorksheetAttempt(enrollmentModelItem.value!.id!);
         }
         if (kDebugMode) {
           print('${enrollmentModelItem.value}fetch enrollment thanh cong');
@@ -284,6 +287,35 @@ class CourseLearningController extends GetxController {
         worksheetListModel.addAll(worksheetDetailModelBase.data!.items!);
         if (kDebugMode) {
           // print(worksheetListModel.value.toString());
+        }
+      } else {
+        throw Exception('Failed to fetch course');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchWorksheetAttempt(String enrollmentId) async {
+    try {
+      if (kDebugMode) {
+        print(enrollmentId);
+      }
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/worksheet-attempts?EnrollmentId=$enrollmentId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final modelBase = WorksheetAttemptModel.fromJson(json.decode(response.body));
+        worksheetAttemptModelItem.addAll(modelBase.data!.items!.where((attempt) => attempt.status == 1));
+        if (kDebugMode) {
+          print('${worksheetAttemptModelItem.value.toString()} danh sach attempt ne ');
         }
       } else {
         throw Exception('Failed to fetch course');

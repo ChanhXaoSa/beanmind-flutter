@@ -9,7 +9,8 @@ import 'package:beanmind_flutter/widgets/widgets.dart';
 class QuizAttemptScreen extends GetView<QuizController> {
   const QuizAttemptScreen({super.key});
 
-  static const String routeName = '/quiz_attempt/course_id=:course_id&worksheet_id=:worksheet_id';
+  // static const String routeName = '/quiz_attempt/course_id=:course_id&worksheet_id=:worksheet_id&worksheet_attempt_id=:worksheet_attempt_id_input';
+  static const String routeName = '/quiz_attempt/course_id=:course_id&worksheet_id=:worksheet_id&worksheet_attempt_id=:worksheet_attempt_id';
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,7 @@ class QuizAttemptScreen extends GetView<QuizController> {
                                     crossAxisCount: crossAxisCount,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
-                                    childAspectRatio: crossAxisCount == 1 ? 5 : 2.5,
+                                    childAspectRatio: crossAxisCount == 1 ? 5 : 4,
                                   ),
                                   itemBuilder: (BuildContext context, int index) {
                                     final answer = controller.currentQuestionApi.value!.question!.questionAnswers![index];

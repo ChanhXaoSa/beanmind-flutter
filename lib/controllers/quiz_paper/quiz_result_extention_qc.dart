@@ -33,6 +33,7 @@ extension QuizeResult on QuizController {
     if (user == null) Get.find<AuthController>().signOut();
     String enrollId = Get.find<AuthController>().getEnrollmentId(courseId);
     String worksheetId = this.worksheetId;
+    String worksheetAttemptId = this.worksheetAttemptId;
     String completionDate = DateTime.now().toUtc().toIso8601String();
 
     List<Map<String, String>> workSheetAttemptAnswers = allQuestionsApi
@@ -44,16 +45,17 @@ extension QuizeResult on QuizController {
     }).toList();
 
     var body = jsonEncode({
+      "id": worksheetAttemptId,
       "enrollmentId": enrollId,
       "worksheetId": worksheetId,
       "completionDate": completionDate,
-      "status": 1,
+      "status": 2,
       "score": points,
       "workSheetAttemptAnswers": workSheetAttemptAnswers
     });
 
     try {
-      final response = await http.post(
+      final response = await http.put(
         Uri.parse('$newBaseApiUrl/worksheet-attempts'),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',

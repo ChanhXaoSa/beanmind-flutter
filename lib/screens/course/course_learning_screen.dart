@@ -55,7 +55,8 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                               child: Column(
                                 children: List.generate(3, (index) {
                                   return Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 8),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 8),
                                     height: 50,
                                     color: Colors.white,
                                   );
@@ -65,25 +66,31 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                           }
                           return Accordion(
                             maxOpenSections: 1,
-                            headerBackgroundColor: const Color.fromARGB(90, 227, 227, 227),
-                            contentBorderColor: const Color.fromARGB(90, 227, 227, 227),
-                            contentBackgroundColor: const Color.fromARGB(90, 227, 227, 227),
+                            headerBackgroundColor:
+                                const Color.fromARGB(90, 227, 227, 227),
+                            contentBorderColor:
+                                const Color.fromARGB(90, 227, 227, 227),
+                            contentBackgroundColor:
+                                const Color.fromARGB(90, 227, 227, 227),
                             headerBackgroundColorOpened: Colors.blue[300],
                             headerPadding: const EdgeInsets.symmetric(
                                 vertical: 7, horizontal: 15),
                             sectionOpeningHapticFeedback:
-                            SectionHapticFeedback.selection,
+                                SectionHapticFeedback.selection,
                             contentVerticalPadding: 10,
                             contentBorderRadius: 0,
                             headerBorderRadius: 3,
                             children: controller.chapterList
                                 .map<AccordionSection>((ChapterItem chapter) {
                               final isExpanded =
-                                  controller.expandedChapters[chapter.id] ?? false;
+                                  controller.expandedChapters[chapter.id] ??
+                                      false;
                               return AccordionSection(
                                 isOpen: isExpanded,
                                 rightIcon: Icon(
-                                  isExpanded ? Icons.expand_less : Icons.expand_more,
+                                  isExpanded
+                                      ? Icons.expand_less
+                                      : Icons.expand_more,
                                   color: Colors.black, // Change icon color here
                                 ),
                                 header: Text(chapter.title!,
@@ -93,27 +100,43 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                         fontWeight: FontWeight.bold)),
                                 content: Obx(() {
                                   final topics = controller.topicListModel
-                                      .where((topic) => topic.chapterId == chapter.id)
+                                      .where((topic) =>
+                                          topic.chapterId == chapter.id)
                                       .toList();
                                   return Column(
-                                    children: topics.map<Widget>((TopicItem topic) {
-                                      final isSelected = controller.selectedTopicId.value == topic.id;
+                                    children:
+                                        topics.map<Widget>((TopicItem topic) {
+                                      final isSelected =
+                                          controller.selectedTopicId.value ==
+                                              topic.id;
                                       return ListTile(
                                         leading: Obx(() {
-                                          final isChecked = controller.processionModelItemList.any(
-                                                (processionItem) => processionItem.topicId == topic.id,
+                                          final isChecked = controller
+                                              .processionModelItemList
+                                              .any(
+                                            (processionItem) =>
+                                                processionItem.topicId ==
+                                                topic.id,
                                           );
                                           return Icon(
-                                            isChecked ? Icons.check_box : Icons.check_box_outline_blank,
-                                            color: isChecked ? Colors.green : Colors.grey,
+                                            isChecked
+                                                ? Icons.check_box
+                                                : Icons.check_box_outline_blank,
+                                            color: isChecked
+                                                ? Colors.green
+                                                : Colors.grey,
                                           );
                                         }),
                                         title: Text(topic.title!,
                                             style: TextStyle(
                                               fontSize: 14,
-                                              color: isSelected ? Colors.blue : Colors.black,
+                                              color: isSelected
+                                                  ? Colors.blue
+                                                  : Colors.black,
                                             )),
-                                        tileColor: isSelected ? Colors.blue[50] : Colors.white,
+                                        tileColor: isSelected
+                                            ? Colors.blue[50]
+                                            : Colors.white,
                                         onTap: () =>
                                             controller.selectContent(topic.id!),
                                       );
@@ -125,40 +148,35 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                           );
                         }),
                         Obx(() {
-                          if (controller.worksheetListModel.value.isNotEmpty) {
+                          if (controller.worksheetAttemptModelItem != []) {
                             return Column(
-                              children: controller.worksheetListModel.value.map((worksheet) {
+                              children: controller.worksheetAttemptModelItem
+                                  .map((worksheetAttempt) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: Center(
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        final route = QuizAttemptScreen.routeName
-                                            .replaceFirst(':course_id', controller.courseId)
-                                            .replaceFirst(':worksheet_id', worksheet.id!);
+                                        final route = QuizAttemptScreen
+                                            .routeName
+                                            .replaceFirst(':course_id',
+                                                controller.courseId)
+                                            .replaceFirst(':worksheet_id',
+                                                worksheetAttempt.worksheet!.id!)
+                                            .replaceFirst(
+                                                ':worksheet_attempt_id',
+                                                worksheetAttempt.id!);
                                         Get.toNamed(route);
                                       },
-                                      child: Text('${worksheet.title}'),
+                                      child: Text(
+                                          '${worksheetAttempt.worksheet!.title}'),
                                     ),
                                   ),
                                 );
                               }).toList(),
                             );
                           } else {
-                            // return Shimmer.fromColors(
-                            //   baseColor: Colors.grey[300]!,
-                            //   highlightColor: Colors.grey[100]!,
-                            //   child: Column(
-                            //     children: List.generate(2, (index) {
-                            //       return Container(
-                            //         margin: const EdgeInsets.symmetric(vertical: 8),
-                            //         height: 50,
-                            //         width: double.infinity,
-                            //         color: Colors.white,
-                            //       );
-                            //     }),
-                            //   ),
-                            // );
                             return Container();
                           }
                         })
@@ -208,8 +226,10 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                           ),
                         );
                       } else {
-                        if(controller.selectedContent.value == 'Chọn nội dung bạn muốn học hôm nay') {
-                          return Center(child: Text(controller.selectedContent.value));
+                        if (controller.selectedContent.value ==
+                            'Chọn nội dung bạn muốn học hôm nay') {
+                          return Center(
+                              child: Text(controller.selectedContent.value));
                         }
                         return Shimmer.fromColors(
                           baseColor: Colors.grey[300]!,

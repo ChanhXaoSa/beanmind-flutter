@@ -157,7 +157,6 @@ class MyNestedAccordion extends GetView<ProfileController> {
         headerBackgroundColorOpened: Colors.black54,
         children: [
           ...chapters.map((chapter) {
-            final topics = Get.find<ProfileController>().getTopicsByChapterId(chapter.id!);
             return AccordionSection(
               isOpen: false,
               leftIcon: const Icon(Icons.insights_rounded, color: Colors.black),
@@ -166,9 +165,10 @@ class MyNestedAccordion extends GetView<ProfileController> {
               header: Text(chapter.title ?? 'Không có tên chương',
                   style: CourseListHistoryScreen.contentStyle),
               content: Obx(() {
-                final topics = controller.topicListModel
-                    .where((topic) => topic.chapterId == chapter.id)
-                    .toList();
+                final topics = Get.find<ProfileController>().getTopicsByChapterId(chapter.id!);
+                // final topics = controller.topicListModel
+                //     .where((topic) => topic.chapterId == chapter.id)
+                //     .toList();
                 return Column(
                   children: topics.map<Widget>((TopicItem topic) {
                     return ListTile(
@@ -207,24 +207,29 @@ class MyNestedAccordion extends GetView<ProfileController> {
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: worksheetAttempts.map((attempt) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
-                          style: CourseListHistoryScreen.headerStyle,
-                        ),
-                        Text(
-                          'Ngày hoàn thành: ${attempt.completionDate != null ? attempt.completionDate!.toLocal().toString().split(' ')[0] : 'N/A'}',
-                          style: CourseListHistoryScreen.contentStyle,
-                        ),
-                        Text(
-                          'Điểm: ${attempt.score != null ? attempt.score.toString() : 'N/A'}',
-                          style: CourseListHistoryScreen.contentStyle,
-                        ),
-                      ],
+                  return InkWell(
+                    onTap: () {
+
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
+                            style: CourseListHistoryScreen.headerStyle,
+                          ),
+                          Text(
+                            'Ngày hoàn thành: ${attempt.completionDate != null ? attempt.completionDate!.toLocal().toString().split(' ')[0] : 'N/A'}',
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                          Text(
+                            'Điểm: ${attempt.score != null ? attempt.score.toString() : 'N/A'}',
+                            style: CourseListHistoryScreen.contentStyle,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }).toList(),

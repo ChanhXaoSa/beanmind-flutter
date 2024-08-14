@@ -16,6 +16,7 @@ import 'package:http/http.dart' as http;
 class QuizController extends GetxController {
   late String courseId;
   late String worksheetId;
+  late String worksheetAttemptId;
   final loadingStatusApi = LoadingStatus.loading.obs;
   final allQuestionsApi = <WorksheetQuestion>[];
   var worksheetDetailModel = Rxn<WorksheetDetailModel>();
@@ -27,6 +28,7 @@ class QuizController extends GetxController {
   void onReady() {
     courseId = Get.parameters['course_id']!;
     worksheetId = Get.parameters['worksheet_id']!;
+    worksheetAttemptId = Get.parameters['worksheet_attempt_id']!;
     // final _quizData = Get.arguments as WorksheetDetailModel;
     // loadDataApi(_quizData);
     // final _quizePaprer = Get.arguments as QuizPaperModel;
