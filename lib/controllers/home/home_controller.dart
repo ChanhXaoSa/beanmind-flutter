@@ -28,11 +28,11 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    checkLoginStatus();
-    fetchCourses();
     fetchCourseLevel();
     fetchProgramType();
     fetchSubject();
+    checkLoginStatus();
+    fetchCourses();
     super.onInit();
   }
 

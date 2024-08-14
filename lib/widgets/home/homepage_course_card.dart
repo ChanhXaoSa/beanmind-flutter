@@ -181,117 +181,105 @@ class HomepageCourseCard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEnrolled = controller.isCourseEnrolled(course.id!);
+    return Obx(() {
+      bool isEnrolled = controller.isCourseEnrolled(course.id!);
+      var courseLevel = controller.courseLevelItemList.where((a) => a.id == course.courseLevelId).firstOrNull;
+      var programType = controller.programTypeItemList.where((a) => a.id == course.programTypeId).firstOrNull;
+      var subject = controller.subjectItemList.where((a) => a.id == course.subjectId).firstOrNull;
 
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: Container(
-        width: 285,
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () {
-                controller.navigateToCourseDetail(course.id!);
-              },
-              child: Stack(
-                children: [
-                  // Image.network(course.imageURL!,
-                  //     fit: BoxFit.cover, height: 200,),
-                  ClipRRect(
-                    // borderRadius: BorderRadius.circular(30),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/background/background.png',
-                      image: course.imageUrl!,
-                      fit: BoxFit.cover,
-                      height: 200,
-                      imageErrorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/background/background.png',
-                          fit: BoxFit.cover,
-                          height: 200,
-                        );
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      color: Colors.blue,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      child: Text(
-                        course.subjectId!,
-                        style: const TextStyle(color: Colors.white),
+      return Card(
+        margin: const EdgeInsets.all(10),
+        child: Container(
+          width: 285,
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  controller.navigateToCourseDetail(course.id!);
+                },
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/background/background.png',
+                        image: course.imageUrl!,
+                        fit: BoxFit.cover,
+                        height: 200,
+                        imageErrorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/background/background.png',
+                            fit: BoxFit.cover,
+                            height: 200,
+                          );
+                        },
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            InkWell(
-              onTap: () => controller.navigateToCourseDetail(course.id!),
-              child: Text(
-                course.title!,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              child: Text(
-                '${course.programTypeId!} - ${course.courseLevelId!}',
-                maxLines: 6,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 120,
-              child: Text(
-                course.description!,
-                maxLines: 6,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(height: 10),
-            // const Row(
-            //   children: [
-            //     Icon(Icons.star, color: Colors.orange, size: 20),
-            //     SizedBox(width: 5),
-            //     Text('5.0'),
-            //   ],
-            // ),
-            // const SizedBox(height: 10),
-            // Row(
-            //   children: [
-            //     Text('${course.totalSlot} tiết học'),
-            //   ],
-            // ),
-            const SizedBox(height: 10),
-            Row(children: [
-              Text(formatPrice(course.price!)),
-              const Spacer(),
-              isEnrolled
-                  ? ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed(CourseLearningScreen.routeName
-                            .replaceFirst(':id', course.id!));
-                      },
-                      child: const Text('Học Ngay'),
-                    )
-                  : const ElevatedButton(
-                      onPressed: null,
-                      child: Text('Chưa đăng ký'),
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        color: Colors.blue,
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Text(
+                          subject?.title ?? 'Unknown Subject',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
-            ])
-          ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              InkWell(
+                onTap: () => controller.navigateToCourseDetail(course.id!),
+                child: SizedBox(
+                  height: 80,
+                  child: Text(
+                    course.title!,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                child: Text(
+                  '${programType?.title ?? 'Unknown Program'} - ${courseLevel?.title ?? 'Unknown Level'}',
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 120,
+                child: Text(
+                  course.description!,
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(children: [
+                Text(formatPrice(course.price!)),
+                const Spacer(),
+                isEnrolled
+                    ? ElevatedButton(
+                  onPressed: () {
+                    Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', course.id!));
+                  },
+                  child: const Text('Học Ngay'),
+                )
+                    : const ElevatedButton(
+                  onPressed: null,
+                  child: Text('Chưa đăng ký'),
+                ),
+              ])
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
