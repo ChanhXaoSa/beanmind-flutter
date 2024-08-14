@@ -152,7 +152,7 @@ class ProfileController extends GetxController {
       if (response.statusCode == 200) {
         final worksheetModelBase = WorksheetAttemptModel.fromJson(json.decode(response.body));
         if(worksheetModelBase.data?.items != null) {
-          worksheetAttempt.addAll(worksheetModelBase.data!.items!);
+          worksheetAttempt.addAll(worksheetModelBase.data!.items!.where((attempt) => attempt.status == 2));
         }
         // print('worksheet attempt for enroll ${worksheetAttempt.first.enrollmentId} id ${worksheetAttempt.first.id}');
       } else {
