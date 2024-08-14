@@ -223,7 +223,7 @@ class HomepageCourseCard extends GetView<HomeController> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       child: Text(
-                        course.subject!.title!,
+                        course.subjectId!,
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
@@ -243,7 +243,7 @@ class HomepageCourseCard extends GetView<HomeController> {
             const SizedBox(height: 10),
             SizedBox(
               child: Text(
-                '${course.programType!.title!} - ${course.courseLevel!.title!}',
+                '${course.programTypeId!} - ${course.courseLevelId!}',
                 maxLines: 6,
                 overflow: TextOverflow.ellipsis,
               ),
