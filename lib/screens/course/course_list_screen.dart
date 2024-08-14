@@ -30,7 +30,7 @@ class CourseListScreen extends GetView<HomeController> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.25,
                       color: Colors.grey[200],
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
                           child: Column(
@@ -41,40 +41,38 @@ class CourseListScreen extends GetView<HomeController> {
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 10),
-                              // Thêm các bộ lọc tùy chỉnh tại đây
-                              FilterExpansionTile(
-                                title: 'Categories',
-                                options: [
-                                  'Software Development',
-                                  'Website Development',
-                                  'Mobile Development',
-                                  'Desktop Development',
-                                  'Game Development',
-                                ],
-                              ),
-                              FilterExpansionTile(
-                                title: 'Instructor',
-                                options: ['Instructor'],
-                              ),
-                              FilterExpansionTile(
-                                title: 'Language',
-                                options: ['English'],
-                              ),
-                              FilterExpansionTile(
-                                title: 'Level',
-                                options: [
-                                  'Beginner',
-                                  'Intermediate',
-                                  'Advanced'
-                                ],
-                              ),
-                              // Thêm các bộ lọc khác nếu cần
+                              Obx(() => FilterExpansionTile(
+                                title: 'Lớp',
+                                options: controller.courseLevelItemList
+                                    .map((item) => item.title ?? '')
+                                    .toList(),
+                                ids: controller.courseLevelItemList
+                                    .map((item) => item.id ?? '00000000-0000-0000-0000-000000000000')
+                                    .toList(),
+                              )),
+                              Obx(() => FilterExpansionTile(
+                                title: 'Chương trình học',
+                                options: controller.programTypeItemList
+                                    .map((item) => item.title ?? '')
+                                    .toList(),
+                                ids: controller.programTypeItemList
+                                    .map((item) => item.id ?? '')
+                                    .toList(),
+                              )),
+                              Obx(() => FilterExpansionTile(
+                                title: 'Môn học',
+                                options: controller.subjectItemList
+                                    .map((item) => item.title ?? '')
+                                    .toList(),
+                                ids: controller.subjectItemList
+                                    .map((item) => item.id ?? '')
+                                    .toList(),
+                              )),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    // Phần Grid hiển thị các khóa học
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -138,7 +136,7 @@ class CourseListScreen extends GetView<HomeController> {
   }
 }
 
-class FilterBar extends StatelessWidget {
+class FilterBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -146,52 +144,29 @@ class FilterBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Showing 1 of total 1 Courses"),
+          Obx(() {
+            return Text("Hiển thị ${controller.courseItemList.length} trên tổng số ${controller.courseItemList.length} khoá học");
+          }),
           Spacer(),
           SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Các tag filter được chọn
-              Wrap(
-                spacing: 8.0,
-                children: [
-                  FilterTag(
-                    label: "Instructor",
-                    onRemove: () {
-                      // Xử lý khi nhấn X để bỏ filter
-                    },
-                  ),
-                  FilterTag(
-                    label: "Website Development",
-                    onRemove: () {
-                      // Xử lý khi nhấn X để bỏ filter
-                    },
-                  ),
-                ],
-              ),
-              // Các nút sắp xếp
-              // Row(
-              //   children: [
-              //     SortButton(label: "Best Rated"),
-              //     SortButton(label: "Most Popular"),
-              //     SortButton(label: "Latest"),
-              //     SortButton(label: "Highest Price"),
-              //     SortButton(label: "Lowest Price"),
-              //     IconButton(
-              //       icon: Icon(Icons.grid_view, color: Colors.blue),
-              //       onPressed: () {
-              //         // Chuyển sang chế độ hiển thị dạng grid
-              //       },
-              //     ),
-              //     IconButton(
-              //       icon: Icon(Icons.list, color: Colors.grey),
-              //       onPressed: () {
-              //         // Chuyển sang chế độ hiển thị dạng list
-              //       },
-              //     ),
-              //   ],
-              // ),
+              Obx(() {
+                return Wrap(
+                  spacing: 8.0,
+                  children: controller.selectedFilterTags.entries.map((entry) {
+                    return FilterTag(
+                      title: entry.key,
+                      label: entry.value, // Hiển thị tên thay vì ID
+                      onRemove: () {
+                        // Xóa thẻ lọc khi nhấn dấu x
+                        Get.find<HomeController>().removeFilterId(entry.key);
+                      },
+                    );
+                  }).toList(),
+                );
+              }),
             ],
           ),
         ],
@@ -200,47 +175,38 @@ class FilterBar extends StatelessWidget {
   }
 }
 
-// Định nghĩa FilterTag như trong mã trước
+
 class FilterTag extends StatelessWidget {
   final String label;
+  final String title;
   final VoidCallback onRemove;
 
-  const FilterTag({required this.label, required this.onRemove});
+  const FilterTag({required this.label, required this.title, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {
     return Chip(
-      label: Text(label),
+      label: Text(label), // Hiển thị tên thay vì ID
       deleteIcon: Icon(Icons.close),
-      onDeleted: onRemove,
-    );
-  }
-}
-
-// Định nghĩa SortButton như trong mã trước
-class SortButton extends StatelessWidget {
-  final String label;
-
-  const SortButton({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        // Xử lý khi nhấn vào nút sắp xếp
+      onDeleted: () {
+        final controller = Get.find<HomeController>();
+        controller.removeFilterId(title); // Cập nhật trạng thái trong controller
+        onRemove(); // Gọi hàm callback để xóa tag khỏi giao diện
       },
-      child: Text(label),
     );
   }
 }
+
 
 class FilterExpansionTile extends StatefulWidget {
   final String title;
-  final List<String> options;
+  final List<String> options; // Tên của các lựa chọn
+  final List<String> ids; // ID của các lựa chọn
 
   const FilterExpansionTile({
     required this.title,
     required this.options,
+    required this.ids,
     super.key,
   });
 
@@ -249,31 +215,38 @@ class FilterExpansionTile extends StatefulWidget {
 }
 
 class _FilterExpansionTileState extends State<FilterExpansionTile> {
-  List<String> selectedOptions = [];
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
+
     return ExpansionTile(
       title: Text(widget.title),
-      children: widget.options.map((option) {
-        return CheckboxListTile(
-          title: Text(option),
-          value: selectedOptions.contains(option),
-          onChanged: (bool? value) {
-            setState(() {
-              if (value == true) {
-                // Thêm tùy chọn vào danh sách nếu được chọn
-                selectedOptions.add(option);
-              } else {
-                // Loại bỏ tùy chọn khỏi danh sách nếu bỏ chọn
-                selectedOptions.remove(option);
+      children: widget.options.asMap().entries.map((entry) {
+        final index = entry.key;
+        final option = entry.value;
+        final id = widget.ids[index];
+
+        return Obx(() {
+          String? selectedOptionId = controller.getFilterId(widget.title);
+          return RadioListTile<String>(
+            title: Text(option),
+            value: id,
+            groupValue: selectedOptionId,
+            onChanged: (String? value) {
+              if (value != null) {
+                controller.addFilterId(widget.title, value, option);
+                controller.applyFilters(); // Gọi API mỗi khi lựa chọn thay đổi
               }
-            });
-            // Handle option change (ví dụ, cập nhật danh sách filter bên ngoài)
-          },
-        );
+            },
+          );
+        });
       }).toList(),
     );
   }
 }
+
+
+
+
+
 

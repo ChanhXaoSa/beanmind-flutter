@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
+import 'package:beanmind_flutter/models/course_level_model.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
+import 'package:beanmind_flutter/models/program_type_model.dart';
+import 'package:beanmind_flutter/models/subject_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/screens/course/course_detail_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
@@ -12,55 +15,25 @@ import 'package:http/http.dart' as http;
 
 class HomeController extends GetxController {
   var courseModel = Rxn<CourseModel>();
+  var courseItemList = <CourseModelItem>[].obs;
   var enrollmentModel = Rxn<EnrollmentModel>();
+  var courseLevelItemList = <CourseLevelModelItem>[].obs;
+  var programTypeItemList = <ProgramTypeModelItem>[].obs;
+  var subjectItemList = <SubjectModelItem>[].obs;
   var user = Rx<UserModel?>(null);
 
-  var selectedCategories = <String>[].obs;
-  var selectedInstructors = <String>[].obs;
-  var selectedLanguages = <String>[].obs;
-  var selectedLevels = <String>[].obs;
+  var selectedFilterTags = <String, String>{}.obs;
+  var filterSelections = <String, String?>{}.obs;
+  var selectedFilterIds = <String, String?>{}.obs;
 
   @override
   void onInit() {
     checkLoginStatus();
     fetchCourses();
+    fetchCourseLevel();
+    fetchProgramType();
+    fetchSubject();
     super.onInit();
-  }
-
-  // Các phương thức cập nhật filter
-  void updateCategories(List<String> categories) {
-    selectedCategories.assignAll(categories);
-  }
-
-  void updateInstructors(List<String> instructors) {
-    selectedInstructors.assignAll(instructors);
-  }
-
-  void updateLanguages(List<String> languages) {
-    selectedLanguages.assignAll(languages);
-  }
-
-  void updateLevels(List<String> levels) {
-    selectedLevels.assignAll(levels);
-  }
-
-  // Phương thức xóa tag
-  void removeTag(String tag, String filterType) {
-    if (filterType == 'category') {
-      selectedCategories.remove(tag);
-    } else if (filterType == 'instructor') {
-      selectedInstructors.remove(tag);
-    } else if (filterType == 'language') {
-      selectedLanguages.remove(tag);
-    } else if (filterType == 'level') {
-      selectedLevels.remove(tag);
-    }
-  }
-
-  void requestRemoveTag(String tag, String filterType) {
-    Future.microtask(() {
-      removeTag(tag, filterType);
-    });
   }
 
   Future<void> checkLoginStatus() async {
@@ -68,6 +41,84 @@ class HomeController extends GetxController {
     if (sessionUser != null) {
       user.value = sessionUser;
       fetchEnrollments();
+    }
+  }
+
+  Future<void> fetchSubject() async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/subjects'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final modelBase = SubjectModel.fromJson(json.decode(response.body));
+        subjectItemList.addAll(modelBase.data!.items!);
+        if (kDebugMode) {
+          print('fetch subject success, count = ${subjectItemList.length}');
+        }
+      } else {
+        throw Exception('Failed to subject type');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchProgramType() async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/program-types'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final modelBase = ProgramTypeModel.fromJson(json.decode(response.body));
+        programTypeItemList.addAll(modelBase.data!.items!);
+        if (kDebugMode) {
+          print('fetch program type success, count = ${programTypeItemList.length}');
+        }
+      } else {
+        throw Exception('Failed to fetch program type');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchCourseLevel() async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/course-levels'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final modelBase = CourseLevelModel.fromJson(json.decode(response.body));
+        courseLevelItemList.addAll(modelBase.data!.items!);
+        if (kDebugMode) {
+          print('fetch course level success, count = ${courseLevelItemList.length}');
+        }
+      } else {
+        throw Exception('Failed to fetch course level');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
     }
   }
 
@@ -109,6 +160,7 @@ class HomeController extends GetxController {
       if (courseResponse.statusCode == 200) {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
         courseModel.value = courseModelBase;
+        courseItemList.addAll(courseModelBase.data!.items!);
         if (kDebugMode) {
           print(courseModel.value.toString());
         }
@@ -121,6 +173,70 @@ class HomeController extends GetxController {
       }
       rethrow;
     }
+  }
+
+  Future<void> fetchCoursesFiltered(String subjectId, String programTypeId, String courseLevelId) async {
+    try {
+      final courseResponse = await http.get(
+          Uri.parse('$newBaseApiUrl/courses?SubjectId=$subjectId&ProgramTypeId=$programTypeId&CourseLevelId=$courseLevelId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (courseResponse.statusCode == 200) {
+        final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
+        courseModel.value = courseModelBase;
+        courseItemList.assignAll(courseModelBase.data!.items!);
+        if (kDebugMode) {
+          print(courseModel.value.toString());
+        }
+      } else {
+        throw Exception('Failed to fetch course');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  void addFilterId(String title, String id, String displayName) {
+    selectedFilterTags[title] = displayName;
+    filterSelections[title] = id;
+  }
+
+  void removeFilterId(String title) {
+    selectedFilterTags.remove(title);
+    filterSelections[title] = null;
+    applyFilters();
+  }
+
+  String? getFilterId(String title) {
+    return filterSelections[title];
+  }
+
+  void applyFilters() {
+    final subjectId = filterSelections['Môn học'] ?? '00000000-0000-0000-0000-000000000000';
+    final programTypeId = filterSelections['Chương trình học'] ?? '00000000-0000-0000-0000-000000000000';
+    final courseLevelId = filterSelections['Lớp'] ?? '00000000-0000-0000-0000-000000000000';
+
+    fetchCoursesFiltered(subjectId, programTypeId, courseLevelId);
+  }
+
+  void addFilterTag(String title, String tag) {
+    selectedFilterTags[title] = tag;
+    filterSelections[title] = tag;
+  }
+
+  void removeFilterTag(String title) {
+    selectedFilterTags.remove(title);
+    filterSelections[title] = null;
+  }
+
+  String? getSelectedOption(String title) {
+    return filterSelections[title];
   }
 
   bool isCourseEnrolled(String courseId) {

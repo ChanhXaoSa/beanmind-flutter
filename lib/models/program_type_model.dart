@@ -45,7 +45,7 @@ class ProgramTypeModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<ProgramTypeModelItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<ProgramTypeModelItem>.from(json["items"]!.map((x) => ProgramTypeModelItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -72,22 +72,25 @@ class Data {
   };
 }
 
-class Item {
+class ProgramTypeModelItem {
   String? title;
   String? description;
+  List<dynamic>? courses;
   String? id;
   bool? isDeleted;
 
-  Item({
+  ProgramTypeModelItem({
     this.title,
     this.description,
+    this.courses,
     this.id,
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory ProgramTypeModelItem.fromJson(Map<String, dynamic> json) => ProgramTypeModelItem(
     title: json["title"],
     description: json["description"],
+    courses: json["courses"] == null ? [] : List<dynamic>.from(json["courses"]!.map((x) => x)),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -95,6 +98,7 @@ class Item {
   Map<String, dynamic> toJson() => {
     "title": title,
     "description": description,
+    "courses": courses == null ? [] : List<dynamic>.from(courses!.map((x) => x)),
     "id": id,
     "isDeleted": isDeleted,
   };

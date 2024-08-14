@@ -45,7 +45,7 @@ class CourseLevelModel {
 }
 
 class Data {
-  List<Item>? items;
+  List<CourseLevelModelItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
@@ -58,7 +58,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    items: json["items"] == null ? [] : List<CourseLevelModelItem>.from(json["items"]!.map((x) => CourseLevelModelItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -72,20 +72,20 @@ class Data {
   };
 }
 
-class Item {
+class CourseLevelModelItem {
   String? title;
   String? description;
   String? id;
   bool? isDeleted;
 
-  Item({
+  CourseLevelModelItem({
     this.title,
     this.description,
     this.id,
     this.isDeleted,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory CourseLevelModelItem.fromJson(Map<String, dynamic> json) => CourseLevelModelItem(
     title: json["title"],
     description: json["description"],
     id: json["id"],
