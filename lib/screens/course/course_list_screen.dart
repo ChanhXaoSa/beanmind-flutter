@@ -19,14 +19,11 @@ class CourseListScreen extends GetView<HomeController> {
           width: MediaQuery.of(context).size.width * 0.8,
           child: Column(
             children: [
-              // Thanh điều hướng trên
               FilterBar(),
-              // Phần nội dung chính
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Phần Filter bên trái
                     Container(
                       width: MediaQuery.of(context).size.width * 0.25,
                       color: Colors.grey[200],
@@ -158,9 +155,8 @@ class FilterBar extends GetView<HomeController> {
                   children: controller.selectedFilterTags.entries.map((entry) {
                     return FilterTag(
                       title: entry.key,
-                      label: entry.value, // Hiển thị tên thay vì ID
+                      label: entry.value,
                       onRemove: () {
-                        // Xóa thẻ lọc khi nhấn dấu x
                         Get.find<HomeController>().removeFilterId(entry.key);
                       },
                     );
@@ -186,12 +182,12 @@ class FilterTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      label: Text(label), // Hiển thị tên thay vì ID
+      label: Text(label),
       deleteIcon: Icon(Icons.close),
       onDeleted: () {
         final controller = Get.find<HomeController>();
-        controller.removeFilterId(title); // Cập nhật trạng thái trong controller
-        onRemove(); // Gọi hàm callback để xóa tag khỏi giao diện
+        controller.removeFilterId(title);
+        onRemove();
       },
     );
   }
@@ -200,8 +196,8 @@ class FilterTag extends StatelessWidget {
 
 class FilterExpansionTile extends StatefulWidget {
   final String title;
-  final List<String> options; // Tên của các lựa chọn
-  final List<String> ids; // ID của các lựa chọn
+  final List<String> options;
+  final List<String> ids;
 
   const FilterExpansionTile({
     required this.title,
