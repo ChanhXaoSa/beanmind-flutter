@@ -26,21 +26,9 @@ class CustomHomeAppBar extends GetView<AppBarController>
                   children: [
                     GestureDetector(
                       onTap: () => controller.navigateToHome(),
-                      child: Image.asset(
-                        'images/logo_beanmind.png',
+                      child: Image.network(
+                        'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e',
                         height: 40.0,
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    GestureDetector(
-                      onTap: () => controller.navigateToHome(),
-                      child: const Text(
-                        'Beanmind',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                     ),
                     const Spacer(),
@@ -119,7 +107,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         },
                         child: const CircleAvatar(
                           backgroundImage:
-                          AssetImage('images/logo_beanmind.png'),
+                          NetworkImage('https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e'),
                           radius: 20.0,
                         ),
                       )
@@ -143,8 +131,8 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () => controller.navigateToHome(),
-                        child: Image.asset(
-                          'images/logo-beanmind.png',
+                        child: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e',
                           height: 40.0,
                         ),
                       ),
@@ -304,21 +292,9 @@ class CustomHomeAppBar extends GetView<AppBarController>
                   children: [
                     GestureDetector(
                       onTap: () => controller.navigateToHome(),
-                      child: Image.asset(
-                        'images/logo_beanmind.png',
+                      child: Image.network(
+                        'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e',
                         height: 40.0,
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    GestureDetector(
-                      onTap: () => controller.navigateToHome(),
-                      child: const Text(
-                        'Beanmind',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                     ),
                     const Spacer(),
