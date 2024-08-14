@@ -144,23 +144,8 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       child: GestureDetector(
                         onTap: () => controller.navigateToHome(),
                         child: Image.asset(
-                          'images/logo_beanmind.png',
+                          'images/logo-beanmind.png',
                           height: 40.0,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => controller.navigateToHome(),
-                        child: const Text(
-                          'Beanmind',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       ),
                     ),

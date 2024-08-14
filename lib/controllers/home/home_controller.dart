@@ -15,11 +15,52 @@ class HomeController extends GetxController {
   var enrollmentModel = Rxn<EnrollmentModel>();
   var user = Rx<UserModel?>(null);
 
+  var selectedCategories = <String>[].obs;
+  var selectedInstructors = <String>[].obs;
+  var selectedLanguages = <String>[].obs;
+  var selectedLevels = <String>[].obs;
+
   @override
   void onInit() {
     checkLoginStatus();
     fetchCourses();
     super.onInit();
+  }
+
+  // Các phương thức cập nhật filter
+  void updateCategories(List<String> categories) {
+    selectedCategories.assignAll(categories);
+  }
+
+  void updateInstructors(List<String> instructors) {
+    selectedInstructors.assignAll(instructors);
+  }
+
+  void updateLanguages(List<String> languages) {
+    selectedLanguages.assignAll(languages);
+  }
+
+  void updateLevels(List<String> levels) {
+    selectedLevels.assignAll(levels);
+  }
+
+  // Phương thức xóa tag
+  void removeTag(String tag, String filterType) {
+    if (filterType == 'category') {
+      selectedCategories.remove(tag);
+    } else if (filterType == 'instructor') {
+      selectedInstructors.remove(tag);
+    } else if (filterType == 'language') {
+      selectedLanguages.remove(tag);
+    } else if (filterType == 'level') {
+      selectedLevels.remove(tag);
+    }
+  }
+
+  void requestRemoveTag(String tag, String filterType) {
+    Future.microtask(() {
+      removeTag(tag, filterType);
+    });
   }
 
   Future<void> checkLoginStatus() async {
