@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
+import 'package:beanmind_flutter/models/participant_model.dart';
+import 'package:beanmind_flutter/models/procession_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/models/worksheet_attempt_model.dart';
@@ -20,11 +22,13 @@ class ProfileController extends GetxController {
   var chapterList = <ChapterItem>[].obs;
   var topicListModel = <TopicItem>[].obs;
   var worksheetAttempt = <WorksheetAttemptItem>[].obs;
+  var participantModelItemList = <ParticipantModelItem>[].obs;
+  var processionModelItemList = <ProcessionModelItem>[].obs;
 
   @override
-  void onReady() {
+  void onInit() {
     checkLoginStatus();
-    super.onReady();
+    super.onInit();
   }
 
   var selectedIndex = 0.obs;
@@ -38,6 +42,67 @@ class ProfileController extends GetxController {
     if (sessionUser != null) {
       user.value = sessionUser;
       fetchEnrollments();
+    }
+  }
+
+  Future<void> fetchProcessions(String participantId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/processions?ParticipantId=$participantId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final processionModelBase = ProcessionModel.fromJson(json.decode(response.body));
+        if(processionModelBase.data?.items != null) {
+          processionModelItemList.addAll(processionModelBase.data!.items!);
+        }
+        if (kDebugMode) {
+          print('${processionModelItemList.value}fetch procession thanh cong');
+        }
+      } else {
+        throw Exception('Failed to fetch enrollment');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchParticipants(String enrollmentId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/participants?EnrollmentId=$enrollmentId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final participantModelBase = ParticipantModel.fromJson(json.decode(response.body));
+        if(participantModelBase.data?.items != null) {
+          participantModelItemList.addAll(participantModelBase.data!.items!);
+        }
+        if(participantModelItemList != []) {
+          for(var item in participantModelItemList) {
+            fetchProcessions(item.id!);
+          }
+        }
+        if (kDebugMode) {
+          print('${participantModelItemList.value}fetch participant thanh cong');
+        }
+      } else {
+        throw Exception('Failed to fetch enrollment');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
     }
   }
 
@@ -58,6 +123,7 @@ class ProfileController extends GetxController {
             fetchCourseDetail(item.courseId!);
             fetchChapter(item.courseId!);
             fetchWorksheetAttempt(item.id!);
+            fetchParticipants(item.id!);
           }
         }
         if (kDebugMode) {
@@ -88,7 +154,7 @@ class ProfileController extends GetxController {
         if(worksheetModelBase.data?.items != null) {
           worksheetAttempt.addAll(worksheetModelBase.data!.items!);
         }
-        print('worksheet attempt for enroll ${worksheetAttempt.first.enrollmentId} id ${worksheetAttempt.first.id}');
+        // print('worksheet attempt for enroll ${worksheetAttempt.first.enrollmentId} id ${worksheetAttempt.first.id}');
       } else {
         throw Exception('Failed to fetch topic');
       }
@@ -96,6 +162,14 @@ class ProfileController extends GetxController {
       print('Error: $e');
       rethrow;
     }
+  }
+
+  List<ChapterItem> getChaptersByCourseId(String courseId) {
+    return chapterList.where((chapter) => chapter.courseId == courseId).toList();
+  }
+
+  List<TopicItem> getTopicsByChapterId(String chapterId) {
+    return topicListModel.where((topic) => topic.chapterId == chapterId).toList();
   }
 
   Future<void> fetchTopic(String chapterId) async {
