@@ -159,8 +159,14 @@ class Screen1 extends GetView<ProfileController> {
                                   child: buildProgressItem(
                                       context,
                                       course.title ?? '',
-                                      0,
-                                      '${course.totalSlot ?? 0}/${course
+                                      course.totalSlot != null && course.totalSlot! > 0
+                                          ? controller.participantModelItemList
+                                          .where((a) => a.enrollment!.courseId == course.id)
+                                          .length / course.totalSlot!
+                                          : 0.0,
+                                      '${controller.participantModelItemList
+                                          .where((a) => a.enrollment!.courseId == course.id)
+                                          .length}/${course
                                           .totalSlot ?? 0}',
                                       'N/A'
                                   ),

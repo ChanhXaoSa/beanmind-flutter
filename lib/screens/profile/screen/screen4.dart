@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:intl/intl.dart';
 
 class Screen4 extends StatelessWidget {
   const Screen4({super.key});
@@ -106,8 +107,14 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
                           buildProgressItem(
                             context,
                             'Thông tin khóa học',
-                            0,
-                            '${courseDetail.totalSlot ?? 0} slot',
+                            courseDetail.totalSlot != null && courseDetail.totalSlot! > 0
+                                ? controller.participantModelItemList
+                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .length / courseDetail.totalSlot!
+                                : 0.0,
+                            '${controller.participantModelItemList
+                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .length}',
                             'N/A',
                           ),
                         ],
@@ -228,10 +235,10 @@ class MyNestedAccordion extends GetView<ProfileController> {
                             'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
                             style: CourseListHistoryScreen.headerStyle,
                           ),
-                          Text(
-                            'Ngày hoàn thành: ${attempt.completionDate != null ? attempt.completionDate!.toLocal().toString().split(' ')[0] : 'N/A'}',
-                            style: CourseListHistoryScreen.contentStyle,
-                          ),
+                        Text(
+                          'Ngày hoàn thành: ${attempt.completionDate != null ? DateFormat('HH:mm:ss dd-MM-yyyy').format(attempt.completionDate!.toLocal()) : 'N/A'}',
+                          style: CourseListHistoryScreen.contentStyle,
+                        ),
                           Text(
                             'Điểm: ${attempt.score != null ? attempt.score.toString() : 'N/A'}',
                             style: CourseListHistoryScreen.contentStyle,
