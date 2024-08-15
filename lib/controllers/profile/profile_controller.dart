@@ -121,7 +121,7 @@ class ProfileController extends GetxController {
         if(enrollmentModel.value?.data?.items != []) {
           for(var item in enrollmentModel.value!.data!.items!) {
             fetchCourseDetail(item.courseId!);
-            fetchChapter(item.courseId!);
+            // fetchChapter(item.courseId!);
             fetchWorksheetAttempt(item.id!);
             fetchParticipants(item.id!);
           }
@@ -242,6 +242,7 @@ class ProfileController extends GetxController {
       if (courseResponse.statusCode == 200) {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailData.add(courseDetailModelBase.data!);
+        fetchChapter(courseDetailModelBase.data!.id!);
         print('add course detail success with id ${courseDetailModelBase.data!.id}');
       } else {
         throw Exception('Failed to fetch course detail');
