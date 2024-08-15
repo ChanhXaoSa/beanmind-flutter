@@ -146,7 +146,6 @@ class MyNestedAccordion extends GetView<ProfileController> {
           .where((attempt) => attempt.enrollment?.courseId == course.id)
           .toList();
 
-      // Check if all necessary data has been loaded
       if (controller.chapterList.isEmpty || controller.topicListModel.isEmpty) {
         return Center(child: CircularProgressIndicator());
       }
@@ -170,8 +169,10 @@ class MyNestedAccordion extends GetView<ProfileController> {
               header: Text(chapter.title ?? 'Không có tên chương',
                   style: CourseListHistoryScreen.contentStyle),
               content: Obx(() {
-                final topics = controller.getTopicsByChapterId(chapter.id!);
-
+                // final topics = controller.getTopicsByChapterId(chapter.id!);
+                final topics = controller.topicListModel
+                    .where((topic) => topic.chapterId == chapter.id)
+                    .toList();
                 if (topics.isEmpty) {
                   return const Center(child: Text('Chưa có chủ đề nào được tải.'));
                 }
