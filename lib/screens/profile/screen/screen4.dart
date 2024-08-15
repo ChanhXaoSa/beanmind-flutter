@@ -148,14 +148,15 @@ class MyNestedAccordion extends GetView<ProfileController> {
   @override
   Widget build(context) {
     return Obx(() {
-      final chapters = controller.getChaptersByCourseId(course.id!);
+      // final chapters = controller.getChaptersByCourseId(course.id!);
+      final chapters = course.chapters ?? [];
       final worksheetAttempts = controller.worksheetAttempt
           .where((attempt) => attempt.enrollment?.courseId == course.id)
           .toList();
 
-      if (controller.chapterList.isEmpty || controller.topicListModel.isEmpty) {
-        return Center(child: CircularProgressIndicator());
-      }
+      // if (controller.chapterList.isEmpty || controller.topicListModel.isEmpty) {
+      //   return Center(child: CircularProgressIndicator());
+      // }
 
       if (chapters.isEmpty) {
         return const Center(child: Text('Chưa có chương nào được tải.'));

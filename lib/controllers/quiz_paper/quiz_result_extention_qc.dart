@@ -2,11 +2,8 @@ import 'dart:convert';
 
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
-import 'package:beanmind_flutter/firebase/references.dart';
-import 'package:beanmind_flutter/services/notification/notification_service.dart';
 import 'package:http/http.dart' as http;
 
 extension QuizeResult on QuizController {
@@ -19,12 +16,17 @@ extension QuizeResult on QuizController {
     return '$correctQuestionCount trên ${allQuestionsApi.length} câu trả lời đúng';
   }
 
+  // String get points {
+  //   var points = ((correctQuestionCount / allQuestionsApi.length) *
+  //       100 *
+  //       (600 - remainSeconds) /
+  //       600 *
+  //       100).round();
+  //   return points.toString();
+  // }
+
   String get points {
-    var points = ((correctQuestionCount / allQuestionsApi.length) *
-        100 *
-        (600 - remainSeconds) /
-        600 *
-        100).round();
+    var points = ((correctQuestionCount / allQuestionsApi.length) * 100).round();
     return points.toString();
   }
 
