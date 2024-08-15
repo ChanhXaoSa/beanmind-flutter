@@ -7,6 +7,7 @@ import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_learning_course_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart'; // Import package shimmer
 
 class CourseLearningScreen extends GetView<CourseLearningController> {
@@ -147,34 +148,94 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                             }).toList(),
                           );
                         }),
+                        // Obx(() {
+                        //   if (controller.worksheetAttemptModelItem != []) {
+                        //     return Column(
+                        //       children: controller.worksheetAttemptModelItem
+                        //           .map((worksheetAttempt) {
+                        //         return Padding(
+                        //           padding:
+                        //               const EdgeInsets.symmetric(vertical: 8.0),
+                        //           child: Center(
+                        //             child: ElevatedButton(
+                        //               onPressed: () {
+                        //                 final route = QuizAttemptScreen
+                        //                     .routeName
+                        //                     .replaceFirst(':course_id',
+                        //                         controller.courseId)
+                        //                     .replaceFirst(':worksheet_id',
+                        //                         worksheetAttempt.worksheet!.id!)
+                        //                     .replaceFirst(
+                        //                         ':worksheet_attempt_id',
+                        //                         worksheetAttempt.id!);
+                        //                 Get.toNamed(route);
+                        //               },
+                        //               child: Text(
+                        //                   '${worksheetAttempt.worksheet!.title}'),
+                        //             ),
+                        //           ),
+                        //         );
+                        //       }).toList(),
+                        //     );
+                        //   } else {
+                        //     return Container();
+                        //   }
+                        // })
                         Obx(() {
-                          if (controller.worksheetAttemptModelItem != []) {
+                          if (controller.worksheetAttemptModelItem.isNotEmpty) {
                             return Column(
-                              children: controller.worksheetAttemptModelItem
-                                  .map((worksheetAttempt) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Center(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        final route = QuizAttemptScreen
-                                            .routeName
-                                            .replaceFirst(':course_id',
-                                                controller.courseId)
-                                            .replaceFirst(':worksheet_id',
-                                                worksheetAttempt.worksheet!.id!)
-                                            .replaceFirst(
-                                                ':worksheet_attempt_id',
-                                                worksheetAttempt.id!);
-                                        Get.toNamed(route);
-                                      },
-                                      child: Text(
-                                          '${worksheetAttempt.worksheet!.title}'),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    'Bài tập giáo viên giao:',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
                                   ),
-                                );
-                              }).toList(),
+                                ),
+                                Column(
+                                  children: controller.worksheetAttemptModelItem.map((worksheetAttempt) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Card(
+                                        elevation: 2,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: ListTile(
+                                          leading: Icon(Icons.assignment, color: Colors.blue[700]),
+                                          title: Text(
+                                            worksheetAttempt.worksheet!.title!,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          // subtitle: Text(
+                                          //   'Ngày giao: ${DateFormat('dd/MM/yyyy').format(worksheetAttempt.!)}',
+                                          //   style: TextStyle(
+                                          //     color: Colors.grey[600],
+                                          //     fontSize: 14,
+                                          //   ),
+                                          // ),
+                                          trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[600]),
+                                          onTap: () {
+                                            final route = QuizAttemptScreen.routeName
+                                                .replaceFirst(':course_id', controller.courseId)
+                                                .replaceFirst(':worksheet_id', worksheetAttempt.worksheet!.id!)
+                                                .replaceFirst(':worksheet_attempt_id', worksheetAttempt.id!);
+                                            Get.toNamed(route);
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
                             );
                           } else {
                             return Container();
