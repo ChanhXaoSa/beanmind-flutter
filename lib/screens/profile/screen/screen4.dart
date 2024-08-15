@@ -241,7 +241,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                           style: CourseListHistoryScreen.contentStyle,
                         ),
                           Text(
-                            'Điểm: ${attempt.score != null ? attempt.score.toString() : 'N/A'}',
+                            'Điểm: ${attempt.score != null ? (attempt.score! / 10).toString() : 'N/A'}',
                             style: CourseListHistoryScreen.contentStyle,
                           ),
                         ],
