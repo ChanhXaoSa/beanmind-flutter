@@ -1,22 +1,22 @@
 // To parse this JSON data, do
 //
-//     final chapterModel = chapterModelFromJson(jsonString);
+//     final chapterGameModel = chapterGameModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ChapterModel chapterModelFromJson(String str) => ChapterModel.fromJson(json.decode(str));
+ChapterGameModel chapterGameModelFromJson(String str) => ChapterGameModel.fromJson(json.decode(str));
 
-String chapterModelToJson(ChapterModel data) => json.encode(data.toJson());
+String chapterGameModelToJson(ChapterGameModel data) => json.encode(data.toJson());
 
-class ChapterModel {
+class ChapterGameModel {
   String? message;
   bool? success;
   int? code;
-  Data? data;
+  ChapterGameData? data;
   dynamic errors;
   dynamic fieldErrors;
 
-  ChapterModel({
+  ChapterGameModel({
     this.message,
     this.success,
     this.code,
@@ -25,11 +25,11 @@ class ChapterModel {
     this.fieldErrors,
   });
 
-  factory ChapterModel.fromJson(Map<String, dynamic> json) => ChapterModel(
+  factory ChapterGameModel.fromJson(Map<String, dynamic> json) => ChapterGameModel(
     message: json["message"],
     success: json["success"],
     code: json["code"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : ChapterGameData.fromJson(json["data"]),
     errors: json["errors"],
     fieldErrors: json["fieldErrors"],
   );
@@ -44,21 +44,21 @@ class ChapterModel {
   };
 }
 
-class Data {
-  List<ChapterItem>? items;
+class ChapterGameData {
+  List<ChapterGameItem>? items;
   int? pageIndex;
   int? pageSize;
   int? totalPage;
 
-  Data({
+  ChapterGameData({
     this.items,
     this.pageIndex,
     this.pageSize,
     this.totalPage,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: json["items"] == null ? [] : List<ChapterItem>.from(json["items"]!.map((x) => ChapterItem.fromJson(x))),
+  factory ChapterGameData.fromJson(Map<String, dynamic> json) => ChapterGameData(
+    items: json["items"] == null ? [] : List<ChapterGameItem>.from(json["items"]!.map((x) => ChapterGameItem.fromJson(x))),
     pageIndex: json["pageIndex"],
     pageSize: json["pageSize"],
     totalPage: json["totalPage"],
@@ -72,35 +72,33 @@ class Data {
   };
 }
 
-class ChapterItem {
-  String? title;
-  String? description;
-  String? courseId;
+class ChapterGameItem {
+  String? chapterId;
+  String? gameId;
+  DateTime? created;
   String? id;
   bool? isDeleted;
-  bool hasGame = false;
 
-  ChapterItem({
-    this.title,
-    this.description,
-    this.courseId,
+  ChapterGameItem({
+    this.chapterId,
+    this.gameId,
+    this.created,
     this.id,
     this.isDeleted,
-    this.hasGame = false,
   });
 
-  factory ChapterItem.fromJson(Map<String, dynamic> json) => ChapterItem(
-    title: json["title"],
-    description: json["description"],
-    courseId: json["courseId"],
+  factory ChapterGameItem.fromJson(Map<String, dynamic> json) => ChapterGameItem(
+    chapterId: json["chapterId"],
+    gameId: json["gameId"],
+    created: json["created"] == null ? null : DateTime.parse(json["created"]),
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
 
   Map<String, dynamic> toJson() => {
-    "title": title,
-    "description": description,
-    "courseId": courseId,
+    "chapterId": chapterId,
+    "gameId": gameId,
+    "created": created?.toIso8601String(),
     "id": id,
     "isDeleted": isDeleted,
   };

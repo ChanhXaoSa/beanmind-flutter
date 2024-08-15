@@ -21,14 +21,42 @@ class GameController extends GetxController {
   var selectedGame = RxnString();
   var shouldReset = false.obs;
   List<dynamic> games = [].obs;
+  late String gameId;
+
+  // @override
+  // void onInit() {
+  //   gameId = Get.parameters['game_id'] ?? '';
+  //   if (gameId.isEmpty) {
+  //     print('Error: gameId is empty');
+  //   } else {
+  //     print('gameId: $gameId');
+  //   }
+  //   fetchGameList();
+  //   fetchDataGameAnimal();
+  //   fetchDataItem();
+  //   super.onInit();
+  // }
+
 
   @override
   void onInit() {
+    super.onInit();
+    gameId = Get.parameters['game_id'] ?? '134a1896-37a0-481c-76b8-08dcb1f69dd7';
+    if (gameId.isEmpty) {
+      print('Error: gameId is empty');
+    } else {
+      print('gameId: $gameId');
+    }
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
     fetchGameList();
     fetchDataGameAnimal();
     fetchDataItem();
-    super.onInit();
   }
+
 
   void navigateToGameList() {
     Get.toNamed(GameListScreen.routeName);

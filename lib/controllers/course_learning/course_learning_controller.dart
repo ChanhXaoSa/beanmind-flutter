@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
+import 'package:beanmind_flutter/models/chapter_game_model.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
@@ -34,6 +35,8 @@ class CourseLearningController extends GetxController {
   var participantModelItemList = <ParticipantModelItem>[].obs;
   var processionModelItemList = <ProcessionModelItem>[].obs;
   var worksheetAttemptModelItem = <WorksheetAttemptItem>[].obs;
+  var chapterGameItemList = <ChapterGameItem>[].obs;
+  var selectedGameId = RxnString();
 
   var selectedContent = 'Chọn nội dung bạn muốn học hôm nay'.obs;
 
@@ -54,6 +57,43 @@ class CourseLearningController extends GetxController {
     }
   }
 
+  Future<void> fetchChapterGames() async {
+    try {
+      final response = await http.get(
+          Uri.parse('$newBaseApiUrl/chapter-games'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          }
+      );
+      if (response.statusCode == 200) {
+        final modelBase = ChapterGameModel.fromJson(json.decode(response.body));
+        if(modelBase.data?.items != null) {
+          chapterGameItemList.addAll(modelBase.data!.items!);
+
+          for (var chapterGameItem in chapterGameItemList) {
+            final chapter = chapterList.where((chapter) => chapter.id == chapterGameItem.chapterId);
+            if (chapter.isNotEmpty) {
+              for(var chap in chapter) {
+                chap.hasGame = true;
+              }
+            }
+          }
+        }
+        if (kDebugMode) {
+          // print('${chapterGameItemList.value}fetch chapter game thanh cong');
+        }
+      } else {
+        throw Exception('Failed to fetch enrollment');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
   Future<void> fetchProcessions(String participantId) async {
     try {
       final response = await http.get(
@@ -69,7 +109,7 @@ class CourseLearningController extends GetxController {
           processionModelItemList.addAll(processionModelBase.data!.items!);
         }
         if (kDebugMode) {
-          print('${processionModelItemList.value}fetch procession thanh cong');
+          // print('${processionModelItemList.value}fetch procession thanh cong');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -102,7 +142,7 @@ class CourseLearningController extends GetxController {
           }
         }
         if (kDebugMode) {
-          print('${participantModelItemList.value}fetch participant thanh cong');
+          // print('${participantModelItemList.value}fetch participant thanh cong');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -132,7 +172,7 @@ class CourseLearningController extends GetxController {
           fetchWorksheetAttempt(enrollmentModelItem.value!.id!);
         }
         if (kDebugMode) {
-          print('${enrollmentModelItem.value}fetch enrollment thanh cong');
+          // print('${enrollmentModelItem.value}fetch enrollment thanh cong');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -219,6 +259,7 @@ class CourseLearningController extends GetxController {
             fetchTopic(chapter.id!);
             expandedChapters[chapter.id!] = false;
           }
+          fetchChapterGames();
         }
         // if(chapterModelBase.data?.items != null)  {
         //   for (var chapter in chapterModelBase.data!.items!) {
@@ -315,7 +356,7 @@ class CourseLearningController extends GetxController {
         final modelBase = WorksheetAttemptModel.fromJson(json.decode(response.body));
         worksheetAttemptModelItem.addAll(modelBase.data!.items!.where((attempt) => attempt.status == 1));
         if (kDebugMode) {
-          print('${worksheetAttemptModelItem.value.toString()} danh sach attempt ne ');
+          // print('${worksheetAttemptModelItem.value.toString()} danh sach attempt ne ');
         }
       } else {
         throw Exception('Failed to fetch course');
@@ -339,6 +380,11 @@ class CourseLearningController extends GetxController {
     selectedTopicId.value = topicId;  // Cập nhật biến này
     topicDetailModel.value = null;
     topicDetailData.value = null;
+    selectedGameId.value = null;
     fetchTopicContent(topicId);
+  }
+
+  void selectGame(String gameId) {
+    selectedGameId.value = gameId;
   }
 }

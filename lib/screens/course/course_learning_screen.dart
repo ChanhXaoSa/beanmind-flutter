@@ -1,14 +1,15 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
+import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
+import 'package:beanmind_flutter/screens/course/course_play_game_screen.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_learning_course_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:shimmer/shimmer.dart'; // Import package shimmer
+import 'package:shimmer/shimmer.dart';
 
 class CourseLearningScreen extends GetView<CourseLearningController> {
   const CourseLearningScreen({super.key});
@@ -18,15 +19,14 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final GameController gameController = Get.find<GameController>();
 
     return Scaffold(
       appBar: const CustomLearningCourseAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -92,7 +92,7 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                   isExpanded
                                       ? Icons.expand_less
                                       : Icons.expand_more,
-                                  color: Colors.black, // Change icon color here
+                                  color: Colors.black,
                                 ),
                                 header: Text(chapter.title!,
                                     style: const TextStyle(
@@ -104,155 +104,91 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                       .where((topic) =>
                                           topic.chapterId == chapter.id)
                                       .toList();
-                                  return Column(
-                                    children:
-                                        topics.map<Widget>((TopicItem topic) {
-                                      final isSelected =
-                                          controller.selectedTopicId.value ==
-                                              topic.id;
-                                      return ListTile(
-                                        leading: Obx(() {
-                                          final isChecked = controller
-                                              .processionModelItemList
-                                              .any(
-                                            (processionItem) =>
-                                                processionItem.topicId ==
-                                                topic.id,
-                                          );
-                                          return Icon(
-                                            isChecked
-                                                ? Icons.check_box
-                                                : Icons.check_box_outline_blank,
-                                            color: isChecked
-                                                ? Colors.green
-                                                : Colors.grey,
-                                          );
-                                        }),
-                                        title: Text(topic.title!,
-                                            style: TextStyle(
+                                  List<Widget> topicWidgets =
+                                      topics.map<Widget>((TopicItem topic) {
+                                    final isSelected =
+                                        controller.selectedTopicId.value ==
+                                            topic.id;
+                                    return ListTile(
+                                      leading: Obx(() {
+                                        final isChecked = controller
+                                            .processionModelItemList
+                                            .any(
+                                          (processionItem) =>
+                                              processionItem.topicId ==
+                                              topic.id,
+                                        );
+                                        return Icon(
+                                          isChecked
+                                              ? Icons.check_box
+                                              : Icons.check_box_outline_blank,
+                                          color: isChecked
+                                              ? Colors.green
+                                              : Colors.grey,
+                                        );
+                                      }),
+                                      title: Text(topic.title!,
+                                          style: TextStyle(
                                               fontSize: 14,
                                               color: isSelected
                                                   ? Colors.blue
-                                                  : Colors.black,
-                                            )),
-                                        tileColor: isSelected
-                                            ? Colors.blue[50]
-                                            : Colors.white,
-                                        onTap: () =>
-                                            controller.selectContent(topic.id!),
-                                      );
-                                    }).toList(),
-                                  );
+                                                  : Colors.black)),
+                                      tileColor: isSelected
+                                          ? Colors.blue[50]
+                                          : Colors.white,
+                                      onTap: () =>
+                                          controller.selectContent(topic.id!),
+                                    );
+                                  }).toList();
+
+                                  if (chapter.hasGame) {
+                                    topicWidgets.add(ListTile(
+                                      leading: Icon(Icons.videogame_asset,
+                                          color: Colors.blue),
+                                      title: Text('Chơi game',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black)),
+                                      onTap: () {
+                                        // controller.selectGame(controller
+                                        //     .chapterGameItemList
+                                        //     .firstWhere((a) =>
+                                        //         a.chapterId == chapter.id)
+                                        //     .gameId!);
+                                        // Get.toNamed(CoursePlayGameScreen
+                                        //     .routeName
+                                        //     .replaceFirst(
+                                        //         ':game_id',
+                                        //         controller.chapterGameItemList
+                                        //             .firstWhere((a) =>
+                                        //                 a.chapterId ==
+                                        //                 chapter.id)
+                                        //             .gameId!));
+                                        Get.toNamed(
+                                          CoursePlayGameScreen.routeName,
+                                          parameters: {'game_id': controller.chapterGameItemList.firstWhere((a) => a.chapterId == chapter.id).gameId!},
+                                          // arguments: {'game_id': controller.chapterGameItemList.firstWhere((a) => a.chapterId == chapter.id).gameId!},
+                                        );
+                                      },
+                                    ));
+                                  }
+
+                                  return Column(children: topicWidgets);
                                 }),
                               );
                             }).toList(),
                           );
                         }),
-                        // Obx(() {
-                        //   if (controller.worksheetAttemptModelItem != []) {
-                        //     return Column(
-                        //       children: controller.worksheetAttemptModelItem
-                        //           .map((worksheetAttempt) {
-                        //         return Padding(
-                        //           padding:
-                        //               const EdgeInsets.symmetric(vertical: 8.0),
-                        //           child: Center(
-                        //             child: ElevatedButton(
-                        //               onPressed: () {
-                        //                 final route = QuizAttemptScreen
-                        //                     .routeName
-                        //                     .replaceFirst(':course_id',
-                        //                         controller.courseId)
-                        //                     .replaceFirst(':worksheet_id',
-                        //                         worksheetAttempt.worksheet!.id!)
-                        //                     .replaceFirst(
-                        //                         ':worksheet_attempt_id',
-                        //                         worksheetAttempt.id!);
-                        //                 Get.toNamed(route);
-                        //               },
-                        //               child: Text(
-                        //                   '${worksheetAttempt.worksheet!.title}'),
-                        //             ),
-                        //           ),
-                        //         );
-                        //       }).toList(),
-                        //     );
-                        //   } else {
-                        //     return Container();
-                        //   }
-                        // })
-                        Obx(() {
-                          if (controller.worksheetAttemptModelItem.isNotEmpty) {
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    'Bài tập giáo viên giao:',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Column(
-                                  children: controller.worksheetAttemptModelItem.map((worksheetAttempt) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                      child: Card(
-                                        elevation: 2,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: ListTile(
-                                          leading: Icon(Icons.assignment, color: Colors.blue[700]),
-                                          title: Text(
-                                            worksheetAttempt.worksheet!.title!,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          // subtitle: Text(
-                                          //   'Ngày giao: ${DateFormat('dd/MM/yyyy').format(worksheetAttempt.!)}',
-                                          //   style: TextStyle(
-                                          //     color: Colors.grey[600],
-                                          //     fontSize: 14,
-                                          //   ),
-                                          // ),
-                                          trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[600]),
-                                          onTap: () {
-                                            final route = QuizAttemptScreen.routeName
-                                                .replaceFirst(':course_id', controller.courseId)
-                                                .replaceFirst(':worksheet_id', worksheetAttempt.worksheet!.id!)
-                                                .replaceFirst(':worksheet_attempt_id', worksheetAttempt.id!);
-                                            Get.toNamed(route);
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Container();
-                          }
-                        })
                       ],
                     ),
                   ),
                 ),
-                // Right Section: Course Content
+                // Right Section: Course Content or Game
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     margin: const EdgeInsets.fromLTRB(10, 0, 20, 0),
-                    constraints: BoxConstraints(
-                      minHeight: screenHeight,
-                    ),
+                    constraints: BoxConstraints(minHeight: screenHeight),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
@@ -265,6 +201,10 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                       ],
                     ),
                     child: Obx(() {
+                      // if (controller.selectedGameId.value != null) {
+                      //   Get.toNamed(CoursePlayGameScreen.routeName.replaceFirst(':game_id', controller.selectedGameId.value!));
+                      //   // return Container();
+                      // }
                       final topicDetail = controller.topicDetailData.value;
                       if (topicDetail != null) {
                         return SingleChildScrollView(
@@ -281,8 +221,6 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                 topicDetail.description ?? 'No Description',
                                 style: const TextStyle(fontSize: 16),
                               ),
-                              // Add more custom widgets here using topicDetail data
-                              const SizedBox(height: 16),
                             ],
                           ),
                         );
