@@ -183,9 +183,15 @@ class HomepageCourseCard extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       bool isEnrolled = controller.isCourseEnrolled(course.id!);
-      var courseLevel = controller.courseLevelItemList.where((a) => a.id == course.courseLevelId).firstOrNull;
-      var programType = controller.programTypeItemList.where((a) => a.id == course.programTypeId).firstOrNull;
-      var subject = controller.subjectItemList.where((a) => a.id == course.subjectId).firstOrNull;
+      var courseLevel = controller.courseLevelItemList
+          .where((a) => a.id == course.courseLevelId)
+          .firstOrNull;
+      var programType = controller.programTypeItemList
+          .where((a) => a.id == course.programTypeId)
+          .firstOrNull;
+      var subject = controller.subjectItemList
+          .where((a) => a.id == course.subjectId)
+          .firstOrNull;
 
       return Card(
         margin: const EdgeInsets.all(10),
@@ -221,7 +227,8 @@ class HomepageCourseCard extends GetView<HomeController> {
                       left: 8,
                       child: Container(
                         color: Colors.blue,
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         child: Text(
                           subject?.title ?? 'Unknown Subject',
                           style: const TextStyle(color: Colors.white),
@@ -238,7 +245,8 @@ class HomepageCourseCard extends GetView<HomeController> {
                   height: 80,
                   child: Text(
                     course.title!,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -264,16 +272,50 @@ class HomepageCourseCard extends GetView<HomeController> {
                 Text(formatPrice(course.price!)),
                 const Spacer(),
                 isEnrolled
-                    ? ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', course.id!));
-                  },
-                  child: const Text('Học Ngay'),
-                )
-                    : const ElevatedButton(
-                  onPressed: null,
-                  child: Text('Chưa đăng ký'),
-                ),
+                    ? ElevatedButton.icon(
+                        onPressed: () {
+                          Get.toNamed(CourseLearningScreen.routeName
+                              .replaceFirst(':id', course.id!));
+                        },
+                        icon: const Icon(Icons.play_arrow,
+                            color: Colors.white),
+                        label: const Text('Học Ngay'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor:
+                              Colors.white,
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12),
+                          textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight:
+                                  FontWeight.bold),
+                        ),
+                      )
+                    : ElevatedButton.icon(
+                        onPressed: null, // Nút bị disable
+                        icon: const Icon(Icons.lock,
+                            color: Colors.grey),
+                        label: const Text('Chưa đăng ký'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                          foregroundColor: Colors.grey[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12),
+                          textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight:
+                                  FontWeight.bold),
+                        ),
+                      ),
               ])
             ],
           ),
