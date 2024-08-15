@@ -91,48 +91,34 @@ class CourseDetailAction extends GetView<CourseDetailController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            isEnrolled ?
-            ElevatedButton(
-              onPressed: () {
-                Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', courseDetailData.id!));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF3DCBB1),
-                padding: const EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: isEnrolled
+                    ? () {
+                  Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', courseDetailData.id!));
+                }
+                    : null,
+                icon: Icon(
+                  isEnrolled ? Icons.play_arrow : Icons.lock,
+                  color: Colors.white,
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  'Học ngay',
+                label: Text(
+                  isEnrolled ? 'Học ngay' : 'Chưa đăng ký',
                   style: kDetailsTS.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
                     height: 1.3,
-                    color: const Color(0xFFFFFFFF),
+                    color: Colors.white,
                   ),
                 ),
-              ),
-            ) :
-            ElevatedButton(
-              onPressed: null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF3DCBB1),
-                padding: const EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Chưa đăng ký',
-                  style: kDetailsTS.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
-                    height: 1.3,
-                    color: const Color(0xFFFFFFFF),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isEnrolled ? const Color(0xFF3DCBB1) : Colors.grey[400],
+                  padding: const EdgeInsets.all(20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
