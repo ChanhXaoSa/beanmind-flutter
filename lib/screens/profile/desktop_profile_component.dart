@@ -146,6 +146,11 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
             onTap: () => onItemTapped(4),
           ),
         ),
+        Container(
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey)),
+          ),
+        ),
         Padding(
           padding: tilePadding,
           child: ListTile(

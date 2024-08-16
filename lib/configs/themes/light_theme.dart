@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'sub_theme_data_mixin.dart';
 
-const Color kPrimayLightColorLT = Color(0xFF667BC6);
-const Color kPrimayColorLT = Color(0xFF667BC6);
-const Color appBarIconColorLT = Color(0xFFFDFFD2);
+const Color kPrimayLightColorLT = Color(0xFF21937C);
+const Color kPrimayColorLT = Color(0xFF21937C);
+const Color appBarIconColorLT = Color(0xFFFFFBEF);
 const Color mainTextColorLT = Color.fromARGB(255, 40, 40, 40);
 const Color iconColorLT = Colors.white;
 const Color shadowColorLT = Color.fromARGB(90, 172, 172, 172);
@@ -26,6 +26,6 @@ class LightTheme with SubThemeData {
             style: getElavatedButtonTheme()),
         cardColor: cardColorLT,
         colorScheme: ColorScheme.fromSwatch(
-            accentColor: kPrimayColorLT, primarySwatch: Colors.blue));
+            accentColor: kPrimayColorLT, primarySwatch: Colors.green));
   }
 }

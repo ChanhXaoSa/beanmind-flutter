@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       //   useMaterial3: true,
       // ),
       theme: Get.find<ThemeController>().getLightheme(),
-      darkTheme: Get.find<ThemeController>().getDarkTheme(),
+      // darkTheme: Get.find<ThemeController>().getDarkTheme(),
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.pages(),
       unknownRoute: GetPage(name: '/notfound', page: () => NotFoundScreen()),
