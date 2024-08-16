@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/configs/themes/ui_parameters.dart';
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/screens/profile/profile_screen.dart';
@@ -165,7 +166,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         foregroundColor:
                         WidgetStateProperty.resolveWith((states) {
                           if (states.contains(WidgetState.hovered)) {
-                            return Colors.blue[900];
+                            return kPrimayLightColorLT;
                           }
                           return null;
                         }),
@@ -186,7 +187,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                           foregroundColor:
                               WidgetStateProperty.resolveWith((states) {
                             if (states.contains(WidgetState.hovered)) {
-                              return Colors.blue[900];
+                              return kPrimayLightColorLT;
                             }
                             return null;
                           }),
@@ -309,7 +310,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         foregroundColor:
                             WidgetStateProperty.resolveWith((states) {
                           if (states.contains(WidgetState.hovered)) {
-                            return Colors.blue[900];
+                            return kPrimayLightColorLT;
                           }
                           return null;
                         }),
@@ -330,7 +331,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                           foregroundColor:
                               WidgetStateProperty.resolveWith((states) {
                             if (states.contains(WidgetState.hovered)) {
-                              return Colors.blue[900];
+                              return kPrimayLightColorLT;
                             }
                             return null;
                           }),
