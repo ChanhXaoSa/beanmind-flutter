@@ -9,6 +9,7 @@ const Color iconColorLT = Colors.white;
 const Color shadowColorLT = Color.fromARGB(90, 172, 172, 172);
 const Color cardColorLT = Color.fromARGB(255, 254, 254, 255);
 const Color scaffoldBackgroundColorLT = Color(0xFFF9FDEE);
+const Color secondaryTextColorLT = Color.fromARGB(255, 255, 255, 255);
 
 class LightTheme with SubThemeData {
   ThemeData buildLightTheme() {

@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
 import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
@@ -21,11 +22,19 @@ class FeaturedCourses extends GetView<HomeController> {
               'Nổi bật',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 // Handle "See All" button press
               },
-              child: const Text('Xem tất cả'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimayColorLT,
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+              ),
+              child: const Text('Xem tất cả', style: TextStyle(color: secondaryTextColorLT),),
             ),
           ],
         ),
@@ -77,11 +86,19 @@ class LastestCourses extends GetView<HomeController> {
               'Mới nhất',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 // Handle "See All" button press
               },
-              child: const Text('Xem tất cả'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimayColorLT,
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+              ),
+              child: const Text('Xem tất cả', style: TextStyle(color: secondaryTextColorLT),),
             ),
           ],
         ),
@@ -133,11 +150,19 @@ class BestRatedCourses extends GetView<HomeController> {
               'Đánh giá cao',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 // Handle "See All" button press
               },
-              child: const Text('Xem tất cả'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimayColorLT,
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+              ),
+              child: const Text('Xem tất cả', style: TextStyle(color: secondaryTextColorLT),),
             ),
           ],
         ),
