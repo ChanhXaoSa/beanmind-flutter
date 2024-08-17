@@ -93,7 +93,17 @@ class CourseDetailInformation extends GetView<CourseDetailController> {
             ),
             SizedBox(height: 16),
             Text(
-              '${courseDetail.data?.subject?.title}',
+              '${courseDetail.data?.subject?.title} - ${courseDetail.data?.courseLevel?.title}',
+              style: kDetailsTS.copyWith(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                height: 1.3,
+                color: const Color(0xFF000000),
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              '${courseDetail.data?.programType?.title}',
               style: kDetailsTS.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -107,19 +117,7 @@ class CourseDetailInformation extends GetView<CourseDetailController> {
                 Icon(Icons.account_circle, color: Colors.black),
                 SizedBox(width: 4),
                 Text(
-                  '2.3k',
-                  style: kDetailsTS.copyWith(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    height: 1.3,
-                    color: const Color(0x991B1B1B),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Icon(Icons.error, color: Colors.black),
-                SizedBox(width: 4),
-                Text(
-                  '1.4k',
+                  '${courseDetail.data?.enrollments?.length}',
                   style: kDetailsTS.copyWith(
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
