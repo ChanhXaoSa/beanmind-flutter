@@ -26,7 +26,14 @@ class CourseListScreen extends GetView<HomeController> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.25,
-                      color: Colors.grey[200],
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Color(0xFFE5E4E4),
+                          width: 1.0,
+                        ),
+                      ),
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
@@ -215,28 +222,40 @@ class _FilterExpansionTileState extends State<FilterExpansionTile> {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
 
-    return ExpansionTile(
-      title: Text(widget.title),
-      children: widget.options.asMap().entries.map((entry) {
-        final index = entry.key;
-        final option = entry.value;
-        final id = widget.ids[index];
-
-        return Obx(() {
-          String? selectedOptionId = controller.getFilterId(widget.title);
-          return RadioListTile<String>(
-            title: Text(option),
-            value: id,
-            groupValue: selectedOptionId,
-            onChanged: (String? value) {
-              if (value != null) {
-                controller.addFilterId(widget.title, value, option);
-                controller.applyFilters(); // Gọi API mỗi khi lựa chọn thay đổi
-              }
-            },
-          );
-        });
-      }).toList(),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
+      ),
+      child: ExpansionTile(
+        title: Row(
+          children: [
+            Expanded(child: Text(
+              widget.title,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),),
+          ],
+        ),
+        children: widget.options.asMap().entries.map((entry) {
+          final index = entry.key;
+          final option = entry.value;
+          final id = widget.ids[index];
+      
+          return Obx(() {
+            String? selectedOptionId = controller.getFilterId(widget.title);
+            return RadioListTile<String>(
+              title: Text(option),
+              value: id,
+              groupValue: selectedOptionId,
+              onChanged: (String? value) {
+                if (value != null) {
+                  controller.addFilterId(widget.title, value, option);
+                  controller.applyFilters();
+                }
+              },
+            );
+          });
+        }).toList(),
+      ),
     );
   }
 }
