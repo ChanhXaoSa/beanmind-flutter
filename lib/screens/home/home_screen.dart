@@ -23,6 +23,7 @@ class HomeScreen extends GetView<HomeController> {
               child: const Column(
                 children: [
                   CustomBanner(),
+                  EnrolledCourses(),
                   FeaturedCourses(),
                   LastestCourses(),
                   BestRatedCourses(),

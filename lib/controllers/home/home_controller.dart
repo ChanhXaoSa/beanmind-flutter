@@ -231,6 +231,16 @@ class HomeController extends GetxController {
     return false;
   }
 
+  List<CourseModelItem> addCourseEnrolled() {
+    if (user.value?.data?.enrollments == null) return [];
+    List<CourseModelItem> list = [];
+    for (var enrollment in user.value!.data!.enrollments!) {
+      var course = courseItemList.where((c) => c.id == enrollment.courseId).first;
+      list.add(course);
+    }
+    return list;
+  }
+
   void navigateToCourseDetail(String id) {
     Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', id));
   }

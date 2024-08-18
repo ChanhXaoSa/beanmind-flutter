@@ -7,6 +7,70 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+class EnrolledCourses extends GetView<HomeController> {
+  const EnrolledCourses({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Đã đăng ký',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Handle "See All" button press
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimayColorLT,
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+              ),
+              child: const Text('Xem tất cả', style: TextStyle(color: secondaryTextColorLT),),
+            ),
+          ],
+        ),
+      ),
+      Obx(() {
+        if (controller.courseModel.value == null) {
+          // return Center(child: CircularProgressIndicator());
+          return Shimmer.fromColors(
+            baseColor: Colors.white.withOpacity(0.4),
+            highlightColor: Colors.blueGrey.withOpacity(0.1),
+            child: const SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    ShimmerHomepageCourseCard(),
+                    ShimmerHomepageCourseCard(),
+                    ShimmerHomepageCourseCard(),
+                    ShimmerHomepageCourseCard(),
+                  ],
+                )),
+          );
+        } else {
+          final courses = controller.addCourseEnrolled();
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children:
+              courses.map((course) => HomepageCourseCard(course)).toList(),
+            ),
+          );
+        }
+      }),
+    ]);
+  }
+}
+
 class FeaturedCourses extends GetView<HomeController> {
   const FeaturedCourses({super.key});
 
