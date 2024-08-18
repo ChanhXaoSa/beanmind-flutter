@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:beanmind_flutter/controllers/auth_controller.dart';
 import 'package:beanmind_flutter/models/game_history_model.dart';
+import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -44,7 +45,7 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
     });
     try {
       final response = await http.get(
-        Uri.parse('https://vinhtc3-001-site1.ftempurl.com/api/v1/game-histories?ApplicationUserId=$user'),
+        Uri.parse('$newBaseApiUrl/game-histories?ApplicationUserId=$user'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8',
           'ngrok-skip-browser-warning': 'true',

@@ -451,7 +451,7 @@ class ParticipantModelItem {
 class Student {
   String? applicationUserId;
   dynamic applicationUser;
-  int? image;
+  String? image;
   String? school;
   String? studentClass;
   String? id;

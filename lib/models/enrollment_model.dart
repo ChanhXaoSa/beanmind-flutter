@@ -282,7 +282,7 @@ class ApplicationUser {
 
 class Student {
   String? applicationUserId;
-  int? image;
+  String? image;
   String? school;
   String? studentClass;
   String? id;
