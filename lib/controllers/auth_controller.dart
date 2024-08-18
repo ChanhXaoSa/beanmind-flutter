@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/models/login_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -33,7 +34,7 @@ class AuthController extends GetxController {
   Future<void> login(String email, String password) async {
     try {
       final loginResponse = await http.post(
-        Uri.parse('${newBaseApiUrl}/auth/login'),
+        Uri.parse('$newBaseApiUrl/auth/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'ngrok-skip-browser-warning': 'true',
@@ -51,7 +52,7 @@ class AuthController extends GetxController {
           String accessToken = loginModel.data!.accessToken;
 
           final userResponse = await http.get(
-            Uri.parse('${newBaseApiUrl}/auth/info'),
+            Uri.parse('$newBaseApiUrl/auth/info'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=utf-8',
               'ngrok-skip-browser-warning': 'true',
@@ -83,7 +84,9 @@ class AuthController extends GetxController {
         showSnackBar('Error', 'Đăng nhập thất bại');
       }
     } catch (e) {
-      print('Error: $e');
+      if (kDebugMode) {
+        print('Error: $e');
+      }
       showSnackBar('Error', 'Lỗi hệ thống: $e');
       // throw e;
     }
@@ -94,7 +97,7 @@ class AuthController extends GetxController {
       title,
       message,
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Color(0xFFFC6B6B),
+      backgroundColor: const Color(0xFFFC6B6B),
       colorText: Colors.white,
     );
   }
@@ -198,6 +201,8 @@ class AuthController extends GetxController {
   }
 
   User? getUser() {
+    return null;
+
     // _user.value = _auth.currentUser;
     // return _user.value;
   }
@@ -210,11 +215,12 @@ class AuthController extends GetxController {
       user.value = [sessionUser];
       return sessionUser;
     }
+    return null;
   }
 
   String getEnrollmentId(String courseId) {
-    if (user.value?.first.data?.enrollments == null) return '';
-    for (var enrollment in user.value!.first.data!.enrollments!) {
+    if (user.value.first.data?.enrollments == null) return '';
+    for (var enrollment in user.value.first.data!.enrollments!) {
       if (enrollment.courseId == courseId) {
         return enrollment.id!;
       }
