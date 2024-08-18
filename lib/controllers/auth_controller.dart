@@ -4,6 +4,7 @@ import 'package:beanmind_flutter/models/login_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:beanmind_flutter/firebase/references.dart';
@@ -66,21 +67,36 @@ class AuthController extends GetxController {
               await _saveUserSession(userModel);
               navigateToHome();
             } else {
-              throw Exception(userModel.message);
+              // throw Exception(userModel.message);
+              showSnackBar('Error', userModel.message!);
             }
           } else {
-            throw Exception('Failed to load user info');
+            // throw Exception('Failed to load user info');
+            showSnackBar('Error', 'Tải thông tin người dùng thất bại');
           }
         } else {
-          throw Exception('Login failed: ${loginModel.message}');
+          // throw Exception('Login failed: ${loginModel.message}');
+          showSnackBar('Error', 'Đăng nhập thất bại: ${loginModel.message}');
         }
       } else {
-        throw Exception('Failed to login');
+        // throw Exception('Failed to login');
+        showSnackBar('Error', 'Đăng nhập thất bại');
       }
     } catch (e) {
       print('Error: $e');
-      throw e;
+      showSnackBar('Error', 'Lỗi hệ thống: $e');
+      // throw e;
     }
+  }
+
+  void showSnackBar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Color(0xFFFC6B6B),
+      colorText: Colors.white,
+    );
   }
 
   Future<void> _saveUserSession(UserModel userModel) async {

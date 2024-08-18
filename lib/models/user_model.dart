@@ -475,7 +475,7 @@ class Course {
 class Student {
   String? applicationUserId;
   StudentApplicationUser? applicationUser;
-  int? image;
+  String? image;
   String? school;
   String? studentClass;
   String? id;
