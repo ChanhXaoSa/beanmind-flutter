@@ -59,6 +59,7 @@ class CourseListScreen extends GetView<ProfileController> {
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                       ),
+                      onChanged: (value) => controller.searchCourses(value),
                     ),
                   ),
                 ),
@@ -68,6 +69,35 @@ class CourseListScreen extends GetView<ProfileController> {
               child: Obx(() {
                 if (controller.enrollmentModel.value?.data?.items == null ||
                     controller.enrollmentModel.value!.data!.items!.isEmpty) {
+                  return const Center(child: Text("Không có khóa học nào."));
+                }
+
+                if(controller.filteredCourses.isNotEmpty && controller.searchQuery.value.isNotEmpty) {
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.5,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                    ),
+                    itemCount: controller.filteredCourses.length,
+                    itemBuilder: (context, index) {
+                      final enrollmentItem = controller.filteredCourses[index];
+                      final course = enrollmentItem;
+                      return InkWell(
+                        onTap: () {
+                          controller.navigateToCourseLearning(course.course!.id!);
+                        },
+                        child: CourseItem(
+                          course: course,
+                          width: 200,
+                          height: 200,
+                        ),
+                      );
+                    },
+                  );
+                } else if(controller.filteredCourses.isEmpty && controller.searchQuery.value.isNotEmpty) {
                   return const Center(child: Text("Không có khóa học nào."));
                 }
 

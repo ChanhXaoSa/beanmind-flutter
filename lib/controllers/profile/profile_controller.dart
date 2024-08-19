@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
+import 'package:beanmind_flutter/models/course_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:beanmind_flutter/models/participant_model.dart';
 import 'package:beanmind_flutter/models/procession_model.dart';
@@ -25,11 +26,27 @@ class ProfileController extends GetxController {
   var worksheetAttempt = <WorksheetAttemptItem>[].obs;
   var participantModelItemList = <ParticipantModelItem>[].obs;
   var processionModelItemList = <ProcessionModelItem>[].obs;
+  var searchQuery = ''.obs;
+  var filteredCourses = <EnrollmentModelItem>[].obs;
 
   @override
   void onInit() {
     checkLoginStatus();
     super.onInit();
+  }
+
+  void searchCourses(String query) {
+    searchQuery.value = query;
+    if (query.isEmpty) {
+      filteredCourses.clear();
+      return;
+    }
+
+    if(enrollmentModel.value?.data?.items != []) {
+      filteredCourses.value = enrollmentModel.value!.data!.items!
+          .where((course) => course.course!.title!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
   }
 
   var selectedIndex = 0.obs;
