@@ -61,9 +61,12 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
                       width: 100,
                       height: 100),
                   Obx(() {
-                    return Text(
-                      controller.user.value?.data?.userName ?? 'Tên người dùng',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: Text(
+                        controller.user.value?.data?.userName ?? 'Tên người dùng',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     );
                   }),
                 ],

@@ -8,6 +8,7 @@ import 'package:beanmind_flutter/models/procession_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/models/worksheet_attempt_model.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/screens/screens.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:flutter/foundation.dart';
@@ -259,6 +260,10 @@ class ProfileController extends GetxController {
 
   void navigateToCourseDetail(String id) {
     Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', id));
+  }
+
+  void navigateToCourseLearning(String id) {
+    Get.toNamed(CourseLearningScreen.routeName.replaceFirst(':id', id));
   }
 
   void signOut() {

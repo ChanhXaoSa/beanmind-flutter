@@ -85,7 +85,7 @@ class CourseListScreen extends GetView<ProfileController> {
                     final course = enrollmentItem;
                     return InkWell(
                       onTap: () {
-                        controller.navigateToCourseDetail(course.course!.id!);
+                        controller.navigateToCourseLearning(course.course!.id!);
                       },
                       child: CourseItem(
                         course: course,

@@ -154,7 +154,7 @@ class Screen1 extends GetView<ProfileController> {
                                 final course = enrollmentItem.course!;
                                 return InkWell(
                                   onTap: () {
-                                    controller.navigateToCourseDetail(course.id!);
+                                    controller.navigateToCourseLearning(course.id!);
                                   },
                                   child: buildProgressItem(
                                       context,
@@ -218,7 +218,7 @@ class Screen1 extends GetView<ProfileController> {
                                 // Giả sử `course` có thuộc tính `title`, `registrationDate`, và `imageUrl`.
                                 return InkWell(
                                   onTap: () {
-                                    controller.navigateToCourseDetail(course.id!);
+                                    controller.navigateToCourseLearning(course.id!);
                                   },
                                   child: buildCourseItem(
                                       context,

@@ -1,5 +1,4 @@
 import 'package:beanmind_flutter/configs/configs.dart';
-import 'package:beanmind_flutter/configs/themes/ui_parameters.dart';
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -53,16 +52,14 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                 children: [
                                   Row(
                                     children: [
-                                      const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'images/logo_beanmind.png'),
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage('${controller.user.value!.data!.student!.image}'),
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
                                         controller.user.value!.data!.userName!,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -72,14 +69,27 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       hintText: 'Tìm khoá học...',
                                       prefixIcon: const Icon(Icons.search),
                                       border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(10.0),
                                         borderSide: BorderSide.none,
                                       ),
                                       filled: true,
                                       fillColor: Colors.grey[200],
                                     ),
+                                    onChanged: (value) => controller.searchCourses(value),
                                   ),
+                                  Obx(() {
+                                    return Column(
+                                      children: List.generate(controller.filteredCourses.length, (index) {
+                                        final course = controller.filteredCourses[index];
+                                        return ListTile(
+                                          title: Text(course.title!),
+                                          onTap: () {
+                                            controller.navigateToCourseDetail(course.id!);
+                                          },
+                                        );
+                                      }),
+                                    );
+                                  }),
                                 ],
                               ),
                             ),
@@ -106,9 +116,9 @@ class CustomHomeAppBar extends GetView<AppBarController>
                             ),
                           ];
                         },
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           backgroundImage:
-                          NetworkImage('https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e'),
+                          NetworkImage('${controller.user.value!.data!.student!.image}'),
                           radius: 20.0,
                         ),
                       )
@@ -152,8 +162,17 @@ class CustomHomeAppBar extends GetView<AppBarController>
                           filled: true,
                           fillColor: Colors.grey[200],
                         ),
+                        onChanged: (value) {
+                          controller.searchCourses(value);
+                          if (value.isNotEmpty) {
+                            SearchOverlay().showSearch(context, _buildSearchResults(context));
+                          } else {
+                            SearchOverlay().removeSearch();
+                          }
+                        },
                       ),
                     ),
+
                     const Spacer(),
                     TextButton(
                       onPressed: () => controller.navigateToCourseList(),
@@ -216,9 +235,8 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                 children: [
                                   Row(
                                     children: [
-                                      const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'images/logo_beanmind.png'),
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage('${controller.user.value!.data!.student!.image}'),
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
@@ -269,9 +287,9 @@ class CustomHomeAppBar extends GetView<AppBarController>
                             ),
                           ];
                         },
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           backgroundImage:
-                          AssetImage('images/logo_beanmind.png'),
+                          NetworkImage('${controller.user.value!.data!.student!.image}'),
                           radius: 20.0,
                         ),
                       )
@@ -360,16 +378,14 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                 children: [
                                   Row(
                                     children: [
-                                      const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'images/logo_beanmind.png'),
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage('${controller.user.value!.data!.student!.image}'),
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
                                       Text(
                                         controller.user.value!.data!.userName!,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -379,14 +395,27 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       hintText: 'Tìm khoá học...',
                                       prefixIcon: const Icon(Icons.search),
                                       border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(10.0),
                                         borderSide: BorderSide.none,
                                       ),
                                       filled: true,
                                       fillColor: Colors.grey[200],
                                     ),
+                                    onChanged: (value) => controller.searchCourses(value),
                                   ),
+                                  Obx(() {
+                                    return Column(
+                                      children: List.generate(controller.filteredCourses.length, (index) {
+                                        final course = controller.filteredCourses[index];
+                                        return ListTile(
+                                          title: Text(course.title!),
+                                          onTap: () {
+                                            controller.navigateToCourseDetail(course.id!);
+                                          },
+                                        );
+                                      }),
+                                    );
+                                  }),
                                 ],
                               ),
                             ),
@@ -413,9 +442,9 @@ class CustomHomeAppBar extends GetView<AppBarController>
                             ),
                           ];
                         },
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           backgroundImage:
-                          AssetImage('images/logo_beanmind.png'),
+                          NetworkImage('${controller.user.value!.data!.student!.image}'),
                           radius: 20.0,
                         ),
                       )
@@ -438,5 +467,34 @@ class CustomHomeAppBar extends GetView<AppBarController>
         ),
       ),
     );
+  }
+
+
+  Widget _buildSearchResults(BuildContext context) {
+    return Obx(() {
+      if (controller.filteredCourses.isNotEmpty) {
+        return Container(
+          color: Colors.white,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5,
+          ),
+          child: ListView.builder(
+            itemCount: controller.filteredCourses.length,
+            itemBuilder: (context, index) {
+              final course = controller.filteredCourses[index];
+              return ListTile(
+                title: Text(course.title!),
+                onTap: () {
+                  controller.navigateToCourseDetail(course.id!);
+                  SearchOverlay().removeSearch();
+                },
+              );
+            },
+          ),
+        );
+      } else {
+        return Container();
+      }
+    });
   }
 }
