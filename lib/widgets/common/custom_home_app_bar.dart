@@ -9,14 +9,14 @@ class CustomHomeAppBar extends GetView<AppBarController>
   const CustomHomeAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(80);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 1.0,
-      title: Center(
+      flexibleSpace: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           child: LayoutBuilder(
@@ -28,7 +28,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       onTap: () => controller.navigateToHome(),
                       child: Image.network(
                         'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e',
-                        height: 40.0,
+                        height: 60.0,
                       ),
                     ),
                     const Spacer(),
@@ -119,7 +119,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         child: CircleAvatar(
                           backgroundImage:
                           NetworkImage('${controller.user.value!.data!.student!.image}'),
-                          radius: 20.0,
+                          radius: 30.0,
                         ),
                       )
                           : ElevatedButton(
@@ -144,7 +144,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         onTap: () => controller.navigateToHome(),
                         child: Image.network(
                           'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e',
-                          height: 40.0,
+                          height: 60.0,
                         ),
                       ),
                     ),
@@ -179,7 +179,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       style: TextButton.styleFrom(
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 16,
+                          fontSize: 18,
                         ),
                       ).copyWith(
                         foregroundColor:
@@ -200,7 +200,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: 18,
                           ),
                         ).copyWith(
                           foregroundColor:
@@ -290,7 +290,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         child: CircleAvatar(
                           backgroundImage:
                           NetworkImage('${controller.user.value!.data!.student!.image}'),
-                          radius: 20.0,
+                          radius: 30.0,
                         ),
                       )
                           : ElevatedButton(
@@ -313,7 +313,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       onTap: () => controller.navigateToHome(),
                       child: Image.network(
                         'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/logo-web.png?alt=media&token=fc4a7733-5731-482f-a690-94c4dbc5ce9e',
-                        height: 40.0,
+                        height: 60.0,
                       ),
                     ),
                     const Spacer(),
@@ -322,7 +322,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       style: TextButton.styleFrom(
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 16,
+                          fontSize: 18,
                         ),
                       ).copyWith(
                         foregroundColor:
@@ -343,7 +343,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: 18,
                           ),
                         ).copyWith(
                           foregroundColor:
@@ -445,7 +445,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         child: CircleAvatar(
                           backgroundImage:
                           NetworkImage('${controller.user.value!.data!.student!.image}'),
-                          radius: 20.0,
+                          radius: 30.0,
                         ),
                       )
                           : ElevatedButton(
