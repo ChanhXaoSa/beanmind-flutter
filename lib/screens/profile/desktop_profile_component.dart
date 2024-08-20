@@ -23,16 +23,16 @@ class DesktopScaffold extends GetView<ProfileController> {
           // main content area
           Expanded(
             child: Obx(() => IndexedStack(
-              index: controller.selectedIndex.value,
-              children: [
-                // Define your different screens here
-                Screen1(),
-                Screen2(),
-                Screen3(),
-                Screen4(),
-                Screen5(),
-              ],
-            )),
+                  index: controller.selectedIndex.value,
+                  children: [
+                    // Define your different screens here
+                    Screen1(),
+                    Screen2(),
+                    Screen3(),
+                    Screen4(),
+                    Screen5(),
+                  ],
+                )),
           ),
         ],
       ),
@@ -57,18 +57,38 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
               child: Column(
                 children: [
                   Image.network(
-                      'https://i0.wp.com/thegameofnerds.com/wp-content/uploads/2022/07/TGON-GAMER-Icon.png?resize=440%2C440&ssl=1',
+                      'https://cdn-icons-png.flaticon.com/512/5294/5294712.png',
                       width: 100,
                       height: 100),
                   Obx(() {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Text(
-                        controller.user.value?.data?.userName ?? 'Tên người dùng',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        '${controller.user.value?.data?.firstName ?? 'null'} ${controller.user.value?.data?.lastName ?? 'null'}',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     );
                   }),
+                  // Obx(() {
+                  //   return Padding(
+                  //     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  //     child: Text(
+                  //       // controller.user.value?.data?.userName ?? 'Tên người dùng',
+                  //       'vinhtran91@gmail.com',
+                  //       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  //     ),
+                  //   );
+                  // }),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Text(
+                      // controller.user.value?.data?.userName ?? 'Tên người dùng',
+                      'vinhtran91@gmail.com',
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ],
               ),
             ),

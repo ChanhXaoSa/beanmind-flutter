@@ -43,7 +43,7 @@ class Screen1 extends GetView<ProfileController> {
                             children: [
                               Obx(() {
                                 return AutoSizeText(
-                                  'Chào mừng bạn quay lại, ${controller.user.value?.data?.userName ?? 'User'}',
+                                  'Chào mừng bạn quay lại, ${controller.user.value?.data?.firstName ?? 'null'} ${controller.user.value?.data?.lastName ?? 'null'}',
                                   maxFontSize: 45,
                                   minFontSize: 30,
                                   overflow: TextOverflow.ellipsis,
@@ -95,18 +95,18 @@ class Screen1 extends GetView<ProfileController> {
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 25)),
                                   ),
-                                  const SizedBox(width: 20),
-                                  ElevatedButton(
-                                    onPressed: () {},
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          WidgetStateProperty.all(
-                                              Colors.blue),
-                                    ),
-                                    child: const Text('Xem lại khóa học',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 25)),
-                                  ),
+                                  // const SizedBox(width: 20),
+                                  // ElevatedButton(
+                                  //   onPressed: () {},
+                                  //   style: ButtonStyle(
+                                  //     backgroundColor:
+                                  //         WidgetStateProperty.all(
+                                  //             Colors.blue),
+                                  //   ),
+                                  //   child: const Text('Xem lại khóa học',
+                                  //       style: TextStyle(
+                                  //           color: Colors.white, fontSize: 25)),
+                                  // ),
                                 ],
                               )
                             ],
@@ -168,7 +168,6 @@ class Screen1 extends GetView<ProfileController> {
                                           .where((a) => a.enrollment!.courseId == course.id)
                                           .length}/${course
                                           .totalSlot ?? 0}',
-                                      'N/A'
                                   ),
                                 );
                               },
@@ -223,8 +222,7 @@ class Screen1 extends GetView<ProfileController> {
                                   child: buildCourseItem(
                                       context,
                                       course.title ?? '',
-                                      'Ngày đăng kí: ${'N/A'}',
-                                      course.imageUrl ?? ''
+                                      course.imageUrl ?? '',
                                   ),
                                 );
                               },
@@ -254,7 +252,7 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
 }
 
 Widget buildCourseItem(
-    BuildContext context, String title, String subtitle, String imageUrl) {
+    BuildContext context, String title, String imageUrl) {
   return Container(
     width: 200,
     margin: const EdgeInsets.all(10),
@@ -274,10 +272,20 @@ Widget buildCourseItem(
       children: [
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-          child: Image.network(imageUrl,
+          child: FadeInImage.assetNetwork(
+            placeholder: 'assets/images/background/background.png',
+            image:  imageUrl,
               height: MediaQuery.of(context).size.height * 0.09,
               width: double.infinity,
-              fit: BoxFit.cover),
+              fit: BoxFit.cover,
+            imageErrorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                'assets/images/background/background.png',
+                height: MediaQuery.of(context).size.height * 0.09,
+                fit: BoxFit.fill,
+              );
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(10),
@@ -290,14 +298,14 @@ Widget buildCourseItem(
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 5),
-              Text(
-                subtitle,
-                style: TextStyle(
-                    fontSize: 14,
-                    overflow: TextOverflow.ellipsis,
-                    color: Colors.grey[600]),
-              ),
+              // const SizedBox(height: 5),
+              // Text(
+              //   subtitle,
+              //   style: TextStyle(
+              //       fontSize: 14,
+              //       overflow: TextOverflow.ellipsis,
+              //       color: Colors.grey[600]),
+              // ),
             ],
           ),
         ),
@@ -307,7 +315,7 @@ Widget buildCourseItem(
 }
 
 Widget buildProgressItem(BuildContext context, String title, double progress,
-    String slots, String time) {
+    String slots) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
     padding: const EdgeInsets.all(10),
@@ -341,10 +349,10 @@ Widget buildProgressItem(BuildContext context, String title, double progress,
           'Đã học: $slots slot',
           style: TextStyle(fontSize: 14, color: Colors.grey[600]),
         ),
-        Text(
-          'Thời gian đã học: $time',
-          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-        ),
+        // Text(
+        //   'Thời gian đã học: $time',
+        //   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+        // ),
       ],
     ),
   );

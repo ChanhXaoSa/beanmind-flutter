@@ -243,7 +243,8 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                       Text(
                                         controller.user.value!.data!.userName!,
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -289,7 +290,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         },
                         child: CircleAvatar(
                           backgroundImage:
-                          NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
+                          NetworkImage('https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                           radius: 30.0,
                         ),
                       )
