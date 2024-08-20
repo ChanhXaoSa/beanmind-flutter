@@ -53,7 +53,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundImage: NetworkImage('${controller.user.value!.data!.student!.image}'),
+                                        backgroundImage: NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
@@ -118,7 +118,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         },
                         child: CircleAvatar(
                           backgroundImage:
-                          NetworkImage('${controller.user.value!.data!.student!.image}'),
+                          NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                           radius: 30.0,
                         ),
                       )
@@ -236,7 +236,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundImage: NetworkImage('${controller.user.value!.data!.student!.image}'),
+                                        backgroundImage: NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
@@ -289,7 +289,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         },
                         child: CircleAvatar(
                           backgroundImage:
-                          NetworkImage('${controller.user.value!.data!.student!.image}'),
+                          NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                           radius: 30.0,
                         ),
                       )
@@ -379,7 +379,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundImage: NetworkImage('${controller.user.value!.data!.student!.image}'),
+                                        backgroundImage: NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
@@ -444,7 +444,7 @@ class CustomHomeAppBar extends GetView<AppBarController>
                         },
                         child: CircleAvatar(
                           backgroundImage:
-                          NetworkImage('${controller.user.value!.data!.student!.image}'),
+                          NetworkImage(controller.user.value?.data?.student?.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'),
                           radius: 30.0,
                         ),
                       )

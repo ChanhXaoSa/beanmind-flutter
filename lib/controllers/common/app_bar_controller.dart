@@ -56,7 +56,7 @@ class AppBarController extends GetxController {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
         courseItemList.addAll(courseModelBase.data!.items!);
         if (kDebugMode) {
-          print(courseItemList.value.toString());
+          // print(courseItemList.value.toString());
         }
       } else {
         throw Exception('Failed to fetch course app bar');

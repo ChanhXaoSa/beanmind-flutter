@@ -20,6 +20,7 @@ import 'package:http/http.dart' as http;
 class ProfileController extends GetxController {
   var user = Rx<UserModel?>(null);
   var enrollmentModel = Rxn<EnrollmentModel>();
+  var enrollmentModelList = <EnrollmentModelItem>[].obs;
   var courseDetailData = <CourseDetailData>[].obs;
   var chapterList = <ChapterItem>[].obs;
   var topicListModel = <TopicItem>[].obs;
@@ -78,7 +79,7 @@ class ProfileController extends GetxController {
           processionModelItemList.addAll(processionModelBase.data!.items!);
         }
         if (kDebugMode) {
-          print('${processionModelItemList.value}fetch procession thanh cong');
+          // print('${processionModelItemList.value}fetch procession thanh cong');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -111,7 +112,7 @@ class ProfileController extends GetxController {
           }
         }
         if (kDebugMode) {
-          print('${participantModelItemList.value}fetch participant thanh cong');
+          // print('${participantModelItemList.value}fetch participant thanh cong');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -137,6 +138,8 @@ class ProfileController extends GetxController {
         final enrollmentModelBase = EnrollmentModel.fromJson(json.decode(response.body));
         enrollmentModel.value = enrollmentModelBase;
         if(enrollmentModel.value?.data?.items != []) {
+          enrollmentModelList.addAll(enrollmentModel.value!.data!.items!);
+          // print(enrollmentModelList.toString());
           for(var item in enrollmentModel.value!.data!.items!) {
             fetchCourseDetail(item.courseId!);
             // fetchChapter(item.courseId!);
@@ -261,7 +264,7 @@ class ProfileController extends GetxController {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailData.add(courseDetailModelBase.data!);
         fetchChapter(courseDetailModelBase.data!.id!);
-        print('add course detail success with id ${courseDetailModelBase.data!.id}');
+        // print('add course detail success with id ${courseDetailModelBase.data!.id}');
       } else {
         throw Exception('Failed to fetch course detail');
       }

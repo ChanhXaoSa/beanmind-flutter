@@ -1,8 +1,13 @@
+import 'package:accordion/accordion.dart';
+import 'package:accordion/controllers.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
+import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Screen3 extends StatelessWidget {
   const Screen3({super.key});
@@ -11,13 +16,17 @@ class Screen3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: const CourseListScreen(),
+      body: const CourseListRegisteredScreen(),
     );
   }
 }
 
-class CourseListScreen extends GetView<ProfileController> {
-  const CourseListScreen({super.key});
+class CourseListRegisteredScreen extends GetView<ProfileController> {
+  static const headerStyle = TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold);
+  static const contentStyleHeader = TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w700);
+  static const contentStyle = TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.normal);
+
+  const CourseListRegisteredScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +40,9 @@ class CourseListScreen extends GetView<ProfileController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: AutoSizeText(
-                    "DANH SÁCH KHOÁ HỌC",
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    "CÁC KHOÁ HỌC ĐÃ ĐĂNG KÝ",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -47,7 +56,7 @@ class CourseListScreen extends GetView<ProfileController> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: "Tìm kiếm khóa học",
+                        hintText: "Tìm nội dung bạn đã học",
                         prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -59,7 +68,6 @@ class CourseListScreen extends GetView<ProfileController> {
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                       ),
-                      onChanged: (value) => controller.searchCourses(value),
                     ),
                   ),
                 ),
@@ -67,63 +75,63 @@ class CourseListScreen extends GetView<ProfileController> {
             ),
             Expanded(
               child: Obx(() {
-                if (controller.enrollmentModel.value?.data?.items == null ||
-                    controller.enrollmentModel.value!.data!.items!.isEmpty) {
-                  return const Center(child: Text("Không có khóa học nào."));
+                if (controller.courseDetailData.isEmpty) {
+                  return const Center(child: Text('Không có khóa học nào.'));
                 }
-
-                if(controller.filteredCourses.isNotEmpty && controller.searchQuery.value.isNotEmpty) {
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(8.0),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1.5,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
-                    ),
-                    itemCount: controller.filteredCourses.length,
-                    itemBuilder: (context, index) {
-                      final enrollmentItem = controller.filteredCourses[index];
-                      final course = enrollmentItem;
-                      return InkWell(
-                        onTap: () {
-                          controller.navigateToCourseLearning(course.course!.id!);
-                        },
-                        child: CourseItem(
-                          course: course,
-                          width: 200,
-                          height: 200,
-                        ),
-                      );
-                    },
-                  );
-                } else if(controller.filteredCourses.isEmpty && controller.searchQuery.value.isNotEmpty) {
-                  return const Center(child: Text("Không có khóa học nào."));
-                }
-
-                return GridView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1.5,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
-                  ),
-                  itemCount: controller.enrollmentModel.value!.data!.items!.length,
-                  itemBuilder: (context, index) {
-                    final enrollmentItem = controller.enrollmentModel.value!.data!.items![index];
-                    final course = enrollmentItem;
-                    return InkWell(
-                      onTap: () {
-                        controller.navigateToCourseLearning(course.course!.id!);
-                      },
-                      child: CourseItem(
-                        course: course,
-                        width: 200,
-                        height: 200,
+                return Accordion(
+                  headerBorderColor: Colors.grey,
+                  headerBackgroundColor: const Color.fromARGB(90, 227, 227, 227),
+                  contentBorderColor: const Color.fromARGB(90, 227, 227, 227),
+                  contentBackgroundColor: const Color.fromARGB(90, 227, 227, 227),
+                  headerBackgroundColorOpened: Colors.blue[300],
+                  contentBorderWidth: 3,
+                  contentHorizontalPadding: 20,
+                  scaleWhenAnimating: true,
+                  openAndCloseAnimation: true,
+                  headerPadding:
+                  const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+                  sectionOpeningHapticFeedback: SectionHapticFeedback.light,
+                  sectionClosingHapticFeedback: SectionHapticFeedback.light,
+                  children: controller.courseDetailData
+                      .map((courseDetail) {
+                    return AccordionSection(
+                      isOpen: false,
+                      header: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            courseDetail.title ?? 'Không có tên',
+                            style: const TextStyle(color: Colors.black, fontSize: 30),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          buildProgressItem(
+                            context,
+                            'Thông tin khóa học',
+                            courseDetail.totalSlot != null && courseDetail.totalSlot! > 0
+                                ? controller.participantModelItemList
+                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .length / courseDetail.totalSlot!
+                                : 0.0,
+                            '${controller.participantModelItemList
+                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .length}',
+                            'N/A',
+                          ),
+                        ],
                       ),
+                      headerBackgroundColor: Colors.transparent,
+                      headerBackgroundColorOpened: Colors.white,
+                      headerBorderColor: Colors.black54,
+                      headerBorderColorOpened: Colors.black54,
+                      contentBackgroundColor: Colors.white,
+                      contentBorderColor: Colors.white,
+                      contentBorderWidth: 1,
+                      contentVerticalPadding: 30,
+                      content: MyNestedAccordion(course: courseDetail),
                     );
-                  },
+                  }).toList(),
                 );
               }),
             ),
@@ -134,67 +142,169 @@ class CourseListScreen extends GetView<ProfileController> {
   }
 }
 
-class CourseItem extends StatelessWidget {
-  final EnrollmentModelItem course;
-  final double width;
-  final double height;
+class MyNestedAccordion extends GetView<ProfileController> {
+  final CourseDetailData course;
 
-  const CourseItem({super.key, required this.course, required this.width, required this.height});
+  const MyNestedAccordion({required this.course, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    bool isCompleted = course.status == 2;
+  Widget build(context) {
+    return Obx(() {
+      // final chapters = controller.getChaptersByCourseId(course.id!);
+      // final chapters = course.chapters ?? [];
+      final chapters = controller.chapterList
+          .where((chapter) => chapter.courseId == course.id)
+          .toList();
+      final worksheetAttempts = controller.worksheetAttempt
+          .where((attempt) => attempt.enrollment?.courseId == course.id)
+          .toList();
 
-    return Container(
-      width: width,
-      height: height,
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4.0,
-            spreadRadius: 2.0,
-          ),
+      if (controller.chapterList.isEmpty && controller.topicListModel.isEmpty) {
+        return Center(child: CircularProgressIndicator());
+      }
+
+      if (chapters.isEmpty) {
+        return const Center(child: Text('Chưa có chương nào được tải.'));
+      }
+
+      return Accordion(
+        paddingListTop: 0,
+        paddingListBottom: 0,
+        maxOpenSections: 1,
+        headerBackgroundColorOpened: Colors.black54,
+        children: [
+          ...chapters.map((chapter) {
+            return AccordionSection(
+              isOpen: false,
+              leftIcon: const Icon(Icons.insights_rounded, color: Colors.black),
+              headerBackgroundColor: Colors.white,
+              headerBackgroundColorOpened: Colors.white,
+              header: Text(chapter.title ?? 'Không có tên chương',
+                  style: CourseListRegisteredScreen.contentStyle),
+              content: Obx(() {
+                // final topics = controller.getTopicsByChapterId(chapter.id!);
+                final topics = controller.topicListModel
+                    .where((topic) => topic.chapterId == chapter.id)
+                    .toList();
+                if (topics.isEmpty) {
+                  return const Center(child: Text('Chưa có chủ đề nào được tải.'));
+                }
+
+                return Column(
+                  children: topics.map<Widget>((TopicItem topic) {
+                    return ListTile(
+                      leading: Obx(() {
+                        final isChecked = controller.processionModelItemList.any(
+                              (processionItem) => processionItem.topicId == topic.id,
+                        );
+                        return Icon(
+                          isChecked ? Icons.check_box : Icons.check_box_outline_blank,
+                          color: isChecked ? Colors.green : Colors.grey,
+                        );
+                      }),
+                      title: Text(topic.title!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                          )),
+                      tileColor: Colors.white,
+                      onTap: () => {},
+                    );
+                  }).toList(),
+                );
+              }),
+              contentBackgroundColor: Colors.white,
+              contentBorderColor: Colors.white,
+            );
+          }).toList(),
+          if (worksheetAttempts.isNotEmpty)
+            AccordionSection(
+              isOpen: false,
+              leftIcon: const Icon(Icons.history, color: Colors.black),
+              headerBackgroundColor: Colors.white,
+              headerBackgroundColorOpened: Colors.white,
+              header: const Text('Lịch sử làm bài',
+                  style: CourseListRegisteredScreen.contentStyle),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: worksheetAttempts.map((attempt) {
+                  return InkWell(
+                    onTap: () {
+                      // Handle onTap event
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
+                            style: CourseListRegisteredScreen.headerStyle,
+                          ),
+                          Text(
+                            'Ngày hoàn thành: ${attempt.completionDate != null ? DateFormat('HH:mm:ss dd-MM-yyyy').format(attempt.completionDate!.toLocal()) : 'N/A'}',
+                            style: CourseListRegisteredScreen.contentStyle,
+                          ),
+                          Text(
+                            'Điểm: ${attempt.score != null ? (attempt.score! / 10).toString() : 'N/A'}',
+                            style: CourseListRegisteredScreen.contentStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              contentBackgroundColor: Colors.white,
+              contentBorderColor: Colors.white,
+            ),
         ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Image.network(
-            course.course!.imageUrl ?? "https://th.bing.com/th/id/OIP.hdTZOd3f6FNd6N2ocUVH_AAAAA?rs=1&pid=ImgDetMain",
-            width: double.infinity,
-            height: height * 0.4,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            course.course!.title ?? "Không có tên",
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            "Đăng kí: ${'N/A'}",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            isCompleted ? "Hoàn thành" : "Chưa hoàn thành",
-            style: TextStyle(
-              fontSize: 14,
-              color: isCompleted ? Colors.green : Colors.red,
-            ),
-          ),
-        ],
-      ),
-    );
+      );
+    });
   }
+}
+
+Widget buildProgressItem(BuildContext context, String title, double progress,
+    String slots, String time) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    padding: const EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 1,
+          blurRadius: 5,
+          offset: const Offset(0, 3),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 5),
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[300],
+          valueColor: AlwaysStoppedAnimation<Color>(
+              progress >= 1 ? Colors.green : Colors.blue),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          'Đã học: $slots slot',
+          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+        ),
+        Text(
+          'Thời gian đã học: $time',
+          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+        ),
+      ],
+    ),
+  );
 }

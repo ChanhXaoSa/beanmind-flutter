@@ -409,7 +409,7 @@ class ParticipantModelItem {
   ItemEnrollment? enrollment;
   String? sessionId;
   Session? session;
-  bool? isPresent;
+  bool isPresent;
   int? status;
   String? id;
   bool? isDeleted;
@@ -419,7 +419,7 @@ class ParticipantModelItem {
     this.enrollment,
     this.sessionId,
     this.session,
-    this.isPresent,
+    this.isPresent = false,
     this.status,
     this.id,
     this.isDeleted,
