@@ -29,7 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   dotted_border: ^2.1.0
-  super_drag_and_drop: ^0.8.16
+  super_drag_and_drop: ^0.8.19
   flutter:
     sdk: flutter
 
