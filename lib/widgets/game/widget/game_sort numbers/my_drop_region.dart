@@ -1,7 +1,5 @@
 import 'package:beanmind_flutter/widgets/game/widget/game_sort%20numbers/types.dart';
 import 'package:flutter/material.dart';
-import 'package:super_drag_and_drop/super_drag_and_drop.dart';
-
 class MyDropRegion extends StatefulWidget {
   const MyDropRegion({
     super.key,
@@ -31,38 +29,33 @@ class _MyDropRegionState extends State<MyDropRegion> {
 
   @override
   Widget build(BuildContext context) {
-    return DropRegion(
-      formats: Formats.standardFormats,
-      onDropOver: (DropOverEvent event) {
-        _updatePreview(event.position.local);
-        return DropOperation.copy;
+    return DragTarget<String>(
+      onWillAccept: (data) {
+        if (data != null) {
+          _updatePreview(data);
+          return true;
+        }
+        return false;
       },
-      onPerformDrop: (PerformDropEvent event) async {
+      onAccept: (data) {
+        widget.setExternalData(int.parse(data));
         widget.onDrop();
       },
-      onDropEnter: (DropEvent event) {
-        if (event.session.items.first.dataReader != null) {
-          final dataReader = event.session.items.first.dataReader!;
-          if (!dataReader.canProvide(Formats.plainTextFile)) {
-            // show unsportted file type message
-            return;
-          }
-        }
+      builder: (BuildContext context, List<String?> candidateData, List<dynamic> rejectedData) {
+        return widget.child;
       },
-      child: widget.child,
     );
-    //onPerformDrop: onPerformDrop);
   }
 
-  void _updatePreview(Offset hoverPosition) {
-    final int row = hoverPosition.dy ~/ widget.childSize.height;
-    final int column = (hoverPosition.dx - (widget.childSize.width / 2)) ~/
-        widget.childSize.width;
+  void _updatePreview(String data) {
+    final int itemData = int.parse(data);
+    final int row = itemData ~/ widget.childSize.height.toInt();
+    final int column = (itemData - (widget.childSize.width / 2).toInt()) ~/ widget.childSize.width.toInt();
     int newDropIndex = (row * widget.columns) + column;
 
     if (newDropIndex != dropIndex) {
       dropIndex = newDropIndex;
-      widget.updateDropPreview((dropIndex!, widget.panel));
+      widget.updateDropPreview((newDropIndex, widget.panel));
     }
   }
 }

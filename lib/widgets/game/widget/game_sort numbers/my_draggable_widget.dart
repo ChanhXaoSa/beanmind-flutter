@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
 class MyDraggableWidget extends StatelessWidget {
   const MyDraggableWidget({
@@ -15,17 +14,20 @@ class MyDraggableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DragItemWidget(dragItemProvider: (DragItemRequest request) {
-      onDragStart();
-      final item = DragItem(
-        localData: data,
-      );
-      //item.add(Formats.plainText(data));
-      return item;
-    },
-    dragBuilder: (context, child) => Opacity(opacity: 0.8, child: child,),
-    allowedOperations: () => [DropOperation.copy],
-    child: DraggableWidget(child: child,),
+    return Draggable<String>(
+      data: data,
+      onDragStarted: onDragStart,
+      feedback: Opacity(
+        opacity: 0.8,
+        child: Material(
+          child: child,
+        ),
+      ),
+      childWhenDragging: Opacity(
+        opacity: 0.5,
+        child: child,
+      ),
+      child: child,
     );
   }
 }

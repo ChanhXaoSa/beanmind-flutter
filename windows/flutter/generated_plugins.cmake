@@ -8,8 +8,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   firebase_storage
   flutter_tts
-  irondash_engine_context
-  super_native_extensions
   url_launcher_windows
 )
 
