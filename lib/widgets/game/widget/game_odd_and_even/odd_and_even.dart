@@ -115,12 +115,6 @@ class GameOddAndEven extends FlameGame {
 
         position = Vector2(xPosition, yPosition);
 
-        // Ensure the animal stays within screen boundaries by clamping its position
-        position.x =
-            position.x.clamp(0, screenWidth - textureSize.x * scaleFactor);
-        position.y =
-            position.y.clamp(0, screenHeight - textureSize.y * scaleFactor);
-
         // Check if the new position is at least minGap away from existing positions
         for (Vector2 existingPosition in positions) {
           if ((position - existingPosition).length < minGap) {
@@ -132,31 +126,33 @@ class GameOddAndEven extends FlameGame {
 
       positions.add(position);
 
-      // Create and add the animal if the position is valid
-      bool flip = Random().nextBool();
-      Animal animal = Animal(
-        scaleFactor: scaleFactor,
-        animation: animation,
-        textureSize: textureSize,
-        position: position,
-        flipped: flip,
-        type: type,
-      );
+      // Check if the animal exceeds the screen boundaries
+      if (position.x >= 0 &&
+          position.x + textureSize.x * scaleFactor <= screenWidth &&
+          position.y >= 0 &&
+          position.y + textureSize.y * scaleFactor <= screenHeight) {
+        bool flip = Random().nextBool();
+        Animal animal = Animal(
+          scaleFactor: scaleFactor,
+          animation: animation,
+          textureSize: textureSize,
+          position: position,
+          flipped: flip,
+          type: type,
+        );
+        if (type == 'bluebird') {
+          globalBlueBirdCount++;
+        } else if (type == 'redbird') {
+          globalRedBirdCount++;
+        }
 
-      if (type == 'bluebird') {
-        globalBlueBirdCount++;
-      } else if (type == 'redbird') {
-        globalRedBirdCount++;
+        add(animal.createComponent());
       }
-
-      add(animal.createComponent());
     }
-
-    // Print animal counts for debugging
+    // print animal count
     print('BlueBird: $globalBlueBirdCount');
     print('RedBird: $globalRedBirdCount');
   }
-
 
   @override
   void update(double dt) {
