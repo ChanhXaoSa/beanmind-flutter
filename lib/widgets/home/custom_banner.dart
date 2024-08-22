@@ -12,7 +12,7 @@ class CustomBanner extends flutter.StatefulWidget {
 
 class _CustomBannerState extends flutter.State<CustomBanner> {
   int _current = 0;
-  final CarouselControllerPlus _controller = CarouselControllerPlus();
+  final CarouselSliderController _controller = CarouselSliderController();
   final List<String> imgList = [];
   bool isLoading = true;
 
