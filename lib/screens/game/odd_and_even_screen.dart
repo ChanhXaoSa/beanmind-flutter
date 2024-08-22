@@ -136,12 +136,38 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text('Hướng dẫn'),
-                                content: Text(
-                                  'Nội dung hướng dẫn người chơi...',
+                                content: SingleChildScrollView(
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: Column(
+                                      children: [
+                                        Image.network(
+                                          'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fodd_and_even%2Fodd_and_even.png?alt=media&token=2abb288a-259f-4b13-8b84-8cd6fd770cc5',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: const Text(
+                                            'Xem đề bài, số động vật hiển thị, sau đó chọn đáp án đúng theo yêu cầu của câu hỏi.',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
                                     child: const Text('OK'),
                                   ),
                                 ],

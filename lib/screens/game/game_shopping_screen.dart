@@ -121,12 +121,38 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('Hướng dẫn'),
-                                  content: Text(
-                                    'Nội dung hướng dẫn người chơi...',
+                                  content: SingleChildScrollView(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: Column(
+                                        children: [
+                                          Image.network(
+                                            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fshopping%2Fshopping.png?alt=media&token=9b4c59e4-62bc-45c3-b81a-68d8978c06c3',
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                            child: const Text(
+                                              'Người chơi đọc câu hỏi trên màn hình, sau đó kéo thả các món hàng vào ô chữ nhật, khi số tiền còn lại của bạn bằng với số tiền yêu cầu, nhấn nút "XONG" để kiểm tra kết quả.',
+                                              style: TextStyle(fontSize: 30),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () => Navigator.pop(context),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                       child: const Text('OK'),
                                     ),
                                   ],
