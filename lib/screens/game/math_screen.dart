@@ -96,30 +96,8 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('Hướng dẫn'),
-                              content: SingleChildScrollView(
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fmath_game%2Fmath_game.png?alt=media&token=d2291958-0a2d-4b47-8a91-970fbe6a13bf',
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                        child: const Text(
-                                          'Xem bài toán hiển thị trên màn hình và chọn đáp án đúng',
-                                          style: TextStyle(fontSize: 30),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              content: Text(
+                                'Nội dung hướng dẫn người chơi...',
                               ),
                               actions: [
                                 TextButton(
