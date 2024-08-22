@@ -159,9 +159,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                                   ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
+                                      onPressed: () => Navigator.pop(context),
                                       child: const Text('OK'),
                                     ),
                                   ],

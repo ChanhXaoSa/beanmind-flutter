@@ -123,9 +123,7 @@ class _MathGameScreeenState extends State<MathGameScreeen> {
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
+                                  onPressed: () => Navigator.pop(context),
                                   child: const Text('OK'),
                                 ),
                               ],

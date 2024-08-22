@@ -150,9 +150,7 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                                   ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
+                                      onPressed: () => Navigator.pop(context),
                                       child: const Text('OK'),
                                     ),
                                   ],
