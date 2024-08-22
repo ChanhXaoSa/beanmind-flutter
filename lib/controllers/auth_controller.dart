@@ -51,6 +51,9 @@ class AuthController extends GetxController {
         if (loginModel.success) {
           String accessToken = loginModel.data!.accessToken;
 
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('accessToken', accessToken);
+
           final userResponse = await http.get(
             Uri.parse('$newBaseApiUrl/auth/info'),
             headers: <String, String>{
@@ -100,6 +103,11 @@ class AuthController extends GetxController {
       backgroundColor: const Color(0xFFFC6B6B),
       colorText: Colors.white,
     );
+  }
+
+  Future<String?> getAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('accessToken');
   }
 
   Future<void> _saveUserSession(UserModel userModel) async {

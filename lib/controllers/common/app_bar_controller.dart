@@ -50,7 +50,7 @@ class AppBarController extends GetxController {
     try {
       final courseResponse = await http.get(
         Uri.parse('$newBaseApiUrl/courses?PageSize=9999'),
-        headers: getHeaders(),
+        headers: getHeaders(''),
       );
       if (courseResponse.statusCode == 200) {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));

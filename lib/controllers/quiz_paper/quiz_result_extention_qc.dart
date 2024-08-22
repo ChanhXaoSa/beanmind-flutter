@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:http/http.dart' as http;
@@ -57,20 +59,31 @@ extension QuizeResult on QuizController {
     });
 
     try {
-      final response = await http.put(
-        Uri.parse('$newBaseApiUrl/worksheet-attempts'),
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'ngrok-skip-browser-warning': 'true',
-        },
-        body: body,
-      );
+      String? accessToken = await Get.find<AuthController>().getAccessToken();
+      if(accessToken != null) {
+        final response = await http.put(
+          Uri.parse('$newBaseApiUrl/worksheet-attempts'),
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'ngrok-skip-browser-warning': 'true',
+          },
+          body: body,
+        );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Quiz results saved successfully');
-        navigateToCourseLearning();
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print('Quiz results saved successfully');
+          navigateToCourseLearning();
+        } else {
+          print('Failed to save quiz results: ${response.statusCode}');
+        }
       } else {
-        print('Failed to save quiz results: ${response.statusCode}');
+        Get.snackbar(
+          'Error',
+          'Token không tồn tại',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: const Color(0xFFFC6B6B),
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       print('Error: $e');

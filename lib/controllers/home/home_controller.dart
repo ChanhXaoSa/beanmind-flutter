@@ -48,7 +48,7 @@ class HomeController extends GetxController {
     try {
       final response = await http.get(
           Uri.parse('$newBaseApiUrl/subjects'),
-          headers: getHeaders(),
+          headers: getHeaders(''),
       );
       if (response.statusCode == 200) {
         final modelBase = SubjectModel.fromJson(json.decode(response.body));
@@ -71,7 +71,7 @@ class HomeController extends GetxController {
     try {
       final response = await http.get(
           Uri.parse('$newBaseApiUrl/program-types'),
-          headers: getHeaders(),
+          headers: getHeaders(''),
       );
       if (response.statusCode == 200) {
         final modelBase = ProgramTypeModel.fromJson(json.decode(response.body));
@@ -94,7 +94,7 @@ class HomeController extends GetxController {
     try {
       final response = await http.get(
           Uri.parse('$newBaseApiUrl/course-levels'),
-          headers: getHeaders(),
+          headers: getHeaders(''),
       );
       if (response.statusCode == 200) {
         final modelBase = CourseLevelModel.fromJson(json.decode(response.body));
@@ -117,7 +117,7 @@ class HomeController extends GetxController {
     try {
       final response = await http.get(
           Uri.parse('$newBaseApiUrl/enrollments?ApplicationUserId=${user.value!.data!.id}'),
-          headers: getHeaders(),
+          headers: getHeaders(''),
       );
       if (response.statusCode == 200) {
         final enrollmentModelBase = EnrollmentModel.fromJson(json.decode(response.body));
@@ -140,7 +140,7 @@ class HomeController extends GetxController {
     try {
       final courseResponse = await http.get(
         Uri.parse('$newBaseApiUrl/courses'),
-        headers: getHeaders(),
+        headers: getHeaders(''),
       );
       if (courseResponse.statusCode == 200) {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
@@ -164,7 +164,7 @@ class HomeController extends GetxController {
     try {
       final courseResponse = await http.get(
           Uri.parse('$newBaseApiUrl/courses?SubjectId=$subjectId&ProgramTypeId=$programTypeId&CourseLevelId=$courseLevelId'),
-          headers: getHeaders(),
+          headers: getHeaders(''),
       );
       if (courseResponse.statusCode == 200) {
         final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
