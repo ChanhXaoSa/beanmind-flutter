@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+// import 'package:just_audio/just_audio.dart';
 
 class AudioButton extends StatefulWidget {
   @override
@@ -7,32 +7,32 @@ class AudioButton extends StatefulWidget {
 }
 
 class _AudioButtonState extends State<AudioButton> {
-  final AudioPlayer player = AudioPlayer();
+  // final AudioPlayer player = AudioPlayer();
   bool isPlaying = true;
 
   @override
   void initState() {
     super.initState();
     //player.setAsset('assets/sounds/music_background/music_happy_farm.mp3');
-    player.setAsset('assets/sounds/music_background/music_adventure.mp3');
-    player.setLoopMode(LoopMode.one);
-    player.play();
+    // player.setAsset('assets/sounds/music_background/music_adventure.mp3');
+    // player.setLoopMode(LoopMode.one);
+    // player.play();
   }
 
   void _togglePlayPause() {
-    if (isPlaying) {
-      player.pause();
-    } else {
-      player.play();
-    }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
+    // if (isPlaying) {
+    //   player.pause();
+    // } else {
+    //   player.play();
+    // }
+    // setState(() {
+    //   isPlaying = !isPlaying;
+    // });
   }
 
   @override
   void dispose() {
-    player.dispose();
+    // player.dispose();
     super.dispose();
   }
 
