@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Screen4 extends StatelessWidget {
   const Screen4({super.key});
@@ -132,7 +133,7 @@ class MyNestedExpansionTile extends GetView<ProfileController> {
       final worksheetAttempts = controller.worksheetAttempt.where((attempt) => attempt.enrollment?.courseId == course.id).toList();
 
       if (controller.participantModelItemList.isEmpty && controller.processionModelItemList.isEmpty) {
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: ShimmerCourseHistoryItem());
       }
 
       if (enrollment == null) {
@@ -269,4 +270,82 @@ Widget buildParticipantInfoItem(BuildContext context, ParticipantModelItem parti
       ],
     ),
   );
+}
+
+class ShimmerCourseHistoryItem extends StatelessWidget {
+  const ShimmerCourseHistoryItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 5),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

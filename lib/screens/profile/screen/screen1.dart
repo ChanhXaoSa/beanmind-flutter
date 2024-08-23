@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Screen1 extends GetView<ProfileController> {
   const Screen1({super.key});
@@ -138,7 +139,8 @@ class Screen1 extends GetView<ProfileController> {
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: Obx(() {
                         if (controller.enrollmentModel.value?.data?.items == null || controller.enrollmentModel.value!.data!.items!.isEmpty) {
-                          return const Center(child: Text('Không có khóa học nào.'));
+                          return const Center(
+                              child: ShimmerCourseProgressItem1());
                         }
                         return ScrollConfiguration(
                           behavior: MyCustomScrollBehavior(),
@@ -202,9 +204,9 @@ class Screen1 extends GetView<ProfileController> {
                       height: MediaQuery.of(context).size.height * 0.25,
                       child: Obx(() {
                         if (controller.enrollmentModel.value?.data?.items == null || controller.enrollmentModel.value!.data!.items!.isEmpty) {
-                          return const Center(child: Text('Không có khóa học nào.'));
+                          return const Center(
+                              child: ShimmerCourseProgressItem2());
                         }
-
                         return ScrollConfiguration(
                           behavior: MyCustomScrollBehavior(),
                           child: Scrollbar(
@@ -356,4 +358,150 @@ Widget buildProgressItem(BuildContext context, String title, double progress,
       ],
     ),
   );
+}
+
+class ShimmerCourseProgressItem1 extends StatelessWidget {
+  const ShimmerCourseProgressItem1({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ShimmerCourseProgressItem2 extends StatelessWidget {
+  const ShimmerCourseProgressItem2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: double.infinity,
+                height: 10,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
