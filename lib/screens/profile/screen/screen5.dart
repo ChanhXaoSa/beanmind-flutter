@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class Screen5 extends StatelessWidget {
   @override
@@ -56,11 +57,14 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
         final body = response.body;
         final decoded = jsonDecode(body);
 
-        if (decoded is Map<String, dynamic> && decoded['data'] is Map<String, dynamic>) {
-          final gameHistoryResponse = GameHistoryResponse.fromJson(decoded['data']);
+        if (decoded is Map<String, dynamic> &&
+            decoded['data'] is Map<String, dynamic>) {
+          final gameHistoryResponse =
+              GameHistoryResponse.fromJson(decoded['data']);
           setState(() {
             gameHistoryItems = gameHistoryResponse.items
-                .map((gameHistory) => GameHistoryItem.fromGameHistory(gameHistory))
+                .map((gameHistory) =>
+                    GameHistoryItem.fromGameHistory(gameHistory))
                 .toList();
             filteredGameHistoryItems = gameHistoryItems;
             loadingStatus = LoadingStatus.completed;
@@ -149,7 +153,8 @@ class _GameHistoryListScreenState extends State<GameHistoryListScreen> {
                       padding: EdgeInsets.zero,
                       itemCount: filteredGameHistoryItems.length,
                       itemBuilder: (context, index) {
-                        return GameHistoryCard(gameHistoryItem: filteredGameHistoryItems[index]);
+                        return GameHistoryCard(
+                            gameHistoryItem: filteredGameHistoryItems[index]);
                       },
                     ),
             ),
@@ -167,6 +172,12 @@ class GameHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Chuyển chuỗi playDate thành đối tượng DateTime
+    DateTime parsedDate = DateTime.parse(gameHistoryItem.playDate);
+
+    // Format lại ngày theo định dạng mong muốn
+    String formattedDate = DateFormat('dd/MM/yyyy, HH:mm').format(parsedDate);
+
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Padding(
@@ -189,10 +200,19 @@ class GameHistoryCard extends StatelessWidget {
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 5),
-                  Text('Điểm: ${gameHistoryItem.score}',
-                      style: TextStyle(fontSize: 20)),
-                  Text('Thời gian: ${gameHistoryItem.playTime} giây',
-                      style: TextStyle(fontSize: 20)),
+                  Row(
+                    children: [
+                      Text('Điểm: ${gameHistoryItem.score}',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      SizedBox(width: 20),
+                      Text('Thời gian: ${gameHistoryItem.playTime} giây',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  Text(
+                    'Ngày chơi: $formattedDate', // Sử dụng ngày đã được format
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
@@ -208,12 +228,14 @@ class GameHistoryItem {
   final String gameName;
   final int score;
   final int playTime;
+  final String playDate;
 
   GameHistoryItem({
     required this.imageUrl,
     required this.gameName,
     required this.score,
     required this.playTime,
+    required this.playDate,
   });
 
   factory GameHistoryItem.fromGameHistory(GameHistory gameHistory) {
@@ -222,7 +244,7 @@ class GameHistoryItem {
       gameName: gameHistory.game.title,
       score: gameHistory.point,
       playTime: gameHistory.duration,
+      playDate: gameHistory.playDate,
     );
   }
 }
-

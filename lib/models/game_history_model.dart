@@ -8,6 +8,7 @@ class GameHistory {
   final int duration;
   final String id;
   final bool isDeleted;
+  final String playDate;
 
   GameHistory({
     required this.gameId,
@@ -17,6 +18,7 @@ class GameHistory {
     required this.duration,
     required this.id,
     required this.isDeleted,
+    required this.playDate,
   });
 
   factory GameHistory.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class GameHistory {
       duration: json['duration'],
       id: json['id'],
       isDeleted: json['isDeleted'],
+      playDate: json['created'],
     );
   }
 }
