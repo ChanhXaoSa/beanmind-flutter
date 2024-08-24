@@ -60,7 +60,7 @@ class ProfileController extends GetxController {
     UserModel? sessionUser = await Get.find<AuthController>().getUserLocal();
     if (sessionUser != null) {
       user.value = sessionUser;
-      fetchEnrollments();
+      await fetchEnrollments();
     }
   }
 
@@ -125,6 +125,14 @@ class ProfileController extends GetxController {
     }
   }
 
+  Future<void> fetchAllEnrollmentsData() async {
+    for (var item in enrollmentModel.value!.data!.items!) {
+      await fetchCourseDetail(item.courseId!);
+      await fetchWorksheetAttempt(item.id!);
+      await fetchParticipants(item.id!);
+    }
+  }
+
   Future<void> fetchEnrollments() async {
     try {
       final response = await http.get(
@@ -141,10 +149,10 @@ class ProfileController extends GetxController {
           enrollmentModelList.addAll(enrollmentModel.value!.data!.items!);
           // print(enrollmentModelList.toString());
           for(var item in enrollmentModel.value!.data!.items!) {
-            fetchCourseDetail(item.courseId!);
+            await fetchCourseDetail(item.courseId!);
             // fetchChapter(item.courseId!);
-            fetchWorksheetAttempt(item.id!);
-            fetchParticipants(item.id!);
+            await fetchWorksheetAttempt(item.id!);
+            await fetchParticipants(item.id!);
           }
         }
         // if (kDebugMode) {
@@ -231,8 +239,8 @@ class ProfileController extends GetxController {
       if (chapterResponse.statusCode == 200) {
         final chapterModelBase = ChapterModel.fromJson(json.decode(chapterResponse.body));
         if(chapterModelBase.data?.items != null)  {
-          chapterList.assignAll(chapterModelBase.data!.items!);
-          for (var chapter in chapterList) {
+          chapterList.addAll(chapterModelBase.data!.items!);
+          for (var chapter in chapterModelBase.data!.items!) {
             fetchTopic(chapter.id!);
           }
         }
