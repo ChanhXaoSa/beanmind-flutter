@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:beanmind_flutter/firebase/loading_status.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
@@ -29,6 +30,7 @@ class ProfileController extends GetxController {
   var processionModelItemList = <ProcessionModelItem>[].obs;
   var searchQuery = ''.obs;
   var filteredCourses = <EnrollmentModelItem>[].obs;
+  final loadingStatusParticipant = LoadingStatus.loading.obs;
 
   @override
   void onInit() {
@@ -60,7 +62,7 @@ class ProfileController extends GetxController {
     UserModel? sessionUser = await Get.find<AuthController>().getUserLocal();
     if (sessionUser != null) {
       user.value = sessionUser;
-      fetchEnrollments();
+      await fetchEnrollments();
     }
   }
 
@@ -125,6 +127,14 @@ class ProfileController extends GetxController {
     }
   }
 
+  Future<void> fetchAllEnrollmentsData() async {
+    for (var item in enrollmentModel.value!.data!.items!) {
+      await fetchCourseDetail(item.courseId!);
+      await fetchWorksheetAttempt(item.id!);
+      await fetchParticipants(item.id!);
+    }
+  }
+
   Future<void> fetchEnrollments() async {
     try {
       final response = await http.get(
@@ -134,6 +144,7 @@ class ProfileController extends GetxController {
             'ngrok-skip-browser-warning': 'true',
           }
       );
+      loadingStatusParticipant.value = LoadingStatus.loading;
       if (response.statusCode == 200) {
         final enrollmentModelBase = EnrollmentModel.fromJson(json.decode(response.body));
         enrollmentModel.value = enrollmentModelBase;
@@ -141,16 +152,17 @@ class ProfileController extends GetxController {
           enrollmentModelList.addAll(enrollmentModel.value!.data!.items!);
           // print(enrollmentModelList.toString());
           for(var item in enrollmentModel.value!.data!.items!) {
-            fetchCourseDetail(item.courseId!);
+            await fetchCourseDetail(item.courseId!);
             // fetchChapter(item.courseId!);
-            fetchWorksheetAttempt(item.id!);
-            fetchParticipants(item.id!);
+            await fetchWorksheetAttempt(item.id!);
+            await fetchParticipants(item.id!);
           }
         }
         // if (kDebugMode) {
         //   print('enrollment id : ${enrollmentModel.value!.data!.items!.first.id}');
         // }
       } else {
+        loadingStatusParticipant.value = LoadingStatus.error;
         throw Exception('Failed to fetch enrollment');
       }
     } catch (e) {
@@ -158,6 +170,8 @@ class ProfileController extends GetxController {
         print('Error: $e');
       }
       rethrow;
+    } finally {
+      loadingStatusParticipant.value = LoadingStatus.completed;
     }
   }
 
@@ -231,8 +245,8 @@ class ProfileController extends GetxController {
       if (chapterResponse.statusCode == 200) {
         final chapterModelBase = ChapterModel.fromJson(json.decode(chapterResponse.body));
         if(chapterModelBase.data?.items != null)  {
-          chapterList.assignAll(chapterModelBase.data!.items!);
-          for (var chapter in chapterList) {
+          chapterList.addAll(chapterModelBase.data!.items!);
+          for (var chapter in chapterModelBase.data!.items!) {
             fetchTopic(chapter.id!);
           }
         }

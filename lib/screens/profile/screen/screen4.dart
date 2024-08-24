@@ -1,3 +1,4 @@
+import 'package:beanmind_flutter/firebase/firebase_configs.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/participant_model.dart';
 import 'package:beanmind_flutter/models/procession_model.dart';
@@ -132,12 +133,12 @@ class MyNestedExpansionTile extends GetView<ProfileController> {
       final chapters = controller.chapterList.where((chapter) => chapter.courseId == course.id).toList();
       final worksheetAttempts = controller.worksheetAttempt.where((attempt) => attempt.enrollment?.courseId == course.id).toList();
 
-      if (controller.participantModelItemList.isEmpty && controller.processionModelItemList.isEmpty) {
+      if (parcitipant.isEmpty && controller.loadingStatusParticipant.value == LoadingStatus.loading) {
         return const Center(child: ShimmerCourseHistoryItem());
       }
 
-      if (enrollment == null) {
-        return const Center(child: Text('Chưa có chương nào được tải.'));
+      if (parcitipant.isEmpty && controller.loadingStatusParticipant.value == LoadingStatus.completed) {
+        return const Center(child: Text('Bạn chưa tham gia vào khoá học này'));
       }
 
       return Column(
