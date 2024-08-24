@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:beanmind_flutter/firebase/loading_status.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
@@ -29,6 +30,7 @@ class ProfileController extends GetxController {
   var processionModelItemList = <ProcessionModelItem>[].obs;
   var searchQuery = ''.obs;
   var filteredCourses = <EnrollmentModelItem>[].obs;
+  final loadingStatusParticipant = LoadingStatus.loading.obs;
 
   @override
   void onInit() {
@@ -142,6 +144,7 @@ class ProfileController extends GetxController {
             'ngrok-skip-browser-warning': 'true',
           }
       );
+      loadingStatusParticipant.value = LoadingStatus.loading;
       if (response.statusCode == 200) {
         final enrollmentModelBase = EnrollmentModel.fromJson(json.decode(response.body));
         enrollmentModel.value = enrollmentModelBase;
@@ -159,6 +162,7 @@ class ProfileController extends GetxController {
         //   print('enrollment id : ${enrollmentModel.value!.data!.items!.first.id}');
         // }
       } else {
+        loadingStatusParticipant.value = LoadingStatus.error;
         throw Exception('Failed to fetch enrollment');
       }
     } catch (e) {
@@ -166,6 +170,8 @@ class ProfileController extends GetxController {
         print('Error: $e');
       }
       rethrow;
+    } finally {
+      loadingStatusParticipant.value = LoadingStatus.completed;
     }
   }
 

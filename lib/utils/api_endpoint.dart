@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 String baseApiUrl = 'http://bmapitest.somee.com/api/v1';
-String newBaseApiUrl = 'http://vinhtc191-001-site1.gtempurl.com/api/v1';
+String newBaseApiUrl = 'https://vinhtc191-001-site1.gtempurl.com/api/v1';
 // String newBaseApiUrl = 'https://congvinh2024-001-site1.dtempurl.com/api/v1';
 
 
