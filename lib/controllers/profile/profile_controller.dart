@@ -128,7 +128,7 @@ class ProfileController extends GetxController {
   Future<void> fetchEnrollments() async {
     try {
       final response = await http.get(
-          Uri.parse('$newBaseApiUrl/enrollments?ApplicationUserId=${user.value!.data!.id}&IsDeleted=1'),
+          Uri.parse('$newBaseApiUrl/enrollments/simplify?ApplicationUserId=${user.value!.data!.id}&IsDeleted=1'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',

@@ -145,20 +145,26 @@ class Screen1 extends GetView<ProfileController> {
                         return ScrollConfiguration(
                           behavior: MyCustomScrollBehavior(),
                           child: Scrollbar(
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              scrollDirection: Axis.vertical,
-                              itemCount: controller.enrollmentModel.value!.data!
-                                  .items!.length,
-                              itemBuilder: (context, index) {
-                                final enrollmentItem = controller
-                                    .enrollmentModel.value!.data!.items![index];
-                                final course = enrollmentItem.course!;
-                                return InkWell(
-                                  onTap: () {
-                                    controller.navigateToCourseLearning(course.id!);
-                                  },
-                                  child: buildProgressItem(
+                            child: Obx(() {
+                              if (controller.courseDetailData.length < controller.enrollmentModelList.length || controller.courseDetailData.isEmpty) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return ListView.builder(
+                                padding: EdgeInsets.zero,
+                                scrollDirection: Axis.vertical,
+                                itemCount: controller.enrollmentModel.value!.data!
+                                    .items!.length,
+                                itemBuilder: (context, index) {
+                                  final enrollmentItem = controller
+                                      .enrollmentModel.value!.data!.items![index];
+                                  final course = controller.courseDetailData.firstWhere((c) => c.id == enrollmentItem.courseId);
+                                  return InkWell(
+                                    onTap: () {
+                                      controller.navigateToCourseLearning(course.id!);
+                                    },
+                                    child: buildProgressItem(
                                       context,
                                       course.title ?? '',
                                       course.totalSlot != null && course.totalSlot! > 0
@@ -170,10 +176,11 @@ class Screen1 extends GetView<ProfileController> {
                                           .where((a) => a.enrollment!.courseId == course.id)
                                           .length}/${course
                                           .totalSlot ?? 0}',
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }),
                           ),
                         );
                       }
@@ -210,25 +217,31 @@ class Screen1 extends GetView<ProfileController> {
                         return ScrollConfiguration(
                           behavior: MyCustomScrollBehavior(),
                           child: Scrollbar(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: controller.enrollmentModel.value!.data!.items!.length,
-                              itemBuilder: (context, index) {
-                                final enrollmentItem = controller.enrollmentModel.value!.data!.items![index];
-                                final course = enrollmentItem.course!;
-                                // Giả sử `course` có thuộc tính `title`, `registrationDate`, và `imageUrl`.
-                                return InkWell(
-                                  onTap: () {
-                                    controller.navigateToCourseLearning(course.id!);
-                                  },
-                                  child: buildCourseItem(
+                            child: Obx(() {
+                              if (controller.courseDetailData.length < controller.enrollmentModelList.length || controller.courseDetailData.isEmpty) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: controller.enrollmentModel.value!.data!.items!.length,
+                                itemBuilder: (context, index) {
+                                  final enrollmentItem = controller.enrollmentModel.value!.data!.items![index];
+                                  final course = controller.courseDetailData.firstWhere((c) => c.id == enrollmentItem.courseId);
+                                  return InkWell(
+                                    onTap: () {
+                                      controller.navigateToCourseLearning(course.id!);
+                                    },
+                                    child: buildCourseItem(
                                       context,
                                       course.title ?? '',
                                       course.imageUrl ?? '',
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }),
                           ),
                         );
                       }),
