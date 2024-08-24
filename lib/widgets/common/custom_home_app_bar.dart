@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/screens/profile/profile_screen.dart';
@@ -240,10 +241,13 @@ class CustomHomeAppBar extends GetView<AppBarController>
                                         radius: 20.0,
                                       ),
                                       const SizedBox(width: 8.0),
-                                      Text(
-                                        controller.user.value!.data!.userName!,
-                                        style: const TextStyle(
+                                      Flexible(
+                                        child: Text(
+                                          controller.user.value!.data!.userName!,
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
