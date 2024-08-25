@@ -104,7 +104,7 @@ class FeaturedCourses extends GetView<HomeController> {
         ),
       ),
       Obx(() {
-        if (controller.courseModel.value == null) {
+        if (controller.hotCourseItemList.isEmpty) {
           // return Center(child: CircularProgressIndicator());
           return Shimmer.fromColors(
             baseColor: Colors.white.withOpacity(0.4),
@@ -121,7 +121,7 @@ class FeaturedCourses extends GetView<HomeController> {
                 )),
           );
         } else {
-          final courses = controller.courseModel.value!.data?.items ?? [];
+          final courses = controller.hotCourseItemList;
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -168,7 +168,7 @@ class LastestCourses extends GetView<HomeController> {
         ),
       ),
       Obx(() {
-        if (controller.courseModel.value == null) {
+        if (controller.newestCourseItemList.isEmpty) {
           // return Center(child: CircularProgressIndicator());
           return Shimmer.fromColors(
             baseColor: Colors.white.withOpacity(0.4),
@@ -185,7 +185,7 @@ class LastestCourses extends GetView<HomeController> {
                 )),
           );
         } else {
-          final courses = controller.courseModel.value!.data?.items ?? [];
+          final courses = controller.newestCourseItemList;
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -300,12 +300,12 @@ class HomepageCourseCard extends GetView<HomeController> {
                       child: FadeInImage.assetNetwork(
                         placeholder: 'assets/images/background/background.png',
                         image: course.imageUrl!,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         height: 200,
                         imageErrorBuilder: (context, error, stackTrace) {
                           return Image.asset(
                             'assets/images/background/background.png',
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                             height: 200,
                           );
                         },
@@ -343,6 +343,14 @@ class HomepageCourseCard extends GetView<HomeController> {
               SizedBox(
                 child: Text(
                   '${programType?.title ?? 'Unknown Program'} - ${courseLevel?.title ?? 'Unknown Level'}',
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                child: Text(
+                  '${course.numberOfEnrollment ?? 'Unknown Program'} người đăng ký',
                   maxLines: 6,
                   overflow: TextOverflow.ellipsis,
                 ),

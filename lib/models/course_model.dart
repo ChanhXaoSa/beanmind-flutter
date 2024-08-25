@@ -119,6 +119,7 @@ class CourseModelItem {
   List<Teachable>? teachables;
   List<dynamic>? chapters;
   List<dynamic>? enrollments;
+  int? numberOfEnrollment;
   String? id;
   bool? isDeleted;
 
@@ -137,6 +138,7 @@ class CourseModelItem {
     this.teachables,
     this.chapters,
     this.enrollments,
+    this.numberOfEnrollment,
     this.id,
     this.isDeleted,
   });
@@ -156,6 +158,7 @@ class CourseModelItem {
     teachables: json["teachables"] == null ? [] : List<Teachable>.from(json["teachables"]!.map((x) => Teachable.fromJson(x))),
     chapters: json["chapters"] == null ? [] : List<dynamic>.from(json["chapters"]!.map((x) => x)),
     enrollments: json["enrollments"] == null ? [] : List<dynamic>.from(json["enrollments"]!.map((x) => x)),
+    numberOfEnrollment: json["numberOfEnrollment"],
     id: json["id"],
     isDeleted: json["isDeleted"],
   );
@@ -175,6 +178,7 @@ class CourseModelItem {
     "teachables": teachables == null ? [] : List<dynamic>.from(teachables!.map((x) => x.toJson())),
     "chapters": chapters == null ? [] : List<dynamic>.from(chapters!.map((x) => x)),
     "enrollments": enrollments == null ? [] : List<dynamic>.from(enrollments!.map((x) => x)),
+    "numberOfEnrollment" : numberOfEnrollment,
     "id": id,
     "isDeleted": isDeleted,
   };

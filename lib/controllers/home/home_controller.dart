@@ -21,6 +21,8 @@ class HomeController extends GetxController {
   var programTypeItemList = <ProgramTypeModelItem>[].obs;
   var subjectItemList = <SubjectModelItem>[].obs;
   var user = Rx<UserModel?>(null);
+  var hotCourseItemList = <CourseModelItem>[].obs;
+  var newestCourseItemList = <CourseModelItem>[].obs;
 
   var selectedFilterTags = <String, String>{}.obs;
   var filterSelections = <String, String?>{}.obs;
@@ -28,6 +30,8 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    fetchNewestCourses();
+    fetchHotCourses();
     fetchCourseLevel();
     fetchProgramType();
     fetchSubject();
@@ -41,6 +45,52 @@ class HomeController extends GetxController {
     if (sessionUser != null) {
       user.value = sessionUser;
       fetchEnrollments();
+    }
+  }
+
+  Future<void> fetchNewestCourses() async {
+    try {
+      final courseResponse = await http.get(
+        Uri.parse('$newBaseApiUrl/courses?PageIndex=1&PageSize=4&IsDeleted=1'),
+        headers: getHeaders(''),
+      );
+      if (courseResponse.statusCode == 200) {
+        final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
+        newestCourseItemList.addAll(courseModelBase.data!.items!);
+        if (kDebugMode) {
+          print(courseModel.value.toString());
+        }
+      } else {
+        throw Exception('Failed to fetch course');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> fetchHotCourses() async {
+    try {
+      final courseResponse = await http.get(
+        Uri.parse('$newBaseApiUrl/courses/hot?PageIndex=1&PageSize=4&IsDeleted=1'),
+        headers: getHeaders(''),
+      );
+      if (courseResponse.statusCode == 200) {
+        final courseModelBase = CourseModel.fromJson(json.decode(courseResponse.body));
+        hotCourseItemList.addAll(courseModelBase.data!.items!);
+        if (kDebugMode) {
+          print(courseModel.value.toString());
+        }
+      } else {
+        throw Exception('Failed to fetch course');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      rethrow;
     }
   }
 
@@ -116,7 +166,7 @@ class HomeController extends GetxController {
   Future<void> fetchEnrollments() async {
     try {
       final response = await http.get(
-          Uri.parse('$newBaseApiUrl/enrollments?ApplicationUserId=${user.value!.data!.id}'),
+          Uri.parse('$newBaseApiUrl/enrollments/simplify?ApplicationUserId=${user.value!.data!.id}'),
           headers: getHeaders(''),
       );
       if (response.statusCode == 200) {
