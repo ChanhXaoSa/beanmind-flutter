@@ -8,11 +8,14 @@ import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> saveGameResults(String gameId, int points, int timeRecord) async {
   String user = Get.find<AuthController>().user.value!.first.data!.id!;
+  final prefs = await SharedPreferences.getInstance();
+  final accessToken = prefs.getString('accessToken') ?? '';
 
-  final apiUrl = "${newBaseApiUrl}/game-histories";
+  final apiUrl = "$newBaseApiUrl/game-histories";
   final body = jsonEncode({
     "gameId": gameId,
     "applicationUserId": user,
@@ -26,6 +29,7 @@ Future<void> saveGameResults(String gameId, int points, int timeRecord) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=utf-8',
         'ngrok-skip-browser-warning': 'true',
+        'Authorization': 'Bearer $accessToken',
       },
       body: body,
     );

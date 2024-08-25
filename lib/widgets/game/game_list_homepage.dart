@@ -130,9 +130,14 @@ class GameCardWidget extends StatelessWidget {
                 controller.selectedGame.value = game['id'];
                 Get.to(() => controller.buildGameWidget(game['id']));
               },
-              child: Text(
-                game['name'] ?? '',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              child: Container(
+                height: 60,
+                child: Text(
+                  game['name'] ?? '',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             const SizedBox(height: 10),

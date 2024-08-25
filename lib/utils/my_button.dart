@@ -28,6 +28,8 @@ class _MyButtonState extends State<MyButton> {
       buttonColor = Colors.deepPurple;
     } else if (widget.child == 'XONG') {
       buttonColor = Colors.green;
+    }else if (widget.child == 'KIỂM TRA') {
+      buttonColor = Colors.green;
     } else if (widget.child == 'KHÔI PHỤC') {
       buttonColor = Colors.red;
     } else if (widget.child =='/'){

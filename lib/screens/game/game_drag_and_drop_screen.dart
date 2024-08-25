@@ -23,7 +23,9 @@ import 'package:video_player/video_player.dart';
 class MathDragAndDropScreen extends StatefulWidget {
   final int level;
   final String gameid;
-  const MathDragAndDropScreen({Key? key, required this.level, required this.gameid}) : super(key: key);
+  const MathDragAndDropScreen(
+      {Key? key, required this.level, required this.gameid})
+      : super(key: key);
   @override
   _MathDragAndDropScreenState createState() => _MathDragAndDropScreenState();
 }
@@ -49,11 +51,6 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
   var whiteTextStyle = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white);
 
-  List<String> numberPad = [
-    'XONG',
-    'KHÔI PHỤC',
-  ];
-
   @override
   void dispose() {
     _resultFocusNode.dispose();
@@ -73,6 +70,17 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
     _splitPanelsMobie = SplitPanelsMobie(level: widget.level);
     generateSortingQuestion();
     delay3Seconds();
+    if (upper.length == 10) {
+      numberPad = [
+        'XONG',
+        'KHÔI PHỤC',
+      ];
+    } else {
+      numberPad = [
+        'KIỂM TRA',
+        'KHÔI PHỤC',
+      ];
+    }
   }
 
   @override
@@ -130,26 +138,33 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('Hướng dẫn'),
-                  content: SingleChildScrollView(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Column(
-                        children: [
-                          Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fdrag_and_drop%2Fsort_number.png?alt=media&token=884f4329-308e-4023-ae95-a08ccb4bdde8',
-                            width: MediaQuery.of(context).size.width * 0.7,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: const Text(
-                              'Người chơi đọc câu hỏi trên màn hình, sau đó kéo thả các thẻ số theo đề bài yêu cầu, khi đã sắp xếp đúng thứ tự, nhấn nút "XONG" để kiểm tra kết quả.',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                                  content: SingleChildScrollView(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: Column(
+                                        children: [
+                                          Image.network(
+                                            'https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/game_tutorial_images%2Fdrag_and_drop%2Fsort_number.png?alt=media&token=884f4329-308e-4023-ae95-a08ccb4bdde8',
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                            child: const Text(
+                                              'Người chơi đọc câu hỏi trên màn hình, sau đó kéo thả các thẻ số theo đề bài yêu cầu, khi đã sắp xếp đúng thứ tự, nhấn nút "XONG" để kiểm tra kết quả.',
+                                              style: TextStyle(fontSize: 30),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.pop(context),
@@ -464,7 +479,7 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
 
   void buttonTapped(String button) {
     setState(() {
-      if (button == 'XONG') {
+      if (button == 'XONG' || button == 'KIỂM TRA') {
         checkResult();
       } else if (button == 'KHÔI PHỤC') {
         upper.clear();
@@ -526,7 +541,10 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+          saveGameResults(
+              widget.gameid,
+              calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
+              _timeRecord.seconds);
           setState(() {
             resetGameSortNumber(widget.level);
           });
@@ -544,7 +562,10 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
           _audio.playCompleteSound();
           String lottieAsset = _getLottieAsset(userPoint);
           _timeRecord.stopTimer();
-          saveGameResults(widget.gameid, calculateScore(userPoint, totalQuestion, _timeRecord.seconds), _timeRecord.seconds);
+          saveGameResults(
+              widget.gameid,
+              calculateScore(userPoint, totalQuestion, _timeRecord.seconds),
+              _timeRecord.seconds);
           setState(() {
             resetGameSortNumber(widget.level);
           });
@@ -574,13 +595,28 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       setState(() {
         resetGameSortNumber(widget.level);
         lower = List.from(startLower);
-        _splitPanels = SplitPanels(level: widget.level,);
-        _splitPanelsMobie = SplitPanelsMobie(level: widget.level,);
+        _splitPanels = SplitPanels(
+          level: widget.level,
+        );
+        _splitPanelsMobie = SplitPanelsMobie(
+          level: widget.level,
+        );
         userAnswer = '';
         generateSortingQuestion();
       });
       setState(() {
         showResultDialog = false;
+        if (upper.length == 10) {
+          numberPad = [
+            'XONG',
+            'KHÔI PHỤC',
+          ];
+        } else {
+          numberPad = [
+            'KIỂM TRA',
+            'KHÔI PHỤC',
+          ];
+        }
       });
     }
   }
@@ -593,8 +629,12 @@ class _MathDragAndDropScreenState extends State<MathDragAndDropScreen> {
       resetGameSortNumber(widget.level);
       _timeRecord.seconds = 0;
       _timeRecord.startTimer();
-      _splitPanels = SplitPanels(level: widget.level,);
-      _splitPanelsMobie = SplitPanelsMobie(level: widget.level,);
+      _splitPanels = SplitPanels(
+        level: widget.level,
+      );
+      _splitPanelsMobie = SplitPanelsMobie(
+        level: widget.level,
+      );
       generateSortingQuestion();
       changeBackgroundColor();
     });

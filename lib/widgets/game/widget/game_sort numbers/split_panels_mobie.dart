@@ -2,12 +2,16 @@ import 'dart:math';
 
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_level.dart';
+import 'package:beanmind_flutter/widgets/game/class/drag_and_drop/math_sort_user.dart';
 import 'package:flutter/material.dart';
 
 class SplitPanelsMobie extends StatefulWidget {
   final int level;
   const SplitPanelsMobie(
-      {super.key, this.columns = 10, this.itemSpacing = 4.0, required this.level});
+      {super.key,
+      this.columns = 10,
+      this.itemSpacing = 4.0,
+      required this.level});
 
   final int columns;
   final double itemSpacing;
@@ -82,6 +86,18 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
         _audio.playDropSound();
         lower.add(product);
       }
+
+      if (upper.length == 10) {
+        numberPad = [
+          'XONG',
+          'KHÔI PHỤC',
+        ];
+      } else {
+        numberPad = [
+          'KIỂM TRA',
+          'KHÔI PHỤC',
+        ];
+      }
     });
   }
 
@@ -104,7 +120,7 @@ class _SplitPanelsMobieState extends State<SplitPanelsMobie> {
     return Column(
       children: <Widget>[
         Container(
-          height: size+5,
+          height: size + 5,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.circular(10),
