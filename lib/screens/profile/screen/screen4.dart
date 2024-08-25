@@ -95,11 +95,11 @@ class CourseListHistoryScreen extends GetView<ProfileController> {
                             'Thông tin khóa học',
                             courseDetail.totalSlot != null && courseDetail.totalSlot! > 0
                                 ? controller.participantModelItemList
-                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .where((a) => a.enrollment!.courseId == courseDetail.id  && a.status == 2)
                                 .length /
                                 courseDetail.totalSlot!
                                 : 0.0,
-                            '${controller.participantModelItemList.where((a) => a.enrollment!.courseId == courseDetail.id).length}',
+                            '${controller.participantModelItemList.where((a) => a.enrollment!.courseId == courseDetail.id  && a.status == 2).length}',
                             'N/A',
                           ),
                         ],
@@ -130,8 +130,8 @@ class MyNestedExpansionTile extends GetView<ProfileController> {
       final enrollment = controller.enrollmentModelList.firstWhere((e) => e.courseId == course.id);
       final parcitipant = controller.participantModelItemList.where((p) => p.enrollment!.id == enrollment.id).toList();
 
-      final chapters = controller.chapterList.where((chapter) => chapter.courseId == course.id).toList();
-      final worksheetAttempts = controller.worksheetAttempt.where((attempt) => attempt.enrollment?.courseId == course.id).toList();
+      // final chapters = controller.chapterList.where((chapter) => chapter.courseId == course.id).toList();
+      // final worksheetAttempts = controller.worksheetAttempt.where((attempt) => attempt.enrollment?.courseId == course.id).toList();
 
       if (parcitipant.isEmpty && controller.loadingStatusParticipant.value == LoadingStatus.loading) {
         return const Center(child: ShimmerCourseHistoryItem());
@@ -154,7 +154,7 @@ class MyNestedExpansionTile extends GetView<ProfileController> {
                     .where((p) => p.participantId == parcitipant.id)
                     .map((ProcessionModelItem procession) {
                   return ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.check_box,
                       color: Colors.green,
                     ),
@@ -219,7 +219,7 @@ Widget buildProgressItem(BuildContext context, String title, double progress, St
 }
 
 Widget buildParticipantInfoItem(BuildContext context, ParticipantModelItem participant) {
-  final isPresent = participant.isPresent!;
+  final isPresent = participant.isPresent;
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
     padding: const EdgeInsets.all(10),

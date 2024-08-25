@@ -26,10 +26,10 @@ class DesktopScaffold extends GetView<ProfileController> {
                   index: controller.selectedIndex.value,
                   children: [
                     // Define your different screens here
-                    Screen1(),
-                    Screen2(),
-                    Screen3(),
-                    Screen4(),
+                    const Screen1(),
+                    const Screen2(),
+                    const Screen3(),
+                    const Screen4(),
                     Screen5(),
                   ],
                 )),
@@ -57,7 +57,7 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
               child: Column(
                 children: [
                   Image.network(
-                      '${controller.user.value?.data?.student!.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'}',
+                      controller.user.value?.data?.student!.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png',
                       width: 100,
                       height: 100),
                   Obx(() {
@@ -65,7 +65,7 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Text(
                         '${controller.user.value?.data?.firstName ?? 'null'} ${controller.user.value?.data?.lastName ?? 'null'}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     );
@@ -83,10 +83,10 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: Text(
-                      // controller.user.value?.data?.userName ?? 'Tên người dùng',
-                      'vinhtran91@gmail.com',
+                      controller.user.value?.data?.userName ?? 'email',
+                      // 'vinhtran91@gmail.com',
                       style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

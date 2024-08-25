@@ -112,11 +112,11 @@ class CourseListRegisteredScreen extends GetView<ProfileController> {
                             'Thông tin khóa học',
                             courseDetail.totalSlot != null && courseDetail.totalSlot! > 0
                                 ? controller.participantModelItemList
-                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .where((a) => a.enrollment!.courseId == courseDetail.id  && a.status == 2)
                                 .length / courseDetail.totalSlot!
                                 : 0.0,
                             '${controller.participantModelItemList
-                                .where((a) => a.enrollment!.courseId == courseDetail.id)
+                                .where((a) => a.enrollment!.courseId == courseDetail.id  && a.status == 2)
                                 .length}',
                             'N/A',
                           ),

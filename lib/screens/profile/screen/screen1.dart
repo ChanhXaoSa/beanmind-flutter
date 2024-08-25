@@ -159,7 +159,7 @@ class Screen1 extends GetView<ProfileController> {
                                 itemBuilder: (context, index) {
                                   final enrollmentItem = controller
                                       .enrollmentModel.value!.data!.items![index];
-                                  final course = controller.courseDetailData.firstWhere((c) => c.id == enrollmentItem.courseId);
+                                  final course = controller.courseDetailData.firstWhere((c) => c.id == enrollmentItem.courseId && enrollmentItem.status == 1);
                                   return InkWell(
                                     onTap: () {
                                       controller.navigateToCourseLearning(course.id!);
@@ -169,11 +169,11 @@ class Screen1 extends GetView<ProfileController> {
                                       course.title ?? '',
                                       course.totalSlot != null && course.totalSlot! > 0
                                           ? controller.participantModelItemList
-                                          .where((a) => a.enrollment!.courseId == course.id)
+                                          .where((a) => a.enrollment!.courseId == course.id && a.status == 2)
                                           .length / course.totalSlot!
                                           : 0.0,
                                       '${controller.participantModelItemList
-                                          .where((a) => a.enrollment!.courseId == course.id)
+                                          .where((a) => a.enrollment!.courseId == course.id && a.status == 2)
                                           .length}/${course
                                           .totalSlot ?? 0}',
                                     ),
