@@ -142,35 +142,36 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                   }).toList();
 
                                   if (chapter.hasGame) {
-                                    topicWidgets.add(ListTile(
-                                      leading: Icon(Icons.videogame_asset,
-                                          color: Colors.blue),
-                                      title: Text('Chơi game',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black)),
-                                      onTap: () {
-                                        // controller.selectGame(controller
-                                        //     .chapterGameItemList
-                                        //     .firstWhere((a) =>
-                                        //         a.chapterId == chapter.id)
-                                        //     .gameId!);
-                                        // Get.toNamed(CoursePlayGameScreen
-                                        //     .routeName
-                                        //     .replaceFirst(
-                                        //         ':game_id',
-                                        //         controller.chapterGameItemList
-                                        //             .firstWhere((a) =>
-                                        //                 a.chapterId ==
-                                        //                 chapter.id)
-                                        //             .gameId!));
-                                        Get.toNamed(
-                                          CoursePlayGameScreen.routeName,
-                                          parameters: {'game_id': controller.chapterGameItemList.firstWhere((a) => a.chapterId == chapter.id).gameId!},
-                                          // arguments: {'game_id': controller.chapterGameItemList.firstWhere((a) => a.chapterId == chapter.id).gameId!},
-                                        );
-                                      },
-                                    ));
+                                    final chapterGame = controller.chapterGameItemList.where((p0) => p0.chapterId == chapter.id);
+                                    for(var game in chapterGame) {
+                                      topicWidgets.add(ListTile(
+                                        leading: Icon(Icons.videogame_asset,
+                                            color: Colors.blue),
+                                        title: Text('${game.game!.name}',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black)),
+                                        onTap: () {
+                                          // controller.selectGame(controller
+                                          //     .chapterGameItemList
+                                          //     .firstWhere((a) =>
+                                          //         a.chapterId == chapter.id)
+                                          //     .gameId!);
+                                          // Get.toNamed(CoursePlayGameScreen
+                                          //     .routeName
+                                          //     .replaceFirst(
+                                          //         ':game_id',
+                                          //         controller.chapterGameItemList
+                                          //             .firstWhere((a) =>
+                                          //                 a.chapterId ==
+                                          //                 chapter.id)
+                                          //             .gameId!));
+                                          final route = CoursePlayGameScreen.routeName
+                                              .replaceFirst(':game_id', game.gameId!);
+                                          Get.toNamed(route);
+                                        },
+                                      ));
+                                    }
                                   }
 
                                   return Column(children: topicWidgets);

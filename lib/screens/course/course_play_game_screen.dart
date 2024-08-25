@@ -1,10 +1,10 @@
-import 'package:beanmind_flutter/controllers/game/game_controller.dart';
+import 'package:beanmind_flutter/controllers/game/game_chapter_controller.dart';
 import 'package:beanmind_flutter/widgets/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart'; // Import mainGradient
 
-class CoursePlayGameScreen extends GetView<GameController> {
+class CoursePlayGameScreen extends GetView<GameChapterController> {
   static const String routeName = '/course_play_game/game_id=:game_id';
 
   const CoursePlayGameScreen({super.key});
@@ -51,6 +51,7 @@ class CoursePlayGameScreen extends GetView<GameController> {
         decoration: const BoxDecoration(color: Colors.white),
         child: Center(
           child: controller.buildGameWidget(controller.gameId),
+          // child: Get.find<GameController>().buildGameWidget(controller.gameId),
         ),
       ),
     );

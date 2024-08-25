@@ -1,5 +1,6 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
+import 'package:beanmind_flutter/controllers/game/game_chapter_controller.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/controllers/result/result_controller.dart';
 import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
@@ -89,7 +90,7 @@ class AppRoutes {
         name: CoursePlayGameScreen.routeName,
         page: () => const CoursePlayGameScreen(),
         binding: BindingsBuilder(() {
-          Get.put(GameController());
+          Get.put(GameChapterController());
         }),
       ),
         GetPage(

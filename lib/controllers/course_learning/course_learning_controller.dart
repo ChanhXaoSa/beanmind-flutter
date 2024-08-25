@@ -35,7 +35,7 @@ class CourseLearningController extends GetxController {
   var participantModelItemList = <ParticipantModelItem>[].obs;
   var processionModelItemList = <ProcessionModelItem>[].obs;
   var worksheetAttemptModelItem = <WorksheetAttemptItem>[].obs;
-  var chapterGameItemList = <ChapterGameItem>[].obs;
+  var chapterGameItemList = <ChapterGameModelItem>[].obs;
   var selectedGameId = RxnString();
 
   var selectedContent = ''.obs;
@@ -57,10 +57,10 @@ class CourseLearningController extends GetxController {
     }
   }
 
-  Future<void> fetchChapterGames() async {
+  Future<void> fetchChapterGames(String chapterId) async {
     try {
       final response = await http.get(
-          Uri.parse('$newBaseApiUrl/chapter-games'),
+          Uri.parse('$newBaseApiUrl/chapter-games?ChapterId=$chapterId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=utf-8',
             'ngrok-skip-browser-warning': 'true',
@@ -81,7 +81,7 @@ class CourseLearningController extends GetxController {
           }
         }
         if (kDebugMode) {
-          // print('${chapterGameItemList.value}fetch chapter game thanh cong');
+          // print('${chapterGameItemList.length} do dai chapter game');
         }
       } else {
         throw Exception('Failed to fetch enrollment');
@@ -257,9 +257,9 @@ class CourseLearningController extends GetxController {
           chapterList.assignAll(chapterModelBase.data!.items!);
           for (var chapter in chapterList) {
             fetchTopic(chapter.id!);
+            fetchChapterGames(chapter.id!);
             expandedChapters[chapter.id!] = false;
           }
-          fetchChapterGames();
         }
         // if(chapterModelBase.data?.items != null)  {
         //   for (var chapter in chapterModelBase.data!.items!) {
