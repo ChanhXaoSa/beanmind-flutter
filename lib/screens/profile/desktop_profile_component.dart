@@ -57,7 +57,7 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
               child: Column(
                 children: [
                   Image.network(
-                      'https://cdn-icons-png.flaticon.com/512/5294/5294712.png',
+                      '${controller.user.value?.data?.student!.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png'}',
                       width: 100,
                       height: 100),
                   Obx(() {
