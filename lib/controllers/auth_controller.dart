@@ -67,9 +67,13 @@ class AuthController extends GetxController {
             final userModel =
                 UserModel.fromJson(json.decode(userResponse.body));
             if (userModel.success == true) {
-              user.value = [userModel];
-              await _saveUserSession(userModel);
-              navigateToHome();
+              if([userModel].first.data!.studentId == '00000000-0000-0000-0000-000000000000') {
+                showSnackBar('Error', 'Tài khoản của bạn không được phép truy cập vào hệ thống này');
+              } else {
+                user.value = [userModel];
+                await _saveUserSession(userModel);
+                navigateToHome();
+              }
             } else {
               // throw Exception(userModel.message);
               showSnackBar('Error', userModel.message!);
