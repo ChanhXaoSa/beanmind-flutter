@@ -1,10 +1,13 @@
 import 'package:beanmind_flutter/controllers/common/app_bar_controller.dart';
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
+import 'package:beanmind_flutter/controllers/result/result_controller.dart';
 import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/screens/course/course_list_screen.dart';
 import 'package:beanmind_flutter/screens/course/course_play_game_screen.dart';
 import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
+import 'package:beanmind_flutter/screens/profile/answer_check_worksheet_attempt_screen.dart';
+import 'package:beanmind_flutter/screens/profile/result_worksheet_attempt_screen.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
@@ -104,6 +107,18 @@ class AppRoutes {
         Get.put(HomeController());
         Get.put(AppBarController());
       }),
+    ),
+    GetPage(
+        name: ResultWorksheetAttemptScreen.routeName,
+        page: () => const ResultWorksheetAttemptScreen(),
+        binding: BindingsBuilder(() {
+          Get.put<ResultController>(ResultController());
+          Get.put(AppBarController());
+        }),
+    ),
+    GetPage(
+      name: AnswerCheckWorksheetAttemptScreen.routeName,
+      page: () => const AnswerCheckWorksheetAttemptScreen(),
     ),
       ];
 }

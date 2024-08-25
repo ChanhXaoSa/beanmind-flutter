@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:beanmind_flutter/controllers/result/result_controller.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:http/http.dart' as http;
 
-extension QuizeResult on QuizController {
+extension ResultExtention on ResultController {
   int get correctQuestionCount => allQuestionsApi
       .where((question) => question.question!.selectedAnswer == question.question!.questionAnswers!.where((element) => element.isCorrect == true,).first)
       .toList()
@@ -18,16 +19,10 @@ extension QuizeResult on QuizController {
     return '$correctQuestionCount trên ${allQuestionsApi.length} câu trả lời đúng';
   }
 
-  // String get points {
-  //   var points = ((correctQuestionCount / allQuestionsApi.length) *
-  //       100 *
-  //       (600 - remainSeconds) /
-  //       600 *
-  //       100).round();
-  //   return points.toString();
-  // }
-
   String get points {
+    if (allQuestionsApi.isEmpty) {
+      return '0';
+    }
     var points = ((correctQuestionCount / allQuestionsApi.length) * 100).round();
     return points.toString();
   }
@@ -73,7 +68,7 @@ extension QuizeResult on QuizController {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           print('Quiz results saved successfully');
-          navigateToCourseLearning();
+          // navigateToCourseLearning();
         } else {
           print('Failed to save quiz results: ${response.statusCode}');
         }
@@ -89,12 +84,5 @@ extension QuizeResult on QuizController {
     } catch (e) {
       print('Error: $e');
     }
-
-    // Get.find<NotificationService>().showQuizCompletedNotification(
-    //     id: 1,
-    //     title: worksheetDetailModel.value!.data!.title,
-    //     body:  'Bạn đạt được $points điểm cho bài kiểm tra ${worksheetDetailModel.value!.data!.title} -  Nhấn vào đây để xem bảng xếp hạng' ,
-    //     // imageUrl: quizPaperModel.imageUrl,
-    //     payload: json.encode(worksheetDetailModel.toJson()));
   }
 }

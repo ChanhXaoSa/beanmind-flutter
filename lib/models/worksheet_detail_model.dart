@@ -90,7 +90,7 @@ class WorksheetDetailData {
 
 class WorksheetQuestion {
   String? questionId;
-  QuestionContent? question;
+  WorksheetDetailModelQuestionContent? question;
   String? worksheetId;
   Worksheet? worksheet;
   String? id;
@@ -107,7 +107,7 @@ class WorksheetQuestion {
 
   factory WorksheetQuestion.fromJson(Map<String, dynamic> json) => WorksheetQuestion(
     questionId: json["questionId"],
-    question: json["question"] == null ? null : QuestionContent.fromJson(json["question"]),
+    question: json["question"] == null ? null : WorksheetDetailModelQuestionContent.fromJson(json["question"]),
     worksheetId: json["worksheetId"],
     worksheet: json["worksheet"] == null ? null : Worksheet.fromJson(json["worksheet"]),
     id: json["id"],
@@ -124,7 +124,7 @@ class WorksheetQuestion {
   };
 }
 
-class QuestionContent {
+class WorksheetDetailModelQuestionContent {
   String? content;
   dynamic imageUrl;
   String? topicId;
@@ -136,7 +136,7 @@ class QuestionContent {
   bool? isDeleted;
   QuestionAnswer? selectedAnswer;
 
-  QuestionContent({
+  WorksheetDetailModelQuestionContent({
     this.content,
     this.imageUrl,
     this.topicId,
@@ -149,7 +149,7 @@ class QuestionContent {
     this.selectedAnswer,
   });
 
-  factory QuestionContent.fromJson(Map<String, dynamic> json) => QuestionContent(
+  factory WorksheetDetailModelQuestionContent.fromJson(Map<String, dynamic> json) => WorksheetDetailModelQuestionContent(
     content: json["content"],
     imageUrl: json["imageUrl"],
     topicId: json["topicId"],

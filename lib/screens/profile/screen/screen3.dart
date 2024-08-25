@@ -5,6 +5,7 @@ import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
 import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
+import 'package:beanmind_flutter/screens/profile/result_worksheet_attempt_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -230,7 +231,11 @@ class MyNestedAccordion extends GetView<ProfileController> {
                 children: worksheetAttempts.map((attempt) {
                   return InkWell(
                     onTap: () {
-                      // Handle onTap event
+                      final route = ResultWorksheetAttemptScreen.routeName
+                          .replaceFirst(':course_id', course.id!)
+                          .replaceFirst(':worksheet_id', attempt.worksheet!.id!)
+                          .replaceFirst(':worksheet_attempt_id', attempt.id!);
+                      Get.toNamed(route);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
