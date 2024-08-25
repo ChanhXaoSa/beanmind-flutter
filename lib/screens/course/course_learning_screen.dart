@@ -300,10 +300,41 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                       // }
                       final topicDetail = controller.topicDetailData.value;
                       if (topicDetail != null) {
+                        final chapterDetail = controller.chapterList.firstWhere(
+                              (chapter) => chapter.id == topicDetail.chapterId,
+                          orElse: () => ChapterItem(id: '', title: 'No Chapter'),
+                        );
                         return SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                controller.courseDetailData.value!.title ??
+                                    'No Title',
+                                style: const TextStyle(
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                controller.courseDetailData.value!
+                                    .description ?? 'No Description',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(height: 40),
+                              Text(
+                                chapterDetail.title ??
+                                    'No Title',
+                                style: const TextStyle(
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                chapterDetail.description ?? 'No Description',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(height: 40),
                               Text(
                                 topicDetail.title ?? 'No Title',
                                 style: const TextStyle(
@@ -319,9 +350,56 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                         );
                       } else {
                         if (controller.selectedContent.value ==
-                            'Chọn nội dung bạn muốn học hôm nay') {
-                          return Center(
-                              child: Text(controller.selectedContent.value));
+                            '') {
+                          if(controller.courseDetailData.value == null) {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 24,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 16,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 200,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.courseDetailData.value!.title ??
+                                        'No Title',
+                                    style: const TextStyle(
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    controller.courseDetailData.value!
+                                        .description ?? 'No Description',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         }
                         return Shimmer.fromColors(
                           baseColor: Colors.grey[300]!,

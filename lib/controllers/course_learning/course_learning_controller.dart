@@ -38,7 +38,7 @@ class CourseLearningController extends GetxController {
   var chapterGameItemList = <ChapterGameItem>[].obs;
   var selectedGameId = RxnString();
 
-  var selectedContent = 'Chọn nội dung bạn muốn học hôm nay'.obs;
+  var selectedContent = ''.obs;
 
   @override
   void onInit() {
