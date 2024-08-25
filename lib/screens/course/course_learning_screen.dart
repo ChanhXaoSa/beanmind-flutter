@@ -173,7 +173,6 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                       ));
                                     }
                                   }
-
                                   return Column(children: topicWidgets);
                                 }),
                               );
