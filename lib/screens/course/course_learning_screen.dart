@@ -263,15 +263,38 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
 
                 if (controller.selectedContent.value == 'pdf' &&
                     controller.courseDetailData.value!.contentURL != null) {
-                  return Expanded(
-                    child: SfPdfViewer.network(
-                      controller.courseDetailData.value!.contentURL!,
-                      key: Key('pdf_viewer'),
-                      canShowScrollHead: true,
-                      canShowPaginationDialog: true,
-                      initialZoomLevel: 1.0,
-                    ),
+                  String viewId = 'pdf-viewer-${UniqueKey()}';
+
+                  platformViewRegistry.registerViewFactory(
+                    viewId,
+                        (int viewId) {
+                      final element = html.IFrameElement();
+                      element.src = '${controller.courseDetailData.value!.contentURL}';
+                      element.style.border = 'none';
+                      element.style.width = '100%';
+                      element.style.height = '100%';
+                      element.style.overflow = 'auto';
+                      element.allowFullscreen = true;
+                      element.setAttribute('scrolling', 'yes');
+                      return element;
+                    },
                   );
+
+                  return Expanded(
+                    child: HtmlElementView(
+                            viewType: viewId,
+                        ),
+                  );
+
+                  // return Expanded(
+                  //   child: SfPdfViewer.network(
+                  //     controller.courseDetailData.value!.contentURL!,
+                  //     key: Key('pdf_viewer'),
+                  //     canShowScrollHead: true,
+                  //     canShowPaginationDialog: true,
+                  //     initialZoomLevel: 1.0,
+                  //   ),
+                  // );
                 } else {
                   final topicDetail = controller.topicDetailData.value;
                   if (topicDetail != null) {
