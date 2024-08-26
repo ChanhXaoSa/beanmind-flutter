@@ -1,4 +1,5 @@
 import 'package:beanmind_flutter/configs/configs.dart';
+import 'package:beanmind_flutter/configs/themes/ui_parameters.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/widgets/common/custom_home_app_bar.dart';
 import 'package:beanmind_flutter/widgets/home/homepage_course_card.dart';
@@ -17,120 +18,88 @@ class CourseListScreen extends GetView<HomeController> {
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(
+          child: ListView(
             children: [
               FilterBar(),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.25,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Color(0xFFE5E4E4),
-                          width: 1.0,
-                        ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: Color(0xFFE5E4E4),
+                        width: 1.0,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Text(
-                                'Lọc khóa học',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 10),
-                              Obx(() => FilterExpansionTile(
-                                title: 'Lớp',
-                                options: controller.courseLevelItemList
-                                    .map((item) => item.title ?? '')
-                                    .toList(),
-                                ids: controller.courseLevelItemList
-                                    .map((item) => item.id ?? '00000000-0000-0000-0000-000000000000')
-                                    .toList(),
-                              )),
-                              Obx(() => FilterExpansionTile(
-                                title: 'Chương trình học',
-                                options: controller.programTypeItemList
-                                    .map((item) => item.title ?? '')
-                                    .toList(),
-                                ids: controller.programTypeItemList
-                                    .map((item) => item.id ?? '')
-                                    .toList(),
-                              )),
-                              Obx(() => FilterExpansionTile(
-                                title: 'Môn học',
-                                options: controller.subjectItemList
-                                    .map((item) => item.title ?? '')
-                                    .toList(),
-                                ids: controller.subjectItemList
-                                    .map((item) => item.id ?? '')
-                                    .toList(),
-                              )),
-                            ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Lọc khóa học',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                        ),
+                          SizedBox(height: 10),
+                          Obx(() => FilterExpansionTile(
+                            title: 'Lớp',
+                            options: controller.courseLevelItemList
+                                .map((item) => item.title ?? '')
+                                .toList(),
+                            ids: controller.courseLevelItemList
+                                .map((item) => item.id ?? '00000000-0000-0000-0000-000000000000')
+                                .toList(),
+                          )),
+                          Obx(() => FilterExpansionTile(
+                            title: 'Chương trình học',
+                            options: controller.programTypeItemList
+                                .map((item) => item.title ?? '')
+                                .toList(),
+                            ids: controller.programTypeItemList
+                                .map((item) => item.id ?? '')
+                                .toList(),
+                          )),
+                          Obx(() => FilterExpansionTile(
+                            title: 'Môn học',
+                            options: controller.subjectItemList
+                                .map((item) => item.title ?? '')
+                                .toList(),
+                            ids: controller.subjectItemList
+                                .map((item) => item.id ?? '')
+                                .toList(),
+                          )),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Obx(() {
-                          final courses =
-                              controller.courseModel.value?.data?.items ?? [];
-                          if (UIParameters.isDesktop(context)) {
-                            return GridView.builder(
-                              gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                childAspectRatio: 0.75,
-                              ),
-                              itemCount: courses.length,
-                              itemBuilder: (context, index) {
-                                return HomepageCourseCard(courses[index]);
-                              },
-                            );
-                          } else if (UIParameters.isTablet(context)) {
-                            return GridView.builder(
-                              gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                childAspectRatio: 0.75,
-                              ),
-                              itemCount: courses.length,
-                              itemBuilder: (context, index) {
-                                return HomepageCourseCard(courses[index]);
-                              },
-                            );
-                          } else {
-                            return GridView.builder(
-                              gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                childAspectRatio: 0.75,
-                              ),
-                              itemCount: courses.length,
-                              itemBuilder: (context, index) {
-                                return HomepageCourseCard(courses[index]);
-                              },
-                            );
-                          }
-                        }),
-                      ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Obx(() {
+                        final courses =
+                            controller.courseModel.value?.data?.items ?? [];
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: UIParameters.isDesktop(context) ? 2 : 1,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: UIParameters.isDesktop(context) ? 0.7 : 0.75,
+                          ),
+                          itemCount: courses.length,
+                          itemBuilder: (context, index) {
+                            return HomepageCourseCard(courses[index]);
+                          },
+                        );
+                      }),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -239,7 +208,7 @@ class _FilterExpansionTileState extends State<FilterExpansionTile> {
           final index = entry.key;
           final option = entry.value;
           final id = widget.ids[index];
-      
+
           return Obx(() {
             String? selectedOptionId = controller.getFilterId(widget.title);
             return RadioListTile<String>(
