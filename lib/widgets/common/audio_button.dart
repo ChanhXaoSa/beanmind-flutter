@@ -31,7 +31,7 @@ class _AudioButtonState extends State<AudioButton> {
 
   @override
   void dispose() {
-    // player.dispose();
+    player.dispose();
     super.dispose();
   }
 
