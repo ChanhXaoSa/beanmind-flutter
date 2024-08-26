@@ -15,10 +15,8 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
-import 'dart:ui' as ui;
 import 'dart:js' as js;
 
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class CourseLearningScreen extends GetView<CourseLearningController> {
   const CourseLearningScreen({super.key});
@@ -37,7 +35,7 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final GameController gameController = Get.find<GameController>();
+    Get.find<GameController>();
 
     return Scaffold(
       appBar: const CustomLearningCourseAppBar(),
@@ -81,16 +79,16 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                     return Accordion(
                       maxOpenSections: 1,
                       headerBackgroundColor:
-                      const Color.fromARGB(90, 227, 227, 227),
+                          const Color.fromARGB(90, 227, 227, 227),
                       contentBorderColor:
-                      const Color.fromARGB(90, 227, 227, 227),
+                          const Color.fromARGB(90, 227, 227, 227),
                       contentBackgroundColor:
-                      const Color.fromARGB(90, 227, 227, 227),
+                          const Color.fromARGB(90, 227, 227, 227),
                       headerBackgroundColorOpened: Colors.blue[300],
                       headerPadding: const EdgeInsets.symmetric(
                           vertical: 7, horizontal: 15),
                       sectionOpeningHapticFeedback:
-                      SectionHapticFeedback.selection,
+                          SectionHapticFeedback.selection,
                       contentVerticalPadding: 10,
                       contentBorderRadius: 0,
                       headerBorderRadius: 3,
@@ -111,28 +109,25 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                   fontWeight: FontWeight.bold)),
                           content: Obx(() {
                             final topics = controller.topicListModel
-                                .where((topic) =>
-                            topic.chapterId == chapter.id)
+                                .where((topic) => topic.chapterId == chapter.id)
                                 .toList();
                             List<Widget> topicWidgets =
-                            topics.map<Widget>((TopicItem topic) {
+                                topics.map<Widget>((TopicItem topic) {
                               final isSelected =
                                   controller.selectedTopicId.value == topic.id;
                               return ListTile(
                                 leading: Obx(() {
-                                  final isChecked = controller
-                                      .processionModelItemList
-                                      .any(
-                                        (processionItem) =>
-                                    processionItem.topicId == topic.id,
+                                  final isChecked =
+                                      controller.processionModelItemList.any(
+                                    (processionItem) =>
+                                        processionItem.topicId == topic.id,
                                   );
                                   return Icon(
                                     isChecked
                                         ? Icons.check_box
                                         : Icons.check_box_outline_blank,
-                                    color: isChecked
-                                        ? Colors.green
-                                        : Colors.grey,
+                                    color:
+                                        isChecked ? Colors.green : Colors.grey,
                                   );
                                 }),
                                 title: Text(topic.title!,
@@ -141,9 +136,8 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                         color: isSelected
                                             ? Colors.blue
                                             : Colors.black)),
-                                tileColor: isSelected
-                                    ? Colors.blue[50]
-                                    : Colors.white,
+                                tileColor:
+                                    isSelected ? Colors.blue[50] : Colors.white,
                                 onTap: () =>
                                     controller.selectContent(topic.id!),
                               );
@@ -154,10 +148,10 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                   .where((p0) => p0.chapterId == chapter.id);
                               for (var game in chapterGame) {
                                 topicWidgets.add(ListTile(
-                                  leading: Icon(Icons.videogame_asset,
+                                  leading: const Icon(Icons.videogame_asset,
                                       color: Colors.blue),
                                   title: Text('${game.game!.name}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14, color: Colors.black)),
                                   onTap: () {
                                     final route = CoursePlayGameScreen.routeName
@@ -177,8 +171,8 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                     if (controller.worksheetAttemptModelItem.isNotEmpty) {
                       return Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
                               'Bài tập giáo viên giao:',
                               style: TextStyle(
@@ -189,19 +183,22 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                             ),
                           ),
                           Column(
-                            children: controller.worksheetAttemptModelItem.map((worksheetAttempt) {
+                            children: controller.worksheetAttemptModelItem
+                                .map((worksheetAttempt) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Card(
                                   elevation: 2,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: ListTile(
-                                    leading: Icon(Icons.assignment, color: Colors.blue[700]),
+                                    leading: Icon(Icons.assignment,
+                                        color: Colors.blue[700]),
                                     title: Text(
                                       worksheetAttempt.worksheet!.title!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -214,12 +211,16 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                     //     fontSize: 14,
                                     //   ),
                                     // ),
-                                    trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[600]),
+                                    trailing: Icon(Icons.arrow_forward_ios,
+                                        size: 16, color: Colors.grey[600]),
                                     onTap: () {
                                       final route = QuizAttemptScreen.routeName
-                                          .replaceFirst(':course_id', controller.courseId)
-                                          .replaceFirst(':worksheet_id', worksheetAttempt.worksheet!.id!)
-                                          .replaceFirst(':worksheet_attempt_id', worksheetAttempt.id!);
+                                          .replaceFirst(
+                                              ':course_id', controller.courseId)
+                                          .replaceFirst(':worksheet_id',
+                                              worksheetAttempt.worksheet!.id!)
+                                          .replaceFirst(':worksheet_attempt_id',
+                                              worksheetAttempt.id!);
                                       Get.toNamed(route);
                                     },
                                   ),
@@ -274,16 +275,28 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                       element.style.width = '100%';
                       element.style.height = '100%';
                       element.style.overflow = 'auto';
-                      element.allowFullscreen = true;
                       element.setAttribute('scrolling', 'yes');
+
+                      js.context.callMethod('eval', [
+                        '''
+      (function() {
+        var element = document.querySelector('iframe');
+        if (element) {
+          element.style.overflow = 'auto';
+          element.style.webkitOverflowScrolling = 'touch';
+        }
+      })()
+      '''
+                      ]);
+
                       return element;
                     },
                   );
 
-                  return Expanded(
-                    child: HtmlElementView(
-                            viewType: viewId,
-                        ),
+                  return SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: HtmlElementView(viewType: viewId),
                   );
 
                   // return Expanded(
@@ -299,7 +312,7 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                   final topicDetail = controller.topicDetailData.value;
                   if (topicDetail != null) {
                     final chapterDetail = controller.chapterList.firstWhere(
-                          (chapter) => chapter.id == topicDetail.chapterId,
+                      (chapter) => chapter.id == topicDetail.chapterId,
                       orElse: () => ChapterItem(id: '', title: 'No Chapter'),
                     );
                     return SingleChildScrollView(
@@ -385,7 +398,8 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                controller.courseDetailData.value!.description ??
+                                controller
+                                        .courseDetailData.value!.description ??
                                     'No Description',
                                 style: const TextStyle(fontSize: 16),
                               ),
@@ -429,5 +443,4 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
       ),
     );
   }
-
 }
