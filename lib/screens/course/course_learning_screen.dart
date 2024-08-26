@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'dart:ui_web';
+
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
@@ -10,11 +13,23 @@ import 'package:beanmind_flutter/widgets/common/custom_learning_course_app_bar.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:html' as html;
+import 'dart:ui' as ui;
 
 class CourseLearningScreen extends GetView<CourseLearningController> {
   const CourseLearningScreen({super.key});
 
   static const String routeName = '/course_learning/course_id=:id';
+
+  Future<Uint8List> fetchPdfFromUrl(String url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      throw Exception('Failed to load PDF');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -298,135 +313,163 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                       //   Get.toNamed(CoursePlayGameScreen.routeName.replaceFirst(':game_id', controller.selectedGameId.value!));
                       //   // return Container();
                       // }
-                      final topicDetail = controller.topicDetailData.value;
-                      if (topicDetail != null) {
-                        final chapterDetail = controller.chapterList.firstWhere(
-                              (chapter) => chapter.id == topicDetail.chapterId,
-                          orElse: () => ChapterItem(id: '', title: 'No Chapter'),
+                      if (controller.courseDetailData.value == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                        return SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                controller.courseDetailData.value!.title ??
-                                    'No Title',
-                                style: const TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                controller.courseDetailData.value!
-                                    .description ?? 'No Description',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 40),
-                              Text(
-                                chapterDetail.title ??
-                                    'No Title',
-                                style: const TextStyle(
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                chapterDetail.description ?? 'No Description',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 40),
-                              Text(
-                                topicDetail.title ?? 'No Title',
-                                style: const TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                topicDetail.description ?? 'No Description',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
+                      }
+
+                      if (controller.selectedContent.value == 'pdf' && controller.courseDetailData.value!.contentURL != null) {
+                        String viewId = 'pdf-viewer-${UniqueKey()}';
+
+                        platformViewRegistry.registerViewFactory(
+                          viewId,
+                              (int viewId) {
+                            final element = html.IFrameElement();
+                            element.src = '${controller.courseDetailData.value!.contentURL}';
+                            element.style.border = 'none';
+                            element.style.width = '100%';
+                            element.style.height = '100%';
+                            return element;
+                          },
+                        );
+
+                        return Container(
+                          width: double.infinity,
+                          height: screenHeight,
+                          child: HtmlElementView(viewType: viewId),
                         );
                       } else {
-                        if (controller.selectedContent.value ==
-                            '') {
-                          if(controller.courseDetailData.value == null) {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 24,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 16,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 200,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.courseDetailData.value!.title ??
-                                        'No Title',
-                                    style: const TextStyle(
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    controller.courseDetailData.value!
-                                        .description ?? 'No Description',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                            );
+                        final topicDetail = controller.topicDetailData.value;
+                        if (topicDetail != null) {
+                          final chapterDetail = controller.chapterList.firstWhere(
+                                (chapter) => chapter.id == topicDetail.chapterId,
+                            orElse: () => ChapterItem(id: '', title: 'No Chapter'),
+                          );
+                          return SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  controller.courseDetailData.value!.title ??
+                                      'No Title',
+                                  style: const TextStyle(
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  controller.courseDetailData.value!
+                                      .description ?? 'No Description',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(height: 40),
+                                Text(
+                                  chapterDetail.title ??
+                                      'No Title',
+                                  style: const TextStyle(
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  chapterDetail.description ?? 'No Description',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(height: 40),
+                                Text(
+                                  topicDetail.title ?? 'No Title',
+                                  style: const TextStyle(
+                                      fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  topicDetail.description ?? 'No Description',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          if (controller.selectedContent.value ==
+                              '') {
+                            if(controller.courseDetailData.value == null) {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      height: 24,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Container(
+                                      width: double.infinity,
+                                      height: 16,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Container(
+                                      width: double.infinity,
+                                      height: 200,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      controller.courseDetailData.value!.title ??
+                                          'No Title',
+                                      style: const TextStyle(
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      controller.courseDetailData.value!
+                                          .description ?? 'No Description',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           }
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 24,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  width: double.infinity,
+                                  height: 16,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  width: double.infinity,
+                                  height: 200,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          );
                         }
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 24,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(height: 16),
-                              Container(
-                                width: double.infinity,
-                                height: 16,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(height: 16),
-                              Container(
-                                width: double.infinity,
-                                height: 200,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        );
                       }
                     }),
                   ),

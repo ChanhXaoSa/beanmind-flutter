@@ -195,26 +195,26 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       ),
                       child: const Text('Danh sách khóa học'),
                     ),
-                    const SizedBox(width: 10.0),
-                    TextButton(
-                        onPressed: () => controller.navigateToGameList(),
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                          ),
-                        ).copyWith(
-                          foregroundColor:
-                              WidgetStateProperty.resolveWith((states) {
-                            if (states.contains(WidgetState.hovered)) {
-                              return kPrimayLightColorLT;
-                            }
-                            return null;
-                          }),
-                          overlayColor:
-                              WidgetStateProperty.all(Colors.transparent),
-                        ),
-                        child: const Text('Danh sách game')),
+                    // const SizedBox(width: 10.0),
+                    // TextButton(
+                    //     onPressed: () => controller.navigateToGameList(),
+                    //     style: TextButton.styleFrom(
+                    //       textStyle: const TextStyle(
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: 18,
+                    //       ),
+                    //     ).copyWith(
+                    //       foregroundColor:
+                    //           WidgetStateProperty.resolveWith((states) {
+                    //         if (states.contains(WidgetState.hovered)) {
+                    //           return kPrimayLightColorLT;
+                    //         }
+                    //         return null;
+                    //       }),
+                    //       overlayColor:
+                    //           WidgetStateProperty.all(Colors.transparent),
+                    //     ),
+                    //     child: const Text('Danh sách game')),
                     const SizedBox(width: 20.0),
                     Obx(() {
                       return controller.isLoggedIn.value
@@ -342,26 +342,26 @@ class CustomHomeAppBar extends GetView<AppBarController>
                       ),
                       child: const Text('Danh sách khóa học'),
                     ),
-                    const SizedBox(width: 10.0),
-                    TextButton(
-                        onPressed: () => controller.navigateToGameList(),
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                          ),
-                        ).copyWith(
-                          foregroundColor:
-                              WidgetStateProperty.resolveWith((states) {
-                            if (states.contains(WidgetState.hovered)) {
-                              return kPrimayLightColorLT;
-                            }
-                            return null;
-                          }),
-                          overlayColor:
-                              WidgetStateProperty.all(Colors.transparent),
-                        ),
-                        child: const Text('Danh sách game')),
+                    // const SizedBox(width: 10.0),
+                    // TextButton(
+                    //     onPressed: () => controller.navigateToGameList(),
+                    //     style: TextButton.styleFrom(
+                    //       textStyle: const TextStyle(
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: 18,
+                    //       ),
+                    //     ).copyWith(
+                    //       foregroundColor:
+                    //           WidgetStateProperty.resolveWith((states) {
+                    //         if (states.contains(WidgetState.hovered)) {
+                    //           return kPrimayLightColorLT;
+                    //         }
+                    //         return null;
+                    //       }),
+                    //       overlayColor:
+                    //           WidgetStateProperty.all(Colors.transparent),
+                    //     ),
+                    //     child: const Text('Danh sách game')),
                     const SizedBox(width: 20.0),
                     Obx(() {
                       return controller.isLoggedIn.value

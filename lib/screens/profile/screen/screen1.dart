@@ -159,24 +159,55 @@ class Screen1 extends GetView<ProfileController> {
                                 itemBuilder: (context, index) {
                                   final enrollmentItem = controller
                                       .enrollmentModel.value!.data!.items![index];
-                                  final course = controller.courseDetailData.firstWhere((c) => c.id == enrollmentItem.courseId && enrollmentItem.status == 1);
+                                  final course = controller.courseDetailData.firstWhere((c) => c.id == enrollmentItem.courseId);
                                   return InkWell(
                                     onTap: () {
                                       controller.navigateToCourseLearning(course.id!);
                                     },
-                                    child: buildProgressItem(
-                                      context,
-                                      course.title ?? '',
-                                      course.totalSlot != null && course.totalSlot! > 0
-                                          ? controller.participantModelItemList
-                                          .where((a) => a.enrollment!.courseId == course.id && a.status == 2)
-                                          .length / course.totalSlot!
-                                          : 0.0,
-                                      '${controller.participantModelItemList
-                                          .where((a) => a.enrollment!.courseId == course.id && a.status == 2)
-                                          .length}/${course
-                                          .totalSlot ?? 0}',
-                                    ),
+                                    // child: buildProgressItem(
+                                    //   context,
+                                    //   course.title ?? '',
+                                    //   course.totalSlot != null && course.totalSlot! > 0
+                                    //       ? controller.participantModelItemList
+                                    //       .where((a) => a.enrollment!.courseId == course.id && a.isPresent == false)
+                                    //       .length / course.totalSlot!
+                                    //       : 0.0,
+                                    //   '${controller.participantModelItemList
+                                    //       .where((a) => a.enrollment!.courseId == course.id && a.isPresent == false)
+                                    //       .length}/${course
+                                    //       .totalSlot ?? 0}',
+                                    // ),
+                                    child: Obx(() {
+                                      if (controller.courseDetailData.isEmpty || controller.participantModelItemList.isEmpty) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+
+                                      final course = controller.courseDetailData.firstWhere(
+                                            (c) => c.id == enrollmentItem.courseId,
+                                      );
+
+                                      if (course == null) {
+                                        return const Center(
+                                          child: Text('Khóa học không tìm thấy hoặc không tồn tại.'),
+                                        );
+                                      }
+
+                                      final totalSlots = course.totalSlot ?? 0;
+                                      final completedSlots = controller.participantModelItemList
+                                          .where((a) => a.enrollment!.courseId == course.id && a.isPresent == true)
+                                          .length;
+                                      final progress = totalSlots > 0 ? completedSlots / totalSlots : 0.0;
+
+                                      return buildProgressItem(
+                                        context,
+                                        course.title ?? '',
+                                        progress,
+                                        '$completedSlots/${totalSlots}',
+                                      );
+                                    }),
+
                                   );
                                 },
                               );

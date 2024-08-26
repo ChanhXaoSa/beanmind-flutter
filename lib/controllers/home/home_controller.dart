@@ -8,6 +8,7 @@ import 'package:beanmind_flutter/models/program_type_model.dart';
 import 'package:beanmind_flutter/models/subject_model.dart';
 import 'package:beanmind_flutter/models/user_model.dart';
 import 'package:beanmind_flutter/screens/course/course_detail_screen.dart';
+import 'package:beanmind_flutter/screens/course/course_list_screen.dart';
 import 'package:beanmind_flutter/utils/api_endpoint.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -293,5 +294,9 @@ class HomeController extends GetxController {
 
   void navigateToCourseDetail(String id) {
     Get.toNamed(CourseDetailScreen.routeName.replaceFirst(':id', id));
+  }
+
+  void navigateToCourseList() {
+    Get.toNamed(CourseListScreen.routeName);
   }
 }

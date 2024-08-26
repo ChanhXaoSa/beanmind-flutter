@@ -38,7 +38,9 @@ class CourseLearningController extends GetxController {
   var chapterGameItemList = <ChapterGameModelItem>[].obs;
   var selectedGameId = RxnString();
 
-  var selectedContent = ''.obs;
+  var selectedContent = 'pdf'.obs;
+
+  var pdfPages = 0.obs;
 
   @override
   void onInit() {
@@ -291,6 +293,7 @@ class CourseLearningController extends GetxController {
         final courseDetailModelBase = CourseDetailModel.fromJson(json.decode(courseResponse.body));
         courseDetailModel.value = courseDetailModelBase;
         courseDetailData.value = courseDetailModelBase.data;
+        print('${courseDetailData.value!.contentURL} content url ne');
         if(courseDetailData.value?.worksheetTemplates !=
             null) {
           for(var worksheet in courseDetailData.value!.worksheetTemplates!) {

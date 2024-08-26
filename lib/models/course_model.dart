@@ -106,6 +106,7 @@ class CourseLevel {
 
 class CourseModelItem {
   String? title;
+  String? contentURL;
   String? imageUrl;
   String? description;
   int? price;
@@ -125,6 +126,7 @@ class CourseModelItem {
 
   CourseModelItem({
     this.title,
+    this.contentURL,
     this.imageUrl,
     this.description,
     this.price,
@@ -145,6 +147,7 @@ class CourseModelItem {
 
   factory CourseModelItem.fromJson(Map<String, dynamic> json) => CourseModelItem(
     title: json["title"],
+    contentURL : json["contentURL"],
     imageUrl: json["imageURL"],
     description: json["description"],
     price: json["price"],
@@ -165,6 +168,7 @@ class CourseModelItem {
 
   Map<String, dynamic> toJson() => {
     "title": title,
+    "contentURL" : contentURL,
     "imageURL": imageUrl,
     "description": description,
     "price": price,

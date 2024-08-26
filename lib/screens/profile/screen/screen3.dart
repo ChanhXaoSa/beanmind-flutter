@@ -107,19 +107,21 @@ class CourseListRegisteredScreen extends GetView<ProfileController> {
                           const SizedBox(
                             width: 10,
                           ),
-                          buildProgressItem(
-                            context,
-                            'Thông tin khóa học',
-                            courseDetail.totalSlot != null && courseDetail.totalSlot! > 0
-                                ? controller.participantModelItemList
-                                .where((a) => a.enrollment!.courseId == courseDetail.id  && a.status == 2)
-                                .length / courseDetail.totalSlot!
-                                : 0.0,
-                            '${controller.participantModelItemList
-                                .where((a) => a.enrollment!.courseId == courseDetail.id  && a.status == 2)
-                                .length}',
-                            'N/A',
-                          ),
+                          Obx(() {
+                            final totalSlots = courseDetail.totalSlot ?? 0;
+                            final completedSlots = controller.participantModelItemList
+                                .where((a) => a.enrollment!.courseId == courseDetail.id && a.isPresent == true)
+                                .length;
+                            final progress = totalSlots > 0 ? completedSlots / totalSlots : 0.0;
+
+                            return buildProgressItem(
+                              context,
+                              'Thông tin khóa học',
+                                progress,
+                              '$completedSlots/$totalSlots',
+                              'N/A',
+                            );
+                          }),
                         ],
                       ),
                       headerBackgroundColor: Colors.transparent,
