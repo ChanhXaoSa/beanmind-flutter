@@ -222,7 +222,7 @@ Widget buildProgressItem(BuildContext context, String title, double progress, St
 }
 
 Widget buildParticipantInfoItem(BuildContext context, ParticipantModelItem participant) {
-  final isPresent = participant.isPresent;
+  final isPresent = participant.status;
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
     padding: const EdgeInsets.all(10),
@@ -261,13 +261,16 @@ Widget buildParticipantInfoItem(BuildContext context, ParticipantModelItem parti
         Row(
           children: [
             Icon(
-              isPresent ? Icons.check_circle : Icons.cancel,
-              color: isPresent ? Colors.green : Colors.red,
+              isPresent == 2 ? Icons.check_circle : isPresent == 3 ? Icons.cancel : Icons.help_outline,
+              color: isPresent == 2 ? Colors.green : isPresent == 3 ? Colors.red : Colors.grey,
             ),
             const SizedBox(width: 5),
             Text(
-              isPresent ? 'Đã điểm danh' : 'Vắng mặt',
-              style: TextStyle(fontSize: 16, color: isPresent ? Colors.green : Colors.red),
+              isPresent == 2 ? 'Đã điểm danh' : isPresent == 3 ? 'Vắng mặt' : 'Chưa diễn ra',
+              style: TextStyle(
+                fontSize: 16,
+                color: isPresent == 2 ? Colors.green : isPresent == 3 ? Colors.red : Colors.grey,
+              ),
             ),
           ],
         ),
