@@ -41,7 +41,7 @@ class AuthController extends GetxController {
         },
         body: jsonEncode(<String, String>{
           'username': email,
-          'email' : email,
+          'email' : '',
           'password': password,
         }),
       );
