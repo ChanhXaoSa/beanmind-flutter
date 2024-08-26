@@ -16,6 +16,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 import 'dart:ui' as ui;
+import 'dart:js' as js;
+
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class CourseLearningScreen extends GetView<CourseLearningController> {
   const CourseLearningScreen({super.key});
@@ -35,7 +38,10 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final GameController gameController = Get.find<GameController>();
-
+    // String canvasId = 'pdf-canvas';
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   js.context.callMethod('loadPdfFromUrl', ['https://firebasestorage.googleapis.com/v0/b/beanmind-2911.appspot.com/o/course_img%2Fcac_so_1_den_10.pdf?alt=media&token=0310819c-a0f8-4d00-aef5-3864b50a38da', canvasId]);
+    // });
     return Scaffold(
       appBar: const CustomLearningCourseAppBar(),
       body: SingleChildScrollView(
@@ -320,25 +326,40 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                       }
 
                       if (controller.selectedContent.value == 'pdf' && controller.courseDetailData.value!.contentURL != null) {
-                        String viewId = 'pdf-viewer-${UniqueKey()}';
+                        // String viewId = 'pdf-viewer-${UniqueKey()}';
+                        //
+                        // platformViewRegistry.registerViewFactory(
+                        //   viewId,
+                        //       (int viewId) {
+                        //     final element = html.IFrameElement();
+                        //     element.src = '${controller.courseDetailData.value!.contentURL}';
+                        //     element.style.border = 'none';
+                        //     element.style.width = '100%';
+                        //     element.style.height = '100%';
+                        //     element.style.overflow = 'auto';
+                        //     element.allowFullscreen = true;
+                        //     element.setAttribute('scrolling', 'yes');
+                        //     return element;
+                        //   },
+                        // );
 
-                        platformViewRegistry.registerViewFactory(
-                          viewId,
-                              (int viewId) {
-                            final element = html.IFrameElement();
-                            element.src = '${controller.courseDetailData.value!.contentURL}';
-                            element.style.border = 'none';
-                            element.style.width = '100%';
-                            element.style.height = '100%';
-                            return element;
-                          },
-                        );
+                        // return Container(
+                        //   width: double.infinity,
+                        //   height: screenHeight,
+                        //   child: HtmlElementView(
+                        //       viewType: viewId,
+                        //   ),
+                        // );
 
                         return Container(
                           width: double.infinity,
                           height: screenHeight,
-                          child: HtmlElementView(viewType: viewId),
+                          child: SfPdfViewer.network(
+                            controller.courseDetailData.value!.contentURL!,
+                          ),
                         );
+
+
                       } else {
                         final topicDetail = controller.topicDetailData.value;
                         if (topicDetail != null) {
