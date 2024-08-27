@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:beanmind_flutter/controllers/game/game_chapter_controller.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/font_style.dart';
 import 'package:beanmind_flutter/widgets/game/class/ocean_adventure/ocean_adventure_level.dart';
@@ -464,11 +466,11 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: backtoHome,
+                          onTap: backtoCourseLearning,
                           child: Row(
                             children: [
                               Text(
-                                'Trở về trang chủ ',
+                                'Trở về trang khoá học ',
                                 style: whiteTextStyle,
                               ),
                               Container(
@@ -588,6 +590,14 @@ class _OceanAdventureScreenState extends State<OceanAdventureScreen> {
     setState(() {
       controller.shouldReset.value = true;
       Get.offAllNamed(GameListScreen.routeName);
+    });
+  }
+
+  void backtoCourseLearning() {
+    final GameChapterController controller = Get.find();
+    setState(() {
+      Get.offAllNamed(CourseLearningScreen.routeName
+          .replaceFirst(':id', controller.courseId));
     });
   }
 

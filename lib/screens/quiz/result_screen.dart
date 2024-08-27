@@ -116,18 +116,18 @@ class Resultcreen extends GetView<QuizController> {
                     padding: UIParameters.screenPadding,
                     child: Row(
                       children: [
-                        Expanded(
-                            child: MainButton(
-                          color: Colors.blueGrey,
-                          onTap: () {
-                            controller.saveQuizResults();
-                            controller.tryAgainApi();
-                          },
-                          title: 'Thử lại',
-                        )),
-                        const SizedBox(
-                          width: 5,
-                        ),
+                        // Expanded(
+                        //     child: MainButton(
+                        //   color: Colors.blueGrey,
+                        //   onTap: () {
+                        //     controller.saveQuizResults();
+                        //     controller.tryAgainApi();
+                        //   },
+                        //   title: 'Thử lại',
+                        // )),
+                        // const SizedBox(
+                        //   width: 5,
+                        // ),
                         Expanded(
                             child: MainButton(
                           onTap: () {

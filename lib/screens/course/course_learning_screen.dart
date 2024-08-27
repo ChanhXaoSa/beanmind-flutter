@@ -113,8 +113,10 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                 .toList();
                             List<Widget> topicWidgets =
                                 topics.map<Widget>((TopicItem topic) {
+                              // final isSelected =
+                              //     controller.selectedTopicId.value == topic.id;
                               final isSelected =
-                                  controller.selectedTopicId.value == topic.id;
+                                  controller.selectedTopicId.value == '';
                               return ListTile(
                                 leading: Obx(() {
                                   final isChecked =
@@ -155,7 +157,8 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                           fontSize: 14, color: Colors.black)),
                                   onTap: () {
                                     final route = CoursePlayGameScreen.routeName
-                                        .replaceFirst(':game_id', game.gameId!);
+                                        .replaceFirst(':game_id', game.gameId!)
+                                    .replaceFirst(':course_id', controller.courseId);
                                     Get.toNamed(route);
                                   },
                                 ));

@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'package:beanmind_flutter/controllers/game/game_chapter_controller.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/bird_fly/bird_fly_level.dart';
 import 'package:beanmind_flutter/widgets/game/class/bird_fly/bird_fly_user.dart';
@@ -437,11 +439,11 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: backtoHome,
+                          onTap: backtoCourseLearning,
                           child: Row(
                             children: [
                               Text(
-                                'Trở về trang chủ ',
+                                'Trở về trang khoá học',
                                 style: whiteTextStyle,
                               ),
                               Container(
@@ -564,6 +566,14 @@ class _GameOddAndEvenScreenState extends State<GameOddAndEvenScreen> {
     setState(() {
       controller.shouldReset.value = true;
       Get.offAllNamed(GameListScreen.routeName);
+    });
+  }
+
+  void backtoCourseLearning() {
+    final GameChapterController controller = Get.find();
+    setState(() {
+      Get.offAllNamed(CourseLearningScreen.routeName
+          .replaceFirst(':id', controller.courseId));
     });
   }
 

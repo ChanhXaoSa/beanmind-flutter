@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:beanmind_flutter/configs/configs.dart'; // Import mainGradient
 
 class CoursePlayGameScreen extends GetView<GameChapterController> {
-  static const String routeName = '/course_play_game/game_id=:game_id';
+  static const String routeName = '/course_play_game/game_id=:game_id&course_id=:course_id';
 
   const CoursePlayGameScreen({super.key});
 

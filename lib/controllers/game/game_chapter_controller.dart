@@ -22,6 +22,7 @@ class GameChapterController extends GetxController {
   var shouldReset = false.obs;
   List<dynamic> games = [].obs;
   late String gameId;
+  late String courseId;
 
   // @override
   // void onInit() {
@@ -41,6 +42,7 @@ class GameChapterController extends GetxController {
   @override
   void onInit() {
     gameId = Get.parameters['game_id']!;
+    courseId = Get.parameters['course_id']!;
     if (gameId.isEmpty) {
       print('Error: gameId is empty');
     } else {

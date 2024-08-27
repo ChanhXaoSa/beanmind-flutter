@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
+import 'package:beanmind_flutter/controllers/game/game_chapter_controller.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
+import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
 import 'package:beanmind_flutter/widgets/game/class/audio.dart';
 import 'package:beanmind_flutter/widgets/game/class/save_game_result.dart';
 import 'package:beanmind_flutter/widgets/game/class/score_cal.dart';
@@ -402,11 +404,11 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: backtoHome,
+                          onTap: backtoCourseLearning,
                           child: Row(
                             children: [
                               Text(
-                                'Trở về trang chủ ',
+                                'Trở về trang khoá học',
                                 style: whiteTextStyle,
                               ),
                               Container(
@@ -526,6 +528,14 @@ class _GameShoppingScreenState extends State<GameShoppingScreen> {
     setState(() {
       controller.shouldReset.value = true;
       Get.offAllNamed(GameListScreen.routeName);
+    });
+  }
+
+  void backtoCourseLearning() {
+    final GameChapterController controller = Get.find();
+    setState(() {
+      Get.offAllNamed(CourseLearningScreen.routeName
+          .replaceFirst(':id', controller.courseId));
     });
   }
 
