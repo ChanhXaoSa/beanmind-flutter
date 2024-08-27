@@ -73,28 +73,29 @@ class AuthController extends GetxController {
                 user.value = [userModel];
                 await _saveUserSession(userModel);
                 navigateToHome();
+                showSuccessSnackBar('Thông báo', 'Đăng nhập thành công');
               }
             } else {
               // throw Exception(userModel.message);
-              showSnackBar('Error', userModel.message!);
+              showSnackBar('Lỗi', userModel.message!);
             }
           } else {
             // throw Exception('Failed to load user info');
-            showSnackBar('Error', 'Tải thông tin người dùng thất bại');
+            showSnackBar('Lỗi', 'Tải thông tin người dùng thất bại');
           }
         } else {
           // throw Exception('Login failed: ${loginModel.message}');
-          showSnackBar('Error', 'Đăng nhập thất bại: ${loginModel.message}');
+          showSnackBar('Lỗi', 'Sai tên đăng nhập hoặc mật khẩu, vui lòng thử lại');
         }
       } else {
         // throw Exception('Failed to login');
-        showSnackBar('Error', 'Đăng nhập thất bại');
+        showSnackBar('Lỗi', 'Đăng nhập thất bại');
       }
     } catch (e) {
       if (kDebugMode) {
         print('Error: $e');
       }
-      showSnackBar('Error', 'Lỗi hệ thống: $e');
+      showSnackBar('Lỗi', 'Lỗi hệ thống: Truy cập máy chủ thất bại, vui lòng thử lại');
       // throw e;
     }
   }
@@ -105,6 +106,16 @@ class AuthController extends GetxController {
       message,
       snackPosition: SnackPosition.TOP,
       backgroundColor: const Color(0xFFFC6B6B),
+      colorText: Colors.white,
+    );
+  }
+
+  void showSuccessSnackBar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: const Color(0xFF89E573),
       colorText: Colors.white,
     );
   }

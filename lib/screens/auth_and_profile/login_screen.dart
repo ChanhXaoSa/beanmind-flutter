@@ -114,8 +114,8 @@ class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  final TextEditingController _emailController = TextEditingController(text: 'StudentTesting0@localhost.com');
-  final TextEditingController _passwordController = TextEditingController(text: 'Abc@123!');
+  final TextEditingController _emailController = TextEditingController(text: '');
+  final TextEditingController _passwordController = TextEditingController(text: '');
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -147,9 +147,9 @@ class __FormContentState extends State<_FormContent> {
                 return null;
               },
               decoration: const InputDecoration(
-                labelText: 'Địa chỉ email',
-                hintText: 'Nhập địa chỉ email',
-                prefixIcon: Icon(Icons.email_outlined),
+                labelText: 'Tên đăng nhập',
+                hintText: 'Nhập tên đăng nhập',
+                prefixIcon: Icon(Icons.account_circle),
                 border: OutlineInputBorder(),
               ),
             ),

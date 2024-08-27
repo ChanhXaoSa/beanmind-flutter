@@ -2,6 +2,7 @@ import 'package:beanmind_flutter/configs/configs.dart';
 import 'package:beanmind_flutter/controllers/home/home_controller.dart';
 import 'package:beanmind_flutter/models/course_model.dart';
 import 'package:beanmind_flutter/screens/course/course_learning_screen.dart';
+import 'package:beanmind_flutter/screens/course/course_list_screen.dart';
 import 'package:beanmind_flutter/utils/number_format.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class EnrolledCourses extends GetView<HomeController> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle "See All" button press
+                Get.toNamed(CourseListScreen.routeName);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPrimayColorLT,
@@ -88,7 +89,7 @@ class FeaturedCourses extends GetView<HomeController> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle "See All" button press
+                Get.toNamed(CourseListScreen.routeName);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPrimayColorLT,
@@ -152,7 +153,7 @@ class LastestCourses extends GetView<HomeController> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle "See All" button press
+                Get.toNamed(CourseListScreen.routeName);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPrimayColorLT,
