@@ -39,7 +39,7 @@ class Resultcreen extends GetView<QuizController> {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SvgPicture.asset('assets/images/bulb.svg'),
+                    Image.asset('assets/images/logo_beanmind.png', height: 100),
                     Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 5),
                       child: Text(
