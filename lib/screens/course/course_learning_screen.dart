@@ -135,11 +135,12 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                   );
                                 }),
                                 title: Text(topic.title!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 14,
-                                        color: isSelected
-                                            ? Colors.blue
-                                            : Colors.black)),
+                                        // color: isSelected
+                                        //     ? Colors.blue
+                                        //     : Colors.black)),
+                                        color : Colors.black)),
                                 tileColor:
                                     isSelected ? Colors.blue[50] : Colors.white,
                                 onTap: () =>

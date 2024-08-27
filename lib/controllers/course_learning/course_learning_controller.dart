@@ -202,7 +202,7 @@ class CourseLearningController extends GetxController {
         topicDetailData.value = topicDetailModelBase.data;
         // final content = json.decode(response.body)['message'];
         const content = 'Đang tải';
-        selectedContent.value = content;
+        // selectedContent.value = content;
       } else {
         throw Exception('Failed to fetch topic content');
       }
