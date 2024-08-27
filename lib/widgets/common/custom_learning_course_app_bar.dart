@@ -39,18 +39,18 @@ class CustomLearningCourseAppBar extends GetView<AppBarController> implements Pr
                     controller.navigateToHome();
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.grid_view, color: Colors.blue),
-                  onPressed: () {
-
-                  },
-                ),
+                // IconButton(
+                //   icon: const Icon(Icons.grid_view, color: Colors.blue),
+                //   onPressed: () {
+                //
+                //   },
+                // ),
               ],
             ),
             Row(
               children: [
                 Obx(() {
-                  final totalTopics = courseLearningController.topicListModel.length;
+                  final totalTopics = courseLearningController.topicListModel.where((t) => t.isDeleted == false).length;
                   final completedTopics = courseLearningController.processionModelItemList
                       .where((processionItem) => courseLearningController.topicListModel
                       .any((topic) => topic.id == processionItem.topicId))
