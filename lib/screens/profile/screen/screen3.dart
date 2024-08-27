@@ -1,9 +1,7 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
 import 'package:beanmind_flutter/models/course_detail_model.dart';
-import 'package:beanmind_flutter/models/enrollment_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/screens/profile/result_worksheet_attempt_screen.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +117,6 @@ class CourseListRegisteredScreen extends GetView<ProfileController> {
                               'Thông tin khóa học',
                                 progress,
                               '$completedSlots/$totalSlots',
-                              'N/A',
                             );
                           }),
                         ],
@@ -163,7 +160,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
           .toList();
 
       if (controller.chapterList.isEmpty && controller.topicListModel.isEmpty) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       }
 
       if (chapters.isEmpty) {
@@ -219,7 +216,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
               contentBackgroundColor: Colors.white,
               contentBorderColor: Colors.white,
             );
-          }).toList(),
+          }),
           if (worksheetAttempts.isNotEmpty)
             AccordionSection(
               isOpen: false,
@@ -229,18 +226,18 @@ class MyNestedAccordion extends GetView<ProfileController> {
               header: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFFAEE7AE),
+                  color: const Color(0xFFAEE7AE),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                    const Icon(Icons.history, color: Colors.white),
-                    const SizedBox(width: 10),
-                    const Text(
+                    Icon(Icons.history, color: Colors.white),
+                    SizedBox(width: 10),
+                    Text(
                       'Lịch sử làm bài',
                       style: CourseListRegisteredScreen.contentStyle,
                     ),
-                    const Spacer(),
+                    Spacer(),
                     Icon(Icons.keyboard_arrow_down, color: Colors.white),
                   ],
                 ),
@@ -267,7 +264,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
@@ -285,7 +282,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                                   textAlign: TextAlign.left,
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Expanded(
                                 child: Text(
                                   'Điểm: ${attempt.score != null ? (attempt.score!).toString() : 'N/A'}',
@@ -295,7 +292,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                                   textAlign: TextAlign.left,
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Expanded(
                                 child: Text(
                                   'Thời gian: ${attempt.completionDate != null ? DateFormat('dd-MM-yyyy, HH:mm:ss').format(attempt.completionDate!.toLocal()) : 'N/A'}',
@@ -307,7 +304,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          Text(
+                          const Text(
                             'Nhấn vào để xem kết quả',
                             style: TextStyle(
                               fontSize: 12,
@@ -332,7 +329,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
 }
 
 Widget buildProgressItem(BuildContext context, String title, double progress,
-    String slots, String time) {
+    String slots) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
     padding: const EdgeInsets.all(10),
@@ -365,10 +362,6 @@ Widget buildProgressItem(BuildContext context, String title, double progress,
         const SizedBox(height: 5),
         Text(
           'Đã học: $slots slot',
-          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-        ),
-        Text(
-          'Thời gian đã học: $time',
           style: TextStyle(fontSize: 14, color: Colors.grey[600]),
         ),
       ],
