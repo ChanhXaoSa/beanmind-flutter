@@ -144,7 +144,7 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                 Icon(Icons.person, color: Colors.black),
                 SizedBox(width: 4),
                 Text(
-                  '${courseDetailData.teachables?.length} giảng viên',
+                  '${courseDetailData.teachables?.where((a) => a.isDeleted = false).length} giảng viên',
                   style: kDetailsTS.copyWith(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,

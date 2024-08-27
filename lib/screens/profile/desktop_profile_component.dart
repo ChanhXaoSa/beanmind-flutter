@@ -56,10 +56,12 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
             child: Center(
               child: Column(
                 children: [
-                  Image.network(
-                      controller.user.value?.data?.student!.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png',
-                      width: 100,
-                      height: 100),
+                  Obx(() {
+                    return Image.network(
+                        controller.user.value?.data?.student!.image ?? 'https://cdn-icons-png.flaticon.com/512/5294/5294712.png',
+                        width: 100,
+                        height: 100);
+                  }),
                   Obx(() {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -82,12 +84,15 @@ Drawer myDrawer(void Function(int) onItemTapped, ProfileController controller) {
                   // }),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: Text(
-                      controller.user.value?.data?.userName ?? 'email',
-                      // 'vinhtran91@gmail.com',
-                      style:
-                          const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
+                    child: Obx(() {
+                      return Text(
+                        controller.user.value?.data?.userName ?? 'username',
+                        // 'vinhtran91@gmail.com',
+                        style:
+                        const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      );
+                    }),
+
                   ),
                 ],
               ),

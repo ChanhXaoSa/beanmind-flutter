@@ -6,8 +6,10 @@ import 'package:accordion/controllers.dart';
 import 'package:beanmind_flutter/controllers/course_learning/course_learning_controller.dart';
 import 'package:beanmind_flutter/controllers/game/game_controller.dart';
 import 'package:beanmind_flutter/models/chapter_model.dart';
+import 'package:beanmind_flutter/models/game_model.dart';
 import 'package:beanmind_flutter/models/topic_model.dart';
 import 'package:beanmind_flutter/screens/course/course_play_game_screen.dart';
+import 'package:beanmind_flutter/screens/game/game_leaderboard_screen.dart';
 import 'package:beanmind_flutter/screens/quiz/quiz_attempt_screen.dart';
 import 'package:beanmind_flutter/widgets/common/custom_learning_course_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -155,6 +157,19 @@ class CourseLearningScreen extends GetView<CourseLearningController> {
                                   title: Text('${game.game!.name}',
                                       style: const TextStyle(
                                           fontSize: 14, color: Colors.black)),
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.leaderboard, color: Colors.green),
+                                    onPressed: () {
+                                      // const leaderboardRoute = GameLeaderboardScreen.routeName;
+                                      Get.toNamed(GameLeaderboardScreen.routeName,
+                                        arguments: GameModel(
+                                          id: game.gameId!,
+                                          title: game.game!.name!,
+                                          imageUrl: game.game!.image ?? '',
+                                          description: game.game!.description!,
+                                        ),);
+                                    },
+                                  ),
                                   onTap: () {
                                     final route = CoursePlayGameScreen.routeName
                                         .replaceFirst(':game_id', game.gameId!)
