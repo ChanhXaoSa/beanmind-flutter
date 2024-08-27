@@ -225,9 +225,26 @@ class MyNestedAccordion extends GetView<ProfileController> {
               isOpen: false,
               leftIcon: const Icon(Icons.history, color: Colors.black),
               headerBackgroundColor: Colors.white,
-              headerBackgroundColorOpened: Colors.white,
-              header: const Text('Lịch sử làm bài',
-                  style: CourseListRegisteredScreen.contentStyle),
+              headerBackgroundColorOpened: Colors.grey[200],
+              header: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFAEE7AE),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.history, color: Colors.white),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Lịch sử làm bài',
+                      style: CourseListRegisteredScreen.contentStyle,
+                    ),
+                    const Spacer(),
+                    Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                  ],
+                ),
+              ),
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: worksheetAttempts.map((attempt) {
@@ -239,22 +256,65 @@ class MyNestedAccordion extends GetView<ProfileController> {
                           .replaceFirst(':worksheet_attempt_id', attempt.id!);
                       Get.toNamed(route);
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
-                            style: CourseListRegisteredScreen.headerStyle,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Bài: ${attempt.worksheet?.title ?? 'Không có tiêu đề'}',
+                                  style: CourseListRegisteredScreen.headerStyle.copyWith(
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Spacer(),
+                              Expanded(
+                                child: Text(
+                                  'Điểm: ${attempt.score != null ? (attempt.score!).toString() : 'N/A'}',
+                                  style: CourseListRegisteredScreen.contentStyle.copyWith(
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Spacer(),
+                              Expanded(
+                                child: Text(
+                                  'Thời gian: ${attempt.completionDate != null ? DateFormat('dd-MM-yyyy, HH:mm:ss').format(attempt.completionDate!.toLocal()) : 'N/A'}',
+                                  style: CourseListRegisteredScreen.contentStyle.copyWith(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                          const SizedBox(height: 8),
                           Text(
-                            'Ngày hoàn thành: ${attempt.completionDate != null ? DateFormat('HH:mm:ss dd-MM-yyyy').format(attempt.completionDate!.toLocal()) : 'N/A'}',
-                            style: CourseListRegisteredScreen.contentStyle,
-                          ),
-                          Text(
-                            'Điểm: ${attempt.score != null ? (attempt.score! / 10).toString() : 'N/A'}',
-                            style: CourseListRegisteredScreen.contentStyle,
+                            'Nhấn vào để xem kết quả',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            textAlign: TextAlign.left,
                           ),
                         ],
                       ),
@@ -263,7 +323,7 @@ class MyNestedAccordion extends GetView<ProfileController> {
                 }).toList(),
               ),
               contentBackgroundColor: Colors.white,
-              contentBorderColor: Colors.white,
+              contentBorderColor: Colors.grey[200],
             ),
         ],
       );
