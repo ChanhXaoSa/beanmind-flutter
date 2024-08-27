@@ -83,8 +83,8 @@ class CourseDetailAction extends GetView<CourseDetailController> {
       return Container(
         // width: MediaQuery.of(context).size.width * 0.2,
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          border: Border.all(color: Color(0xFF9A9A9A), width: 0.5),
+          color: const Color(0xFFFFFFFF),
+          border: Border.all(color: const Color(0xFF9A9A9A), width: 0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         padding: const EdgeInsets.all(24),
@@ -122,11 +122,11 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Icon(Icons.book, color: Colors.black),
-                SizedBox(width: 4),
+                const Icon(Icons.book, color: Colors.black),
+                const SizedBox(width: 4),
                 Text(
                   '${courseDetailData.totalSlot} Tiết học',
                   style: kDetailsTS.copyWith(
@@ -138,13 +138,13 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Icon(Icons.person, color: Colors.black),
-                SizedBox(width: 4),
+                const Icon(Icons.person, color: Colors.black),
+                const SizedBox(width: 4),
                 Text(
-                  '${courseDetailData.teachables?.where((a) => a.isDeleted = false).length} giảng viên',
+                  '${courseDetailData.teachables?.where((a) => a.isDeleted == false).length} giảng viên',
                   style: kDetailsTS.copyWith(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
@@ -154,11 +154,11 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Icon(Icons.watch_later, color: Colors.black),
-                SizedBox(width: 4),
+                const Icon(Icons.watch_later, color: Colors.black),
+                const SizedBox(width: 4),
                 Text(
                   '${courseDetailData.enrollments?.length} đã học',
                   style: kDetailsTS.copyWith(
@@ -170,11 +170,11 @@ class CourseDetailAction extends GetView<CourseDetailController> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Icon(Icons.category, color: Colors.black),
-                SizedBox(width: 4),
+                const Icon(Icons.category, color: Colors.black),
+                const SizedBox(width: 4),
                 Text(
                   'Toán',
                   style: kDetailsTS.copyWith(
