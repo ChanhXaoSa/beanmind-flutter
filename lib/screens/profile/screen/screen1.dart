@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beanmind_flutter/configs/themes/app_colors.dart';
 import 'package:beanmind_flutter/controllers/controllers.dart';
+import 'package:beanmind_flutter/firebase/loading_status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -178,7 +179,7 @@ class Screen1 extends GetView<ProfileController> {
                                     //       .totalSlot ?? 0}',
                                     // ),
                                     child: Obx(() {
-                                      if (controller.courseDetailData.isEmpty || controller.participantModelItemList.isEmpty) {
+                                      if ((controller.courseDetailData.isEmpty || controller.participantModelItemList.isEmpty) && controller.loadingStatusParticipant != LoadingStatus.completed) {
                                         return const Center(
                                           child: CircularProgressIndicator(),
                                         );
